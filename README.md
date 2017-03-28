@@ -35,6 +35,7 @@ The following **optional** features can be implemented:
 The following **bonus** features can be implemented:
 
 * [x] Create a highlights video at the end of the event.
+* [x] App walkthrough screens
 
     Copyright [2017] [Insync Inc]
 
