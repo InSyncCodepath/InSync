@@ -31,6 +31,7 @@ The following **optional** features can be implemented:
 * [x] User with RSVP will get a choice if they want to continue receiving event updates.
 * [x] In location tracker, user can see the location with a pin and profile image.
 * [x] Host can create a poll to ask invitee preferences for example meal preferences.
+* [x] Send reminders/ nudges to people to RSVP.
 
 The following **bonus** features can be implemented:
 
