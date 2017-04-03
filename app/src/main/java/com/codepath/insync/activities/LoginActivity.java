@@ -1,9 +1,10 @@
-package com.codepath.insync;
+package com.codepath.insync.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.codepath.insync.R;
 import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;

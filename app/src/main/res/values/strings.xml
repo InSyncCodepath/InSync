@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">InSync</string>
+    <string name="fabric_api_key">98b4aaea624003eec876dae2a53a6629318ae4ac</string>
     <string name="facebook_app_id">677338939135120</string>
+    <string name="parse_app_id">insync-codepath</string>
+    <string name="parse_app_url">https://insync-codepath.herokuapp.com/parse/</string>
 </resources>
