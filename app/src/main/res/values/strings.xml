@@ -4,4 +4,5 @@
     <string name="facebook_app_id">677338939135120</string>
     <string name="parse_app_id">insync-codepath</string>
     <string name="parse_app_url">https://insync-codepath.herokuapp.com/parse/</string>
+    <string name="gcm_defaultSenderId">1042520388761</string>
 </resources>
