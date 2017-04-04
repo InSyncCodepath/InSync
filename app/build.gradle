@@ -51,5 +51,8 @@ dependencies {
     // Custom Tabs
     compile 'com.android.support:customtabs:25.2.0'
     // Google play
-    compile "com.google.android.gms:play-services-gcm:8.4.0"
+    compile "com.google.android.gms:play-services-gcm:10.2.1"
+    compile 'com.google.android.gms:play-services-maps:10.2.1'
+    compile 'com.google.android.gms:play-services-location:10.2.1'
+
 }
