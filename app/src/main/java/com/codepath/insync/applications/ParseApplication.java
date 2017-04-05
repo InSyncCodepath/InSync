@@ -6,6 +6,7 @@ import com.codepath.insync.R;
 import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.interceptors.ParseLogInterceptor;
+import com.parse.interceptors.ParseStethoInterceptor;
 
 
 public class ParseApplication extends Application {
@@ -20,6 +21,7 @@ public class ParseApplication extends Application {
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(getString(R.string.parse_app_id))
                 .clientKey(null)
+                .addNetworkInterceptor(new ParseStethoInterceptor())
                 .addNetworkInterceptor(new ParseLogInterceptor())
                 .server(getString(R.string.parse_app_url)).build());
     }

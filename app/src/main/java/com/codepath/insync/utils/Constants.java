@@ -1,4 +1,4 @@
-package com.codepath.insync.util;
+package com.codepath.insync.utils;
 
 /**
  * Created by usarfraz on 4/3/17.
