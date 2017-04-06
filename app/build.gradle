@@ -5,9 +5,11 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
+    dataBinding.enabled = true
     defaultConfig {
         applicationId "com.codepath.insync"
         minSdkVersion 19
@@ -15,6 +17,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -59,5 +62,6 @@ dependencies {
     // Permission dispatcher
     compile 'com.github.hotchemi:permissionsdispatcher:2.3.2'
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.3.2'
+    compile 'com.google.maps.android:android-maps-utils:0.4+'
     testCompile 'junit:junit:4.12'
 }
