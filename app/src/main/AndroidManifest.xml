@@ -2,13 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.codepath.insync">
 
-    <permission android:name="android.permission.ACCESS_FINE_LOCATION" android:protectionLevel="dangerous"/>
-    <permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:protectionLevel="dangerous"/>
-
+    <permission
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:protectionLevel="dangerous" />
+    <permission
+        android:name="android.permission.ACCESS_COARSE_LOCATION"
+        android:protectionLevel="dangerous" />
 
     <uses-permission android:name="com.example.mapdemo.permission.MAPS_RECEIVE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -32,29 +35,36 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activities.LoginActivity">
             <intent-filter>
-
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <!--<action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />-->
+                <!--
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                -->
             </intent-filter>
         </activity>
-        <activity android:name=".activities.LocationTrackerActivity">
+        <activity
+            android:name=".activities.EventListActivity"
+            android:label="@string/title_activity_event_list"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".activities.LocationTrackerActivity"></activity>
         <activity android:name=".activities.EventCreationActivity">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
-               <!-- <action android:name="android.intent.action.MAIN" />
+                <!--
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />-->
+                <category android:name="android.intent.category.LAUNCHER" />
+                -->
             </intent-filter>
         </activity>
+
         <service android:name="com.parse.PushService" />
 
         <receiver

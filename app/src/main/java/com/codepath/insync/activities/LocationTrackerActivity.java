@@ -295,7 +295,7 @@ public class LocationTrackerActivity extends AppCompatActivity implements
             @Override
             public void done(Object object, ParseException e) {
                 if (e != null) {
-                    Log.e(TAG, "Error sending push to cloud: " + e.toString());
+                    Log.e(TAG, "Error sending push to cloud: " + e.toString ());
                 } else {
                     Log.d(TAG, "Push sent successfully!");
                 }
