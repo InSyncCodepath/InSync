@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.codepath.insync.R;
 
-public class CreateEventActivity extends AppCompatActivity {
+public class EventCreationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

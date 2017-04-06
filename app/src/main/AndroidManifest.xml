@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.CreateEventActivity">
+        <activity android:name=".activities.EventCreationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

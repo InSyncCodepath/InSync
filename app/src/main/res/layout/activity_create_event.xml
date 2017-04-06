@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.codepath.insync.activities.CreateEventActivity"
+    tools:context="com.codepath.insync.activities.EventCreationActivity"
     android:padding="8dp">
     <ImageView
         android:layout_width="45dp"
@@ -107,10 +107,6 @@
         android:layout_toRightOf="@+id/ivDetails"
         android:layout_marginLeft="8dp"/>
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
