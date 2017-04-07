@@ -11,4 +11,6 @@
     <dimen name="event_heading">16sp</dimen>
     <dimen name="margin24">24dp</dimen>
     <dimen name="margin48">48dp</dimen>
+    <dimen name="tvHeight">50dp</dimen>
+    <dimen name="margin_minus_30">-30dp</dimen>
 </resources>

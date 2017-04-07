@@ -120,24 +120,45 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:orientation="vertical">
-
-            <android.support.design.widget.TabLayout
-                android:id="@+id/profile_tabs"
+            <RelativeLayout
+                android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabMode="fixed" />
+                >
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rvChat"
+                    android:transcriptMode="alwaysScroll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    />
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/profile_viewpager"
-                android:layout_width="match_parent"
-                android:layout_height="0px"
-                android:layout_weight="1"
-                android:background="@android:color/white"/>
-        </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/etMessage"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/tvHeight"
+                        android:hint="@string/message_hint"
+                        android:inputType="textShortMessage"
+                        android:imeOptions="actionSend"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true"
+                        android:background="@color/accent"
+                        android:backgroundTint="@color/primary_light"
+                        tools:targetApi="lollipop" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fabEDSend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="bottom"
+                    android:layout_above="@id/etMessage"
+                    android:layout_marginBottom="@dimen/margin_minus_30"
+                    android:layout_marginEnd="@dimen/margin8"
+                    android:src="@drawable/ic_send" />
+
+            </RelativeLayout>
     </android.support.design.widget.CoordinatorLayout>
 </layout>
