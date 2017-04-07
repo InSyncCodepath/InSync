@@ -48,12 +48,12 @@
             android:label="@string/title_activity_event_list"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <!--<action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />-->
             </intent-filter>
         </activity>
-        <activity android:name=".activities.LocationTrackerActivity"></activity>
+        <activity android:name=".activities.LocationTrackerActivity" />
         <activity android:name=".activities.EventCreationActivity">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
@@ -103,6 +103,14 @@
             android:name="com.parse.push.gcm_sender_id"
             android:value="@string/gcm_sender_id" />
 
+        <activity
+            android:name=".activities.EventDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
