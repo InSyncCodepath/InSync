@@ -1,22 +1,26 @@
 package com.codepath.insync.fragments;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.codepath.insync.R;
+import com.codepath.insync.databinding.FragmentPastEventListBinding;
 
 /**
  * Created by Gauri Gadkari on 4/6/17.
  */
 
 public class PastEventsFragment extends Fragment {
-
+    FragmentPastEventListBinding binding;
     private static final String ARG_SECTION_NUMBER = "section_number";
-
+    RecyclerView pastList;
     public PastEventsFragment() {
     }
 
@@ -31,10 +35,12 @@ public class PastEventsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_past_event_list, container, false);
-        TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-        textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-        return rootView;
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_past_event_list, container, false);
+        View view = binding.getRoot();
+        pastList = binding.pastList;
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        pastList.setLayoutManager(linearLayoutManager);
+        return view;
     }
 }
 
