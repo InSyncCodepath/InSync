@@ -3,14 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.codepath.insync.activities.EventDetailActivity"
+        android:fitsSystemWindows="true"
+        >
+
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/clED"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        android:clickable="true"
-        android:focusableInTouchMode="true"
-        tools:context="com.codepath.insync.activities.EventDetailActivity">
+        android:layout_above="@+id/bnvEDMessage"
+        >
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/abEventDetail"
@@ -130,6 +136,8 @@
                 android:layout_alignParentTop="true"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 />
+
+    </android.support.design.widget.CoordinatorLayout>
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/bnvEDMessage"
             android:layout_width="match_parent"
@@ -165,5 +173,5 @@
                 app:layout_behavior=".BottomNavigationBehavior"
                 tools:targetApi="lollipop" />
         </android.support.design.widget.BottomNavigationView>
-    </android.support.design.widget.CoordinatorLayout>
+    </RelativeLayout>
 </layout>
