@@ -1,11 +1,23 @@
 package com.codepath.insync.activities;
 
+import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
+import com.codepath.insync.databinding.ActivityLoginBinding;
+import com.codepath.insync.fragments.LoginFragment;
 import com.crashlytics.android.Crashlytics;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
@@ -22,11 +34,12 @@ import io.fabric.sdk.android.Fabric;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
+    ActivityLoginBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         //Make sure the Fabric.with() line is after all other 3rd-party SDKs that set an UncaughtExceptionHandler
 
         Fabric.with(this, new Crashlytics());
@@ -40,8 +53,19 @@ public class LoginActivity extends AppCompatActivity {
             Crashlytics.setUserEmail("user@fabric.io");
             Crashlytics.setUserName("Test User");
         }*/
+
+        setUpToolbar();
+
+
+        if (savedInstanceState == null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            LoginFragment loginFragment = new LoginFragment();
+            ft.replace(R.id.flLogin, loginFragment);
+            ft.commit();
+        }
     }
-    public void forceCrash(View view){
+    /*
+        public void forceCrash(View view){
         HashMap<String, String> payload = new HashMap<>();
         payload.put("customData", "My message");
         ParseCloud.callFunctionInBackground("pushChannelTest", payload, new FunctionCallback<Object>() {
@@ -56,4 +80,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+     */
+
+    private void setUpToolbar() {
+        setSupportActionBar(binding.tbLogin);
+        getSupportActionBar().setTitle("Login");
+    }
+
+
+
 }

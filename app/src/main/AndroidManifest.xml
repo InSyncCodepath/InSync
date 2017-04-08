@@ -33,14 +33,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.LoginActivity">
+        <activity
+            android:name=".activities.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
-
-                <!--
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-                -->
             </intent-filter>
         </activity>
         <activity
@@ -54,14 +54,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.LocationTrackerActivity" >
-        <intent-filter>
+        <!--<intent-filter>
             <category android:name="android.intent.category.DEFAULT" />
 
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
 
-        </intent-filter>
+        </intent-filter>-->
         </activity>
         <activity android:name=".activities.EventCreationActivity">
             <!--<intent-filter>
