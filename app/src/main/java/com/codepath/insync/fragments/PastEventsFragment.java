@@ -11,7 +11,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.codepath.insync.R;
+import com.codepath.insync.adapters.PastEventAdapter;
 import com.codepath.insync.databinding.FragmentPastEventListBinding;
+import com.codepath.insync.models.Event;
+
+import java.util.ArrayList;
 
 /**
  * Created by Gauri Gadkari on 4/6/17.
@@ -21,6 +25,8 @@ public class PastEventsFragment extends Fragment {
     FragmentPastEventListBinding binding;
     private static final String ARG_SECTION_NUMBER = "section_number";
     RecyclerView pastList;
+    ArrayList<Event> events = new ArrayList<>();
+    PastEventAdapter pastEventAdapter;
     public PastEventsFragment() {
     }
 
@@ -40,6 +46,8 @@ public class PastEventsFragment extends Fragment {
         pastList = binding.pastList;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         pastList.setLayoutManager(linearLayoutManager);
+        pastEventAdapter = new PastEventAdapter(getContext(), events);
+        pastList.setAdapter(pastEventAdapter);
         return view;
     }
 }

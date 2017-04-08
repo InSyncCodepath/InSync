@@ -109,6 +109,27 @@ public class Event extends ParseObject {
     public void setHighlightsVideo(ParseFile highlightsVideo) {
         put(HIGHLIGHTS_VIDEO_KEY, highlightsVideo);
     }
+    public Event(){}
 
     // TODO: Call get, saveInBackground and pinInBackground here
+    public static Event newEventInstance(String eventName, String address, Date startDate, Date endDate, String description, ParseGeoPoint location){
+        Event newEvent = new Event();
+        newEvent.setName(eventName);
+        newEvent.setAddress(address);
+        newEvent.setStartDate(startDate);
+        newEvent.setEndDate(endDate);
+        newEvent.setDescription(description);
+        newEvent.setLocation(location);
+        return newEvent;
+    }
+    public Event(String eventName, String address, Date startDate, Date endDate, String description, ParseGeoPoint location){
+        this.setName(eventName);
+        this.setAddress(address);
+        this.setStartDate(startDate);
+        this.setEndDate(endDate);
+        this.setDescription(description);
+        this.setLocation(location);
+
+    }
+
 }

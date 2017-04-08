@@ -11,7 +11,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.codepath.insync.R;
+import com.codepath.insync.adapters.UpcomingEventAdapter;
 import com.codepath.insync.databinding.FragmentUpcomingEventListBinding;
+import com.codepath.insync.models.Event;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Gauri Gadkari on 4/6/17.
@@ -21,6 +29,8 @@ public class UpcomingEventsFragment extends Fragment {
     FragmentUpcomingEventListBinding binding;
     private static final String ARG_SECTION_NUMBER = "section_number";
     RecyclerView upcomingList;
+    ArrayList<Event> events = new ArrayList<>();
+    UpcomingEventAdapter upcomingEventAdapter;
     public UpcomingEventsFragment() {
     }
 
@@ -39,7 +49,20 @@ public class UpcomingEventsFragment extends Fragment {
         View view = binding.getRoot();
         upcomingList = binding.upcomingList;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+
+        upcomingEventAdapter = new UpcomingEventAdapter(getContext(), events);
+        upcomingList.setAdapter(upcomingEventAdapter);
         upcomingList.setLayoutManager(linearLayoutManager);
+        ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
+        query.findInBackground(new FindCallback<Event>() {
+            @Override
+            public void done(List<Event> objects, ParseException e) {
+                events.addAll(objects);
+                upcomingEventAdapter.notifyDataSetChanged();
+            }
+        });
+
+
         return view;
     }
 }

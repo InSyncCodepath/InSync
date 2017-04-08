@@ -8,16 +8,18 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="10dp"
     android:elevation="4dp"
-    android:padding="4dp">
+    android:layout_margin="4dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="4dp">
 
         <ImageView
             android:id="@+id/ivEventImage"
             android:layout_width="180dp"
-            android:layout_height="180dp" />
+            android:layout_height="180dp"
+            tools:src="@mipmap/ic_launcher"/>
 
         <TextView
             android:id="@+id/tvEventName"
@@ -41,6 +43,7 @@
             android:id="@+id/tvTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/tvEventName"
             android:layout_toRightOf="@id/tvDate"
             tools:text="9:00 pm"
             style="@style/eventListTextView"/>
@@ -49,6 +52,16 @@
             android:layout_height="wrap_content"
             android:id="@+id/tvLocation"
             android:layout_below="@+id/tvDate"
+            android:layout_toRightOf="@id/ivEventImage"
+            tools:text="Location"
+            style="@style/eventListTextView"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvAddress"
+            android:layout_below="@+id/tvLocation"
+            android:layout_toRightOf="@id/ivEventImage"
+            tools:text="Address"
             style="@style/eventListTextView"/>
     </RelativeLayout>
 
