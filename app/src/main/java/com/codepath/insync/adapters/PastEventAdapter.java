@@ -2,10 +2,13 @@ package com.codepath.insync.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.codepath.insync.R;
+import com.codepath.insync.databinding.PastEventItemBinding;
 import com.codepath.insync.models.Event;
 
 import java.util.ArrayList;
@@ -20,13 +23,17 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
 
     @Override
     public PastEventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        View itemView = LayoutInflater.
+                from(context).
+                inflate(R.layout.past_event_item, parent, false);
+
+        return new PastEventViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(PastEventViewHolder holder, int position) {
         Event event = events.get(position);
-
+        holder.binding.tvEventName.setText(event.getName());
     }
 
     @Override
@@ -40,8 +47,11 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
     }
 
     public static class PastEventViewHolder extends RecyclerView.ViewHolder {
+        PastEventItemBinding binding;
         public PastEventViewHolder(View itemView) {
             super(itemView);
+            binding = PastEventItemBinding.bind(itemView);
+
         }
     }
 }
