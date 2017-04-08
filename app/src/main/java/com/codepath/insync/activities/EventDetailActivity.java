@@ -1,6 +1,9 @@
 package com.codepath.insync.activities;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -47,6 +50,7 @@ public class EventDetailActivity extends AppCompatActivity {
     MessageAdapter messageAdapter;
     LinearLayoutManager linearLayoutManager;
     boolean mFirstLoad;
+    BroadcastReceiver messageReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,28 @@ public class EventDetailActivity extends AppCompatActivity {
             login();
         }
 
+    }
+
+    @Override
+    protected void onPause() {
+        this.unregisterReceiver(messageReceiver);
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter("com.codepath.insync.Messages");
+        messageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getBooleanExtra("new_messages", false)) {
+                    refreshMessages();
+                }
+
+            }
+        };
+        registerReceiver(messageReceiver, filter);
     }
 
     public void setupUI(View view) {
@@ -93,6 +119,7 @@ public class EventDetailActivity extends AppCompatActivity {
     // Get the userId from the cached currentUser object
     void startWithCurrentUser() {
         setupMessagePosting();
+        refreshMessages();
     }
 
     // Create an anonymous user using ParseAnonymousUtils and set sUserId
@@ -179,7 +206,7 @@ public class EventDetailActivity extends AppCompatActivity {
                         if(e == null) {
                             Toast.makeText(getApplicationContext(), "Successfully created message on Parse",
                                     Toast.LENGTH_SHORT).show();
-                            refreshMessages();
+
                         } else {
                             Log.e(TAG, "Failed to save message", e);
                         }
@@ -206,25 +233,24 @@ public class EventDetailActivity extends AppCompatActivity {
                 if (e == null) {
                     messages.clear();
                     messages.addAll(newMessages);
-                    messageAdapter.notifyDataSetChanged(); // update adapter
-                    /* TODO: Add this instead
-                    int curSize = tweetsArrayAdapter.getItemCount();
+                    messageAdapter.notifyDataSetChanged();
+        /*
+        TODO: ADD THIS INSTEAD
+        int curSize = tweetsArrayAdapter.getItemCount();
         tweets.addAll(newTweets);
         int newSize = newTweets.size();
         tweetsArrayAdapter.notifyItemRangeInserted(curSize, newSize);
-                     */
-                    // Scroll to the bottom of the list on initial load
+         */
+                    // Scroll to the bottom of the list on initial load 
                     if (mFirstLoad) {
-                        Log.d(TAG, "FIRST LOAD");
+                        Log.d(TAG, "Loading messages for the first time.");
                         linearLayoutManager.scrollToPosition(0);
                         mFirstLoad = false;
                     }
                 } else {
-                    Log.e("message", "Error Loading Messages" + e);
+                    Log.e(TAG, "Error Loading Messages" + e);
                 }
             }
         });
     }
-
-
 }
