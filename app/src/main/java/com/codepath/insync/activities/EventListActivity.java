@@ -1,5 +1,6 @@
 package com.codepath.insync.activities;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,11 +18,13 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.codepath.insync.R;
+import com.codepath.insync.adapters.UpcomingEventAdapter;
 import com.codepath.insync.databinding.ActivityEventListBinding;
 import com.codepath.insync.fragments.PastEventsFragment;
 import com.codepath.insync.fragments.UpcomingEventsFragment;
 
 import static com.codepath.insync.R.id.fab;
+import static com.codepath.insync.activities.EventCreationActivity.newIntent;
 
 public class EventListActivity extends AppCompatActivity {
 
@@ -51,8 +54,8 @@ public class EventListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent startEventCreationIntent = EventCreationActivity.newIntent(EventListActivity.this);
+                EventListActivity.this.startActivity(startEventCreationIntent);
             }
         });
 
@@ -80,6 +83,7 @@ public class EventListActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
     public class MyPagerAdapter extends FragmentPagerAdapter {
         private int NUM_ITEMS = 2;
