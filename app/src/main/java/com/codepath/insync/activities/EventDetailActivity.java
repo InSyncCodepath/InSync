@@ -1,5 +1,6 @@
 package com.codepath.insync.activities;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -62,6 +63,11 @@ public class EventDetailActivity extends AppCompatActivity {
         setupToolbar();
         setupUI(binding.clED);
         setupRecyclerView();
+
+        //get Intent
+        Intent intent = getIntent();
+        String objectId = intent.getStringExtra("ObjectId");
+
 
         if (ParseUser.getCurrentUser() != null) { // start with existing user
             startWithCurrentUser();
@@ -252,5 +258,10 @@ public class EventDetailActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public static Intent newIntent(Activity callingActivity){
+        Intent intent = new Intent(callingActivity, EventDetailActivity.class);
+        return intent;
     }
 }

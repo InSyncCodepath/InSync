@@ -21,6 +21,11 @@ public class Event extends ParseObject {
     public static final String MESSAGE_RELATION_KEY = "messageRelation";
     public static final String ALBUM_RELATION_KEY = "albumRelation";
     public static final String HIGHLIGHTS_VIDEO_KEY = "highlightsVideo";
+    public static final String OBJECT_ID_KEY = "objectId";
+
+    public static String getObjectIdKey() {
+        return OBJECT_ID_KEY;
+    }
 
     public String getName() {
         return getString(NAME_KEY);

@@ -1,5 +1,8 @@
 package com.codepath.insync.activities;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
@@ -37,5 +40,10 @@ public class EventCreationActivity extends AppCompatActivity {
 
         event.saveInBackground();
 
+    }
+
+    public static Intent newIntent(Activity callingActivity){
+        Intent intent = new Intent(callingActivity, EventCreationActivity.class);
+        return intent;
     }
 }
