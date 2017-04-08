@@ -5,8 +5,10 @@ import android.os.Bundle;
 
 import com.codepath.insync.R;
 import com.codepath.insync.models.Event;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 
+import java.io.File;
 import java.util.Date;
 
 public class EventCreationActivity extends AppCompatActivity {

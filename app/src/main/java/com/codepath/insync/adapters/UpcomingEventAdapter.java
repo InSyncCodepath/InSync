@@ -40,6 +40,7 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
                 //.setText("Event Name");
                 //.setText(event.getName());
         holder.binding.tvAddress.setText(event.getAddress());
+        
         //holder.binding.tvTime.setText();
     }
 

@@ -129,6 +129,7 @@ public class Event extends ParseObject {
         this.setEndDate(endDate);
         this.setDescription(description);
         this.setLocation(location);
+        //this.setProfileImage();
 
     }
 
