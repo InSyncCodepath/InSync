@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.UpcomingEventItemBinding;
 import com.codepath.insync.models.Event;
@@ -40,7 +41,7 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
                 //.setText("Event Name");
                 //.setText(event.getName());
         holder.binding.tvAddress.setText(event.getAddress());
-        
+        Glide.with(context).load(event.getProfileImage().getUrl()).into(holder.binding.ivEventImage);
         //holder.binding.tvTime.setText();
     }
 

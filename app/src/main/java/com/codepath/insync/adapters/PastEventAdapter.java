@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.PastEventItemBinding;
 import com.codepath.insync.models.Event;
@@ -34,6 +35,7 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
     public void onBindViewHolder(PastEventViewHolder holder, int position) {
         Event event = events.get(position);
         holder.binding.tvEventName.setText(event.getName());
+        //Glide.with(context).load(event.getHighlightsVideo().getUrl()).into(holder.binding.highlightsVideo);
     }
 
     @Override
