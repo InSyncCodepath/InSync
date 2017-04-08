@@ -46,8 +46,6 @@ import java.util.HashMap;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 
-import static android.os.Build.VERSION_CODES.M;
-
 @RuntimePermissions
 public class LocationTrackerActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -306,7 +304,7 @@ public class LocationTrackerActivity extends AppCompatActivity implements
     private void showAlertDialogForPoint(final LatLng point) {
         // inflate message_item.xml view
         final View messageView = LayoutInflater.from(LocationTrackerActivity.this).
-                inflate(R.layout.message_item, null);
+                inflate(R.layout.item_message_left, null);
         // Create alert dialog builder
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         // set message_item.xml to AlertDialog builder
@@ -326,7 +324,7 @@ public class LocationTrackerActivity extends AppCompatActivity implements
                         // Possible color options:
                         // STYLE_WHITE, STYLE_RED, STYLE_BLUE, STYLE_GREEN, STYLE_PURPLE, STYLE_ORANGE
                         iconGenerator.setStyle(IconGenerator.STYLE_GREEN);
-                        EditText etTitle = (EditText) messageView.findViewById(R.id.etTitle);
+                        EditText etTitle = (EditText) messageView.findViewById(R.id.etEDMessage);
                         // Swap text here to live inside speech bubble
                         Bitmap bitmap = iconGenerator.makeIcon(etTitle.getText().toString());
                         // Use BitmapDescriptorFactory to create the marker
@@ -335,9 +333,9 @@ public class LocationTrackerActivity extends AppCompatActivity implements
                         BitmapDescriptor defaultMarker =
                                 BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
                         // Extract content from alert dialog
-                        String title = ((EditText) alertDialog.findViewById(R.id.etTitle)).
+                        String title = ((EditText) alertDialog.findViewById(R.id.etEDMessage)).
                                 getText().toString();
-                        String snippet = ((EditText) alertDialog.findViewById(R.id.etSnippet)).
+                        String snippet = ((EditText) alertDialog.findViewById(R.id.etEDMessage)).
                                 getText().toString();
                         // Creates and adds marker to the map
                         Marker marker = map.addMarker(new MarkerOptions()

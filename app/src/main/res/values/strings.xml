@@ -17,4 +17,6 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="event_profile_image">Event Profile Image</string>
     <string name="message_hint">Type message...</string>
+    <string name="profile_left">Left Profile Image</string>
+    <string name="profile_right">Right Profile Image</string>
 </resources>

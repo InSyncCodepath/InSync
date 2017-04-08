@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="@dimen/margin8"
+    android:layout_marginBottom="@dimen/margin8"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/ivProfileRight"
+        android:contentDescription="@string/profile_right"
+        android:layout_width="@dimen/image_width"
+        android:layout_height="@dimen/image_height"
+        android:layout_marginEnd="@dimen/margin16"
+        android:layout_alignParentEnd="true"
+        app:srcCompat="@drawable/ic_profile" />
+    <ImageView
+        android:id="@+id/ivMessageLeft"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/ivProfileRight"
+        android:layout_marginStart="@dimen/margin16"
+        android:layout_marginEnd="@dimen/margin16"
+        tools:src="@drawable/ic_camera_alt_white_48px"
+        />
+    <TextView
+        android:id="@+id/tvBodyLeft"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_toStartOf="@id/ivProfileRight"
+        android:layout_marginStart="@dimen/margin16"
+        android:layout_marginEnd="@dimen/margin16"
+        android:layout_below="@id/ivMessageLeft"
+        tools:text="What is the name of the place you went hiking last weekend?"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/tvTimeRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivProfileRight"
+        android:layout_marginTop="@dimen/margin8"
+        android:layout_alignStart="@id/ivProfileRight"
+        tools:text="4:30PM"/>
+</RelativeLayout>

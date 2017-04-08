@@ -46,5 +46,14 @@ public class User extends ParseUser {
         put(PHONE_NUMBER_KEY, phoneNumber);
     }
 
+    public User() {
+        super();
+    }
+
+    public User(ParseUser parseUser) {
+        setUsername(parseUser.getUsername());
+        //setEmail(parseUser.getEmail());
+        setObjectId(parseUser.getObjectId());
+    }
     // TODO: Call get, saveInBackground and pinInBackground here
 }

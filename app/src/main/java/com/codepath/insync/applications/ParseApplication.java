@@ -8,6 +8,7 @@ import com.codepath.insync.models.Message;
 import com.codepath.insync.models.User;
 import com.parse.Parse;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 import com.parse.interceptors.ParseLogInterceptor;
 import com.parse.interceptors.ParseStethoInterceptor;
 
@@ -21,7 +22,7 @@ public class ParseApplication extends Application {
         Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);
 
         // Registering parse models
-        ParseObject.registerSubclass(User.class);
+        ParseUser.registerSubclass(User.class);
         ParseObject.registerSubclass(Event.class);
         ParseObject.registerSubclass(Message.class);
 
