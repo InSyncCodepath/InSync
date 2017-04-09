@@ -1,6 +1,5 @@
 package com.codepath.insync.activities;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -32,15 +31,13 @@ import com.codepath.insync.models.Message;
 import com.codepath.insync.models.User;
 import com.codepath.insync.utils.Constants;
 import com.parse.FindCallback;
-import com.parse.LogInCallback;
-import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 
 public class EventDetailActivity extends AppCompatActivity {
@@ -53,6 +50,7 @@ public class EventDetailActivity extends AppCompatActivity {
     LinearLayoutManager linearLayoutManager;
     boolean mFirstLoad;
     BroadcastReceiver messageReceiver;
+    String eventId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,18 +62,14 @@ public class EventDetailActivity extends AppCompatActivity {
         setupToolbar();
         setupUI(binding.clED);
         setupRecyclerView();
+        processIntent();
+        setupMessagePosting();
+        refreshMessages();
+    }
 
-        //get Intent
+    private void processIntent() {
         Intent intent = getIntent();
-        String objectId = intent.getStringExtra("ObjectId");
-
-
-        if (ParseUser.getCurrentUser() != null) { // start with existing user
-            startWithCurrentUser();
-        } else { // If not logged in, login as a new anonymous user
-            login();
-        }
-
+        eventId = intent.getStringExtra("objectId");
     }
 
     @Override
@@ -132,26 +126,6 @@ public class EventDetailActivity extends AppCompatActivity {
                 setupUI(innerView);
             }
         }
-    }
-
-    // Get the userId from the cached currentUser object
-    void startWithCurrentUser() {
-        setupMessagePosting();
-        refreshMessages();
-    }
-
-    // Create an anonymous user using ParseAnonymousUtils and set sUserId
-    void login() {
-        ParseAnonymousUtils.logIn(new LogInCallback() {
-            @Override
-            public void done(ParseUser user, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Anonymous login failed: ", e);
-                } else {
-                    startWithCurrentUser();
-                }
-            }
-        });
     }
 
     private void setupRecyclerView() {
@@ -215,8 +189,7 @@ public class EventDetailActivity extends AppCompatActivity {
                 Message message = new Message();
                 message.setBody(data);
 
-
-                message.setSender(new User(ParseUser.getCurrentUser()));
+                message.setSender(User.getCurrentUser());
 
                 message.saveInBackground(new SaveCallback() {
                     @Override
@@ -270,10 +243,5 @@ public class EventDetailActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    public static Intent newIntent(Activity callingActivity){
-        Intent intent = new Intent(callingActivity, EventDetailActivity.class);
-        return intent;
     }
 }

@@ -19,14 +19,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.codepath.insync.R;
-import com.codepath.insync.adapters.UpcomingEventAdapter;
 import com.codepath.insync.databinding.ActivityEventListBinding;
 import com.codepath.insync.fragments.PastEventsFragment;
 import com.codepath.insync.fragments.UpcomingEventsFragment;
 import com.codepath.insync.interfaces.OnEventClickListener;
 
-import static com.codepath.insync.R.id.fab;
-import static com.codepath.insync.activities.EventCreationActivity.newIntent;
 
 public class EventListActivity extends AppCompatActivity implements OnEventClickListener {
 

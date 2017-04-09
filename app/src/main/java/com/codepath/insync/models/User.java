@@ -22,8 +22,9 @@ public class User extends ParseUser {
     private static User currentUser;
 
     public static User getCurrentUser() {
-        if (currentUser == null) {
-            currentUser = new User(ParseUser.getCurrentUser());
+        ParseUser parseUser = ParseUser.getCurrentUser();
+        if (currentUser == null && parseUser != null) {
+            currentUser = new User(parseUser);
         }
         return currentUser;
     }
@@ -76,6 +77,7 @@ public class User extends ParseUser {
         setUsername(parseUser.getUsername());
         //setEmail(parseUser.getEmail());
         setObjectId(parseUser.getObjectId());
+
     }
 
 
