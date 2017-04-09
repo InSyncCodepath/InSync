@@ -18,18 +18,31 @@ import com.codepath.insync.databinding.FragmentLoginBinding;
 
 public class LoginFragment extends Fragment {
     FragmentLoginBinding binding;
+    OnSignupListener signupListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false);
+        signupListener = (OnSignupListener) getActivity();
+        setupUI(binding.svLogin);
+        setupClickListeners();
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupUI(binding.svLogin);
+
+    }
+
+    private void setupClickListeners() {
+        binding.tvLoginSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signupListener.onSignup();
+            }
+        });
     }
 
     public void setupUI(View view) {
@@ -40,12 +53,16 @@ public class LoginFragment extends Fragment {
                 public boolean onTouch(View v, MotionEvent event) {
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    binding.inputEmail.clearFocus();
-                    binding.inputPassword.clearFocus();
+                    binding.etLoginEmail.clearFocus();
+                    binding.etLoginPassword.clearFocus();
 
                     return false;
                 }
             });
         }
+    }
+
+    public interface OnSignupListener {
+        void onSignup();
     }
 }

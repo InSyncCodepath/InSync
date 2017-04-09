@@ -43,7 +43,7 @@
                     android:layout_marginTop="8dp">
 
                     <EditText
-                        android:id="@+id/input_email"
+                        android:id="@+id/etLoginEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/username_email"
@@ -59,7 +59,7 @@
                     android:layout_marginTop="8dp">
 
                     <EditText
-                        android:id="@+id/input_password"
+                        android:id="@+id/etLoginPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/password"
@@ -67,7 +67,7 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <TextView
-                    android:id="@+id/btn_login"
+                    android:id="@+id/tvLoginBtn"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
@@ -78,13 +78,13 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/link_signup"
+                android:id="@+id/tvLoginSignup"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin24"
                 android:layout_marginTop="@dimen/margin24"
                 android:gravity="center"
-                android:text="@string/create_account"
+                android:text="@string/not_registered_create_account"
                 android:textSize="16sp" />
 
         </LinearLayout>
