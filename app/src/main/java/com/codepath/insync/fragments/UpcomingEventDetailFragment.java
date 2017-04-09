@@ -50,6 +50,8 @@ public class UpcomingEventDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_upcoming_event_detail, container, false);
         viewTouchListener = (OnViewTouchListener) getActivity();
         setupUI(binding.rvChat);

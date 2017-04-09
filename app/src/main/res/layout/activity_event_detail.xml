@@ -48,7 +48,7 @@
                             android:layout_width="@dimen/image_width"
                             android:layout_height="@dimen/image_height"
                             android:layout_marginStart="@dimen/margin8"
-                            android:layout_marginTop="@dimen/margin48"
+                            android:layout_marginTop="@dimen/margin24"
                             android:contentDescription="@string/event_profile_image"
                             android:scaleType="fitXY"
                             app:srcCompat="@drawable/ic_camera_alt_white_48px" />

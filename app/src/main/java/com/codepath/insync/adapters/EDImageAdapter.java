@@ -2,18 +2,16 @@ package com.codepath.insync.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.codepath.insync.R;
-import com.codepath.insync.models.Message;
-import com.codepath.insync.utils.DateUtil;
-
+import com.parse.ParseException;
+import com.parse.ParseFile;
 
 import java.util.List;
 
@@ -21,10 +19,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHolder> {
 
-    // view types
-    private final int LEFT = 0, RIGHT = 1;
 
     // Define listener member variable
     private OnItemClickListener listener;
@@ -38,13 +34,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.listener = listener;
     }
 
-    public class ViewHolderLeft extends RecyclerView.ViewHolder {
-        public @BindView(R.id.ivProfileLeft) ImageView ivProfileLeft;
-        public @BindView(R.id.ivMessageRight) ImageView ivMessageRight;
-        public @BindView(R.id.tvBodyRight) TextView tvBodyRight;
-        public @BindView(R.id.tvTimeLeft) TextView tvTimeLeft;
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public @BindView(R.id.ivEDImage) ImageView ivEDImage;
 
-        public ViewHolderLeft(final View itemView) {
+        public ViewHolder(final View itemView) {
                 // Stores the itemView in a public final member variable that can be used
                 // to access the context from any ViewHolder instance.
                 super(itemView);
@@ -66,42 +59,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    public class ViewHolderRight extends RecyclerView.ViewHolder {
-        public @BindView(R.id.ivProfileRight) ImageView ivProfileRight;
-        public @BindView(R.id.ivMessageLeft) ImageView ivMessageLeft;
-        public @BindView(R.id.tvBodyLeft) TextView tvBodyLeft;
-        public @BindView(R.id.tvTimeRight) TextView tvTimeRight;
-
-        public ViewHolderRight(final View itemView) {
-            // Stores the itemView in a public final member variable that can be used
-            // to access the context from any ViewHolder instance.
-            super(itemView);
-
-            ButterKnife.bind(this, itemView);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                // Triggers click upwards to the adapter on click
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(itemView, position);
-                        }
-                    }
-                }
-            });
-        }
-    }
-
     // Store a member variable for the messages
-    private List<Message> mMessages;
+    private List<ParseFile> mEDImages;
     // Store the context for easy access
     private Context mContext;
 
     // Pass in the message array into the constructor
-    public MessageAdapter(Context context, List<Message> messages) {
-        mMessages = messages;
+    public EDImageAdapter(Context context, List<ParseFile> edImages) {
+        mEDImages = edImages;
         mContext = context;
     }
 
@@ -112,111 +77,60 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder viewHolder;
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+    public EDImageAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(mContext);
 
-        switch (viewType) {
-            case LEFT:
-                View viewLeft = inflater.inflate(R.layout.item_message_left, parent, false);
-                viewHolder = new ViewHolderLeft(viewLeft);
-                break;
-            default:
-                View viewRight = inflater.inflate(R.layout.item_message_right, parent, false);
-                viewHolder = new ViewHolderRight(viewRight);
-                break;
-        }
+        // Inflate the custom image view layout
+        View edImageView = inflater.inflate(R.layout.item_edimage, parent, false);
+
+        // Return a new holder instance
+        ViewHolder viewHolder = new ViewHolder(edImageView);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
 
         // Get the data model based on position
-        Message message = mMessages.get(position);
-        Bitmap profileBitmap = message.getProfileImageBitmap();
-        Bitmap mediaBitmap = message.getMediaImageBitmap();
-        String messageTime = DateUtil.getTimeInFormat(message.getCreatedAt());
+        ParseFile edImage = mEDImages.get(position);
+        Bitmap imageBitmap;
+        holder.ivEDImage.setImageResource(R.drawable.ic_camera_alt_white_48px);
 
-        // Set item views based on your views and data model
-        switch (holder.getItemViewType()) {
-            case LEFT:
-                ViewHolderLeft viewLeft = (ViewHolderLeft) holder;
-                // set the text view
-                viewLeft.tvBodyRight.setText(message.getBody());
-                viewLeft.tvTimeLeft.setText(messageTime);
-
-                // reset the recycle view to the default profile image
-                viewLeft.ivProfileLeft.setImageResource(R.drawable.ic_profile);
-
-                // populate the profile image if it exists
-                if (profileBitmap != null) {
-                    viewLeft.ivProfileLeft.setImageBitmap(profileBitmap);
-                }
-
-                // populate the message media if it exists
-                if (mediaBitmap != null) {
-                    viewLeft.ivMessageRight.setVisibility(View.VISIBLE);
-                    viewLeft.ivMessageRight.setImageBitmap(mediaBitmap);
-                } else {
-                    viewLeft.ivMessageRight.setVisibility(View.GONE);
-                }
-
-                break;
-            default:
-                ViewHolderRight viewRight = (ViewHolderRight) holder;
-                // set the text view
-                viewRight.tvBodyLeft.setText(message.getBody());
-                viewRight.tvTimeRight.setText(messageTime);
-
-                // reset the recycle view to the default profile image
-                viewRight.ivProfileRight.setImageResource(R.drawable.ic_profile);
-
-                // populate the profile image if it exists
-                if (profileBitmap != null) {
-                    viewRight.ivProfileRight.setImageBitmap(profileBitmap);
-                }
-
-                // populate the message media if it exists
-                if (mediaBitmap != null) {
-                    viewRight.ivMessageLeft.setVisibility(View.VISIBLE);
-                    viewRight.ivMessageLeft.setImageBitmap(mediaBitmap);
-                } else {
-                    viewRight.ivMessageLeft.setVisibility(View.GONE);
-                }
-                break;
+        try {
+            imageBitmap = BitmapFactory.decodeStream(edImage.getDataStream());
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return;
         }
+
+        holder.ivEDImage.setImageBitmap(imageBitmap);
+
+
 
     }
 
     @Override
     public int getItemCount() {
-        return mMessages.size();
+        return mEDImages.size();
     }
     
-    public Message getItem(int position) {
-        return getItem(getItemCount() - position - 1);
+    public ParseFile getItem(int position) {
+        return getItem(position);
     }
 
     public void clear() {
-        mMessages.clear();
+        mEDImages.clear();
         notifyDataSetChanged();
 
     }
 
-    public void addAll(List<Message> newMessages) {
-        int position = mMessages.size();
-        for (int i=0; i < newMessages.size(); i++) {
-            mMessages.add(newMessages.get(i));
+    public void addAll(List<ParseFile> newEDImages) {
+        int position = mEDImages.size();
+        for (int i=0; i < newEDImages.size(); i++) {
+            mEDImages.add(newEDImages.get(i));
             notifyItemInserted(position);
             position++;
         }
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        int newPosition = getItemCount() - position - 1;
-        return (newPosition % 2 == 0) ? LEFT : RIGHT;
     }
 
 }

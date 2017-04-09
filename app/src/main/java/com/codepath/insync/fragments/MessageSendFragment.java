@@ -24,6 +24,8 @@ public class MessageSendFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_message_send, container, false);
         setupMessagePosting();
         return binding.getRoot();

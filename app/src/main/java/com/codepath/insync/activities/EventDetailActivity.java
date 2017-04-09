@@ -24,6 +24,7 @@ import android.support.v7.graphics.Palette;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityEventDetailBinding;
 import com.codepath.insync.fragments.MessageSendFragment;
+import com.codepath.insync.fragments.PastEventDetailFragment;
 import com.codepath.insync.fragments.UpcomingEventDetailFragment;
 import com.codepath.insync.models.Event;
 import com.codepath.insync.utils.Constants;
@@ -50,7 +51,6 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
 
         setupToolbar();
         processIntent();
-        setupUI(binding.clED);
     }
 
     private void processIntent() {
@@ -158,18 +158,28 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
             }
         });
     }
-    
+
     private void loadFragments() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Date now = new Date();
+        String videoUrl;
+        if (event.getHighlightsVideo() != null) {
+            videoUrl = event.getHighlightsVideo().getUrl();
+        } else {
+            videoUrl = null;
+        }
         if (event.getEndDate().compareTo(now) < 0) {
-            // Load past event detail
+            PastEventDetailFragment pastEventDetailFragment =
+                    PastEventDetailFragment.newInstance(event.getObjectId(), videoUrl);
+            ft.replace(R.id.flMessages, pastEventDetailFragment);
         } else {
             // Load current and upcoming event detail
             UpcomingEventDetailFragment upcomingEventDetailFragment = new UpcomingEventDetailFragment();
             ft.replace(R.id.flMessages, upcomingEventDetailFragment);
             messageSendFragment = new MessageSendFragment();
             ft.replace(R.id.flMessageSend, messageSendFragment);
+
+            setupUI(binding.clED);
         }
 
 
