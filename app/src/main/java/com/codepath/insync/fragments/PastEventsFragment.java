@@ -8,11 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.PastEventAdapter;
+import com.codepath.insync.adapters.UpcomingEventAdapter;
 import com.codepath.insync.databinding.FragmentPastEventListBinding;
+import com.codepath.insync.interfaces.OnEventClickListener;
 import com.codepath.insync.models.Event;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -21,14 +22,12 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Gauri Gadkari on 4/6/17.
- */
 
-public class PastEventsFragment extends Fragment {
+public class PastEventsFragment extends Fragment implements PastEventAdapter.EventDetailClickHandling {
     FragmentPastEventListBinding binding;
     private static final String ARG_SECTION_NUMBER = "section_number";
     RecyclerView pastList;
+    OnEventClickListener eventClickListener;
     ArrayList<Event> events = new ArrayList<>();
     PastEventAdapter pastEventAdapter;
     public PastEventsFragment() {
@@ -50,8 +49,9 @@ public class PastEventsFragment extends Fragment {
         pastList = binding.pastList;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         pastList.setLayoutManager(linearLayoutManager);
-        pastEventAdapter = new PastEventAdapter(getContext(), events);
+        pastEventAdapter = new PastEventAdapter(this, getContext(), events);
         pastList.setAdapter(pastEventAdapter);
+        eventClickListener = (OnEventClickListener) getActivity();
         ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
         query.findInBackground(new FindCallback<Event>() {
             @Override
@@ -62,6 +62,11 @@ public class PastEventsFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onEventItemClick(String objectId) {
+        eventClickListener.onItemClick(objectId);
     }
 }
 

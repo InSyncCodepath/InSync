@@ -19,6 +19,15 @@ public class User extends ParseUser {
     public static final String LOCATION_KEY = "location";
     public static final String EVENT_RELATION_KEY = "eventRelation";
     public static final String PHONE_NUMBER_KEY = "phoneNumber";
+    private static User currentUser;
+
+    public static User getCurrentUser() {
+        ParseUser parseUser = ParseUser.getCurrentUser();
+        if (currentUser == null && parseUser != null) {
+            currentUser = new User(parseUser);
+        }
+        return currentUser;
+    }
 
     public String getName() {
         return getString(NAME_KEY);
@@ -68,6 +77,7 @@ public class User extends ParseUser {
         setUsername(parseUser.getUsername());
         //setEmail(parseUser.getEmail());
         setObjectId(parseUser.getObjectId());
+
     }
 
 

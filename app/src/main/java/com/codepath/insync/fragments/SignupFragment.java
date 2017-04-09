@@ -70,7 +70,6 @@ public class SignupFragment extends Fragment {
                                     getActivity(),
                                     "Sign up successful!", Toast.LENGTH_SHORT)
                                     .show();
-                            loginListener.onLoginSuccess();
                             user.login(
                                     binding.etSignupUsername.getText().toString(),
                                     binding.etSignupPassword.getText().toString(),
@@ -78,7 +77,7 @@ public class SignupFragment extends Fragment {
                                         @Override
                                         public void done(ParseUser user, ParseException e) {
                                             if (e == null) {
-
+                                                loginListener.onLoginSuccess();
                                             } else {
                                                 Toast.makeText(
                                                         getActivity(),

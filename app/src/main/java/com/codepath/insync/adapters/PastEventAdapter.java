@@ -1,6 +1,7 @@
 package com.codepath.insync.adapters;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +15,13 @@ import com.codepath.insync.models.Event;
 
 import java.util.ArrayList;
 
-/**
- * Created by Gauri Gadkari on 4/6/17.
- */
+import static android.R.attr.fragment;
+
 
 public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.PastEventViewHolder> {
     ArrayList<Event> events;
     Context context;
+    EventDetailClickHandling listener;
 
     @Override
     public PastEventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -33,7 +34,13 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
 
     @Override
     public void onBindViewHolder(PastEventViewHolder holder, int position) {
-        Event event = events.get(position);
+        final Event event = events.get(position);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onEventItemClick(event.getObjectId());
+            }
+        });
         holder.binding.tvEventName.setText(event.getName());
         //Glide.with(context).load(event.getHighlightsVideo().getUrl()).into(holder.binding.highlightsVideo);
     }
@@ -43,7 +50,8 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
         return events.size();
     }
 
-    public PastEventAdapter(Context context, ArrayList<Event> events) {
+    public PastEventAdapter(Fragment fragment, Context context, ArrayList<Event> events) {
+        this.listener = (EventDetailClickHandling) fragment;
         this.context = context;
         this.events = events;
     }
@@ -55,5 +63,9 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
             binding = PastEventItemBinding.bind(itemView);
 
         }
+    }
+
+    public interface EventDetailClickHandling {
+        public void onEventItemClick(String objectId);
     }
 }

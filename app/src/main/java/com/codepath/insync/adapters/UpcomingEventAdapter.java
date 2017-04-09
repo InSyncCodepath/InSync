@@ -2,6 +2,7 @@ package com.codepath.insync.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.codepath.insync.models.Event;
 
 import java.util.ArrayList;
 
+import static android.R.id.message;
 import static com.codepath.insync.R.id.tvEventName;
 
 /**
@@ -47,7 +49,12 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
         //holder.binding.tvDate.setText(event.getStartDate().toString());
         holder.eventName.setText(event.getName());
         holder.binding.tvAddress.setText(event.getAddress());
-        Glide.with(context).load(event.getProfileImage().getUrl()).into(holder.binding.ivEventImage);
+
+        Bitmap profileBitmap = event.getProfileImageBitmap();
+        if (profileBitmap != null) {
+            holder.binding.ivEventImage.setImageBitmap(profileBitmap);
+        }
+
         //holder.binding.tvTime.setText();
     }
 
@@ -73,7 +80,8 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
 
         }
     }
-    public interface EventDetailClickHandling{
+
+    public interface EventDetailClickHandling {
         public void onEventItemClick(String objectId);
     }
 }

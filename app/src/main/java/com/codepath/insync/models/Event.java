@@ -1,7 +1,11 @@
 package com.codepath.insync.models;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.util.Date;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
@@ -114,6 +118,20 @@ public class Event extends ParseObject {
     public void setHighlightsVideo(ParseFile highlightsVideo) {
         put(HIGHLIGHTS_VIDEO_KEY, highlightsVideo);
     }
+
+    public Bitmap getProfileImageBitmap() {
+        ParseFile profileImg = getProfileImage();
+        Bitmap bitmap = null;
+        if (profileImg != null) {
+            try {
+                bitmap = BitmapFactory.decodeStream(profileImg.getDataStream());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return bitmap;
+    }
+
     public Event(){}
 
     // TODO: Call get, saveInBackground and pinInBackground here
