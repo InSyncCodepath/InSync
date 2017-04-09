@@ -1,6 +1,7 @@
 package com.codepath.insync.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +21,7 @@ import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityLoginBinding;
 import com.codepath.insync.fragments.LoginFragment;
 import com.codepath.insync.fragments.SignupFragment;
+import com.codepath.insync.interfaces.OnLoginListener;
 import com.crashlytics.android.Crashlytics;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
@@ -33,7 +35,7 @@ import java.util.HashMap;
 
 import io.fabric.sdk.android.Fabric;
 
-public class LoginActivity extends AppCompatActivity implements LoginFragment.OnSignupListener, SignupFragment.OnLoginListener{
+public class LoginActivity extends AppCompatActivity implements OnLoginListener {
 
     private static final String TAG = "LoginActivity";
     ActivityLoginBinding binding;
@@ -100,6 +102,13 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
         SignupFragment signupFragment = new SignupFragment();
         ft.replace(R.id.flLogin, signupFragment);
         ft.commit();
+    }
+
+    @Override
+    public void onLoginSuccess() {
+        Intent intent = new Intent(LoginActivity.this, EventListActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

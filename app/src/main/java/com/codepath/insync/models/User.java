@@ -1,18 +1,28 @@
 package com.codepath.insync.models;
 
+import com.parse.LogInCallback;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
+
+import static android.R.attr.phoneNumber;
 
 
 @ParseClassName("User")
 public class User extends ParseUser {
+    public static final String NAME_KEY = "name";
     public static final String PROFILE_IMAGE_KEY = "profileImage";
     public static final String LOCATION_KEY = "location";
     public static final String EVENT_RELATION_KEY = "eventRelation";
     public static final String PHONE_NUMBER_KEY = "phoneNumber";
+
+    public String getName() {
+        return getString(NAME_KEY);
+    }
 
     public ParseFile getProfileImage() {
         return getParseFile(PROFILE_IMAGE_KEY);
@@ -28,6 +38,10 @@ public class User extends ParseUser {
 
     public String getPhoneNumber() {
         return getString(PHONE_NUMBER_KEY);
+    }
+
+    public void setName(String name) {
+        put(NAME_KEY, name);
     }
 
     public void setProfileImage(ParseFile profileImage) {
@@ -55,5 +69,15 @@ public class User extends ParseUser {
         //setEmail(parseUser.getEmail());
         setObjectId(parseUser.getObjectId());
     }
-    // TODO: Call get, saveInBackground and pinInBackground here
+
+
+
+    public void signup(SignUpCallback callback) {
+        super.signUpInBackground(callback);
+    }
+
+    public void login(String username, String password, LogInCallback callback) {
+        super.logInInBackground(username, password, callback);
+    }
+
 }

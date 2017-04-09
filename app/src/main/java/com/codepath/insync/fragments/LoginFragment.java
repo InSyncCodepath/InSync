@@ -11,20 +11,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.FragmentLoginBinding;
+import com.codepath.insync.interfaces.OnLoginListener;
+import com.codepath.insync.models.User;
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 
 public class LoginFragment extends Fragment {
     FragmentLoginBinding binding;
-    OnSignupListener signupListener;
+    OnLoginListener loginListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false);
-        signupListener = (OnSignupListener) getActivity();
+        loginListener = (OnLoginListener) getActivity();
         setupUI(binding.svLogin);
         setupClickListeners();
         return binding.getRoot();
@@ -40,7 +46,34 @@ public class LoginFragment extends Fragment {
         binding.tvLoginSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signupListener.onSignup();
+                loginListener.onSignup();
+            }
+        });
+
+        binding.tvLoginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final User user = new User();
+                user.login(
+                        binding.etLoginEmail.getText().toString(),
+                        binding.etLoginPassword.getText().toString(),
+                        new LogInCallback() {
+                            @Override
+                            public void done(ParseUser user, ParseException e) {
+                                if (e == null) {
+                                    Toast.makeText(
+                                            getActivity(),
+                                            "Login successful!", Toast.LENGTH_SHORT)
+                                            .show();
+                                    loginListener.onLoginSuccess();
+                                } else {
+                                    Toast.makeText(
+                                            getActivity(),
+                                            "Error logging in. Please try again later!", Toast.LENGTH_SHORT)
+                                            .show();
+                                }
+                            }
+                        });
             }
         });
     }
@@ -62,7 +95,4 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    public interface OnSignupListener {
-        void onSignup();
-    }
 }
