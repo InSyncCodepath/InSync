@@ -63,6 +63,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-gcm:10.2.1'
     compile 'com.google.android.gms:play-services-maps:10.2.1'
     compile 'com.google.android.gms:play-services-location:10.2.1'
+    compile 'com.google.android.gms:play-services-places:10.2.1'
     compile 'com.google.maps.android:android-maps-utils:0.5'
 
     // Permission dispatcher
