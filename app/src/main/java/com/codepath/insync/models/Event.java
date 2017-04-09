@@ -70,7 +70,7 @@ public class Event extends ParseObject {
         return getRelation(MESSAGE_RELATION_KEY);
     }
 
-    public ParseRelation getAlbumRelation() {
+    public ParseRelation<ParseObject> getAlbumRelation() {
         return getRelation(ALBUM_RELATION_KEY);
     }
 
