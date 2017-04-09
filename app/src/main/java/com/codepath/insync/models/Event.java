@@ -4,11 +4,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.util.Date;
+
+import com.parse.GetCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 
 
@@ -153,6 +156,14 @@ public class Event extends ParseObject {
         this.setDescription(description);
         this.setLocation(location);
         //this.setProfileImage();
+
+    }
+
+    public static void findEvent(String eventId, GetCallback<Event> getCallback) {
+        ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
+        // First try to find from the cache and only then go to network
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        query.getInBackground(eventId, getCallback);
 
     }
 

@@ -1,177 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.codepath.insync.activities.EventDetailActivity"
         android:fitsSystemWindows="true"
-        >
+        tools:context="com.codepath.insync.activities.EventDetailActivity">
 
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/clED"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:layout_above="@+id/bnvEDMessage"
-        >
-
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/abEventDetail"
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/clED"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            >
+            android:layout_height="match_parent"
+            android:layout_above="@+id/flMessageSend"
+            android:fitsSystemWindows="true">
 
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/ctlEventDetail"
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/abEventDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fitsSystemWindows="true"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                android:fitsSystemWindows="true">
 
-                <RelativeLayout
-                    android:id="@+id/rlToolbar"
+                <android.support.design.widget.CollapsingToolbarLayout
+                    android:id="@+id/ctlEventDetail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fitsSystemWindows="true"
-                    android:background="@android:color/white"
-                    app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed"
-                    >
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                    <ImageView
-                        android:id="@+id/ivEDProfile"
-                        android:layout_width="@dimen/image_width"
-                        android:layout_height="@dimen/image_height"
-                        android:scaleType="fitXY"
-                        app:srcCompat="@drawable/ic_camera_alt_white_48px"
-                        android:contentDescription="@string/event_profile_image"
-                        android:layout_marginStart="@dimen/margin8"
-                        android:layout_marginTop="@dimen/margin48"
-                        />
+                    <android.support.v7.widget.Toolbar
+                        android:id="@+id/tbEventDetail"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        app:layout_collapseMode="pin" />
 
-
-                    <TextView
-                        android:id="@+id/tvEDName"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:id="@+id/rlToolbar"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin8"
-                        android:textSize="@dimen/event_heading"
-                        android:textColor="@android:color/black"
-                        android:text="Netfix Demo Day"
-                        android:layout_toEndOf="@id/ivEDProfile"
-                        android:layout_alignTop="@id/ivEDProfile"
+                        android:background="@android:color/white"
+                        android:fitsSystemWindows="true"
+                        app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed">
 
-                        />
-                    <TextView
-                        android:id="@+id/tvEDDescription"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignStart="@id/tvEDName"
-                        android:layout_below="@id/tvEDName"
-                        android:layout_marginTop="@dimen/margin8"
-                        android:text="App demos will be presented to each other on April 26th. We will be voting and selecting the top teams to present at our public Demo Day following the bootcamp."
-                        />
+                        <ImageView
+                            android:id="@+id/ivEDProfile"
+                            android:layout_width="@dimen/image_width"
+                            android:layout_height="@dimen/image_height"
+                            android:layout_marginStart="@dimen/margin8"
+                            android:layout_marginTop="@dimen/margin48"
+                            android:contentDescription="@string/event_profile_image"
+                            android:scaleType="fitXY"
+                            app:srcCompat="@drawable/ic_camera_alt_white_48px" />
 
-                    <TextView
-                        android:id="@+id/tvWhen"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:textSize="@dimen/event_heading"
-                        android:textColor="@android:color/black"
-                        android:layout_marginTop="@dimen/margin16"
-                        android:text="When?"
-                        android:layout_below="@id/tvEDDescription"
-                        />
-                    <TextView
-                        android:id="@+id/tvEDDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/tvWhen"
-                        android:layout_centerHorizontal="true"
-                        android:text="Wednesday, April 26th at 7pm"
-                        />
 
-                    <TextView
-                        android:id="@+id/tvWhere"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:textSize="@dimen/event_heading"
-                        android:textColor="@android:color/black"
-                        android:layout_marginTop="@dimen/margin16"
-                        android:text="Where?"
-                        android:layout_below="@id/tvEDDate"
-                        />
-                    <TextView
-                        android:id="@+id/tvEDLocation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/tvWhere"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="@dimen/margin8"
-                        android:text="121 Albright Way, Los Gatos, CA 95032"/>
+                        <TextView
+                            android:id="@+id/tvEDName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@id/ivEDProfile"
+                            android:layout_marginStart="@dimen/margin8"
+                            android:layout_toEndOf="@id/ivEDProfile"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/event_heading"
+                            tools:text="Netfix Demo Day"
 
-                </RelativeLayout>
+                            />
 
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/tbEventDetail"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:layout_collapseMode="pin"
-                     />
+                        <TextView
+                            android:id="@+id/tvEDDescription"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignStart="@id/tvEDName"
+                            android:layout_below="@id/tvEDName"
+                            android:layout_marginTop="@dimen/margin8"
+                            tools:text="App demos will be presented to each other on April 26th. We will be voting and selecting the top teams to present at our public Demo Day following the bootcamp." />
 
-            </android.support.design.widget.CollapsingToolbarLayout>
+                        <TextView
+                            android:id="@+id/tvWhen"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tvEDDescription"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/margin16"
+                            android:text="@string/when"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/event_heading" />
 
-        </android.support.design.widget.AppBarLayout>
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rvChat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                />
+                        <TextView
+                            android:id="@+id/tvEDDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tvWhen"
+                            android:layout_centerHorizontal="true"
+                            tools:text="Wednesday, April 26th at 7pm" />
 
-    </android.support.design.widget.CoordinatorLayout>
-        <android.support.design.widget.BottomNavigationView
-            android:id="@+id/bnvEDMessage"
+                        <TextView
+                            android:id="@+id/tvWhere"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tvEDDate"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/margin16"
+                            android:text="@string/where"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/event_heading" />
+
+                        <TextView
+                            android:id="@+id/tvEDLocation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tvWhere"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="@dimen/margin8"
+                            tools:text="121 Albright Way, Los Gatos, CA 95032" />
+
+                    </RelativeLayout>
+
+                </android.support.design.widget.CollapsingToolbarLayout>
+
+            </android.support.design.widget.AppBarLayout>
+
+          <FrameLayout
+                android:id="@+id/flMessages"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            </FrameLayout>
+        </android.support.design.widget.CoordinatorLayout>
+       <FrameLayout
+            android:id="@+id/flMessageSend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="@dimen/margin8"
             android:layout_gravity="bottom"
-            android:layout_alignParentEnd="true">
+            android:layout_marginTop="@dimen/margin8"
+           >
+        </FrameLayout>
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fabEDSend"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/etEDMessage"
-                android:layout_alignParentEnd="true"
-                android:layout_gravity="bottom|end"
-                android:layout_marginBottom="@dimen/margin30"
-                android:layout_marginEnd="@dimen/margin8"
-                app:srcCompat="@drawable/ic_send" />
-
-            <EditText
-                android:id="@+id/etEDMessage"
-                android:layout_gravity="bottom"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/tvHeight"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:background="@color/accent"
-                android:backgroundTint="@color/primary_light"
-                android:hint="@string/message_hint"
-                android:imeOptions="actionSend"
-                android:inputType="textShortMessage"
-                app:layout_behavior=".BottomNavigationBehavior"
-                tools:targetApi="lollipop" />
-        </android.support.design.widget.BottomNavigationView>
     </RelativeLayout>
 </layout>

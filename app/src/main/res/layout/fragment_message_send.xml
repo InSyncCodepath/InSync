@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/bnvEDMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabEDSend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/etEDMessage"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="bottom|end"
+                android:layout_marginBottom="@dimen/margin30"
+                android:layout_marginEnd="@dimen/margin8"
+                app:srcCompat="@drawable/ic_send" />
+
+            <EditText
+                android:id="@+id/etEDMessage"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/tvHeight"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="bottom"
+                android:background="@color/accent"
+                android:backgroundTint="@color/primary_light"
+                android:hint="@string/message_hint"
+                android:imeOptions="actionSend"
+                android:inputType="textShortMessage"
+                app:layout_behavior=".BottomNavigationBehavior"
+                tools:targetApi="lollipop" />
+        </android.support.design.widget.BottomNavigationView>
+    </RelativeLayout>
+</layout>
