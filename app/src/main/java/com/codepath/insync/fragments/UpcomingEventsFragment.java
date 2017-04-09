@@ -69,5 +69,9 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
     public void onEventItemClick(String objectId) {
        eventClickListener.onItemClick(objectId);
     }
+
+    public void reloadList(){
+        upcomingEventAdapter.notifyDataSetChanged();
+    }
 }
 

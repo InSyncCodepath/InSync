@@ -4,7 +4,6 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +16,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityEventListBinding;
@@ -30,7 +30,9 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
     private ActivityEventListBinding binding;
     private FragmentPagerAdapter viewPagerAdapter;
     private ViewPager viewPager;
-
+    final int REQUEST_CODE = 1001;
+    public UpcomingEventsFragment upcomingFragment;
+    public PastEventsFragment pastFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,12 +56,20 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
             @Override
             public void onClick(View view) {
                 Intent startEventCreationIntent = EventCreationActivity.newIntent(EventListActivity.this);
-                EventListActivity.this.startActivity(startEventCreationIntent);
+                EventListActivity.this.startActivityForResult(startEventCreationIntent, REQUEST_CODE);
             }
         });
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            upcomingFragment.reloadList();
+            Toast.makeText(this, "New Event Added", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,7 +96,7 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
     @Override
     public void onItemClick(String objectId) {
         Bundle animationBundle =
-                ActivityOptions.makeCustomAnimation(this, R.anim.slide_from_left,R.anim.slide_to_left).toBundle();
+                ActivityOptions.makeCustomAnimation(this, R.anim.slide_from_left, R.anim.slide_to_left).toBundle();
         Intent eventDetailIntent = new Intent(EventListActivity.this, EventDetailActivity.class);
         eventDetailIntent.putExtra("objectId", objectId);
         startActivity(eventDetailIntent, animationBundle);
@@ -95,9 +105,6 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
 
     public class MyPagerAdapter extends FragmentPagerAdapter {
         private int NUM_ITEMS = 2;
-        public UpcomingEventsFragment upcomingFragment;
-        public PastEventsFragment pastFragment;
-
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
         }

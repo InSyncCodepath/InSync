@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp">
+
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/autoCompleteTextView"
+            android:ems="10"
+            android:text="Please enter your place" >
+            <requestFocus />
+        </AutoCompleteTextView>
+
+        <!--<android.support.v7.app.AlertController.RecycleListView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:id="@+id/locationList"-->
+            <!--android:layout_below="@id/etLocationSearch"-->
+            <!--android:layout_marginTop="4dp"/>-->
+
+    </RelativeLayout>
+
+</layout>

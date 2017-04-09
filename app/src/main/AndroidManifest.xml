@@ -43,7 +43,7 @@
             android:name=".activities.EventListActivity"
             android:label="@string/title_activity_event_list"
             android:theme="@style/AppTheme.NoActionBar">
-       <!--     <intent-filter>
+           <!--<intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -59,7 +59,9 @@
 
         </intent-filter>-->
         </activity>
-        <activity android:name=".activities.EventCreationActivity">
+        <activity android:name=".activities.EventCreationActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            >
             <!--<intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
 
@@ -101,6 +103,9 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_api_key" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_api_key"/>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
