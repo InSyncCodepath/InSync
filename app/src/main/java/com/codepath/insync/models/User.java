@@ -19,6 +19,14 @@ public class User extends ParseUser {
     public static final String LOCATION_KEY = "location";
     public static final String EVENT_RELATION_KEY = "eventRelation";
     public static final String PHONE_NUMBER_KEY = "phoneNumber";
+    private static User currentUser;
+
+    public static User getCurrentUser() {
+        if (currentUser == null) {
+            currentUser = new User(ParseUser.getCurrentUser());
+        }
+        return currentUser;
+    }
 
     public String getName() {
         return getString(NAME_KEY);
