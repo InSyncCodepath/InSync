@@ -1,7 +1,11 @@
 package com.codepath.insync.fragments;
 
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.SurfaceTexture;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -114,6 +118,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
                         edImages.add(imageObject.getParseFile("image"));
                     }
                     edImageAdapter.notifyDataSetChanged();
+                    animateImages();
                 } else {
                     Log.e(TAG, "Error fetching event album");
                 }
@@ -248,5 +253,22 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     @Override
     public int getAudioSessionId() {
         return 0;
+    }
+
+    public void animateImages() {
+        AnimationDrawable anim = new AnimationDrawable();
+        for (ParseFile image : edImages) {
+            try {
+                Bitmap bitmap = BitmapFactory.decodeStream(image.getDataStream());
+
+                anim.addFrame(new BitmapDrawable(getResources(), bitmap), 500);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        binding.ivHighlights.setImageDrawable(anim);
+
+        anim.setOneShot(false);
+        anim.start();
     }
 }
