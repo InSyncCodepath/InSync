@@ -80,7 +80,8 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
 
         }
     }
-    public interface EventDetailClickHandling{
+
+    public interface EventDetailClickHandling {
         public void onEventItemClick(String objectId);
     }
 }

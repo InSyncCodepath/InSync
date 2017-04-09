@@ -1,5 +1,6 @@
 package com.codepath.insync.activities;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.design.widget.FloatingActionButton;
@@ -22,11 +23,12 @@ import com.codepath.insync.adapters.UpcomingEventAdapter;
 import com.codepath.insync.databinding.ActivityEventListBinding;
 import com.codepath.insync.fragments.PastEventsFragment;
 import com.codepath.insync.fragments.UpcomingEventsFragment;
+import com.codepath.insync.interfaces.OnEventClickListener;
 
 import static com.codepath.insync.R.id.fab;
 import static com.codepath.insync.activities.EventCreationActivity.newIntent;
 
-public class EventListActivity extends AppCompatActivity {
+public class EventListActivity extends AppCompatActivity implements OnEventClickListener {
 
     private ActivityEventListBinding binding;
     private FragmentPagerAdapter viewPagerAdapter;
@@ -82,6 +84,15 @@ public class EventListActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(String objectId) {
+        Bundle animationBundle =
+                ActivityOptions.makeCustomAnimation(this, R.anim.slide_from_left,R.anim.slide_to_left).toBundle();
+        Intent eventDetailIntent = new Intent(EventListActivity.this, EventDetailActivity.class);
+        eventDetailIntent.putExtra("objectId", objectId);
+        startActivity(eventDetailIntent, animationBundle);
     }
 
 
