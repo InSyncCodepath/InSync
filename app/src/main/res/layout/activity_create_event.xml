@@ -6,6 +6,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/contactsContainer"
         tools:context="com.codepath.insync.activities.EventCreationActivity">
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
@@ -130,6 +131,7 @@
             android:layout_marginTop="8dp"
             android:layout_toRightOf="@+id/ivDetails"
             android:hint="Details" />
+
 
         <EditText
             android:layout_width="wrap_content"

@@ -8,7 +8,9 @@
     <permission
         android:name="android.permission.ACCESS_COARSE_LOCATION"
         android:protectionLevel="dangerous" />
-
+    <permission android:name="android.permission.READ_CONTACTS"
+        android:protectionLevel="dangerous" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="com.example.mapdemo.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -35,41 +37,49 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.LoginActivity"
+            android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:noHistory="true">
-        </activity>
+            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
         <activity
             android:name=".activities.EventListActivity"
             android:label="@string/title_activity_event_list"
             android:theme="@style/AppTheme.NoActionBar">
-           <!--<intent-filter>
+
+            <!--
+            <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
-        <activity android:name=".activities.LocationTrackerActivity" >
-        <!--<intent-filter>
+        <activity android:name=".activities.LocationTrackerActivity">
+
+            <!--
+        <intent-filter>
             <category android:name="android.intent.category.DEFAULT" />
 
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
 
-        </intent-filter>-->
+        </intent-filter>
+            -->
         </activity>
-        <activity android:name=".activities.EventCreationActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            >
-            <!--<intent-filter>
+        <activity
+            android:name=".activities.EventCreationActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <!--
+            <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
 
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
 
         <service android:name="com.parse.PushService" />
@@ -105,7 +115,7 @@
             android:value="@string/google_maps_api_key" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_api_key"/>
+            android:value="@string/google_maps_api_key" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -117,22 +127,27 @@
             android:name=".activities.EventDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden">
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
-        </activity>
-        <activity
-            android:name=".activities.SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:noHistory="true">
+
+            <!--
             <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            -->
         </activity>
+        <activity
+            android:name=".activities.SplashActivity"
+            android:noHistory="true"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
 
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activities.ContactActivity"></activity>
     </application>
 
 </manifest>

@@ -4,7 +4,11 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,8 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TimePicker;
 
+import com.codepath.insync.Manifest;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityCreateEventBinding;
 import com.codepath.insync.models.Event;
@@ -40,7 +46,11 @@ public class EventCreationActivity extends AppCompatActivity implements TimePick
     String eventName, eventDescription, endDate = "", endTime = "", address = "";
     EditText location, startTime, startDate;
     ParseGeoPoint geoPoint;
-
+    RelativeLayout contactsContainer;
+    private static final int REQUEST_CODE = 1002;
+    private static final int REQUEST_CAMERA = 0;
+    private static final int REQUEST_CONTACTS = 1;
+    private static String[] PERMISSIONS_CONTACT = {Manifest.permission.READ_CONTACTS};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +58,7 @@ public class EventCreationActivity extends AppCompatActivity implements TimePick
         startDate = binding.etStartDate;
         startTime = binding.etStartTime;
         location = binding.etLocation;
+        contactsContainer = binding.contactsContainer;
         Toolbar toolbar = binding.toolbarCreate;
         setSupportActionBar(toolbar);
         location.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -147,6 +158,10 @@ public class EventCreationActivity extends AppCompatActivity implements TimePick
             saveEventDetails();
             return true;
         }
+        if (id == R.id.action_invite) {
+            showContacts();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -168,5 +183,78 @@ public class EventCreationActivity extends AppCompatActivity implements TimePick
         eventStartDate.set(Calendar.HOUR, hour);
         eventStartDate.set(Calendar.MINUTE, minute);
         updateTime();
+    }
+
+    public void showContacts() {
+        Log.i(TAG, "Show contacts button pressed. Checking permissions.");
+
+        // Verify that all required contact permissions have been granted.
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Contacts permissions have not been granted.
+            Log.i(TAG, "Contact permissions has NOT been granted. Requesting permissions.");
+            requestContactsPermissions();
+
+        } else {
+
+            // Contact permissions have been granted. Show the contacts fragment.
+            Log.i(TAG,
+                    "Contact permissions have already been granted. Displaying contact details.");
+            showContactDetails();
+        }
+    }
+
+
+    private void showContactDetails() {
+        Intent contactActivityIntent = ContactActivity.newIntent(this);
+        this.startActivityForResult(contactActivityIntent, REQUEST_CODE);
+    }
+
+    private void requestContactsPermissions() {
+        ActivityCompat.requestPermissions(this, PERMISSIONS_CONTACT, REQUEST_CONTACTS);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CAMERA) {
+            // BEGIN_INCLUDE(permission_result)
+            // Received permission result for camera permission.
+            Log.i(TAG, "Received response for Camera permission request.");
+
+            // Check if the only required permission has been granted
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Camera permission has been granted, preview can be displayed
+                Log.i(TAG, "CAMERA permission has now been granted. Showing preview.");
+                Snackbar.make(contactsContainer, R.string.permision_available_camera,
+                        Snackbar.LENGTH_SHORT).show();
+            } else {
+                Log.i(TAG, "CAMERA permission was NOT granted.");
+                Snackbar.make(contactsContainer, R.string.permissions_not_granted,
+                        Snackbar.LENGTH_SHORT).show();
+
+            }
+            // END_INCLUDE(permission_result)
+
+        } else if (requestCode == REQUEST_CONTACTS) {
+            Log.i(TAG, "Received response for contact permissions request.");
+
+            // We have requested multiple permissions for contacts, so all of them need to be
+            // checked.
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // All required permissions have been granted, display contacts fragment.
+                Snackbar.make(contactsContainer, R.string.permision_available_contacts,
+                        Snackbar.LENGTH_SHORT)
+                        .show();
+                showContactDetails();
+            } else {
+                Log.i(TAG, "Contacts permissions were NOT granted.");
+                Snackbar.make(contactsContainer, R.string.permissions_not_granted,
+                        Snackbar.LENGTH_SHORT)
+                        .show();
+            }
+
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 }

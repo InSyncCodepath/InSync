@@ -34,4 +34,8 @@
     <string name="when">When?</string>
     <string name="event_image">Event image</string>
     <string name="create">Create</string>
+    <string name="permision_available_camera">Camera Permission has been granted. Preview can now be opened.</string>
+    <string name="permision_available_contacts">Contacts Permissions have been granted. Contacts screen can now be opened.</string>
+    <string name="permissions_not_granted">Permissions were not granted.</string>
+
 </resources>
