@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.FragmentMessageSendBinding;
-import com.codepath.insync.models.Message;
-import com.codepath.insync.models.User;
+import com.codepath.insync.models.parse.Message;
+import com.codepath.insync.models.parse.User;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
 

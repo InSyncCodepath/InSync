@@ -25,7 +25,7 @@ import android.widget.MediaController;
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.EDImageAdapter;
 import com.codepath.insync.databinding.FragmentPastEventDetailBinding;
-import com.codepath.insync.models.Event;
+import com.codepath.insync.models.parse.Event;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;

@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.insync.R;
-import com.codepath.insync.models.Message;
+import com.codepath.insync.models.parse.Message;
 import com.codepath.insync.utils.DateUtil;
 
 

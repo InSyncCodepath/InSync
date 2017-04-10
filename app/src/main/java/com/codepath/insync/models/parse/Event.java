@@ -1,4 +1,4 @@
-package com.codepath.insync.models;
+package com.codepath.insync.models.parse;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

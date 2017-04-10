@@ -1,15 +1,12 @@
-package com.codepath.insync.models;
+package com.codepath.insync.models.parse;
 
 import com.parse.LogInCallback;
 import com.parse.ParseClassName;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
-
-import static android.R.attr.phoneNumber;
 
 
 @ParseClassName("User")

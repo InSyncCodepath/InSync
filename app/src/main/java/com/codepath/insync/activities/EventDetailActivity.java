@@ -26,7 +26,7 @@ import com.codepath.insync.databinding.ActivityEventDetailBinding;
 import com.codepath.insync.fragments.MessageSendFragment;
 import com.codepath.insync.fragments.PastEventDetailFragment;
 import com.codepath.insync.fragments.UpcomingEventDetailFragment;
-import com.codepath.insync.models.Event;
+import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.utils.Constants;
 import com.codepath.insync.utils.DateUtil;
 import com.parse.GetCallback;

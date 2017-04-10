@@ -1,6 +1,5 @@
 package com.codepath.insync.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
@@ -11,15 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.UpcomingEventItemBinding;
-import com.codepath.insync.models.Event;
+import com.codepath.insync.models.parse.Event;
 
 import java.util.ArrayList;
-
-import static android.R.id.message;
-import static com.codepath.insync.R.id.tvEventName;
 
 /**
  * Created by Gauri Gadkari on 4/6/17.

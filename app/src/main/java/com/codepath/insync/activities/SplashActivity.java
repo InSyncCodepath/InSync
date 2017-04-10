@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
 
 import com.codepath.insync.R;
-import com.codepath.insync.models.User;
-import com.parse.ParseUser;
+import com.codepath.insync.models.parse.User;
 
 public class SplashActivity extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGTH = 1000;

@@ -8,14 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.PastEventItemBinding;
-import com.codepath.insync.models.Event;
+import com.codepath.insync.models.parse.Event;
 
 import java.util.ArrayList;
-
-import static android.R.attr.fragment;
 
 
 public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.PastEventViewHolder> {

@@ -4,9 +4,9 @@ import android.app.Application;
 import android.content.Intent;
 
 import com.codepath.insync.R;
-import com.codepath.insync.models.Event;
-import com.codepath.insync.models.Message;
-import com.codepath.insync.models.User;
+import com.codepath.insync.models.parse.Event;
+import com.codepath.insync.models.parse.Message;
+import com.codepath.insync.models.parse.User;
 import com.parse.Parse;
 import com.parse.ParseLiveQueryClient;
 import com.parse.ParseObject;

@@ -1,4 +1,4 @@
-package com.codepath.insync.models;
+package com.codepath.insync.models.parse;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,7 +7,6 @@ import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseUser;
 
 
 @ParseClassName("Message")
