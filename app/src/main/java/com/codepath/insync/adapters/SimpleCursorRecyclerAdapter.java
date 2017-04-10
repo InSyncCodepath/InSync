@@ -4,12 +4,16 @@ package com.codepath.insync.adapters;
  * Created by Gauri Gadkari on 4/9/17.
  */
 
+import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleViewHolder> {
 
@@ -17,9 +21,11 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
     private int[] mFrom;
     private int[] mTo;
     private String[] mOriginalFrom;
+    private Context context;
 
-    public SimpleCursorRecyclerAdapter (int layout, Cursor c, String[] from, int[] to) {
+    public SimpleCursorRecyclerAdapter (Context context, int layout, Cursor c, String[] from, int[] to) {
         super(c);
+        this.context = context;
         mLayout = layout;
         mTo = to;
         mOriginalFrom = from;
@@ -38,9 +44,12 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
         final int count = mTo.length;
         final int[] from = mFrom;
 
-        for (int i = 0; i < count; i++) {
-            holder.views[i].setText(cursor.getString(from[i]));
-        }
+//        for (int i = 0; i < count; i++) {
+//            holder.views[i].setText(cursor.getString(from[i]));
+//        }
+        holder.contactName.setText(cursor.getString(from[0]));
+        Glide.with(context).load(cursor.getString(from[1])).into(holder.imageView);
+        holder.contactNumber.setText(cursor.getString(from[2]));
     }
 
     /**
@@ -74,14 +83,17 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
 
 class SimpleViewHolder extends RecyclerView.ViewHolder
 {
-    public TextView[] views;
+    public TextView contactName, contactNumber;
+    public ImageView imageView;
 
     public SimpleViewHolder (View itemView, int[] to)
     {
         super(itemView);
-        views = new TextView[to.length];
-        for(int i = 0 ; i < to.length ; i++) {
-            views[i] = (TextView) itemView.findViewById(to[i]);
-        }
+//        views = new TextView[to.length];
+//        for(int i = 0 ; i < to.length ; i++) {
+//        }
+        contactName = (TextView) itemView.findViewById(to[0]);
+        imageView = (ImageView) itemView.findViewById(to[1]);
+        contactNumber = (TextView) itemView.findViewById(to[2]);
     }
 }

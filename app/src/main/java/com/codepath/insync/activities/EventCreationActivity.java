@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -23,6 +24,7 @@ import android.widget.TimePicker;
 
 import com.codepath.insync.Manifest;
 import com.codepath.insync.R;
+import com.codepath.insync.adapters.SimpleCursorRecyclerAdapter;
 import com.codepath.insync.databinding.ActivityCreateEventBinding;
 import com.codepath.insync.models.Event;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -95,8 +97,10 @@ public class EventCreationActivity extends AppCompatActivity implements TimePick
                 new TimePickerDialog(EventCreationActivity.this, EventCreationActivity.this, eventStartDate.get(Calendar.HOUR), eventStartDate.get(Calendar.MINUTE), false).show();
             }
         });
-    }
 
+
+
+    }
 
     private void updateDate() {
         String myFormat = "MM/dd/yy"; //In which you need put here
