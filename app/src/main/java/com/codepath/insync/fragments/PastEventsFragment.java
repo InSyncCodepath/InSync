@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.PastEventAdapter;
 import com.codepath.insync.databinding.FragmentPastEventListBinding;
-import com.codepath.insync.interfaces.OnEventClickListener;
+import com.codepath.insync.listeners.OnEventClickListener;
 import com.codepath.insync.models.parse.Event;
 import com.parse.FindCallback;
 import com.parse.ParseException;

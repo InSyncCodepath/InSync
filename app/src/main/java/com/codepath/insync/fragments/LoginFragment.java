@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.FragmentLoginBinding;
-import com.codepath.insync.interfaces.OnLoginListener;
+import com.codepath.insync.listeners.OnLoginListener;
 import com.codepath.insync.models.parse.User;
 import com.parse.LogInCallback;
 import com.parse.ParseException;

@@ -1,4 +1,4 @@
-package com.codepath.insync.interfaces;
+package com.codepath.insync.listeners;
 
 
 public interface OnEventClickListener {

@@ -1,37 +1,18 @@
 package com.codepath.insync.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityLoginBinding;
 import com.codepath.insync.fragments.LoginFragment;
 import com.codepath.insync.fragments.SignupFragment;
-import com.codepath.insync.interfaces.OnLoginListener;
+import com.codepath.insync.listeners.OnLoginListener;
 import com.crashlytics.android.Crashlytics;
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
-import com.parse.ParseInstallation;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
 
 import io.fabric.sdk.android.Fabric;
 

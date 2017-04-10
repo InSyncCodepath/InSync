@@ -22,7 +22,7 @@ import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityEventListBinding;
 import com.codepath.insync.fragments.PastEventsFragment;
 import com.codepath.insync.fragments.UpcomingEventsFragment;
-import com.codepath.insync.interfaces.OnEventClickListener;
+import com.codepath.insync.listeners.OnEventClickListener;
 
 
 public class EventListActivity extends AppCompatActivity implements OnEventClickListener {
