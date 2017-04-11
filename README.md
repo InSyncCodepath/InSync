@@ -43,7 +43,7 @@ The following **bonus** features can be implemented:
 * [x] Create a highlights video at the end of the event.
 * [] App walkthrough screens
 
-Video Walkthrough
+##Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 
