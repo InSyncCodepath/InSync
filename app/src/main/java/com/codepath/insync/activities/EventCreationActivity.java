@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -23,6 +24,7 @@ import android.widget.TimePicker;
 
 import com.codepath.insync.Manifest;
 import com.codepath.insync.R;
+import com.codepath.insync.adapters.SimpleCursorRecyclerAdapter;
 import com.codepath.insync.databinding.ActivityCreateEventBinding;
 import com.codepath.insync.models.parse.Event;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -37,7 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class EventCreationActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
+public class EventCreationActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, SimpleCursorRecyclerAdapter.SimpleCursorAdapterInterface {
     ActivityCreateEventBinding binding;
     public final String TAG = EventCreationActivity.class.getName();
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -49,6 +51,7 @@ public class EventCreationActivity extends AppCompatActivity implements TimePick
     private static final int REQUEST_CODE = 1002;
     private static final int REQUEST_CAMERA = 0;
     private static final int REQUEST_CONTACTS = 1;
+    RecyclerView inviteeList;
     private static String[] PERMISSIONS_CONTACT = {Manifest.permission.READ_CONTACTS};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +98,7 @@ public class EventCreationActivity extends AppCompatActivity implements TimePick
             }
         });
 
+        inviteeList = binding.inviteeList;
 
 
     }
@@ -257,5 +261,10 @@ public class EventCreationActivity extends AppCompatActivity implements TimePick
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    @Override
+    public void showInvitees() {
+
     }
 }

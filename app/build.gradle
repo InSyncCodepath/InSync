@@ -3,6 +3,7 @@ apply plugin: 'io.fabric'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    maven { url "https://jitpack.io" }
 }
 
 
@@ -69,6 +70,10 @@ dependencies {
     // Permission dispatcher
     compile 'com.github.hotchemi:permissionsdispatcher:2.3.2'
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.3.2'
+
+    //Chipview
+    compile 'com.github.Plumillon:ChipView:1.2.0'
+
 
     // Retrofit and Gson
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
