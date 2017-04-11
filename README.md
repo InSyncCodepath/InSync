@@ -43,6 +43,13 @@ The following **bonus** features can be implemented:
 * [x] Create a highlights video at the end of the event.
 * [] App walkthrough screens
 
+Video Walkthrough
+
+Here's a walkthrough of implemented user stories:
+
+http://recordit.co/a9OScepSED 
+
+
     Copyright [2017] [Insync Inc]
 
     Licensed under the Apache License, Version 2.0 (the "License");
