@@ -15,6 +15,7 @@ import com.codepath.insync.databinding.UpcomingEventItemBinding;
 import com.codepath.insync.models.parse.Event;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Gauri Gadkari on 4/6/17.
@@ -35,10 +36,13 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
     @Override
     public void onBindViewHolder(UpcomingEventViewHolder holder, int position) {
         final Event event = events.get(position);
+        Date now = new Date();
+        final boolean isCurrent = event.getEndDate().compareTo(now) >= 0;
+        final boolean canTrack = event.getStartDate().compareTo(now) <= 0 && event.getEndDate().compareTo(now) >= 0;
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onEventItemClick(event.getObjectId());
+                listener.onEventItemClick(event.getObjectId(), event.getName(), isCurrent, canTrack);
             }
         });
         //holder.binding.tvDate.setText(event.getStartDate().toString());
@@ -77,7 +81,7 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
     }
 
     public interface EventDetailClickHandling {
-        public void onEventItemClick(String objectId);
+        public void onEventItemClick(String eventId, String eventName, boolean isCurrent, boolean canTrack);
     }
 }
 

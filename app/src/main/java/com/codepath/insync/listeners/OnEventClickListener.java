@@ -2,5 +2,5 @@ package com.codepath.insync.listeners;
 
 
 public interface OnEventClickListener {
-    void onItemClick(String objectId);
+    void onItemClick(String eventId, String eventName, boolean isCurrent, boolean canTrack);
 }

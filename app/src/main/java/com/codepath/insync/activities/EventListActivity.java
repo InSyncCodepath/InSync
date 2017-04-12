@@ -94,11 +94,14 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
     }
 
     @Override
-    public void onItemClick(String objectId) {
+    public void onItemClick(String eventId, String eventName, boolean isCurrent, boolean canTrack) {
         Bundle animationBundle =
                 ActivityOptions.makeCustomAnimation(this, R.anim.slide_from_left, R.anim.slide_to_left).toBundle();
         Intent eventDetailIntent = new Intent(EventListActivity.this, EventDetailActivity.class);
-        eventDetailIntent.putExtra("objectId", objectId);
+        eventDetailIntent.putExtra("eventId", eventId);
+        eventDetailIntent.putExtra("eventName", eventName);
+        eventDetailIntent.putExtra("isCurrent", isCurrent);
+        eventDetailIntent.putExtra("canTrack", canTrack);
 
         startActivity(eventDetailIntent, animationBundle);
     }

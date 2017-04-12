@@ -13,6 +13,7 @@ import com.codepath.insync.databinding.PastEventItemBinding;
 import com.codepath.insync.models.parse.Event;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.PastEventViewHolder> {
@@ -32,10 +33,13 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
     @Override
     public void onBindViewHolder(PastEventViewHolder holder, int position) {
         final Event event = events.get(position);
+        Date now = new Date();
+        final boolean canTrack = event.getStartDate().compareTo(now) <= 0 && event.getEndDate().compareTo(now) >= 0;
+        final boolean isCurrent = event.getEndDate().compareTo(now) >= 0;
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onEventItemClick(event.getObjectId());
+                listener.onEventItemClick(event.getObjectId(), event.getName(), isCurrent, canTrack);
             }
         });
         holder.binding.tvEventName.setText(event.getName());
@@ -63,6 +67,6 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
     }
 
     public interface EventDetailClickHandling {
-        public void onEventItemClick(String objectId);
+        public void onEventItemClick(String eventId, String eventName, boolean isCurrent, boolean canTrack);
     }
 }

@@ -64,8 +64,8 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
     }
 
     @Override
-    public void onEventItemClick(String objectId) {
-        eventClickListener.onItemClick(objectId);
+    public void onEventItemClick(String eventId, String eventName, boolean isCurrent, boolean canTrack) {
+        eventClickListener.onItemClick(eventId, eventName, isCurrent, canTrack);
     }
 }
 
