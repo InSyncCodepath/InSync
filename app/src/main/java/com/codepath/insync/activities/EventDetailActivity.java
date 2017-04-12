@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,8 +32,6 @@ import com.codepath.insync.utils.Constants;
 import com.codepath.insync.utils.DateUtil;
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import java.util.Date;
-
 
 
 public class EventDetailActivity extends AppCompatActivity implements UpcomingEventDetailFragment.OnViewTouchListener {
@@ -41,27 +40,44 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
     ActivityEventDetailBinding binding;
     CollapsingToolbarLayout collapsingToolbar;
     Event event;
+    String eventId;
+    String eventName;
+    boolean isCurrent;
+    boolean canTrack;
     MessageSendFragment messageSendFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_event_detail);
 
-
-        setupToolbar();
         processIntent();
+        setupToolbar();
+        loadFragments();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu for the current event
+        if (canTrack) {
+            getMenuInflater().inflate(R.menu.menu_event_detail, menu);
+        }
+        return super.onCreateOptionsMenu(menu);
     }
 
     private void processIntent() {
         Intent intent = getIntent();
-        Event.findEvent(intent.getStringExtra("objectId"), new GetCallback<Event>() {
+        eventId = intent.getStringExtra("eventId");
+        eventName = intent.getStringExtra("eventName");
+        isCurrent = intent.getBooleanExtra("isCurrent", false);
+        canTrack = intent.getBooleanExtra("canTrack", false);
+        Event.findEvent(eventId, new GetCallback<Event>() {
             @Override
             public void done(Event eventObj, ParseException e) {
                 if (e == null) {
                     event = eventObj;
                     loadViews();
-                    loadFragments();
                 } else {
                     event = null;
                     Log.e(TAG, "Error finding event.");
@@ -77,6 +93,9 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
             case android.R.id.home:
                 this.finish();
                 return true;
+            case R.id.action_track:
+                Intent intent = new Intent(EventDetailActivity.this, LocationTrackerActivity.class);
+                startActivity(intent);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -138,14 +157,13 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
             }
         });
 
-
         binding.abEventDetail.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
                 Log.d(TAG, "Appbar offset changed to: "+verticalOffset);
-
-                if (Math.abs(verticalOffset) > 650) {
+                int vOffSetThreshold = isCurrent ? 480 : 480;
+                if (Math.abs(verticalOffset) > vOffSetThreshold) {
                     TextView tvEventName = (TextView) collapsingToolbar.findViewById(R.id.tvEDName);
                     collapsingToolbar.setTitle(tvEventName.getText().toString());
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -161,27 +179,18 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
 
     private void loadFragments() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Date now = new Date();
-        String videoUrl;
-        if (event.getHighlightsVideo() != null) {
-            videoUrl = event.getHighlightsVideo().getUrl();
-        } else {
-            videoUrl = null;
-        }
-        if (event.getEndDate().compareTo(now) < 0) {
-            PastEventDetailFragment pastEventDetailFragment =
-                    PastEventDetailFragment.newInstance(event.getObjectId(), event.getName());
-            ft.replace(R.id.flMessages, pastEventDetailFragment);
-        } else {
+        if (isCurrent) {
             // Load current and upcoming event detail
             UpcomingEventDetailFragment upcomingEventDetailFragment = new UpcomingEventDetailFragment();
             ft.replace(R.id.flMessages, upcomingEventDetailFragment);
             messageSendFragment = new MessageSendFragment();
             ft.replace(R.id.flMessageSend, messageSendFragment);
-
             setupUI(binding.clED);
+        } else {
+            PastEventDetailFragment pastEventDetailFragment =
+                    PastEventDetailFragment.newInstance(eventId, eventName);
+            ft.replace(R.id.flMessages, pastEventDetailFragment);
         }
-
 
         ft.commit();
 

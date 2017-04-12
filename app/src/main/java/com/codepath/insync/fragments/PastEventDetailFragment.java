@@ -57,8 +57,6 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     LinearLayoutManager linearLayoutManager;
     private MediaPlayer mediaPlayer;
     private MediaController mcontroller;
-    private Handler handler;
-
 
     public static PastEventDetailFragment newInstance(String eventId, String eventName) {
 
@@ -81,8 +79,6 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         event.setName(getArguments().getString("eventName"));
         edImages = new ArrayList<>();
         edImageAdapter = new EDImageAdapter(getActivity(), edImages);
-        handler = new Handler();
-
     }
 
     @Override
@@ -198,7 +194,6 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         mcontroller.setAnchorView(binding.tvHighlights);
         mcontroller.setEnabled(true);
         mcontroller.show(Constants.CONTROL_SHOW_DURATION);
-
     }
 
     @Override
