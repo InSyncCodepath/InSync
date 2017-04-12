@@ -21,5 +21,8 @@ public class Constants {
     public static final String ASSET_ID_STR = "asset_id";
     public static final String IMAGE_STR = "image";
     public static final String MUSIC_STR = "music";
-    static int DEFAULT_ERR_CODE = 10;
+    public static final int CONTROL_SHOW_DURATION = 1000;
+    public static int DEFAULT_ERR_CODE = 10;
+    public static int CLIP_DURATION = 3;
+    public static int FADE_DURATION = 1000;
 }

@@ -8,6 +8,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -21,12 +22,14 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.MediaController;
+import android.widget.SeekBar;
 
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.EDImageAdapter;
 import com.codepath.insync.databinding.FragmentPastEventDetailBinding;
 import com.codepath.insync.listeners.OnVideoCreateListener;
 import com.codepath.insync.models.parse.Event;
+import com.codepath.insync.utils.Constants;
 import com.codepath.insync.utils.MediaClient;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -99,7 +102,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
             public boolean onTouch(View v, MotionEvent event) {
 
                 if (event.getAction() == MotionEvent.ACTION_UP){
-                    mcontroller.show();
+                    mcontroller.show(Constants.CONTROL_SHOW_DURATION);
                 }
                 return true;
             }
@@ -109,6 +112,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.tvHighlights.setOpaque(false);
         ParseQuery<ParseObject> parseQuery = event.getAlbumRelation().getQuery();
 
         parseQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -155,6 +159,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         }*/
         MediaClient mediaClient = new MediaClient(this);
         mediaClient.createHighlights(getContext(), event, edImages, "party");
+        binding.pbMediaUpdate.setVisibility(View.VISIBLE);
 
     }
 
@@ -185,17 +190,15 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
 
     @Override
     public void onPrepared(MediaPlayer mp) {
+        binding.pbMediaUpdate.setVisibility(View.GONE);
+        binding.tvHighlights.setOpaque(true);
         start();
 
         mcontroller.setMediaPlayer(this);
         mcontroller.setAnchorView(binding.tvHighlights);
-        handler.post(new Runnable() {
+        mcontroller.setEnabled(true);
+        mcontroller.show(Constants.CONTROL_SHOW_DURATION);
 
-            public void run() {
-                mcontroller.setEnabled(true);
-                mcontroller.show();
-            }
-        });
     }
 
     @Override
@@ -205,6 +208,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
 
     @Override
     public void start() {
+
         mediaPlayer.start();
 
     }
@@ -264,14 +268,14 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         for (ParseFile image : edImages) {
             try {
                 Bitmap bitmap = BitmapFactory.decodeStream(image.getDataStream());
-
-                anim.addFrame(new BitmapDrawable(getResources(), bitmap), 500);
+                anim.addFrame(new BitmapDrawable(getResources(), bitmap), Constants.CLIP_DURATION*1000);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
         binding.ivHighlights.setImageDrawable(anim);
-
+        anim.setEnterFadeDuration(Constants.FADE_DURATION);
+        anim.setExitFadeDuration(Constants.FADE_DURATION);
         anim.setOneShot(false);
         anim.start();
     }
@@ -295,11 +299,15 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
                 e.printStackTrace();
             }
         }
+
     }
 
     @Override
     public void onCreateFailure(int status, String message) {
         Log.e(TAG, "Video could not be created. status: "+status+", message: "+message);
+        binding.tvHighlights.setVisibility(View.INVISIBLE);
+        binding.pbMediaUpdate.setVisibility(View.GONE);
 
+        animateImages();
     }
 }
