@@ -99,6 +99,7 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
                 ActivityOptions.makeCustomAnimation(this, R.anim.slide_from_left, R.anim.slide_to_left).toBundle();
         Intent eventDetailIntent = new Intent(EventListActivity.this, EventDetailActivity.class);
         eventDetailIntent.putExtra("objectId", objectId);
+
         startActivity(eventDetailIntent, animationBundle);
     }
 

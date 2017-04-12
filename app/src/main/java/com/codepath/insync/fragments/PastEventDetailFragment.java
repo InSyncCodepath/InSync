@@ -25,7 +25,9 @@ import android.widget.MediaController;
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.EDImageAdapter;
 import com.codepath.insync.databinding.FragmentPastEventDetailBinding;
+import com.codepath.insync.listeners.OnVideoCreateListener;
 import com.codepath.insync.models.parse.Event;
+import com.codepath.insync.utils.MediaClient;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -41,26 +43,27 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         MediaPlayer.OnCompletionListener,
         MediaPlayer.OnPreparedListener,
         MediaPlayer.OnVideoSizeChangedListener,
-        MediaController.MediaPlayerControl {
+        MediaController.MediaPlayerControl,
+        OnVideoCreateListener
+{
     public static final String TAG = "PastEventDetailFragment";
     FragmentPastEventDetailBinding binding;
-    String eventId;
+    Event event;
     List<ParseFile> edImages;
     EDImageAdapter edImageAdapter;
     LinearLayoutManager linearLayoutManager;
-    String videoUrl;
     private MediaPlayer mediaPlayer;
     private MediaController mcontroller;
     private Handler handler;
 
 
-    public static PastEventDetailFragment newInstance(String eventId, String videoUrl) {
+    public static PastEventDetailFragment newInstance(String eventId, String eventName) {
 
         Bundle args = new Bundle();
 
         PastEventDetailFragment pastEventDetailFragment = new PastEventDetailFragment();
         args.putString("eventId", eventId);
-        args.putString("videoUrl", videoUrl);
+        args.putString("eventName", eventName);
 
         pastEventDetailFragment.setArguments(args);
         return pastEventDetailFragment;
@@ -70,8 +73,9 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        eventId = getArguments().getString("eventId");
-        videoUrl = getArguments().getString("videoUrl");
+        event = new Event();
+        event.setObjectId(getArguments().getString("eventId"));
+        event.setName(getArguments().getString("eventName"));
         edImages = new ArrayList<>();
         edImageAdapter = new EDImageAdapter(getActivity(), edImages);
         handler = new Handler();
@@ -105,8 +109,6 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Event event = new Event();
-        event.setObjectId(eventId);
         ParseQuery<ParseObject> parseQuery = event.getAlbumRelation().getQuery();
 
         parseQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -118,7 +120,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
                         edImages.add(imageObject.getParseFile("image"));
                     }
                     edImageAdapter.notifyDataSetChanged();
-                    animateImages();
+                    //animateImages();
                 } else {
                     Log.e(TAG, "Error fetching event album");
                 }
@@ -133,12 +135,11 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         binding.rvEDImages.setLayoutManager(linearLayoutManager);
     }
 
-
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setSurface(new Surface(surface));
-        try {
+        /*try {
             mediaPlayer.setDataSource(videoUrl);
             mediaPlayer.prepare();
             mediaPlayer.setOnBufferingUpdateListener(this);
@@ -151,7 +152,10 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
             mcontroller = new MediaController(getContext());
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
+        MediaClient mediaClient = new MediaClient(this);
+        mediaClient.createHighlights(getContext(), event, edImages, "party");
+
     }
 
     @Override
@@ -270,5 +274,32 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
 
         anim.setOneShot(false);
         anim.start();
+    }
+
+    @Override
+    public void onCreateSuccess(String videoUrl) {
+        Log.d(TAG, "Video created successfully. Url: "+videoUrl);
+        if (mediaPlayer != null) {
+            try {
+                mediaPlayer.setDataSource(videoUrl);
+                mediaPlayer.prepare();
+                mediaPlayer.setOnBufferingUpdateListener(this);
+                mediaPlayer.setOnCompletionListener(this);
+                mediaPlayer.setOnPreparedListener(this);
+                mediaPlayer.setScreenOnWhilePlaying(true);
+                mediaPlayer.setOnVideoSizeChangedListener(this);
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                mediaPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT);
+                mcontroller = new MediaController(getContext());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onCreateFailure(int status, String message) {
+        Log.e(TAG, "Video could not be created. status: "+status+", message: "+message);
+
     }
 }

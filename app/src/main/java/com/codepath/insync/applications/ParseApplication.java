@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.codepath.insync.R;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
+import com.codepath.insync.models.parse.Music;
 import com.codepath.insync.models.parse.User;
 import com.parse.Parse;
 import com.parse.ParseLiveQueryClient;
@@ -30,6 +31,7 @@ public class ParseApplication extends Application {
         ParseUser.registerSubclass(User.class);
         ParseObject.registerSubclass(Event.class);
         ParseObject.registerSubclass(Message.class);
+        ParseObject.registerSubclass(Music.class);
 
         // Initialize parse with credentials
         Parse.initialize(new Parse.Configuration.Builder(this)
