@@ -33,10 +33,10 @@ public abstract class CursorRecyclerAdapter<VH extends RecyclerView.ViewHolder> 
             throw new IllegalStateException("couldn't move cursor to position " + position);
         }
 
-        onBindViewHolder(holder, mCursor);
+        onBindViewHolder(holder, mCursor, position);
     }
 
-    public abstract void onBindViewHolder(VH holder, Cursor cursor);
+    public abstract void onBindViewHolder(VH holder, Cursor cursor, int position);
 
     public Cursor getCursor() {
         return mCursor;

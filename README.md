@@ -6,26 +6,26 @@
 
 The following **required** functionality will be completed:
 
-* [] User can login with facebook and/or google or create an account.
+* [x] User can login and can create an account.
 * [] User can search for other users by username
 * [] User can create a group and add people to that group
-* [] User can create an event with the following functionality:
-  * [] Event Name and Description
-  * [] Date, time, location
-  * [] RSVP
+* [x] User can create an event with the following functionality:
+  * [x] Event Name and Description
+  * [x] Date, time, location
+  * [x] RSVP
   * [] Attendees
   * [] Invite message
-* [] Partipants in an event can communicate via instant messages.
+* [x] Partipants in an event can communicate via instant messages.
 * [] Users will get event reminders.
 * [] Users can share pictures/ video of the event in the chat.
-* [] After the event, an album will be created which users can download. Optional: The album will expire after one week.
+* [x] After the event, an album will be created which users can download. Optional: The album will expire after one week.
 * [] Users can see the location of the partipants in real time some time before the event.
 * [] Host can choose if the location tracker and invitee list is visible to the invitees or not.
 
 The following **optional** features can be implemented:
 
 * [] User can send an invite link to their contacts 
-* [] User can search for other users by phone number
+* [x] User can search for other users by phone number
 * [] User can upload a profile image.
 * [] User with admin permissions can invite others to the group.
 * [] Both host and invitee can choose the visibility level of their calendar for the particular event.
@@ -40,8 +40,15 @@ The following **optional** features can be implemented:
 
 The following **bonus** features can be implemented:
 
-* [] Create a highlights video at the end of the event.
+* [x] Create a highlights video at the end of the event.
 * [] App walkthrough screens
+
+##Video Walkthrough
+
+Here's a walkthrough of implemented user stories:
+
+http://recordit.co/a9OScepSED 
+
 
     Copyright [2017] [Insync Inc]
 

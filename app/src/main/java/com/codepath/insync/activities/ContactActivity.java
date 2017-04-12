@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.SimpleCursorRecyclerAdapter;
@@ -70,7 +72,29 @@ public class ContactActivity extends AppCompatActivity {
         getSupportLoaderManager().initLoader(CONTACT_LOADER_ID,
                 new Bundle(), contactsLoader);
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_contact, menu);
+        MenuItem addContact = (MenuItem) menu.findItem(R.id.action_add);
 
+        return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if (id == R.id.action_add) {
+            return true;
+        }
+//        if (id == R.id.action_invite) {
+//            showContacts();
+//            return true;
+//        }
+
+        return super.onOptionsItemSelected(item);
+    }
     public static Intent newIntent(Activity callingActivity) {
         Intent intent = new Intent(callingActivity, ContactActivity.class);
         return intent;
@@ -82,6 +106,12 @@ public class ContactActivity extends AppCompatActivity {
         int[] uiBindTo = { R.id.contactName, R.id.contactImage, R.id.contactNumber };
 
         adapter = new SimpleCursorRecyclerAdapter(this, R.layout.contact_item, null, uiBindFrom, uiBindTo);
+        adapter.setAdapterListener(new SimpleCursorRecyclerAdapter.SimpleCursorAdapterInterface() {
+            @Override
+            public void showInvitees() {
+                
+            }
+        });
     }
 
 }
