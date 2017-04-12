@@ -41,7 +41,6 @@ import static android.media.CamcorderProfile.get;
 
 public class MediaClient {
     private static String TAG = "MediaClient";
-    private static int CLIP_DURATION = 3;
     private static int RENDER_SUCCESS = 7101;
     public static int VIDEO_FETCH_DELAY = 5000;
     private static PicovicoService service;
@@ -53,6 +52,13 @@ public class MediaClient {
     VideoStatus videoStatus;
     OnVideoCreateListener videoCreateListener;
     Handler handler;
+    Runnable getVideoRunnable = new Runnable() {
+        @Override
+        public void run() {
+            Log.d(TAG, "Fetching the rendered video");
+            getVideo();
+        }
+    };
 
     public MediaClient(OnVideoCreateListener listener) {
         handler = new Handler();
@@ -249,12 +255,12 @@ public class MediaClient {
         String [][]credits = {{"Thank you", "for coming and making it so special"}};
         JSONArray assets = new JSONArray();
 
-        int endTime = CLIP_DURATION;
+        int endTime = Constants.CLIP_DURATION;
 
         for (Photo photo: photos) {
             JSONObject photoAsset = new JSONObject();
             try {
-                photoAsset.put(Constants.START_TIME_STR, endTime - CLIP_DURATION);
+                photoAsset.put(Constants.START_TIME_STR, endTime - Constants.CLIP_DURATION);
                 photoAsset.put(Constants.END_TIME_STR, endTime);
                 photoAsset.put(Constants.ASSET_ID_STR, photo.getId());
                 photoAsset.put(Constants.NAME_STR, Constants.IMAGE_STR);
@@ -262,7 +268,7 @@ public class MediaClient {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            endTime += CLIP_DURATION;
+            endTime += Constants.CLIP_DURATION;
         }
 
         JSONObject audioAsset = new JSONObject();
@@ -330,13 +336,7 @@ public class MediaClient {
                 } else {
                     RenderResponse renderResponse = response.body();
                     if (renderResponse.getStatus() == RENDER_SUCCESS) {
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.d(TAG, "Fetching the rendered video");
-                                getVideo();
-                            }
-                        }, VIDEO_FETCH_DELAY);
+                        handler.postDelayed(getVideoRunnable, VIDEO_FETCH_DELAY);
 
                     } else {
                         Log.e(
