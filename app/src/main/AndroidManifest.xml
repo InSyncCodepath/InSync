@@ -39,47 +39,18 @@
             android:name=".activities.LoginActivity"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activities.EventListActivity"
             android:label="@string/title_activity_event_list"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.LocationTrackerActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
-            <!--
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
-               <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
-        </activity>
-        <activity android:name=".activities.LocationTrackerActivity">
-
-            <!--
-        <intent-filter>
-            <category android:name="android.intent.category.DEFAULT" />
-
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-
-        </intent-filter>
-            -->
-        </activity>
         <activity
             android:name=".activities.EventCreationActivity"
             android:theme="@style/AppTheme.NoActionBar">
-
-            <!--
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-
-            </intent-filter>
-            -->
         </activity>
 
         <service android:name="com.parse.PushService" />
@@ -110,9 +81,10 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-        <meta-data
+        <!---the Geo API key is good for both maps and places services-->
+        <!--<meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="@string/google_maps_api_key" />
+            android:value="@string/google_maps_api_key" />-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_api_key" />
@@ -127,27 +99,17 @@
             android:name=".activities.EventDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden">
-
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
         </activity>
         <activity
             android:name=".activities.SplashActivity"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
-
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ContactActivity"></activity>
+        <activity android:name=".activities.ContactActivity" />
     </application>
 
 </manifest>
