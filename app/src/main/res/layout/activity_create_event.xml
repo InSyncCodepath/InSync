@@ -142,11 +142,15 @@
             android:layout_marginBottom="4dp"
             android:layout_marginTop="8dp"/>
 
-        <android.support.v7.widget.RecyclerView
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:id="@+id/inviteeList"-->
+            <!--android:layout_below="@id/inviteeHeader"/>-->
+        <com.plumillonforge.android.chipview.ChipView
+            android:id="@+id/chipview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/inviteeList"
-            android:layout_below="@id/inviteeHeader"/>
+            android:layout_height="wrap_content" />
 
     </RelativeLayout>
 </layout>

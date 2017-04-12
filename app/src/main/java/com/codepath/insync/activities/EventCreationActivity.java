@@ -20,12 +20,15 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.codepath.insync.Manifest;
 import com.codepath.insync.R;
+import com.codepath.insync.adapters.MainChipViewAdapter;
 import com.codepath.insync.adapters.SimpleCursorRecyclerAdapterContacts;
 import com.codepath.insync.databinding.ActivityCreateEventBinding;
+import com.codepath.insync.models.Tag;
 import com.codepath.insync.models.parse.Event;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -34,11 +37,15 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseGeoPoint;
+import com.plumillonforge.android.chipview.Chip;
+import com.plumillonforge.android.chipview.ChipView;
+import com.plumillonforge.android.chipview.ChipViewAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class EventCreationActivity extends AppCompatActivity implements SimpleCursorRecyclerAdapterContacts.SimpleCursorAdapterInterface {
@@ -56,6 +63,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     private static final int REQUEST_CONTACTS = 1;
     RecyclerView inviteeList;
     ArrayList<? extends String> invitees = new ArrayList<>();
+    List<Chip> chipList = new ArrayList<>();
     private static String[] PERMISSIONS_CONTACT = {Manifest.permission.READ_CONTACTS};
 
     @Override
@@ -70,6 +78,17 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         contactsContainer = binding.contactsContainer;
         Toolbar toolbar = binding.toolbarCreate;
         setSupportActionBar(toolbar);
+
+        chipList.add(new Tag("Lorem"));
+        chipList.add(new Tag("Ipsum dolor"));
+        chipList.add(new Tag("Sit amet"));
+        chipList.add(new Tag("Consectetur"));
+        chipList.add(new Tag("adipiscing elit"));
+        ChipView chipView = (ChipView) findViewById(R.id.chipview);
+        chipView.setChipList(chipList);
+        ChipViewAdapter adapter = new MainChipViewAdapter(this);
+        chipView.setAdapter(adapter);
+
         location.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
@@ -122,7 +141,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
             }
         });
 
-        inviteeList = binding.inviteeList;
+        //inviteeList = binding.inviteeList;
 
 
     }

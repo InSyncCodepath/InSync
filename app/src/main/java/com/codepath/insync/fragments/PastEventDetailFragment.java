@@ -302,6 +302,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         Log.e(TAG, "Video could not be created. status: "+status+", message: "+message);
         binding.tvHighlights.setVisibility(View.INVISIBLE);
         binding.pbMediaUpdate.setVisibility(View.GONE);
+        
 
         animateImages();
     }
