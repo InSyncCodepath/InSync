@@ -170,7 +170,7 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
         }
         if (event.getEndDate().compareTo(now) < 0) {
             PastEventDetailFragment pastEventDetailFragment =
-                    PastEventDetailFragment.newInstance(event.getObjectId(), videoUrl);
+                    PastEventDetailFragment.newInstance(event.getObjectId(), event.getName());
             ft.replace(R.id.flMessages, pastEventDetailFragment);
         } else {
             // Load current and upcoming event detail
