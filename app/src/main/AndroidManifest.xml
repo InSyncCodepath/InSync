@@ -8,8 +8,10 @@
     <permission
         android:name="android.permission.ACCESS_COARSE_LOCATION"
         android:protectionLevel="dangerous" />
-    <permission android:name="android.permission.READ_CONTACTS"
+    <permission
+        android:name="android.permission.READ_CONTACTS"
         android:protectionLevel="dangerous" />
+
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="com.example.mapdemo.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -110,6 +112,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.ContactActivity" />
+
+        <activity android:name=".activities.InSyncContactsActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

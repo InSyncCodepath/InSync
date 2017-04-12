@@ -9,10 +9,10 @@
         android:icon="@drawable/ic_check_white_48px"
         app:showAsAction="always" />
 
-    <item
+    <!--<item
         android:id="@+id/action_search"
         android:orderInCategory="99"
         android:title="@string/create"
         android:icon="@drawable/ic_person_add_white_48px"
-        app:showAsAction="always" />
+        app:showAsAction="always" />-->
 </menu>

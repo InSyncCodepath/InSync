@@ -106,7 +106,7 @@
 
         <EditText
             android:id="@+id/etLocation"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/endDateTimeContainer"
             android:layout_marginLeft="8dp"

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.provider.ContactsContract;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -17,14 +16,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.codepath.insync.R;
-import com.codepath.insync.adapters.SimpleCursorRecyclerAdapter;
+import com.codepath.insync.adapters.SimpleCursorRecyclerAdapterContacts;
 import com.codepath.insync.databinding.ActivityContactBinding;
 
+import java.util.ArrayList;
+
 public class ContactActivity extends AppCompatActivity {
-    SimpleCursorRecyclerAdapter adapter;
+    SimpleCursorRecyclerAdapterContacts adapter;
     ActivityContactBinding binding;
     RecyclerView contactList;
     public static final int CONTACT_LOADER_ID = 10;
+    ArrayList<String> guestList;
 
     private LoaderManager.LoaderCallbacks<Cursor> contactsLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
@@ -86,6 +88,7 @@ public class ContactActivity extends AppCompatActivity {
 
         int id = item.getItemId();
         if (id == R.id.action_add) {
+            getInviteeList();
             return true;
         }
 //        if (id == R.id.action_invite) {
@@ -95,6 +98,17 @@ public class ContactActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void getInviteeList() {
+        guestList = adapter.showInvitees();
+        Intent returnIntent = new Intent();
+        Bundle bundle = new Bundle();
+        //bundle.pu
+        returnIntent.putExtra("result",guestList);
+        setResult(Activity.RESULT_OK,returnIntent);
+        finish();
+    }
+
     public static Intent newIntent(Activity callingActivity) {
         Intent intent = new Intent(callingActivity, ContactActivity.class);
         return intent;
@@ -105,13 +119,8 @@ public class ContactActivity extends AppCompatActivity {
                 ContactsContract.Contacts.PHOTO_THUMBNAIL_URI, ContactsContract.CommonDataKinds.Phone.NUMBER };
         int[] uiBindTo = { R.id.contactName, R.id.contactImage, R.id.contactNumber };
 
-        adapter = new SimpleCursorRecyclerAdapter(this, R.layout.contact_item, null, uiBindFrom, uiBindTo);
-        adapter.setAdapterListener(new SimpleCursorRecyclerAdapter.SimpleCursorAdapterInterface() {
-            @Override
-            public void showInvitees() {
-                
-            }
-        });
+        adapter = new SimpleCursorRecyclerAdapterContacts(this, R.layout.contact_item, null, uiBindFrom, uiBindTo);
     }
+
 
 }

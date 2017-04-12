@@ -24,7 +24,7 @@ import android.widget.TimePicker;
 
 import com.codepath.insync.Manifest;
 import com.codepath.insync.R;
-import com.codepath.insync.adapters.SimpleCursorRecyclerAdapter;
+import com.codepath.insync.adapters.SimpleCursorRecyclerAdapterContacts;
 import com.codepath.insync.databinding.ActivityCreateEventBinding;
 import com.codepath.insync.models.parse.Event;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -36,29 +36,36 @@ import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseGeoPoint;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
-public class EventCreationActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, SimpleCursorRecyclerAdapter.SimpleCursorAdapterInterface {
+public class EventCreationActivity extends AppCompatActivity implements SimpleCursorRecyclerAdapterContacts.SimpleCursorAdapterInterface {
     ActivityCreateEventBinding binding;
     public final String TAG = EventCreationActivity.class.getName();
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     Calendar eventStartDate = Calendar.getInstance();
-    String eventName, eventDescription, endDate = "", endTime = "", address = "";
-    EditText location, startTime, startDate;
+    Calendar eventEndDate = Calendar.getInstance();
+    String eventName, eventDescription, address = "";
+    EditText location, startTime, startDate, endDate, endTime;
     ParseGeoPoint geoPoint;
     RelativeLayout contactsContainer;
-    private static final int REQUEST_CODE = 1002;
+    public static final int REQUEST_CODE = 1002;
     private static final int REQUEST_CAMERA = 0;
     private static final int REQUEST_CONTACTS = 1;
     RecyclerView inviteeList;
+    ArrayList<? extends String> invitees = new ArrayList<>();
     private static String[] PERMISSIONS_CONTACT = {Manifest.permission.READ_CONTACTS};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_event);
         startDate = binding.etStartDate;
         startTime = binding.etStartTime;
+        endDate = binding.etEndDate;
+        endTime = binding.etEndTime;
         location = binding.etLocation;
         contactsContainer = binding.contactsContainer;
         Toolbar toolbar = binding.toolbarCreate;
@@ -85,7 +92,7 @@ public class EventCreationActivity extends AppCompatActivity implements TimePick
 
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(EventCreationActivity.this, date, eventStartDate
+                new DatePickerDialog(EventCreationActivity.this, startDateListener, eventStartDate
                         .get(Calendar.YEAR), eventStartDate.get(Calendar.MONTH),
                         eventStartDate.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -94,7 +101,24 @@ public class EventCreationActivity extends AppCompatActivity implements TimePick
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new TimePickerDialog(EventCreationActivity.this, EventCreationActivity.this, eventStartDate.get(Calendar.HOUR), eventStartDate.get(Calendar.MINUTE), false).show();
+                new TimePickerDialog(EventCreationActivity.this, startTimeListener, eventStartDate.get(Calendar.HOUR), eventStartDate.get(Calendar.MINUTE), false).show();
+            }
+        });
+
+        endDate.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(EventCreationActivity.this, endDateListener, eventEndDate
+                        .get(Calendar.YEAR), eventEndDate.get(Calendar.MONTH),
+                        eventEndDate.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        endTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new TimePickerDialog(EventCreationActivity.this, endTimeListener, eventEndDate.get(Calendar.HOUR), eventEndDate.get(Calendar.MINUTE), false).show();
             }
         });
 
@@ -103,10 +127,10 @@ public class EventCreationActivity extends AppCompatActivity implements TimePick
 
     }
 
-    private void updateDate() {
+    private void updateDate(EditText etDate, Date date) {
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        startDate.setText(sdf.format(eventStartDate.getTime()));
+        etDate.setText(sdf.format(date));
     }
 
     public static Intent newIntent(Activity callingActivity) {
@@ -115,7 +139,7 @@ public class EventCreationActivity extends AppCompatActivity implements TimePick
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(this, data);
@@ -130,23 +154,69 @@ public class EventCreationActivity extends AppCompatActivity implements TimePick
                 // The user canceled the operation.
             }
         }
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                invitees = data.getStringArrayListExtra("result");
+                Log.d("INVITE", invitees.toString());
+            }
+            else {
+                Log.d("INVITE", "Error");
+            }
+        }
     }
 
-    DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+    DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
             eventStartDate.set(Calendar.YEAR, year);
             eventStartDate.set(Calendar.MONTH, monthOfYear);
             eventStartDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            updateDate();
+            updateDate(startDate, eventStartDate.getTime());
         }
     };
 
-    private void updateTime() {
+    DatePickerDialog.OnDateSetListener endDateListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            eventEndDate.set(Calendar.YEAR, year);
+            eventEndDate.set(Calendar.MONTH, monthOfYear);
+            eventEndDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateDate(endDate, eventEndDate.getTime());
+        }
+    };
+
+    TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener(){
+
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+            eventStartDate.set(Calendar.HOUR, hour);
+            eventStartDate.set(Calendar.MINUTE, minute);
+            updateTime(startTime, eventStartDate.getTime());
+        }
+    };
+
+    TimePickerDialog.OnTimeSetListener endTimeListener = new TimePickerDialog.OnTimeSetListener(){
+
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+            eventEndDate.set(Calendar.HOUR, hour);
+            eventEndDate.set(Calendar.MINUTE, minute);
+            updateTime(endTime, eventEndDate.getTime());
+        }
+    };
+
+    private void updateTime(EditText etTime, Date date) {
         String myFormat = "hh:mm a"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        startTime.setText(sdf.format(eventStartDate.getTime()));
+        etTime.setText(sdf.format(date));
+        if(etTime == startTime) {
+            Date eventEndTime = eventStartDate.getTime();
+            eventEndTime.setHours(eventEndTime.getHours() + 3);
+            endTime.setText(sdf.format(eventEndTime));
+            updateDate(endDate, eventEndTime);
+        }
     }
 
     @Override
@@ -174,20 +244,10 @@ public class EventCreationActivity extends AppCompatActivity implements TimePick
     private void saveEventDetails() {
         eventName = binding.etEventName.getText().toString();
         eventDescription = binding.etDescription.getText().toString();
-        endDate = binding.etEndDate.getText().toString();
-        endTime = binding.etEndTime.getText().toString();
-
         Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint);
         event.saveInBackground();
         setResult(RESULT_OK);
         finish();
-    }
-
-    @Override
-    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-        eventStartDate.set(Calendar.HOUR, hour);
-        eventStartDate.set(Calendar.MINUTE, minute);
-        updateTime();
     }
 
     public void showContacts() {
@@ -211,7 +271,9 @@ public class EventCreationActivity extends AppCompatActivity implements TimePick
 
 
     private void showContactDetails() {
-        Intent contactActivityIntent = ContactActivity.newIntent(this);
+        //Intent contactActivityIntent = ContactActivity.newIntent(this);
+        Intent contactActivityIntent = InSyncContactsActivity.newIntent(this);
+
         this.startActivityForResult(contactActivityIntent, REQUEST_CODE);
     }
 
@@ -238,13 +300,10 @@ public class EventCreationActivity extends AppCompatActivity implements TimePick
                         Snackbar.LENGTH_SHORT).show();
 
             }
-            // END_INCLUDE(permission_result)
 
         } else if (requestCode == REQUEST_CONTACTS) {
             Log.i(TAG, "Received response for contact permissions request.");
 
-            // We have requested multiple permissions for contacts, so all of them need to be
-            // checked.
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // All required permissions have been granted, display contacts fragment.
                 Snackbar.make(contactsContainer, R.string.permision_available_contacts,

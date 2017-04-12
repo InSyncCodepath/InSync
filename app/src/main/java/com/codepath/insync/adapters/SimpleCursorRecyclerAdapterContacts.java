@@ -21,10 +21,7 @@ import com.codepath.insync.R;
 
 import java.util.ArrayList;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
-import static com.codepath.insync.R.id.isSelected;
-
-public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleViewHolder> {
+public class SimpleCursorRecyclerAdapterContacts extends CursorRecyclerAdapter<SimpleViewHolder> {
     SimpleCursorAdapterInterface listener;
     private int mLayout;
     private int[] mFrom;
@@ -33,7 +30,7 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
     private Context context;
     boolean isSelectedContact [];
     ArrayList<String> invitees;
-    public SimpleCursorRecyclerAdapter (Context context, int layout, Cursor c, String[] from, int[] to) {
+    public SimpleCursorRecyclerAdapterContacts(Context context, int layout, Cursor c, String[] from, int[] to) {
         super(c);
         //this.listener = listener;
         this.context = context;
@@ -90,6 +87,9 @@ public class SimpleCursorRecyclerAdapter extends CursorRecyclerAdapter<SimpleVie
             holder.isSelected.setChecked(false);
         }
 }
+    public ArrayList<String> showInvitees(){
+        return invitees;
+    }
     public void setAdapterListener(SimpleCursorAdapterInterface listener) {
         this.listener = listener;
     }
