@@ -15,4 +15,5 @@
     <dimen name="margin_minus_30">-30dp</dimen>
     <dimen name="margin64">64dp</dimen>
     <dimen name="margin30">30dp</dimen>
+    <dimen name="padding4">4dp</dimen>
 </resources>
