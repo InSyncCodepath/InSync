@@ -85,5 +85,6 @@ dependencies {
     compile 'com.android.support:palette-v7:25.2.0'
     compile 'com.android.support:support-v4:25.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.beloo.widget:ChipsLayoutManager:0.3.7@aar'
     testCompile 'junit:junit:4.12'
 }

@@ -25,7 +25,8 @@
             android:layout_height="45dp"
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_camera_alt_white_48px"
-            android:layout_below="@id/appbar"/>
+            android:layout_below="@id/appbar"
+            android:layout_marginTop="8dp"/>
 
         <EditText
             android:id="@+id/etEventName"
@@ -130,7 +131,9 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_toRightOf="@+id/ivDetails"
-            android:hint="Details" />
+            android:hint="Details"
+            android:minLines="2"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -142,15 +145,16 @@
             android:layout_marginBottom="4dp"
             android:layout_marginTop="8dp"/>
 
-        <!--<android.support.v7.widget.RecyclerView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:id="@+id/inviteeList"-->
-            <!--android:layout_below="@id/inviteeHeader"/>-->
-        <com.plumillonforge.android.chipview.ChipView
-            android:id="@+id/chipview"
+        <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:id="@+id/inviteeList"
+            android:layout_below="@id/inviteeHeader"
+            android:layout_margin="8dp"/>
+        <!--<com.plumillonforge.android.chipview.ChipView-->
+            <!--android:id="@+id/chipview"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" />-->
 
     </RelativeLayout>
 </layout>

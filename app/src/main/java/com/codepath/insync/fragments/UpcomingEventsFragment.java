@@ -19,6 +19,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -54,6 +55,7 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
         upcomingList.setLayoutManager(linearLayoutManager);
         eventClickListener = (OnEventClickListener) getActivity();
         ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
+        query.whereGreaterThanOrEqualTo("endDate", new Date());
         query.findInBackground(new FindCallback<Event>() {
             @Override
             public void done(List<Event> objects, ParseException e) {

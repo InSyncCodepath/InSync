@@ -6,14 +6,18 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,8 +27,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
+import com.beloo.widget.chipslayoutmanager.gravity.IChildGravityResolver;
+import com.beloo.widget.chipslayoutmanager.layouter.breaker.IRowBreaker;
 import com.codepath.insync.Manifest;
 import com.codepath.insync.R;
+import com.codepath.insync.adapters.InviteeAdapter;
 import com.codepath.insync.adapters.MainChipViewAdapter;
 import com.codepath.insync.adapters.SimpleCursorRecyclerAdapterContacts;
 import com.codepath.insync.databinding.ActivityCreateEventBinding;
@@ -36,7 +44,9 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
+import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.SaveCallback;
 import com.plumillonforge.android.chipview.Chip;
 import com.plumillonforge.android.chipview.ChipView;
 import com.plumillonforge.android.chipview.ChipViewAdapter;
@@ -62,10 +72,10 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     private static final int REQUEST_CAMERA = 0;
     private static final int REQUEST_CONTACTS = 1;
     RecyclerView inviteeList;
-    ArrayList<? extends String> invitees = new ArrayList<>();
-    List<Chip> chipList = new ArrayList<>();
+    ArrayList<String> invitees = new ArrayList<>();
+    ArrayList<String> chipList = new ArrayList<>();
     private static String[] PERMISSIONS_CONTACT = {Manifest.permission.READ_CONTACTS};
-
+    InviteeAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,15 +89,47 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         Toolbar toolbar = binding.toolbarCreate;
         setSupportActionBar(toolbar);
 
-        chipList.add(new Tag("Lorem"));
-        chipList.add(new Tag("Ipsum dolor"));
-        chipList.add(new Tag("Sit amet"));
-        chipList.add(new Tag("Consectetur"));
-        chipList.add(new Tag("adipiscing elit"));
-        ChipView chipView = (ChipView) findViewById(R.id.chipview);
-        chipView.setChipList(chipList);
-        ChipViewAdapter adapter = new MainChipViewAdapter(this);
-        chipView.setAdapter(adapter);
+        inviteeList = binding.inviteeList;
+
+        ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(this)
+                //set vertical gravity for all items in a row. Default = Gravity.CENTER_VERTICAL
+                .setChildGravity(Gravity.TOP)
+                //whether RecyclerView can scroll. TRUE by default
+                .setScrollingEnabled(true)
+                //set maximum views count in a particular row
+                .setMaxViewsInRow(4)
+                //set gravity resolver where you can determine gravity for item in position.
+                //This method have priority over previous one
+                .setGravityResolver(new IChildGravityResolver() {
+                    @Override
+                    public int getItemGravity(int position) {
+                        return Gravity.CENTER;
+                    }
+                })
+                //you are able to break row due to your conditions. Row breaker should return true for that views
+                .setRowBreaker(new IRowBreaker() {
+                    @Override
+                    public boolean isItemBreakRow(@IntRange(from = 0) int position) {
+                        return position == 8 || position == 12 || position == 4;
+                    }
+                })
+                //a layoutOrientation of layout manager, could be VERTICAL OR HORIZONTAL. HORIZONTAL by default
+                .setOrientation(ChipsLayoutManager.HORIZONTAL)
+                // row strategy for views in completed row, could be STRATEGY_DEFAULT, STRATEGY_FILL_VIEW,
+                //STRATEGY_FILL_SPACE or STRATEGY_CENTER
+                .setRowStrategy(ChipsLayoutManager.STRATEGY_DEFAULT)
+                // whether strategy is applied to last row. FALSE by default
+                .withLastRow(true)
+                .build();
+        inviteeList.setLayoutManager(chipsLayoutManager);
+
+
+//        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.HORIZONTAL);
+//        inviteeList.setLayoutManager(staggeredGridLayoutManager);
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+//        inviteeList.setLayoutManager(linearLayoutManager);
+        adapter = new InviteeAdapter(this, invitees);
+        inviteeList.setAdapter(adapter);
 
         location.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -175,13 +217,23 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         }
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                invitees = data.getStringArrayListExtra("result");
+                chipList = data.getStringArrayListExtra("result");
+                showGuests();
                 Log.d("INVITE", invitees.toString());
             }
             else {
                 Log.d("INVITE", "Error");
             }
         }
+    }
+
+    private void showGuests() {
+        for(int i=0; i < chipList.size(); i++){
+            if(!(invitees.contains(chipList.get(i)))){
+                invitees.add(chipList.get(i));
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 
     DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
@@ -263,9 +315,17 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     private void saveEventDetails() {
         eventName = binding.etEventName.getText().toString();
         eventDescription = binding.etDescription.getText().toString();
-        Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint);
-        event.saveInBackground();
+        final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint);
+        event.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                Log.d("Debug", event.getObjectId());
+                //for(int i =0; i )
+                //event.setUserRelation();
+            }
+        });
         setResult(RESULT_OK);
+
         finish();
     }
 
@@ -282,8 +342,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         } else {
 
             // Contact permissions have been granted. Show the contacts fragment.
-            Log.i(TAG,
-                    "Contact permissions have already been granted. Displaying contact details.");
+            Log.i(TAG, "Contact permissions have already been granted. Displaying contact details.");
             showContactDetails();
         }
     }
