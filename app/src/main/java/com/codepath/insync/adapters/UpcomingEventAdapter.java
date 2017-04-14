@@ -13,10 +13,10 @@ import android.widget.TextView;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.UpcomingEventItemBinding;
 import com.codepath.insync.models.parse.Event;
+import com.codepath.insync.utils.DateUtil;
 import com.codepath.insync.models.parse.User;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by Gauri Gadkari on 4/6/17.
@@ -37,16 +37,14 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
     @Override
     public void onBindViewHolder(UpcomingEventViewHolder holder, int position) {
         final Event event = events.get(position);
-        Date now = new Date();
+        final boolean canTrack = DateUtil.canTrackGuests(event.getStartDate(), event.getEndDate());
         User currentUser = User.getCurrentUser();
 
         //boolean isUserInvited
-        final boolean isCurrent = event.getEndDate().compareTo(now) >= 0;
-        final boolean canTrack = event.getStartDate().compareTo(now) <= 0 && event.getEndDate().compareTo(now) >= 0;
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onEventItemClick(event.getObjectId(), event.getName(), isCurrent, canTrack);
+                listener.onEventItemClick(event.getObjectId(), true, canTrack);
             }
         });
         //holder.binding.tvDate.setText(event.getStartDate().toString());
@@ -85,7 +83,7 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
     }
 
     public interface EventDetailClickHandling {
-        public void onEventItemClick(String eventId, String eventName, boolean isCurrent, boolean canTrack);
+        public void onEventItemClick(String eventId, boolean isCurrent, boolean canTrack);
     }
 }
 

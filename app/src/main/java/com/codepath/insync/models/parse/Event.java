@@ -14,6 +14,7 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
+import com.parse.SaveCallback;
 
 
 @ParseClassName("Event")
@@ -29,6 +30,7 @@ public class Event extends ParseObject {
     public static final String ALBUM_RELATION_KEY = "albumRelation";
     public static final String HIGHLIGHTS_VIDEO_KEY = "highlightsVideo";
     public static final String OBJECT_ID_KEY = "objectId";
+    public static final String HAS_ENDED_KEY = "hasEnded";
 
     public static String getObjectIdKey() {
         return OBJECT_ID_KEY;
@@ -70,8 +72,12 @@ public class Event extends ParseObject {
         return getRelation(ALBUM_RELATION_KEY);
     }
 
-    public ParseFile getHighlightsVideo() {
-        return getParseFile(HIGHLIGHTS_VIDEO_KEY);
+    public String getHighlightsVideo() {
+        return getString(HIGHLIGHTS_VIDEO_KEY);
+    }
+
+    public boolean hasEnded() {
+        return getBoolean(HAS_ENDED_KEY);
     }
 
     public void setName(String name) {
@@ -110,8 +116,12 @@ public class Event extends ParseObject {
         put(ALBUM_RELATION_KEY, albumRelation);
     }
 
-    public void setHighlightsVideo(ParseFile highlightsVideo) {
+    public void setHighlightsVideo(String highlightsVideo) {
         put(HIGHLIGHTS_VIDEO_KEY, highlightsVideo);
+    }
+
+    public void setHasEnded(boolean hasEnded) {
+        put(HAS_ENDED_KEY, hasEnded);
     }
 
     public Bitmap getProfileImageBitmap() {
@@ -138,6 +148,10 @@ public class Event extends ParseObject {
         this.setDescription(object.getString(DESCRIPTION_KEY));
         this.setLocation(object.getParseGeoPoint(LOCATION_KEY));
         //this.setProfileImage(object.getParseFile(PROFILE_IMAGE_KEY));
+    }
+
+    public void updateEvent(SaveCallback saveCallback) {
+        saveInBackground(saveCallback);
     }
 
     // TODO: Call get, saveInBackground and pinInBackground here

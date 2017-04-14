@@ -34,12 +34,11 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
     public void onBindViewHolder(PastEventViewHolder holder, int position) {
         final Event event = events.get(position);
         Date now = new Date();
-        final boolean canTrack = event.getStartDate().compareTo(now) <= 0 && event.getEndDate().compareTo(now) >= 0;
         final boolean isCurrent = event.getEndDate().compareTo(now) >= 0;
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onEventItemClick(event.getObjectId(), event.getName(), isCurrent, canTrack);
+                listener.onEventItemClick(event.getObjectId(), false, false);
             }
         });
         holder.binding.tvEventName.setText(event.getName());
@@ -67,6 +66,6 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
     }
 
     public interface EventDetailClickHandling {
-        public void onEventItemClick(String eventId, String eventName, boolean isCurrent, boolean canTrack);
+        public void onEventItemClick(String eventId, boolean isCurrent, boolean canTrack);
     }
 }

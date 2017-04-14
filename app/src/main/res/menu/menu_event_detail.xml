@@ -3,7 +3,13 @@
     <item
         android:id="@+id/action_track"
         android:icon="@drawable/ic_track"
-        app:showAsAction="always"
-        android:title="Track">
+        app:showAsAction="ifRoom"
+        android:title="@string/get_whereabouts">
+    </item>
+    <item
+        android:id="@+id/action_highlights"
+        android:icon="@drawable/ic_highlights"
+        app:showAsAction="ifRoom"
+        android:title="@string/get_highlights">
     </item>
 </menu>

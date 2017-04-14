@@ -19,6 +19,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +32,8 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
     RecyclerView upcomingList;
     ArrayList<Event> events = new ArrayList<>();
     UpcomingEventAdapter upcomingEventAdapter;
+    int bufferHours = 3;
+    Calendar cal = Calendar.getInstance(); // creates calendar
     public UpcomingEventsFragment() {
     }
 
@@ -53,9 +56,12 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
         upcomingEventAdapter = new UpcomingEventAdapter(this, getContext(), events);
         upcomingList.setAdapter(upcomingEventAdapter);
         upcomingList.setLayoutManager(linearLayoutManager);
+        cal.setTime(new Date()); // sets calendar time/date
+        cal.add(Calendar.HOUR_OF_DAY, bufferHours); // adds three buffer hours
         eventClickListener = (OnEventClickListener) getActivity();
         ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
-        query.whereGreaterThanOrEqualTo("endDate", new Date());
+        query.whereGreaterThanOrEqualTo("endDate", cal.getTime());
+        query.whereNotEqualTo("hasEnded", true);
         query.findInBackground(new FindCallback<Event>() {
             @Override
             public void done(List<Event> objects, ParseException e) {
@@ -68,8 +74,8 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
     }
 
     @Override
-    public void onEventItemClick(String eventId, String eventName, boolean isCurrent, boolean canTrack) {
-       eventClickListener.onItemClick(eventId, eventName, isCurrent, canTrack);
+    public void onEventItemClick(String eventId, boolean isCurrent, boolean canTrack) {
+       eventClickListener.onItemClick(eventId, isCurrent, canTrack);
     }
 
     public void reloadList(){
