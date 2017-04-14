@@ -8,6 +8,7 @@ import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
 import com.codepath.insync.models.parse.Music;
 import com.codepath.insync.models.parse.User;
+import com.codepath.insync.models.parse.UserEventRelation;
 import com.parse.Parse;
 import com.parse.ParseLiveQueryClient;
 import com.parse.ParseObject;
@@ -32,6 +33,7 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(Event.class);
         ParseObject.registerSubclass(Message.class);
         ParseObject.registerSubclass(Music.class);
+        ParseObject.registerSubclass(UserEventRelation.class);
 
         // Initialize parse with credentials
         Parse.initialize(new Parse.Configuration.Builder(this)
@@ -39,6 +41,7 @@ public class ParseApplication extends Application {
                 .clientKey(null)
                 .addNetworkInterceptor(new ParseStethoInterceptor())
                 .addNetworkInterceptor(new ParseLogInterceptor())
+                //.enableLocalDataStore()
                 .server(getString(R.string.parse_app_url)).build());
 
         // Add support for live queries

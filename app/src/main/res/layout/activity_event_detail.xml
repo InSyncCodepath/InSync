@@ -115,6 +115,47 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginBottom="@dimen/margin8"
                             tools:text="121 Albright Way, Los Gatos, CA 95032" />
+                        <RadioGroup
+                            android:id="@+id/rgEDRsvp"
+                            android:layout_below="@id/tvEDLocation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:orientation="horizontal" >
+
+                            <RadioButton
+                                android:id="@+id/rbnAttending"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/rbn_attending_selector"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:padding="5dp"
+                                tools:text="10 Attending" />
+                            <RadioButton
+                                android:id="@+id/rbnPending"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/rbn_pending_selector"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:padding="5dp"
+                                tools:text="10 Waiting" />
+                            <RadioButton
+                                android:id="@+id/rbnDecline"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/rbn_decline_selector"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:padding="5dp"
+                                tools:text="10 Regrets" />
+
+                        </RadioGroup>
 
                     </RelativeLayout>
 
