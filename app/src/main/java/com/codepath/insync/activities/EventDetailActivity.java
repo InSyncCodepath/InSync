@@ -124,7 +124,7 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
                                 numPending++;
                                 break;
                         }
-                        if (userEventRelation.getUser().getObjectId().equals(User.getCurrentUser().getObjectId())) {
+                        if (userEventRelation.getUserId().equals(User.getCurrentUser().getObjectId())) {
                             currentRbnId = binding.rgEDRsvp.getCheckedRadioButtonId();
                             currentUserEvent = userEventRelation;
 

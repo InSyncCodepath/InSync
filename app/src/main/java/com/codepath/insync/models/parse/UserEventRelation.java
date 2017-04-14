@@ -9,7 +9,7 @@ import com.parse.SaveCallback;
 
 @ParseClassName("UserEventRelation")
 public class UserEventRelation extends ParseObject {
-    public static final String USER_KEY = "user";
+    public static final String USER_ID_KEY = "userId";
     public static final String EVENT_KEY = "event";
     public static final String IS_ATTENDEES_VISIBLE_KEY = "isAttendeesVisible";
     public static final String IS_HOSTING_KEY = "isHosting";
@@ -17,8 +17,8 @@ public class UserEventRelation extends ParseObject {
     public static final String IS_LOCATION_VISIBLE_KEY = "isLocationVisible";
     public static final String CAN_GET_UPDATES_KEY = "canGetUpdates";
 
-    public User getUser() {
-        return new User(getParseUser(USER_KEY));
+    public String getUserId() {
+        return getString(USER_ID_KEY);
     }
 
     public Event getEvent() {
@@ -45,8 +45,8 @@ public class UserEventRelation extends ParseObject {
         return getBoolean(CAN_GET_UPDATES_KEY);
     }
 
-    public void setUser(User user) {
-        put(USER_KEY, user);
+    public void setUser(String userId) {
+        put(USER_ID_KEY, userId);
     }
 
     public void setEvent(Event event) {
@@ -80,7 +80,6 @@ public class UserEventRelation extends ParseObject {
     public static void findAttendees(Event event, FindCallback<UserEventRelation> findCallback) {
         ParseQuery<UserEventRelation> query = ParseQuery.getQuery(UserEventRelation.class);
         query.whereEqualTo(EVENT_KEY, event);
-        query.include(USER_KEY);
         // First try to find from the cache and only then go to network
         query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
         query.findInBackground(findCallback);
