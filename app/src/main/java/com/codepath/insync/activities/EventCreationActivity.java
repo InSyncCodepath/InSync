@@ -34,6 +34,7 @@ import com.codepath.insync.adapters.SimpleCursorRecyclerAdapterContacts;
 import com.codepath.insync.databinding.ActivityCreateEventBinding;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
+import com.codepath.insync.models.parse.UserEventRelation;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
@@ -327,7 +328,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                     try {
                         userEvent.save();
                         Log.d("Debug", userEvent.getObjectId()+" Object id");
-                        Log.d("Debug", "Event id=" + userEvent.getEventPointerKey() + "USer id" + userEvent.getUserIdKey());
+                        Log.d("Debug", "Event id=" + userEvent.getEvent() + "USer id" + userEvent.getUserIdKey());
 
                     } catch (ParseException e1) {
                         e1.printStackTrace();

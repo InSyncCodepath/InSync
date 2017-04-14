@@ -31,6 +31,7 @@ import com.codepath.insync.fragments.PastEventDetailFragment;
 import com.codepath.insync.fragments.UpcomingEventDetailFragment;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
+import com.codepath.insync.models.parse.UserEventRelation;
 import com.codepath.insync.utils.Constants;
 import com.codepath.insync.utils.DateUtil;
 import com.parse.FindCallback;
@@ -258,13 +259,13 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 // Get current selected radio button and increment count locally
                 if (checkedId == binding.rbnAttending.getId()) {
-                    currentUserEvent.setRsvpStatus(Constants.ATTENDING);
+                    currentUserEvent.setRsvpStatusKey(Constants.ATTENDING);
                     numAttending++;
                 } else if (checkedId == binding.rbnDecline.getId()) {
-                    currentUserEvent.setRsvpStatus(Constants.DECLINE);
+                    currentUserEvent.setRsvpStatusKey(Constants.DECLINE);
                     numDecline++;
                 } else {
-                    currentUserEvent.setRsvpStatus(Constants.PENDING);
+                    currentUserEvent.setRsvpStatusKey(Constants.PENDING);
                     numPending++;
                 }
 

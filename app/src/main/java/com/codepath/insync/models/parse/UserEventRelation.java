@@ -5,15 +5,8 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
-import com.parse.ParseClassName;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseObject;
-import com.parse.ParseRelation;
 
-import java.util.Date;
-
-import static android.R.attr.description;
-import static com.codepath.insync.R.string.location;
+import static com.facebook.AccessToken.USER_ID_KEY;
 //import static com.codepath.insync.models.parse.Event.USER_RELATION_KEY;
 
 @ParseClassName("UserEventRelation")
@@ -38,6 +31,13 @@ public class UserEventRelation extends ParseObject {
         return getBoolean(IS_ATTENDEES_VISIBLE_KEY);
     }
 
+    public static String getUserIdKey() {
+        return USER_ID_KEY;
+    }
+
+    public void setUserId(String userId) {
+        put(USER_ID_KEY, userId);
+    }
     public boolean isHosting() {
         return getBoolean(IS_HOSTING_KEY);
     }
@@ -61,26 +61,28 @@ public class UserEventRelation extends ParseObject {
     public void setEvent(Event event) {
         put(EVENT_KEY, event);
     }
-
-    public void setIsAttendeesVisible(boolean isAttendeesVisible) {
+    public void setIsAttendeesVisibleKey(boolean isAttendeesVisible) {
         put(IS_ATTENDEES_VISIBLE_KEY, isAttendeesVisible);
     }
 
-    public void setIsHosting(boolean isHosting) {
+    public void setIsHostingKey(boolean isHosting) {
         put(IS_HOSTING_KEY, isHosting);
     }
 
-    public void setRsvpStatus(int rsvpStatus) {
-        put(RSVP_STATUS_KEY, rsvpStatus);
+    public void setCanGetUpdatesKey(boolean canGetUpdates) {
+        put(CAN_GET_UPDATES_KEY, canGetUpdates);
     }
 
-    public void setIsLocationVisible(boolean isLocationVisible) {
+
+    public void setIsLocationVisibleKey(boolean isLocationVisible){
         put(IS_LOCATION_VISIBLE_KEY, isLocationVisible);
     }
 
-    public void setCanGetUpdates(boolean canGetUpdates) {
-        put(CAN_GET_UPDATES_KEY, canGetUpdates);
+
+    public void setRsvpStatusKey(int rsvpStatus) {
+        put(RSVP_STATUS_KEY, rsvpStatus);
     }
+
 
     public void updateRsvpStatus(SaveCallback saveCallback) {
         saveInBackground(saveCallback);
@@ -95,6 +97,21 @@ public class UserEventRelation extends ParseObject {
         query.findInBackground(findCallback);
     }
 
+    public UserEventRelation(){
+
+    }
+
+    public UserEventRelation(Event event, String user, boolean isHosting, boolean isAttendeesVisible, boolean isLocationVisible, boolean canGetUpdates, int rsvpStatus){
+        this.setEvent(event);
+        this.setUserId(user);
+        this.setIsHostingKey(isHosting);
+        this.setIsAttendeesVisibleKey(isAttendeesVisible);
+        this.setIsLocationVisibleKey(isLocationVisible);
+        this.setCanGetUpdatesKey(canGetUpdates);
+        this.setRsvpStatusKey(rsvpStatus);
+        //this.setProfileImage();
+
+    }
 
 }
 
