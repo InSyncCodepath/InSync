@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.UpcomingEventItemBinding;
 import com.codepath.insync.models.parse.Event;
+import com.codepath.insync.models.parse.User;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,6 +38,9 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
     public void onBindViewHolder(UpcomingEventViewHolder holder, int position) {
         final Event event = events.get(position);
         Date now = new Date();
+        User currentUser = User.getCurrentUser();
+
+        //boolean isUserInvited
         final boolean isCurrent = event.getEndDate().compareTo(now) >= 0;
         final boolean canTrack = event.getStartDate().compareTo(now) <= 0 && event.getEndDate().compareTo(now) >= 0;
         holder.itemView.setOnClickListener(new View.OnClickListener() {

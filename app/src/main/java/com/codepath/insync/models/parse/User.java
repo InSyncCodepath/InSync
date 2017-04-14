@@ -1,12 +1,18 @@
 package com.codepath.insync.models.parse;
 
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+
+import java.util.List;
 
 
 @ParseClassName("User")
@@ -15,8 +21,41 @@ public class User extends ParseUser {
     public static final String PROFILE_IMAGE_KEY = "profileImage";
     public static final String LOCATION_KEY = "location";
     public static final String PHONE_NUMBER_KEY = "phoneNumber";
+    public static final String USERNAME_KEY = "username";
     private static User currentUser;
+    private static User user;
 
+    public static String getUsernameKey() {
+        return USERNAME_KEY;
+    }
+
+    public static User getUser(String username) throws ParseException {
+//        ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+//        query.whereEqualTo("user", user);
+//        List<ParseObject> objects = query.find();
+//        ParseObject parseObject = objects.get(0);
+        //user = new User(parseObject);
+
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("username", username);
+        List<ParseUser> objects = query.find();
+        ParseUser parseUser = objects.get(0);
+        user = new User(parseUser);
+
+//                findInBackground(new FindCallback<ParseUser>() {
+//            @Override
+//            public void done(List<ParseUser> objects, ParseException e) {
+//                user = (User) objects.get(0);
+//            }
+//
+//        });
+        return user;
+    }
+    public User(ParseObject parseObject) {
+        //setEmail(parseUser.getEmail());
+        setObjectId(parseObject.getObjectId());
+
+    }
     public static User getCurrentUser() {
         ParseUser parseUser = ParseUser.getCurrentUser();
         if (currentUser == null && parseUser != null) {
@@ -67,7 +106,6 @@ public class User extends ParseUser {
         setObjectId(parseUser.getObjectId());
 
     }
-
 
 
     public void signup(SignUpCallback callback) {

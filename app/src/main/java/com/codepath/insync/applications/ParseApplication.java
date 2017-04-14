@@ -8,7 +8,6 @@ import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
 import com.codepath.insync.models.parse.Music;
 import com.codepath.insync.models.parse.User;
-import com.codepath.insync.models.parse.UserEventRelation;
 import com.parse.Parse;
 import com.parse.ParseLiveQueryClient;
 import com.parse.ParseObject;

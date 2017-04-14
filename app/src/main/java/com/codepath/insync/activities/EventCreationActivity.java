@@ -12,9 +12,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,7 +22,6 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
@@ -33,11 +30,10 @@ import com.beloo.widget.chipslayoutmanager.layouter.breaker.IRowBreaker;
 import com.codepath.insync.Manifest;
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.InviteeAdapter;
-import com.codepath.insync.adapters.MainChipViewAdapter;
 import com.codepath.insync.adapters.SimpleCursorRecyclerAdapterContacts;
 import com.codepath.insync.databinding.ActivityCreateEventBinding;
-import com.codepath.insync.models.Tag;
 import com.codepath.insync.models.parse.Event;
+import com.codepath.insync.models.parse.User;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
@@ -47,15 +43,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.SaveCallback;
-import com.plumillonforge.android.chipview.Chip;
-import com.plumillonforge.android.chipview.ChipView;
-import com.plumillonforge.android.chipview.ChipViewAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public class EventCreationActivity extends AppCompatActivity implements SimpleCursorRecyclerAdapterContacts.SimpleCursorAdapterInterface {
@@ -320,8 +312,36 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
             @Override
             public void done(ParseException e) {
                 Log.d("Debug", event.getObjectId());
-                //for(int i =0; i )
-                //event.setUserRelation();
+
+                for(int i = 0; i < invitees.size(); i++){
+                    User user = null;
+                    try {
+                        user = User.getUser(invitees.get(i));
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
+                    }
+//                    ParseObject userEvent = ParseObject.create("userEventRelation");
+//                    userEvent.put();
+                    //userEvent.newUserEventRelation(event, user, false, true, true, true, 4);
+                    final UserEventRelation userEvent = new UserEventRelation(event, user.getObjectId(), false, true, true, true, 3);
+                    try {
+                        userEvent.save();
+                        Log.d("Debug", userEvent.getObjectId()+" Object id");
+                        Log.d("Debug", "Event id=" + userEvent.getEventPointerKey() + "USer id" + userEvent.getUserIdKey());
+
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
+                    }
+//                    userEvent.saveInBackground(new SaveCallback() {
+//                        @Override
+//                        public void done(ParseException e) {
+//                            Log.d("Debug", userEvent.getObjectId()+" Object id");
+//                            Log.d("Debug", "Event id=" + userEvent.getEventPointerKey() + "USer id" + userEvent.getUserPointerKey());
+//
+//                        }
+//                    });
+                }
+
             }
         });
         setResult(RESULT_OK);

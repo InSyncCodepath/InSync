@@ -5,7 +5,16 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
+import com.parse.ParseClassName;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
+import com.parse.ParseRelation;
 
+import java.util.Date;
+
+import static android.R.attr.description;
+import static com.codepath.insync.R.string.location;
+//import static com.codepath.insync.models.parse.Event.USER_RELATION_KEY;
 
 @ParseClassName("UserEventRelation")
 public class UserEventRelation extends ParseObject {
@@ -88,3 +97,5 @@ public class UserEventRelation extends ParseObject {
 
 
 }
+
+
