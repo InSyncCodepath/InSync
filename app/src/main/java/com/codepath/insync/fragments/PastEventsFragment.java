@@ -17,12 +17,15 @@ import com.codepath.insync.listeners.OnEventClickListener;
 import com.codepath.insync.models.parse.Event;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import static android.R.id.list;
 
 
 public class PastEventsFragment extends Fragment implements PastEventAdapter.EventDetailClickHandling {
@@ -57,10 +60,19 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
         pastEventAdapter = new PastEventAdapter(this, getContext(), events);
         pastList.setAdapter(pastEventAdapter);
         cal.setTime(new Date()); // sets calendar time/date
-        cal.add(Calendar.HOUR_OF_DAY, bufferHours); // adds one hour
+        cal.add(Calendar.HOUR_OF_DAY, bufferHours); // adds three buffer hours
         eventClickListener = (OnEventClickListener) getActivity();
-        ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
-        query.whereLessThan("endDate", cal.getTime());
+        ParseQuery<Event> queryTime = ParseQuery.getQuery(Event.class);
+        queryTime.whereLessThan("endDate", cal.getTime());
+
+        ParseQuery<Event> queryEnded = ParseQuery.getQuery(Event.class);
+        queryEnded.whereEqualTo("hasEnded", true);
+
+        List<ParseQuery<Event>> queryList = new ArrayList<ParseQuery<Event>>();
+        queryList.add(queryTime);
+        queryList.add(queryEnded);
+
+        ParseQuery<Event> query = ParseQuery.or(queryList);
         query.findInBackground(new FindCallback<Event>() {
             @Override
             public void done(List<Event> objects, ParseException e) {
@@ -73,8 +85,8 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
     }
 
     @Override
-    public void onEventItemClick(String eventId, String eventName, boolean isCurrent, boolean canTrack) {
-        eventClickListener.onItemClick(eventId, eventName, isCurrent, canTrack);
+    public void onEventItemClick(String eventId, boolean isCurrent, boolean canTrack) {
+        eventClickListener.onItemClick(eventId, isCurrent, canTrack);
     }
 }
 

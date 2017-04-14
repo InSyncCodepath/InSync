@@ -20,10 +20,9 @@ import android.view.ViewGroup;
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.EDImageAdapter;
 import com.codepath.insync.databinding.FragmentPastEventDetailBinding;
-import com.codepath.insync.listeners.OnVideoCreateListener;
+import com.codepath.insync.listeners.OnVideoPrepareListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.utils.Constants;
-import com.codepath.insync.utils.MediaClient;
 import com.codepath.insync.utils.VideoPlayer;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -36,7 +35,7 @@ import java.util.List;
 
 
 public class PastEventDetailFragment extends Fragment implements TextureView.SurfaceTextureListener,
-        OnVideoCreateListener
+        OnVideoPrepareListener
 {
     public static final String TAG = "PastEventDetailFragment";
     FragmentPastEventDetailBinding binding;
@@ -46,13 +45,14 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     LinearLayoutManager linearLayoutManager;
     VideoPlayer videoPlayer;
 
-    public static PastEventDetailFragment newInstance(String eventId, String eventName) {
+    public static PastEventDetailFragment newInstance(String eventId, String eventName, String eventHighlights) {
 
         Bundle args = new Bundle();
 
         PastEventDetailFragment pastEventDetailFragment = new PastEventDetailFragment();
         args.putString("eventId", eventId);
         args.putString("eventName", eventName);
+        args.putString("eventHighlights", eventHighlights);
 
         pastEventDetailFragment.setArguments(args);
         return pastEventDetailFragment;
@@ -65,6 +65,11 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         event = new Event();
         event.setObjectId(getArguments().getString("eventId"));
         event.setName(getArguments().getString("eventName"));
+        String eventHighlights = getArguments().getString("eventHighlights");
+        if (eventHighlights != null && eventHighlights.trim().length() > 0) {
+            event.setHighlightsVideo(eventHighlights);
+        }
+
         edImages = new ArrayList<>();
         edImageAdapter = new EDImageAdapter(getActivity(), edImages);
     }
@@ -74,6 +79,10 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_past_event_detail, container, false);
+
+        if (event.getHighlightsVideo() == null || event.getHighlightsVideo().equals("")) {
+            binding.tvHighlights.setVisibility(View.INVISIBLE);
+        }
 
         binding.tvHighlights.setSurfaceTextureListener(this);
         videoPlayer = new VideoPlayer(getContext(), this, binding.tvHighlights);
@@ -99,6 +108,8 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.tvHighlights.setOpaque(false);
+        binding.pbMediaUpdate.setVisibility(View.VISIBLE);
+
         ParseQuery<ParseObject> parseQuery = event.getAlbumRelation().getQuery();
 
         parseQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -110,7 +121,10 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
                         edImages.add(imageObject.getParseFile("image"));
                     }
                     edImageAdapter.notifyDataSetChanged();
-                    //animateImages();
+                    if (event.getHighlightsVideo() == null) {
+                        binding.pbMediaUpdate.setVisibility(View.GONE);
+                        animateImages();
+                    }
                 } else {
                     Log.e(TAG, "Error fetching event album");
                 }
@@ -128,11 +142,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         videoPlayer.setupPlayer(surface);
-
-        MediaClient mediaClient = new MediaClient(this);
-        mediaClient.createHighlights(getContext(), event, edImages, "party");
-        binding.pbMediaUpdate.setVisibility(View.VISIBLE);
-
+        videoPlayer.playVideo(event.getHighlightsVideo());
     }
 
     @Override
@@ -171,23 +181,6 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     public void onPrepare() {
         binding.pbMediaUpdate.setVisibility(View.GONE);
         binding.tvHighlights.setOpaque(true);
-    }
-
-    @Override
-    public void onCreateSuccess(String videoUrl) {
-        Log.d(TAG, "Video created successfully. Url: "+videoUrl);
-        videoPlayer.playVideo(videoUrl);
-
-
-    }
-
-    @Override
-    public void onCreateFailure(int status, String message) {
-        Log.e(TAG, "Video could not be created. status: "+status+", message: "+message);
-        binding.tvHighlights.setVisibility(View.INVISIBLE);
-        binding.pbMediaUpdate.setVisibility(View.GONE);
-
-        animateImages();
     }
 
     @Override

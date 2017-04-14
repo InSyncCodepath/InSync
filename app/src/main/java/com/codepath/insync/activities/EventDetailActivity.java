@@ -1,6 +1,7 @@
 package com.codepath.insync.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
@@ -9,6 +10,7 @@ import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,30 +28,41 @@ import android.support.v7.graphics.Palette;
 
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityEventDetailBinding;
+import com.codepath.insync.fragments.ConfirmationFragment;
 import com.codepath.insync.fragments.MessageSendFragment;
 import com.codepath.insync.fragments.PastEventDetailFragment;
 import com.codepath.insync.fragments.UpcomingEventDetailFragment;
+import com.codepath.insync.listeners.OnVideoCreateListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
 import com.codepath.insync.utils.Constants;
 import com.codepath.insync.utils.DateUtil;
+import com.codepath.insync.utils.MediaClient;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
-public class EventDetailActivity extends AppCompatActivity implements UpcomingEventDetailFragment.OnViewTouchListener {
+public class EventDetailActivity extends AppCompatActivity implements
+        UpcomingEventDetailFragment.OnViewTouchListener,
+        ConfirmationFragment.UpdateDraftDialogListener,
+        OnVideoCreateListener {
     private static final String TAG = "EventDetailActivity";
 
     ActivityEventDetailBinding binding;
     CollapsingToolbarLayout collapsingToolbar;
     Event event;
     String eventId;
-    String eventName;
     boolean isCurrent;
     boolean canTrack;
     int numAttending;
@@ -59,16 +72,17 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
     MessageSendFragment messageSendFragment;
     UserEventRelation currentUserEvent;
     private boolean firstLoad;
+    FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_event_detail);
 
+        fragmentManager = getSupportFragmentManager();
         firstLoad = true;
         processIntent();
         setupToolbar();
-        loadFragments();
     }
 
     @Override
@@ -83,7 +97,6 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
     private void processIntent() {
         Intent intent = getIntent();
         eventId = intent.getStringExtra("eventId");
-        eventName = intent.getStringExtra("eventName");
         isCurrent = intent.getBooleanExtra("isCurrent", false);
         canTrack = intent.getBooleanExtra("canTrack", false);
         Event.findEvent(eventId, new GetCallback<Event>() {
@@ -93,6 +106,7 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
                     event = eventObj;
                     findAttendance();
                     loadViews();
+                    loadFragments();
                 } else {
                     event = null;
                     Log.e(TAG, "Error finding event.");
@@ -168,9 +182,17 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
             case R.id.action_track:
                 Intent intent = new Intent(EventDetailActivity.this, LocationTrackerActivity.class);
                 startActivity(intent);
+            case R.id.action_highlights:
+                createHighlights();
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void createHighlights() {
+        String message = "Your event will end and you will not be able to post. Do you want to continue creating highlights?";
+        ConfirmationFragment confirmationFragment = ConfirmationFragment.newInstance(message, "Continue", "Cancel");
+        confirmationFragment.show(fragmentManager, "fragment_confirmation");
     }
 
     public void setupUI(View view) {
@@ -301,7 +323,7 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
     }
 
     private void loadFragments() {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
         if (isCurrent) {
             // Load current and upcoming event detail
             UpcomingEventDetailFragment upcomingEventDetailFragment = new UpcomingEventDetailFragment();
@@ -311,7 +333,7 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
             setupUI(binding.clED);
         } else {
             PastEventDetailFragment pastEventDetailFragment =
-                    PastEventDetailFragment.newInstance(eventId, eventName);
+                    PastEventDetailFragment.newInstance(event.getObjectId(), event.getName(), event.getHighlightsVideo());
             ft.replace(R.id.flMessages, pastEventDetailFragment);
         }
 
@@ -322,5 +344,66 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
     @Override
     public void onViewTouch(View v) {
         hideAndClearFocus(v);
+    }
+
+    @Override
+    public void onConfirmUpdateDialog(int position) {
+        if (position == DialogInterface.BUTTON_POSITIVE) {
+            event.setEndDate(new Date());
+            event.setHasEnded(true);
+
+            final List<ParseFile> edImages = new ArrayList<>();
+            ParseQuery<ParseObject> parseQuery = event.getAlbumRelation().getQuery();
+
+            parseQuery.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> objects, ParseException e) {
+                    if (e == null) {
+
+                        for (ParseObject imageObject: objects) {
+                            edImages.add(imageObject.getParseFile("image"));
+                        }
+                    } else {
+                        Log.e(TAG, "Error fetching event album");
+                    }
+                }
+            });
+            MediaClient mediaClient = new MediaClient(this);
+            mediaClient.createHighlights(this, event, edImages, "party");
+
+        }
+    }
+
+    @Override
+    public void onCreateSuccess(String videoUrl) {
+        Log.d(TAG, "Video created successfully. Url: "+videoUrl);
+        event.setHighlightsVideo(videoUrl);
+        event.updateEvent(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d(TAG, "Event highlights have been successfully created and updated");
+                    isCurrent = false;
+                    canTrack = false;
+                    invalidateOptionsMenu();
+                    FragmentTransaction ft = fragmentManager.beginTransaction();
+                    ft.remove(messageSendFragment);
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                    ft.commit();
+                    loadViews();
+                    loadFragments();
+                } else {
+                    Log.d(TAG, "Event highlights creation failed with error: "+e.getLocalizedMessage());
+                }
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onCreateFailure(int status, String message) {
+        Log.e(TAG, "Video could not be created. status: "+status+", message: "+message);
+
     }
 }

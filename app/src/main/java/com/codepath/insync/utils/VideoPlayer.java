@@ -8,7 +8,7 @@ import android.view.Surface;
 import android.view.View;
 import android.widget.MediaController;
 
-import com.codepath.insync.listeners.OnVideoCreateListener;
+import com.codepath.insync.listeners.OnVideoPrepareListener;
 
 public class VideoPlayer implements MediaPlayer.OnBufferingUpdateListener,
         MediaPlayer.OnCompletionListener,
@@ -18,12 +18,12 @@ public class VideoPlayer implements MediaPlayer.OnBufferingUpdateListener,
     private MediaPlayer mediaPlayer;
     private MediaController mcontroller;
     private Context mContext;
-    private OnVideoCreateListener videoCreateListener;
+    private OnVideoPrepareListener videoPrepareListener;
     private View controllerAnchorView;
 
-    public VideoPlayer(Context context, OnVideoCreateListener listener, View anchorView) {
+    public VideoPlayer(Context context, OnVideoPrepareListener listener, View anchorView) {
         mContext = context;
-        videoCreateListener = listener;
+        videoPrepareListener = listener;
         controllerAnchorView = anchorView;
     }
 
@@ -78,7 +78,7 @@ public class VideoPlayer implements MediaPlayer.OnBufferingUpdateListener,
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-        videoCreateListener.onPrepare();
+        videoPrepareListener.onPrepare();
         start();
 
         mcontroller.setMediaPlayer(this);
