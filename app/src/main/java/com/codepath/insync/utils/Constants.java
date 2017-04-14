@@ -22,7 +22,14 @@ public class Constants {
     public static final String IMAGE_STR = "image";
     public static final String MUSIC_STR = "music";
     public static final int CONTROL_SHOW_DURATION = 1000;
-    public static int DEFAULT_ERR_CODE = 10;
-    public static int CLIP_DURATION = 3;
-    public static int FADE_DURATION = 1000;
+    public static final int DEFAULT_ERR_CODE = 10;
+    public static final int CLIP_DURATION = 3;
+    public static final int FADE_DURATION = 1000;
+    // RSVP status
+    public static final int ATTENDING = 0;
+    public static final int DECLINE = 1;
+    public static final int PENDING = 2;
+    public static final String ATTENDING_STR = "Attending";
+    public static final String DECLINE_STR = "Regrets";
+    public static final String PENDING_STR = "Waiting";
 }

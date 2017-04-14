@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.support.v7.graphics.Palette;
 
@@ -28,10 +30,16 @@ import com.codepath.insync.fragments.MessageSendFragment;
 import com.codepath.insync.fragments.PastEventDetailFragment;
 import com.codepath.insync.fragments.UpcomingEventDetailFragment;
 import com.codepath.insync.models.parse.Event;
+import com.codepath.insync.models.parse.User;
+import com.codepath.insync.models.parse.UserEventRelation;
 import com.codepath.insync.utils.Constants;
 import com.codepath.insync.utils.DateUtil;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.SaveCallback;
+
+import java.util.List;
 
 
 public class EventDetailActivity extends AppCompatActivity implements UpcomingEventDetailFragment.OnViewTouchListener {
@@ -44,14 +52,20 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
     String eventName;
     boolean isCurrent;
     boolean canTrack;
+    int numAttending;
+    int numDecline;
+    int numPending;
+    int currentRbnId;
     MessageSendFragment messageSendFragment;
-
+    UserEventRelation currentUserEvent;
+    private boolean firstLoad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_event_detail);
 
+        firstLoad = true;
         processIntent();
         setupToolbar();
         loadFragments();
@@ -77,12 +91,70 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
             public void done(Event eventObj, ParseException e) {
                 if (e == null) {
                     event = eventObj;
+                    findAttendance();
                     loadViews();
                 } else {
                     event = null;
                     Log.e(TAG, "Error finding event.");
                     finish();
                 }
+            }
+        });
+
+    }
+
+    private void findAttendance() {
+        numAttending = 0;
+        numDecline = 0;
+        numPending = 0;
+        UserEventRelation.findAttendees(event, new FindCallback<UserEventRelation>() {
+            @Override
+            public void done(List<UserEventRelation> userEventRelations, ParseException e) {
+                if (e == null) {
+                    for (UserEventRelation userEventRelation : userEventRelations) {
+                        int rsvpStatus = userEventRelation.getRsvpStatus();
+                        switch (rsvpStatus) {
+                            case Constants.ATTENDING:
+                                numAttending++;
+                                break;
+                            case Constants.DECLINE:
+                                numDecline++;
+                                break;
+                            default:
+                                numPending++;
+                                break;
+                        }
+                        if (userEventRelation.getUser().getObjectId().equals(User.getCurrentUser().getObjectId())) {
+                            currentRbnId = binding.rgEDRsvp.getCheckedRadioButtonId();
+                            currentUserEvent = userEventRelation;
+
+                            if (firstLoad) {
+                                firstLoad = false;
+                                if (rsvpStatus == Constants.ATTENDING) {
+                                    binding.rbnAttending.setChecked(true);
+                                } else if (rsvpStatus == Constants.DECLINE) {
+                                    binding.rbnDecline.setChecked(true);
+                                } else {
+                                    binding.rbnPending.setChecked(true);
+                                }
+                                // Disable the radio button selection if the user is hosting
+                                if (currentUserEvent.isHosting()) {
+                                    binding.rbnAttending.setEnabled(false);
+                                    binding.rbnDecline.setEnabled(false);
+                                    binding.rbnPending.setEnabled(false);
+                                } else {
+                                    setupRadioButtonGroup();
+                                }
+
+                            }
+                        }
+                    }
+                } else {
+                    Log.e(TAG, "Error loading RSVP status: "+e.getLocalizedMessage());
+                }
+                binding.rbnAttending.setText(numAttending+" "+Constants.ATTENDING_STR);
+                binding.rbnDecline.setText(numDecline+" "+Constants.DECLINE_STR);
+                binding.rbnPending.setText(numPending+" "+Constants.PENDING_STR);
             }
         });
     }
@@ -133,6 +205,9 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
         if (bitmap != null) {
             binding.ivEDProfile.setImageBitmap(bitmap);
         }
+        if (!isCurrent) {
+            binding.rgEDRsvp.setVisibility(View.GONE);
+        }
         binding.tvEDName.setText(event.getName());
         binding.tvEDDescription.setText(event.getDescription());
         binding.tvEDDate.setText(DateUtil.getDateTimeInFormat(event.getStartDate()));
@@ -162,7 +237,7 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
                 Log.d(TAG, "Appbar offset changed to: "+verticalOffset);
-                int vOffSetThreshold = isCurrent ? 480 : 480;
+                int vOffSetThreshold = isCurrent ? 700 : 480;
                 if (Math.abs(verticalOffset) > vOffSetThreshold) {
                     TextView tvEventName = (TextView) collapsingToolbar.findViewById(R.id.tvEDName);
                     collapsingToolbar.setTitle(tvEventName.getText().toString());
@@ -173,6 +248,54 @@ public class EventDetailActivity extends AppCompatActivity implements UpcomingEv
                     getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                     binding.rlToolbar.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+    }
+
+
+    private void setupRadioButtonGroup() {
+        binding.rgEDRsvp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                // Get current selected radio button and increment count locally
+                if (checkedId == binding.rbnAttending.getId()) {
+                    currentUserEvent.setRsvpStatus(Constants.ATTENDING);
+                    numAttending++;
+                } else if (checkedId == binding.rbnDecline.getId()) {
+                    currentUserEvent.setRsvpStatus(Constants.DECLINE);
+                    numDecline++;
+                } else {
+                    currentUserEvent.setRsvpStatus(Constants.PENDING);
+                    numPending++;
+                }
+
+                // Get previously checked radio button and decrement count locally
+                if (currentRbnId == binding.rbnAttending.getId()) {
+                    numAttending--;
+                } else if (currentRbnId == binding.rbnDecline.getId()) {
+                    numDecline--;
+                } else {
+                    numPending--;
+                }
+
+                // Update attendance
+                binding.rbnAttending.setText(numAttending+" "+Constants.ATTENDING_STR);
+                binding.rbnDecline.setText(numDecline+" "+Constants.DECLINE_STR);
+                binding.rbnPending.setText(numPending+" "+Constants.PENDING_STR);
+
+                // Update remote store and refresh
+                currentUserEvent.updateRsvpStatus(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            Log.d(TAG, "Rsvp status updated successfully.");
+                            findAttendance();
+                        } else {
+                            Log.e(TAG, "Error updating RSVP status: "+e.getLocalizedMessage());
+                        }
+                    }
+                });
+
             }
         });
     }

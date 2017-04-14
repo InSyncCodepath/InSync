@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 
 import java.util.Date;
 
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
@@ -24,7 +25,6 @@ public class Event extends ParseObject {
     public static final String LOCATION_KEY = "location";
     public static final String DESCRIPTION_KEY = "description";
     public static final String PROFILE_IMAGE_KEY = "profileImage";
-    public static final String USER_RELATION_KEY = "userRelation";
     public static final String MESSAGE_RELATION_KEY = "messageRelation";
     public static final String ALBUM_RELATION_KEY = "albumRelation";
     public static final String HIGHLIGHTS_VIDEO_KEY = "highlightsVideo";
@@ -60,10 +60,6 @@ public class Event extends ParseObject {
 
     public ParseFile getProfileImage() {
         return getParseFile(PROFILE_IMAGE_KEY);
-    }
-
-    public ParseRelation getUserRelation() {
-        return getRelation(USER_RELATION_KEY);
     }
 
     public ParseRelation getMessageRelation() {
@@ -106,10 +102,6 @@ public class Event extends ParseObject {
         put(PROFILE_IMAGE_KEY, profileImage);
     }
 
-    public void setUserRelation(ParseRelation userRelation) {
-        put(USER_RELATION_KEY, userRelation);
-    }
-
     public void setMessageRelation(ParseRelation messageRelation) {
         put(MESSAGE_RELATION_KEY, messageRelation);
     }
@@ -137,6 +129,17 @@ public class Event extends ParseObject {
 
     public Event(){}
 
+    public Event(ParseObject object) {
+        super("Event");
+        this.setName(object.getString(NAME_KEY));
+        this.setAddress(object.getString(ADDRESS_KEY));
+        this.setStartDate(object.getDate(START_DATE_KEY));
+        this.setEndDate(object.getDate(END_DATE_KEY));
+        this.setDescription(object.getString(DESCRIPTION_KEY));
+        this.setLocation(object.getParseGeoPoint(LOCATION_KEY));
+        this.setProfileImage(object.getParseFile(PROFILE_IMAGE_KEY));
+    }
+
     // TODO: Call get, saveInBackground and pinInBackground here
     public static Event newEventInstance(String eventName, String address, Date startDate, Date endDate, String description, ParseGeoPoint location){
         Event newEvent = new Event();
@@ -162,9 +165,11 @@ public class Event extends ParseObject {
     public static void findEvent(String eventId, GetCallback<Event> getCallback) {
         ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
         // First try to find from the cache and only then go to network
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        /* Unsupported method when local data store is enabled */
+        //query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
         query.getInBackground(eventId, getCallback);
 
     }
+
 
 }
