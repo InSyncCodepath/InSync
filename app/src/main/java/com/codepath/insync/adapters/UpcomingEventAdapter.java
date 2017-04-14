@@ -14,10 +14,9 @@ import com.codepath.insync.R;
 import com.codepath.insync.databinding.UpcomingEventItemBinding;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.utils.DateUtil;
+import com.codepath.insync.models.parse.User;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by Gauri Gadkari on 4/6/17.
@@ -39,6 +38,9 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
     public void onBindViewHolder(UpcomingEventViewHolder holder, int position) {
         final Event event = events.get(position);
         final boolean canTrack = DateUtil.canTrackGuests(event.getStartDate(), event.getEndDate());
+        User currentUser = User.getCurrentUser();
+
+        //boolean isUserInvited
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

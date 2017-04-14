@@ -147,7 +147,7 @@ public class Event extends ParseObject {
         this.setEndDate(object.getDate(END_DATE_KEY));
         this.setDescription(object.getString(DESCRIPTION_KEY));
         this.setLocation(object.getParseGeoPoint(LOCATION_KEY));
-        this.setProfileImage(object.getParseFile(PROFILE_IMAGE_KEY));
+        //this.setProfileImage(object.getParseFile(PROFILE_IMAGE_KEY));
     }
 
     public void updateEvent(SaveCallback saveCallback) {

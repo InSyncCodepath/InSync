@@ -281,13 +281,13 @@ public class EventDetailActivity extends AppCompatActivity implements
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 // Get current selected radio button and increment count locally
                 if (checkedId == binding.rbnAttending.getId()) {
-                    currentUserEvent.setRsvpStatus(Constants.ATTENDING);
+                    currentUserEvent.setRsvpStatusKey(Constants.ATTENDING);
                     numAttending++;
                 } else if (checkedId == binding.rbnDecline.getId()) {
-                    currentUserEvent.setRsvpStatus(Constants.DECLINE);
+                    currentUserEvent.setRsvpStatusKey(Constants.DECLINE);
                     numDecline++;
                 } else {
-                    currentUserEvent.setRsvpStatus(Constants.PENDING);
+                    currentUserEvent.setRsvpStatusKey(Constants.PENDING);
                     numPending++;
                 }
 
