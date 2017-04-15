@@ -41,14 +41,22 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
+import com.parse.FindCallback;
+import com.parse.FunctionCallback;
+import com.parse.GetCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseInstallation;
+import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 public class EventCreationActivity extends AppCompatActivity implements SimpleCursorRecyclerAdapterContacts.SimpleCursorAdapterInterface {
@@ -313,7 +321,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
             @Override
             public void done(ParseException e) {
                 Log.d("Debug", event.getObjectId());
-
+                List<String> userIds = new ArrayList<>();
                 for(int i = 0; i < invitees.size(); i++){
                     User user = null;
                     try {
@@ -328,11 +336,14 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                     try {
                         userEvent.save();
                         Log.d("Debug", userEvent.getObjectId()+" Object id");
-                        Log.d("Debug", "Event id=" + userEvent.getEvent() + "USer id" + userEvent.getUserIdKey());
+                        Log.d("Debug", "Event id=" + userEvent.getEvent() + "USer id" + userEvent.getUserId());
+                        userIds.add(userEvent.getUserId());
 
                     } catch (ParseException e1) {
                         e1.printStackTrace();
                     }
+
+
 //                    userEvent.saveInBackground(new SaveCallback() {
 //                        @Override
 //                        public void done(ParseException e) {
@@ -342,7 +353,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
 //                        }
 //                    });
                 }
-
+                sendInviteNotifcations(userIds);
             }
         });
         setResult(RESULT_OK);
@@ -350,6 +361,22 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         finish();
     }
 
+    public void sendInviteNotifcations(List<String> userIds) {
+        HashMap<String, Object> payload = new HashMap<>();
+        payload.put("customData", "My message");
+        payload.put("userIds", userIds);
+        ParseCloud.callFunctionInBackground("pushChannelTest", payload, new FunctionCallback<Object>() {
+
+            @Override
+            public void done(Object object, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error sending push to cloud: " + e.toString ());
+                } else {
+                    Log.d(TAG, "Push sent successfully!");
+                }
+            }
+        });
+    }
     public void showContacts() {
         Log.i(TAG, "Show contacts button pressed. Checking permissions.");
 

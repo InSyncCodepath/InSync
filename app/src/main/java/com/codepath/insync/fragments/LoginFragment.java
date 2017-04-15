@@ -19,6 +19,7 @@ import com.codepath.insync.listeners.OnLoginListener;
 import com.codepath.insync.models.parse.User;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 
 
@@ -63,6 +64,9 @@ public class LoginFragment extends Fragment {
                             @Override
                             public void done(ParseUser user, ParseException e) {
                                 if (e == null) {
+                                    ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+                                    installation.put("userId", user.getObjectId());
+                                    installation.saveInBackground();
                                     Toast.makeText(
                                             getActivity(),
                                             "Login successful!", Toast.LENGTH_SHORT)
