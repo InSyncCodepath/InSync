@@ -1,8 +1,10 @@
 package com.codepath.insync.activities;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +27,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.support.v7.graphics.Palette;
+import android.widget.Toast;
 
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityEventDetailBinding;
@@ -48,15 +51,13 @@ import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 
 public class EventDetailActivity extends AppCompatActivity implements
         UpcomingEventDetailFragment.OnViewTouchListener,
-        ConfirmationFragment.UpdateDraftDialogListener,
-        OnVideoCreateListener {
+        ConfirmationFragment.UpdateDraftDialogListener
+        {
     private static final String TAG = "EventDetailActivity";
 
     ActivityEventDetailBinding binding;
@@ -73,6 +74,7 @@ public class EventDetailActivity extends AppCompatActivity implements
     UserEventRelation currentUserEvent;
     private boolean firstLoad;
     FragmentManager fragmentManager;
+    BroadcastReceiver messageReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +85,41 @@ public class EventDetailActivity extends AppCompatActivity implements
         firstLoad = true;
         processIntent();
         setupToolbar();
+    }
+
+    @Override
+    public void onPause() {
+        unregisterReceiver(messageReceiver);
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter("com.codepath.insync.Events");
+        messageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getBooleanExtra("event_has_ended", false)) {
+                    event.setHighlightsVideo(intent.getStringExtra("event_highlights"));
+                    Toast.makeText(
+                            getApplicationContext(),
+                            "Your event has ended. Enjoy the upcoming highlights!",
+                            Toast.LENGTH_SHORT).show();
+                    isCurrent = false;
+                    canTrack = false;
+                    invalidateOptionsMenu();
+                    FragmentTransaction ft = fragmentManager.beginTransaction();
+                    ft.remove(messageSendFragment);
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                    ft.commit();
+                    loadViews();
+                    loadFragments();
+                }
+
+            }
+        };
+        registerReceiver(messageReceiver, filter);
     }
 
     @Override
@@ -183,13 +220,13 @@ public class EventDetailActivity extends AppCompatActivity implements
                 Intent intent = new Intent(EventDetailActivity.this, LocationTrackerActivity.class);
                 startActivity(intent);
             case R.id.action_highlights:
-                createHighlights();
+                handleHighlightsAction();
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void createHighlights() {
+    private void handleHighlightsAction() {
         String message = "Your event will end and you will not be able to post. Do you want to continue creating highlights?";
         ConfirmationFragment confirmationFragment = ConfirmationFragment.newInstance(message, "Continue", "Cancel");
         confirmationFragment.show(fragmentManager, "fragment_confirmation");
@@ -349,61 +386,18 @@ public class EventDetailActivity extends AppCompatActivity implements
     @Override
     public void onConfirmUpdateDialog(int position) {
         if (position == DialogInterface.BUTTON_POSITIVE) {
-            event.setEndDate(new Date());
             event.setHasEnded(true);
-
-            final List<ParseFile> edImages = new ArrayList<>();
-            ParseQuery<ParseObject> parseQuery = event.getAlbumRelation().getQuery();
-
-            parseQuery.findInBackground(new FindCallback<ParseObject>() {
+            event.updateEvent(new SaveCallback() {
                 @Override
-                public void done(List<ParseObject> objects, ParseException e) {
+                public void done(ParseException e) {
                     if (e == null) {
-
-                        for (ParseObject imageObject: objects) {
-                            edImages.add(imageObject.getParseFile("image"));
-                        }
+                        Log.d(TAG, "Past event status updated successfully!");
                     } else {
-                        Log.e(TAG, "Error fetching event album");
+                        Log.e(TAG, "Could not update past event flag");
                     }
                 }
             });
-            MediaClient mediaClient = new MediaClient(this);
-            mediaClient.createHighlights(this, event, edImages, "party");
-
         }
     }
 
-    @Override
-    public void onCreateSuccess(String videoUrl) {
-        Log.d(TAG, "Video created successfully. Url: "+videoUrl);
-        event.setHighlightsVideo(videoUrl);
-        event.updateEvent(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.d(TAG, "Event highlights have been successfully created and updated");
-                    isCurrent = false;
-                    canTrack = false;
-                    invalidateOptionsMenu();
-                    FragmentTransaction ft = fragmentManager.beginTransaction();
-                    ft.remove(messageSendFragment);
-                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-                    ft.commit();
-                    loadViews();
-                    loadFragments();
-                } else {
-                    Log.d(TAG, "Event highlights creation failed with error: "+e.getLocalizedMessage());
-                }
-            }
-        });
-
-
-    }
-
-    @Override
-    public void onCreateFailure(int status, String message) {
-        Log.e(TAG, "Video could not be created. status: "+status+", message: "+message);
-
-    }
 }

@@ -36,8 +36,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static android.media.CamcorderProfile.get;
-
 
 public class MediaClient {
     private static String TAG = "MediaClient";
@@ -45,24 +43,23 @@ public class MediaClient {
     public static int VIDEO_FETCH_DELAY = 5000;
     private static PicovicoService service;
     LoginCredential loginCredential;
-    List<Photo> photos;
+    private List<Photo> photos;
     Audio audio;
     Video video;
     Music music;
+    Event event;
+    List<ParseFile> images;
+    String theme;
+    Context context;
     VideoStatus videoStatus;
     OnVideoCreateListener videoCreateListener;
-    Handler handler;
-    Runnable getVideoRunnable = new Runnable() {
-        @Override
-        public void run() {
-            Log.d(TAG, "Fetching the rendered video");
-            getVideo();
-        }
-    };
 
-    public MediaClient(OnVideoCreateListener listener) {
-        handler = new Handler();
+    public MediaClient(OnVideoCreateListener listener, Context context, Event event, List<ParseFile> images, String theme) {
         this.videoCreateListener = listener;
+        this.context = context;
+        this.event = event;
+        this.images = images;
+        this.theme = theme;
     }
 
     private void initPivocoService() {
@@ -80,11 +77,11 @@ public class MediaClient {
             service = retrofit.create(PicovicoService.class);
         }
     }
-    public String createHighlights(Context context, Event event, List<ParseFile> images, String theme) {
+    public String createHighlights() {
         initPivocoService();
         loginCredential = LoginCredential.getLoginCredential();
         if (loginCredential == null) {
-            login(context, event, images, theme);
+            login();
         } else {
             //uploadPhoto(event, images, theme);
             getVideo();
@@ -92,7 +89,7 @@ public class MediaClient {
         return "";
     }
 
-    private void login(Context context, final Event event, final List<ParseFile> images, final String theme) {
+    private void login() {
         Call<LoginCredential> loginCredentialCall = service.login(
                 context.getResources().getString(R.string.picovico_app_id),
                 context.getResources().getString(R.string.picovico_app_secret));
@@ -127,7 +124,7 @@ public class MediaClient {
         loginCredentialCall.enqueue(loginCredentialCallback);
     }
 
-    private void uploadPhoto(final Event event, final List<ParseFile> images, final String theme) {
+    private void uploadPhoto() {
         photos = new ArrayList<>();
         final int[] photoCount = {0};
 
@@ -144,7 +141,7 @@ public class MediaClient {
                 }
                 photoCount[0]++;
                 if (photoCount[0] == images.size()) {
-                    createAudio(event, images, theme);
+                    createAudio();
                 }
 
             }
@@ -170,7 +167,7 @@ public class MediaClient {
         }
     }
 
-    private void createAudio(final Event event, final List<ParseFile> images, final String theme) {
+    private void createAudio() {
 
         final Callback<Audio> audioCallback = new Callback<Audio>() {
             @Override
@@ -182,7 +179,7 @@ public class MediaClient {
                     videoCreateListener.onCreateFailure(response.code(), response.message());
                 } else {
                     audio = response.body();
-                    createVideo(event, images, theme);
+                    createVideo();
                 }
             }
 
@@ -218,7 +215,7 @@ public class MediaClient {
 
 
     }
-    private void createVideo(final Event event, final List<ParseFile> images, final String theme) {
+    private void createVideo() {
         Call<Video> videoCall = service.createVideo(
                 loginCredential.getAccessKey(),
                 loginCredential.getAccessToken(),
@@ -235,7 +232,7 @@ public class MediaClient {
                     videoCreateListener.onCreateFailure(response.code(), response.message());
                 } else {
                     video = response.body();
-                    addVideoAssets(event, theme);
+                    addVideoAssets();
                 }
             }
 
@@ -251,7 +248,7 @@ public class MediaClient {
         videoCall.enqueue(videoCallback);
     }
 
-    private void addVideoAssets(final Event event, final String theme) {
+    private void addVideoAssets() {
         String [][]credits = {{"Thank you", "for coming and making it so special"}};
         JSONArray assets = new JSONArray();
 
@@ -336,7 +333,12 @@ public class MediaClient {
                 } else {
                     RenderResponse renderResponse = response.body();
                     if (renderResponse.getStatus() == RENDER_SUCCESS) {
-                        handler.postDelayed(getVideoRunnable, VIDEO_FETCH_DELAY);
+                        try {
+                            Thread.sleep(5000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        getVideo();
 
                     } else {
                         Log.e(
@@ -380,7 +382,7 @@ public class MediaClient {
                     videoStatus = response.body();
                     Video video = videoStatus.getVideo();
                     if (video != null && video.getVideoInfo(360) != null) {
-                        videoCreateListener.onCreateSuccess(video.getVideoInfo(360).getUrl());
+                        videoCreateListener.onCreateSuccess(event, video.getVideoInfo(360).getUrl());
                     }
                 }
             }
