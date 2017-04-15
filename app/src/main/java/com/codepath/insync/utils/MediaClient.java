@@ -83,7 +83,7 @@ public class MediaClient {
         if (loginCredential == null) {
             login();
         } else {
-            //uploadPhoto(event, images, theme);
+            //uploadPhoto();
             getVideo();
         }
         return "";
@@ -106,7 +106,7 @@ public class MediaClient {
                 } else {
                     LoginCredential.setLoginCredential(response.body());
                     loginCredential = LoginCredential.getLoginCredential();
-                    //uploadPhoto(event, images, theme);
+                    //uploadPhoto();
                     getVideo();
                 }
 

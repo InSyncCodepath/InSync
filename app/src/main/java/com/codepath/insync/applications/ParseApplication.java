@@ -2,7 +2,6 @@ package com.codepath.insync.applications;
 
 import android.app.Application;
 import android.content.Intent;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import com.codepath.insync.R;
@@ -85,7 +84,7 @@ public class ParseApplication extends Application implements OnVideoCreateListen
         eventSubscriptionHandling.handleEvents(new SubscriptionHandling.HandleEventsCallback<Event>() {
             @Override
             public void onEvents(ParseQuery<Event> query, SubscriptionHandling.Event event, Event object) {
-                Log.d("ParseApp", "Coming here: "+object.getHighlightsVideo());
+                Log.d(TAG, "Event updated. Current highlights video: "+ object.getHighlightsVideo());
                 if (object.getHighlightsVideo() == null || object.getHighlightsVideo().trim().length() <= 0) {
                     createHighlights(object);
                 }
@@ -142,6 +141,8 @@ public class ParseApplication extends Application implements OnVideoCreateListen
     @Override
     public void onCreateFailure(int status, String message) {
         Log.e(TAG, "Video could not be created. status: "+status+", message: "+message);
-
+        Intent intent = new Intent("com.codepath.insync.Events");
+        intent.putExtra("event_has_ended", true);
+        sendBroadcast(intent);
     }
 }

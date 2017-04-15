@@ -34,23 +34,19 @@ import com.codepath.insync.databinding.ActivityEventDetailBinding;
 import com.codepath.insync.fragments.ConfirmationFragment;
 import com.codepath.insync.fragments.MessageSendFragment;
 import com.codepath.insync.fragments.PastEventDetailFragment;
+import com.codepath.insync.fragments.PastEventWaitFragment;
 import com.codepath.insync.fragments.UpcomingEventDetailFragment;
-import com.codepath.insync.listeners.OnVideoCreateListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
 import com.codepath.insync.utils.Constants;
 import com.codepath.insync.utils.DateUtil;
-import com.codepath.insync.utils.MediaClient;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+
 import com.parse.SaveCallback;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -71,6 +67,7 @@ public class EventDetailActivity extends AppCompatActivity implements
     int numPending;
     int currentRbnId;
     MessageSendFragment messageSendFragment;
+            PastEventWaitFragment pastEventWaitFragment;
     UserEventRelation currentUserEvent;
     private boolean firstLoad;
     FragmentManager fragmentManager;
@@ -101,18 +98,11 @@ public class EventDetailActivity extends AppCompatActivity implements
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getBooleanExtra("event_has_ended", false)) {
-                    event.setHighlightsVideo(intent.getStringExtra("event_highlights"));
-                    Toast.makeText(
-                            getApplicationContext(),
-                            "Your event has ended. Enjoy the upcoming highlights!",
-                            Toast.LENGTH_SHORT).show();
-                    isCurrent = false;
-                    canTrack = false;
-                    invalidateOptionsMenu();
-                    FragmentTransaction ft = fragmentManager.beginTransaction();
-                    ft.remove(messageSendFragment);
-                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-                    ft.commit();
+                    String eventHighlights = intent.getStringExtra("event_highlights");
+                    if (eventHighlights != null) {
+                        event.setHighlightsVideo(eventHighlights);
+                    }
+
                     loadViews();
                     loadFragments();
                 }
@@ -386,7 +376,18 @@ public class EventDetailActivity extends AppCompatActivity implements
     @Override
     public void onConfirmUpdateDialog(int position) {
         if (position == DialogInterface.BUTTON_POSITIVE) {
+
             event.setHasEnded(true);
+            isCurrent = false;
+            canTrack = false;
+            invalidateOptionsMenu();
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+            ft.remove(messageSendFragment);
+            binding.flMessageSend.setVisibility(View.GONE);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+            pastEventWaitFragment = new PastEventWaitFragment();
+            ft.replace(R.id.flMessages, pastEventWaitFragment);
+            ft.commit();
             event.updateEvent(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -397,6 +398,10 @@ public class EventDetailActivity extends AppCompatActivity implements
                     }
                 }
             });
+            Toast.makeText(
+                    getApplicationContext(),
+                    "Your event has ended. Your highlights are being created!",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
