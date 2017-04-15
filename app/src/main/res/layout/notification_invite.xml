@@ -1,6 +1,43 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-</LinearLayout>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/primary_light"
+    android:padding="10dp" >
+    <ImageView
+        android:src="@mipmap/ic_launcher"
+        android:id="@+id/ivInviteNoti"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="10dp" />
+    <TextView
+        android:id="@+id/tvInviteTitle"
+        android:textSize="13sp"
+        android:textColor="#000"
+        tools:text="Testing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/ivInviteNoti"
+        />
+    <TextView
+        android:id="@+id/tvInviteText"
+        android:textSize="13sp"
+        android:textColor="#000"
+        tools:text="Testing is awecome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/ivInviteNoti"
+        android:layout_below="@id/tvInviteTitle"
+        />
+    <TextView
+        android:id="@+id/tvInviteDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvInviteText"
+        android:layout_alignParentEnd="true"
+        android:textStyle="bold"
+        android:text="@string/see_details"/>
+</RelativeLayout>

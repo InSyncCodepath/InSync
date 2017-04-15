@@ -7,16 +7,24 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.RemoteViews;
 
+import com.codepath.insync.BuildConfig;
 import com.codepath.insync.R;
+import com.codepath.insync.activities.EventDetailActivity;
+import com.codepath.insync.activities.EventListActivity;
 import com.codepath.insync.activities.LoginActivity;
+import com.codepath.insync.utils.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Iterator;
+
+import static android.R.attr.value;
 
 
 public  class ParseCBroadcastReceiver extends BroadcastReceiver {
@@ -45,21 +53,21 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
                 Iterator<String> itr = json.keys();
                 while (itr.hasNext()) {
                     String key = itr.next();
-                    String value = json.getString(key);
-                    Log.d(TAG, "..." + key + " => " + value);
+                    //String value = json.getString(key);
+                    //Log.d(TAG, "..." + key + " => " + value);
                     // Extract custom push data
                     switch (key) {
                         case "customdata":
                             // create a local notification
-                            createNotification(context, value);
+                            createNotification(context, json.getJSONObject(key));
                             break;
                         case "launch":
                             // Handle push notification by invoking activity directly
-                            launchSomeActivity(context, value);
+                            launchSomeActivity(context, json.getString(key));
                             break;
                         case "broadcast":
                             // OR trigger a broadcast to activity
-                            triggerBroadcastToActivity(context, value);
+                            triggerBroadcastToActivity(context, json.getString(key));
                             break;
                     }
                 }
@@ -71,33 +79,56 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
 
     // Create a local dashboard notification to tell user about the event
     // See: http://guides.codepath.com/android/Notifications
-    private void createNotification(Context context, String datavalue) {
+    private void createNotification(Context context, JSONObject notiObj) {
+        int notiType = notiObj.optInt("notificationType");
+
+        switch (notiType) {
+            case Constants.NEW_EVENT:
+                createNewEventNoti(context, notiObj);
+                break;
+            default:
+                break;
+        }
+    }
+
+    // Handle push notification by invoking activity directly
+    // TODO: add activity to launch
+    // See: http://guides.codepath.com/android/Using-Intents-to-Create-Flows
+    private void createNewEventNoti(Context context, JSONObject notiObj) {
+
+        // Define custom views
+        RemoteViews contentView = new RemoteViews(BuildConfig.APPLICATION_ID, R.layout.notification_invite);
+        contentView.setImageViewResource(R.id.ivInviteNoti, R.mipmap.ic_launcher);
+        contentView.setTextViewText(R.id.tvInviteTitle, notiObj.optString("title"));
+        contentView.setTextViewText(R.id.tvInviteText, notiObj.optString("text"));
+
         // Define the intent to trigger when notification is selected
-        Intent intent = new Intent(context, LoginActivity.class);
-        // Next, let's turn this into a PendingIntent using
-        int requestID = (int) System.currentTimeMillis(); //unique requestID to differentiate between various notification with same NotifId
-        int flags = PendingIntent.FLAG_CANCEL_CURRENT; // cancel old intent and create new one
-        PendingIntent pIntent = PendingIntent.getActivity(context, requestID, intent, flags);
+        Intent resultIntent = new Intent(context.getApplicationContext(), EventDetailActivity.class);
+        resultIntent.putExtra("eventId", notiObj.optString("eventId"));
+        resultIntent.putExtra("isCurrent", true);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context.getApplicationContext());
+        // Adds the back stack
+        stackBuilder.addParentStack(EventDetailActivity.class);
+        // Adds the Intent to the top of the stack
+        stackBuilder.addNextIntent(resultIntent);
+        // Gets a PendingIntent containing the entire back stack
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
         // Now we can attach the pendingIntent to a new notification using setContentIntent
         Notification notification = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.messenger_bubble_large_blue)
-                .setContentTitle("Notification: " + datavalue)
-                .setContentText("Pushed!")
-                .setContentIntent(pIntent)
+                .setContent(contentView)
                 .setAutoCancel(true) // Hides the notification after its been selected
                 //.setDefaults(Notification.DEFAULT_ALL)
                 //.setPriority(Notification.PRIORITY_HIGH)
-                .setFullScreenIntent(pIntent, true) // Sets the notification for heads up display
+                .setContentIntent(resultPendingIntent)
+                .setFullScreenIntent(resultPendingIntent, true) // Sets the notification for heads up display
                 .build();
         // Get the notification manager system service
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         // mId allows you to update the notification later on.
         mNotificationManager.notify(0, notification);
     }
-
-    // Handle push notification by invoking activity directly
-    // TODO: add activity to launch
-    // See: http://guides.codepath.com/android/Using-Intents-to-Create-Flows
     private void launchSomeActivity(Context context, String datavalue) {
         Intent pupInt = new Intent(context, LoginActivity.class);
         pupInt.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
