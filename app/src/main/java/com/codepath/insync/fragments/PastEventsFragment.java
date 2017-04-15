@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,12 @@ import com.codepath.insync.adapters.PastEventAdapter;
 import com.codepath.insync.databinding.FragmentPastEventListBinding;
 import com.codepath.insync.listeners.OnEventClickListener;
 import com.codepath.insync.models.parse.Event;
+import com.codepath.insync.utils.DateUtil;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,18 +29,19 @@ import java.util.Date;
 import java.util.List;
 
 import static android.R.id.list;
+import static com.codepath.insync.utils.DateUtil.getParstEventQuery;
 
 
 public class PastEventsFragment extends Fragment implements PastEventAdapter.EventDetailClickHandling {
     FragmentPastEventListBinding binding;
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String TAG = "PastEventsFragment";
     RecyclerView pastList;
     OnEventClickListener eventClickListener;
     ArrayList<Event> events = new ArrayList<>();
     PastEventAdapter pastEventAdapter;
-    int bufferHours = 3;
-    Calendar cal = Calendar.getInstance(); // creates calendar
     public PastEventsFragment() {
+
     }
 
     public static PastEventsFragment newInstance(int sectionNumber) {
@@ -59,24 +63,26 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
         pastList.setLayoutManager(linearLayoutManager);
         pastEventAdapter = new PastEventAdapter(this, getContext(), events);
         pastList.setAdapter(pastEventAdapter);
-        cal.setTime(new Date()); // sets calendar time/date
-        cal.add(Calendar.HOUR_OF_DAY, bufferHours); // adds three buffer hours
         eventClickListener = (OnEventClickListener) getActivity();
-        ParseQuery<Event> queryTime = ParseQuery.getQuery(Event.class);
-        queryTime.whereLessThan("endDate", cal.getTime());
 
-        ParseQuery<Event> queryEnded = ParseQuery.getQuery(Event.class);
-        queryEnded.whereEqualTo("hasEnded", true);
-
-        List<ParseQuery<Event>> queryList = new ArrayList<ParseQuery<Event>>();
-        queryList.add(queryTime);
-        queryList.add(queryEnded);
-
-        ParseQuery<Event> query = ParseQuery.or(queryList);
+        ParseQuery<Event> query = DateUtil.getParstEventQuery();
         query.findInBackground(new FindCallback<Event>() {
             @Override
             public void done(List<Event> objects, ParseException e) {
                 events.addAll(objects);
+                for (Event object: objects) {
+                    object.setHasEnded(true);
+                    object.updateEvent(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                Log.d(TAG, "Past event status updated successfully!");
+                            } else {
+                                Log.e(TAG, "Could not update past event flag");
+                            }
+                        }
+                    });
+                }
                 pastEventAdapter.notifyDataSetChanged();
             }
         });
