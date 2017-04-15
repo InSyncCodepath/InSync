@@ -71,25 +71,6 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
         pastList.setAdapter(pastEventAdapter);
         eventClickListener = (OnEventClickListener) getActivity();
 
-//        ParseQuery<Event> query = DateUtil.getParstEventQuery();
-//        query.findInBackground(new FindCallback<Event>() {
-//            @Override
-//            public void done(List<Event> objects, ParseException e) {
-//                events.addAll(objects);
-//                for (Event object: objects) {
-//                    object.setHasEnded(true);
-//                    object.updateEvent(new SaveCallback() {
-//                        @Override
-//                        public void done(ParseException e) {
-//                            if (e == null) {
-//                                Log.d(TAG, "Past event status updated successfully!");
-//                            } else {
-//                                Log.e(TAG, "Could not update past event flag");
-//                            }
-//                        }
-//                    });
-//                }
-
         cal.setTime(new Date()); // sets calendar time/date
         cal.add(Calendar.HOUR_OF_DAY, bufferHours); // subtract 3 hours
         eventClickListener = (OnEventClickListener) getActivity();
@@ -123,31 +104,6 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
 
             }
         });
-//        try {
-//            List<UserEventRelation> objects = query.find();
-//            for (int i = 0; i < objects.size(); i++) {
-//                Event userEvent = (Event) objects.get(i).get("event");
-//                ParseQuery<Event> queryEvent = DateUtil.getParstEventQuery();
-//                queryEvent.whereEqualTo("objectId", userEvent.getObjectId());
-//                queryEvent.whereLessThan("endDate", cal.getTime());
-//                List<Event> userEvents = queryEvent.find();
-//                events.addAll(userEvents);
-//                pastEventAdapter.notifyDataSetChanged();
-//            }
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-
-
-//        ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
-//        query.whereLessThan("endDate", cal.getTime());
-//        query.findInBackground(new FindCallback<Event>() {
-//            @Override
-//            public void done(List<Event> objects, ParseException e) {
-//                events.addAll(objects);
-//                pastEventAdapter.notifyDataSetChanged();
-//            }
-//        });
 
         return view;
     }

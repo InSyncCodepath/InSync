@@ -70,30 +70,6 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
         cal.setTime(new Date()); // sets calendar time/date
         cal.add(Calendar.HOUR_OF_DAY, bufferHours); // adds three buffer hours
         eventClickListener = (OnEventClickListener) getActivity();
-//<<<<<<< Updated upstream
-//        ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
-//        query.whereGreaterThanOrEqualTo("endDate", cal.getTime());
-//        query.whereNotEqualTo("hasEnded", true);
-//        query.findInBackground(new FindCallback<Event>() {
-//            @Override
-//            public void done(List<Event> objects, ParseException e) {
-//                events.addAll(objects);
-//=======
-//        ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
-//        query.whereGreaterThanOrEqualTo("endDate", new Date());
-//        query.findInBackground(new FindCallback<Event>() {
-//            @Override
-//            public void done(List<Event> objects, ParseException e) {
-//                events.addAll(objects);
-//                upcomingEventAdapter.notifyDataSetChanged();
-//            }
-//        });
-
-//        var testObject = Parse.Object.extend("UserEventRelation");
-//        var query = new Parse.Query(testObject);
-//        query.select('A');
-//        query.equalTo('username', username);
-//
 
         cal.setTime(new Date()); // sets calendar time/date
         cal.add(Calendar.HOUR_OF_DAY, bufferHours); // subtract 3 hours
@@ -117,26 +93,6 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
 
             }
         });
-
-//        User currentUser = User.getCurrentUser();
-//        ParseQuery<UserEventRelation> query = ParseQuery.getQuery("UserEventRelation");
-//        query.selectKeys(Arrays.asList("event"));
-//        query.whereEqualTo("userId", currentUser.getObjectId());
-//        try {
-//            List<UserEventRelation> objects = query.find();
-//            for (int i = 0; i < objects.size(); i++) {
-//                Event userEvent = (Event) objects.get(i).get("event");
-//                ParseQuery<Event> queryEvent = ParseQuery.getQuery(Event.class);
-//                queryEvent.whereEqualTo("objectId", userEvent.getObjectId());
-//                queryEvent.whereGreaterThanOrEqualTo("endDate", cal.getTime());
-//                query.whereNotEqualTo("event.hasEnded", true);
-//                List<Event> userEvents = queryEvent.find();
-//                events.addAll(userEvents);
-//                upcomingEventAdapter.notifyDataSetChanged();
-//            }
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
 
         return view;
     }
