@@ -67,9 +67,6 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
         upcomingEventAdapter = new UpcomingEventAdapter(this, getContext(), events);
         upcomingList.setAdapter(upcomingEventAdapter);
         upcomingList.setLayoutManager(linearLayoutManager);
-        cal.setTime(new Date()); // sets calendar time/date
-        cal.add(Calendar.HOUR_OF_DAY, bufferHours); // adds three buffer hours
-        eventClickListener = (OnEventClickListener) getActivity();
 
         cal.setTime(new Date()); // sets calendar time/date
         cal.add(Calendar.HOUR_OF_DAY, bufferHours); // subtract 3 hours

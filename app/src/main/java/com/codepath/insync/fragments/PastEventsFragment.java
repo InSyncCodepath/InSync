@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +15,10 @@ import com.codepath.insync.adapters.PastEventAdapter;
 import com.codepath.insync.databinding.FragmentPastEventListBinding;
 import com.codepath.insync.listeners.OnEventClickListener;
 import com.codepath.insync.models.parse.Event;
-import com.codepath.insync.utils.DateUtil;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
@@ -30,9 +27,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import static android.R.id.list;
-import static com.codepath.insync.utils.DateUtil.getParstEventQuery;
 
 
 public class PastEventsFragment extends Fragment implements PastEventAdapter.EventDetailClickHandling {
