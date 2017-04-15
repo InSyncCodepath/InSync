@@ -32,4 +32,8 @@ public class Constants {
     public static final String ATTENDING_STR = "Attending";
     public static final String DECLINE_STR = "Regrets";
     public static final String PENDING_STR = "Waiting";
+    // NOTIFICATION TYPES
+    public static final int NEW_EVENT = 0;
+    public static final int RSVP_REMINDER = 1;
+    public static final int NUDGE = 2;
 }

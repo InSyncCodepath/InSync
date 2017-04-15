@@ -35,6 +35,7 @@ import com.codepath.insync.databinding.ActivityCreateEventBinding;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
+import com.codepath.insync.utils.Constants;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
@@ -353,7 +354,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
 //                        }
 //                    });
                 }
-                sendInviteNotifcations(userIds);
+                sendInviteNotifcations(event, userIds);
             }
         });
         setResult(RESULT_OK);
@@ -361,9 +362,14 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         finish();
     }
 
-    public void sendInviteNotifcations(List<String> userIds) {
+    public void sendInviteNotifcations(Event event, List<String> userIds) {
         HashMap<String, Object> payload = new HashMap<>();
-        payload.put("customData", "My message");
+        HashMap<String, Object> notiInfo = new HashMap<>();
+        notiInfo.put("title", "You've been invited!");
+        notiInfo.put("text", event.getName());
+        notiInfo.put("eventId", event.getObjectId());
+        notiInfo.put("notificationType", Constants.NEW_EVENT);
+        payload.put("customData", notiInfo);
         payload.put("userIds", userIds);
         ParseCloud.callFunctionInBackground("pushChannelTest", payload, new FunctionCallback<Object>() {
 

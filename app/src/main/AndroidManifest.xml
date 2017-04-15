@@ -101,6 +101,9 @@
             android:name=".activities.EventDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.EventListActivity"/>
         </activity>
         <activity
             android:name=".activities.SplashActivity"

@@ -42,5 +42,6 @@
     <string name="track">Track</string>
     <string name="get_highlights">Get Highlights</string>
     <string name="get_whereabouts">Get Whereabouts</string>
+    <string name="see_details">SEE DETAILS</string>
 
 </resources>
