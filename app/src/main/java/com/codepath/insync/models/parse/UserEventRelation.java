@@ -27,10 +27,17 @@ public class UserEventRelation extends ParseObject {
         return new Event(getParseObject(EVENT_KEY));
     }
 
+//    public Event getUserEvent(String objectId) {
+//        ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
+//        query.whereEqualTo("event", );
+//    }
+
     public boolean isAttendeesVisbile() {
         return getBoolean(IS_ATTENDEES_VISIBLE_KEY);
     }
-
+    public static String getEventPointerKey() {
+        return EVENT_KEY;
+    }
     public static String getUserIdKey() {
         return USER_ID_KEY;
     }

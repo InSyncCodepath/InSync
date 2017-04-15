@@ -15,8 +15,14 @@ import com.codepath.insync.databinding.UpcomingEventItemBinding;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.utils.DateUtil;
 import com.codepath.insync.models.parse.User;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Gauri Gadkari on 4/6/17.
@@ -26,6 +32,7 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
     ArrayList<Event> events;
     Context context;
     EventDetailClickHandling listener;
+
     @Override
     public UpcomingEventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.
@@ -39,6 +46,8 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
         final Event event = events.get(position);
         final boolean canTrack = DateUtil.canTrackGuests(event.getStartDate(), event.getEndDate());
         User currentUser = User.getCurrentUser();
+        Date now = new Date();
+
 
         //boolean isUserInvited
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +83,7 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
         UpcomingEventItemBinding binding;
         TextView eventName, eventDate, eventTime, eventLocation;
         ImageView eventImage;
+
         public UpcomingEventViewHolder(View itemView) {
             super(itemView);
             binding = UpcomingEventItemBinding.bind(itemView);
