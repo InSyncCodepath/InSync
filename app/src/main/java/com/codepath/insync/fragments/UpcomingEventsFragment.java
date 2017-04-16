@@ -25,6 +25,8 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -76,7 +78,6 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
         query.selectKeys(Arrays.asList("event"));
         query.include("event");
         query.whereEqualTo("userId", currentUser.getObjectId());
-//        query.addDescendingOrder("")
         query.findInBackground(new FindCallback<UserEventRelation>() {
             @Override
             public void done(List<UserEventRelation> objects, ParseException e) {
@@ -86,6 +87,12 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
                         events.add(userEvent);
                     }
                 }
+                Collections.sort(events, new Comparator<Event>() {
+                    @Override
+                    public int compare(Event event1, Event event2) {
+                        return event1.getStartDate().compareTo(event2.getStartDate());
+                    }
+                });
                 upcomingEventAdapter.notifyDataSetChanged();
 
 

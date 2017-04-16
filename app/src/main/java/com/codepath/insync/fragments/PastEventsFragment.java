@@ -25,6 +25,8 @@ import com.parse.SaveCallback;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -93,6 +95,12 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
                         });
                     }
                 }
+                Collections.sort(events, new Comparator<Event>() {
+                    @Override
+                    public int compare(Event event1, Event event2) {
+                        return event1.getStartDate().compareTo(event2.getStartDate());
+                    }
+                });
                 pastEventAdapter.notifyDataSetChanged();
 
 
