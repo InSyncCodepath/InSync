@@ -43,7 +43,7 @@ public class DateUtil {
         cal.setTime(new Date()); // sets calendar time/date
         cal.add(Calendar.HOUR_OF_DAY, currentBufferHours); // adds three buffer hours
         ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
-        query.whereLessThanOrEqualTo("endDate", cal.getTime());
+        query.whereGreaterThanOrEqualTo("endDate", cal.getTime());
         query.whereNotEqualTo("hasEnded", true);
         return query;
     }
@@ -53,7 +53,7 @@ public class DateUtil {
         cal.setTime(new Date()); // sets calendar time/date
         cal.add(Calendar.HOUR_OF_DAY, currentBufferHours); // adds three buffer hours
         ParseQuery<Event> queryTime = ParseQuery.getQuery(Event.class);
-        queryTime.whereGreaterThan("endDate", cal.getTime());
+        queryTime.whereLessThan("endDate", cal.getTime());
 
         ParseQuery<Event> queryEnded = ParseQuery.getQuery(Event.class);
         queryEnded.whereEqualTo("hasEnded", true);
