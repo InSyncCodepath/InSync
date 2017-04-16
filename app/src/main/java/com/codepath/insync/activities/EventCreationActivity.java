@@ -12,6 +12,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -21,8 +22,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 import com.beloo.widget.chipslayoutmanager.gravity.IChildGravityResolver;
@@ -35,6 +38,7 @@ import com.codepath.insync.databinding.ActivityCreateEventBinding;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
+import com.codepath.insync.utils.Camera;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
@@ -59,6 +63,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     Calendar eventEndDate = Calendar.getInstance();
     String eventName, eventDescription, address = "";
     EditText location, startTime, startDate, endDate, endTime;
+    ImageView setProfileImage;
     ParseGeoPoint geoPoint;
     RelativeLayout contactsContainer;
     public static final int REQUEST_CODE = 1002;
@@ -78,6 +83,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         endDate = binding.etEndDate;
         endTime = binding.etEndTime;
         location = binding.etLocation;
+        setProfileImage = binding.ivCamera;
         contactsContainer = binding.contactsContainer;
         Toolbar toolbar = binding.toolbarCreate;
         setSupportActionBar(toolbar);
@@ -114,13 +120,14 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                 // whether strategy is applied to last row. FALSE by default
                 .withLastRow(true)
                 .build();
-        inviteeList.setLayoutManager(chipsLayoutManager);
+        //inviteeList.setLayoutManager(chipsLayoutManager);
 
 
 //        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.HORIZONTAL);
 //        inviteeList.setLayoutManager(staggeredGridLayoutManager);
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-//        inviteeList.setLayoutManager(linearLayoutManager);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+
+        inviteeList.setLayoutManager(linearLayoutManager);
         adapter = new InviteeAdapter(this, invitees);
         inviteeList.setAdapter(adapter);
 
@@ -177,7 +184,14 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         });
 
         //inviteeList = binding.inviteeList;
-
+        setProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(EventCreationActivity.this, "Click me", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(EventCreationActivity.this, CameraActivity.class);
+                startActivityForResult(intent, 1023);
+            }
+        });
 
     }
 
@@ -325,14 +339,16 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
 //                    userEvent.put();
                     //userEvent.newUserEventRelation(event, user, false, true, true, true, 4);
                     final UserEventRelation userEvent = new UserEventRelation(event, user.getObjectId(), false, true, true, true, 3);
-                    try {
-                        userEvent.save();
-                        Log.d("Debug", userEvent.getObjectId()+" Object id");
-                        Log.d("Debug", "Event id=" + userEvent.getEvent() + "USer id" + userEvent.getUserIdKey());
+                        userEvent.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                Log.d("Debug", userEvent.getObjectId()+" Object id");
+                                Log.d("Debug", "Event id=" + userEvent.getEvent() + "USer id" + userEvent.getUserIdKey());
+                            }
+                        });
 
-                    } catch (ParseException e1) {
-                        e1.printStackTrace();
-                    }
+
+
 //                    userEvent.saveInBackground(new SaveCallback() {
 //                        @Override
 //                        public void done(ParseException e) {
@@ -342,6 +358,15 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
 //                        }
 //                    });
                 }
+                final UserEventRelation hostEvent = new UserEventRelation(event, User.getCurrentUser().getObjectId(), true, true, true, true, 0);
+
+                hostEvent.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        Log.d("Debug", "Event id=" + hostEvent.getEvent() + "USer id" + hostEvent.getUserIdKey());
+
+                    }
+                });
 
             }
         });

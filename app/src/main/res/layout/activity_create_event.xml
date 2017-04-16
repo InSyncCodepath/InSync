@@ -34,7 +34,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/event_name"
             android:textSize="24sp"
-            android:layout_below="@id/appbar"/>
+            android:layout_below="@id/appbar"
+            android:layout_toLeftOf="@id/ivCamera"/>
 
         <ImageView
             android:id="@+id/ivClock"

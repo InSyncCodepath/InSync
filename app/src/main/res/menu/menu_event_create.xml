@@ -15,4 +15,11 @@
         android:title="@string/create"
         android:icon="@drawable/ic_person_add_white_48px"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="99"
+        android:title="@string/action_settings"
+        android:icon="@drawable/ic_settings_white_48px"
+        app:showAsAction="always" />
 </menu>
