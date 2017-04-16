@@ -84,7 +84,10 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
 
         switch (notiType) {
             case Constants.NEW_EVENT:
-                createNewEventNoti(context, notiObj);
+                createNewEventNoti(context, notiObj, Constants.NEW_EVENT);
+                break;
+            case Constants.RSVP_REMINDER:
+                createNewEventNoti(context, notiObj, Constants.RSVP_REMINDER);
                 break;
             default:
                 break;
@@ -94,7 +97,7 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
     // Handle push notification by invoking activity directly
     // TODO: add activity to launch
     // See: http://guides.codepath.com/android/Using-Intents-to-Create-Flows
-    private void createNewEventNoti(Context context, JSONObject notiObj) {
+    private void createNewEventNoti(Context context, JSONObject notiObj, int notiType) {
 
         // Define custom views
         RemoteViews contentView = new RemoteViews(BuildConfig.APPLICATION_ID, R.layout.notification_invite);
@@ -127,7 +130,7 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
         // Get the notification manager system service
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         // mId allows you to update the notification later on.
-        mNotificationManager.notify(0, notification);
+        mNotificationManager.notify((int)System.currentTimeMillis(), notification);
     }
     private void launchSomeActivity(Context context, String datavalue) {
         Intent pupInt = new Intent(context, LoginActivity.class);
