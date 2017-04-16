@@ -3,159 +3,175 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/contactsContainer"
-        tools:context="com.codepath.insync.activities.EventCreationActivity">
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/appbar">
-            <android.support.v7.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/toolbarCreate">
-            </android.support.v7.widget.Toolbar>
-        </android.support.design.widget.AppBarLayout>
+        android:fitsSystemWindows="true">
 
-        <ImageView
-            android:id="@+id/ivCamera"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/ic_camera_alt_white_48px"
-            android:layout_below="@id/appbar"
-            android:layout_marginTop="8dp"/>
-
-        <EditText
-            android:id="@+id/etEventName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/event_name"
-            android:textSize="24sp"
-            android:layout_below="@id/appbar"
-            android:layout_toLeftOf="@id/ivCamera"/>
-
-        <ImageView
-            android:id="@+id/ivClock"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_below="@id/etEventName"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/ic_watch_later_white_48px" />
-
-        <LinearLayout
-            android:id="@+id/startDateTimeContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/etEventName"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_toRightOf="@id/ivClock">
-
-            <EditText
-                android:id="@+id/etStartDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
-                android:layout_weight="1"
-                android:hint="@string/start_date" />
-
-            <EditText
-                android:id="@+id/etStartTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_weight="1"
-                android:hint="@string/start_time" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/endDateTimeContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/startDateTimeContainer"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_toRightOf="@id/ivClock">
-
-            <EditText
-                android:id="@+id/etEndDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
-                android:layout_weight="1"
-                android:hint="@string/end_date" />
-
-            <EditText
-                android:id="@+id/etEndTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_weight="1"
-                android:hint="@string/end_time" />
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/ivLocationPin"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_below="@id/endDateTimeContainer"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/ic_location_on_white_48px" />
-
-        <EditText
-            android:id="@+id/etLocation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/endDateTimeContainer"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_toRightOf="@id/ivLocationPin"
-            android:hint="@string/location" />
-
-        <ImageView
-            android:id="@+id/ivDetails"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_below="@id/etLocation"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/ic_mode_edit_white_48px" />
-
-        <EditText
-            android:id="@+id/etDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/etLocation"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_toRightOf="@+id/ivDetails"
-            android:hint="Details"
-            android:minLines="2"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/inviteeHeader"
-            android:layout_below="@id/etDescription"
-            android:text="Invitees"
-            android:textSize="20sp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="8dp"/>
-
-        <android.support.v7.widget.RecyclerView
+        <RelativeLayout
+            android:id="@+id/contactsContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/inviteeList"
-            android:layout_below="@id/inviteeHeader"
-            android:layout_margin="8dp"/>
-        <!--<com.plumillonforge.android.chipview.ChipView-->
+            tools:context="com.codepath.insync.activities.EventCreationActivity">
+
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/appbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbarCreate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.Toolbar>
+            </android.support.design.widget.AppBarLayout>
+
+            <ImageView
+                android:id="@+id/profilePic"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:adjustViewBounds="true"
+                android:layout_below="@id/appbar"
+                android:visibility="gone"
+                android:scaleType="centerCrop"/>
+
+            <ImageView
+                android:id="@+id/ivCamera"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/profilePic"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_camera_alt_white_48px" />
+
+            <EditText
+                android:id="@+id/etEventName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profilePic"
+                android:layout_toLeftOf="@id/ivCamera"
+                android:hint="@string/event_name"
+                android:textSize="24sp" />
+
+            <ImageView
+                android:id="@+id/ivClock"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/etEventName"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_watch_later_white_48px" />
+
+            <LinearLayout
+                android:id="@+id/startDateTimeContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etEventName"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_toRightOf="@id/ivClock">
+
+                <EditText
+                    android:id="@+id/etStartDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:layout_weight="1"
+                    android:hint="@string/start_date" />
+
+                <EditText
+                    android:id="@+id/etStartTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_weight="1"
+                    android:hint="@string/start_time" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/endDateTimeContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/startDateTimeContainer"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_toRightOf="@id/ivClock">
+
+                <EditText
+                    android:id="@+id/etEndDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:layout_weight="1"
+                    android:hint="@string/end_date" />
+
+                <EditText
+                    android:id="@+id/etEndTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_weight="1"
+                    android:hint="@string/end_time" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ivLocationPin"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/endDateTimeContainer"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_location_on_white_48px" />
+
+            <EditText
+                android:id="@+id/etLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/endDateTimeContainer"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_toRightOf="@id/ivLocationPin"
+                android:hint="@string/location" />
+
+            <ImageView
+                android:id="@+id/ivDetails"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/etLocation"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_mode_edit_white_48px" />
+
+            <EditText
+                android:id="@+id/etDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etLocation"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_toRightOf="@+id/ivDetails"
+                android:hint="Details"
+                android:minLines="2" />
+
+            <TextView
+                android:id="@+id/inviteeHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etDescription"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="8dp"
+                android:text="Invitees"
+                android:textSize="20sp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/inviteeList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/inviteeHeader"
+                android:layout_margin="8dp" />
+            <!--<com.plumillonforge.android.chipview.ChipView-->
             <!--android:id="@+id/chipview"-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="wrap_content" />-->
 
-    </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
 </layout>

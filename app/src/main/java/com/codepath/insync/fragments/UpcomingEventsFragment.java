@@ -76,6 +76,7 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
         query.selectKeys(Arrays.asList("event"));
         query.include("event");
         query.whereEqualTo("userId", currentUser.getObjectId());
+//        query.addDescendingOrder("")
         query.findInBackground(new FindCallback<UserEventRelation>() {
             @Override
             public void done(List<UserEventRelation> objects, ParseException e) {

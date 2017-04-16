@@ -4,6 +4,7 @@ apply plugin: 'io.fabric'
 repositories {
     maven { url 'https://maven.fabric.io/public' }
     maven { url "https://jitpack.io" }
+    maven { url "https://dl.bintray.com/drummer-aidan/maven" }
 }
 
 
@@ -90,5 +91,5 @@ dependencies {
 
     //Camera
     compile 'com.flurgle:camerakit:0.9.17'
-//    compile 'com.afollestad:material-camera:0.4.4'
+    compile 'com.afollestad:material-camera:0.4.4'
 }

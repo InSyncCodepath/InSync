@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 import com.beloo.widget.chipslayoutmanager.gravity.IChildGravityResolver;
 import com.beloo.widget.chipslayoutmanager.layouter.breaker.IRowBreaker;
+import com.bumptech.glide.Glide;
 import com.codepath.insync.Manifest;
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.InviteeAdapter;
@@ -51,11 +53,13 @@ import com.parse.FunctionCallback;
 import com.parse.GetCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseInstallation;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -74,17 +78,18 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     Calendar eventEndDate = Calendar.getInstance();
     String eventName, eventDescription, address = "";
     EditText location, startTime, startDate, endDate, endTime;
-    ImageView setProfileImage;
+    ImageView setProfileImage, profileImage;
     ParseGeoPoint geoPoint;
     RelativeLayout contactsContainer;
     public static final int REQUEST_CODE = 1002;
-    private static final int REQUEST_CAMERA = 0;
+    private static final int REQUEST_CAMERA_ACTIVITY = 1023;
     private static final int REQUEST_CONTACTS = 1;
     RecyclerView inviteeList;
     ArrayList<String> invitees = new ArrayList<>();
     ArrayList<String> chipList = new ArrayList<>();
     private static String[] PERMISSIONS_CONTACT = {Manifest.permission.READ_CONTACTS};
     InviteeAdapter adapter;
+    ParseFile parseFile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +100,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         endTime = binding.etEndTime;
         location = binding.etLocation;
         setProfileImage = binding.ivCamera;
+        profileImage = binding.profilePic;
         contactsContainer = binding.contactsContainer;
         Toolbar toolbar = binding.toolbarCreate;
         setSupportActionBar(toolbar);
@@ -243,6 +249,19 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                 Log.d("INVITE", "Error");
             }
         }
+        if(requestCode == REQUEST_CAMERA_ACTIVITY){
+            if (resultCode == RESULT_OK) {
+                String filePath = data.getStringExtra("filePath");
+//                Uri newUri = Uri.parse(filePath);
+                File file = new File(filePath);
+//                String tempPath = "/cache/IMG_20170416_110438.jpg";
+//                File tempfile = new File(tempPath);
+                parseFile = new ParseFile(file);
+
+                Glide.with(EventCreationActivity.this).load(file).into(profileImage);
+                profileImage.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private void showGuests() {
@@ -333,7 +352,8 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     private void saveEventDetails() {
         eventName = binding.etEventName.getText().toString();
         eventDescription = binding.etDescription.getText().toString();
-        final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint);
+//        final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint);
+        final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint, parseFile);
         event.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -349,12 +369,12 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
 //                    ParseObject userEvent = ParseObject.create("userEventRelation");
 //                    userEvent.put();
                     //userEvent.newUserEventRelation(event, user, false, true, true, true, 4);
-                    final UserEventRelation userEvent = new UserEventRelation(event, user.getObjectId(), false, true, true, true, 3);
+                    final UserEventRelation userEvent = new UserEventRelation(event, user.getObjectId(), false, true, true, true, 2);
                         userEvent.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
                                 Log.d("Debug", userEvent.getObjectId()+" Object id");
-                                Log.d("Debug", "Event id=" + userEvent.getEvent() + "USer id" + userEvent.getUserIdKey());
+                                Log.d("Debug", "Event id=" + userEvent.getEvent() + " USer id" + userEvent.getUserIdKey());
                                 userIds.add(userEvent.getUserId());
                             }
                         });
@@ -368,7 +388,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
 //                        }
 //                    });
                 }
-                
+
                 final UserEventRelation hostEvent = new UserEventRelation(event, User.getCurrentUser().getObjectId(), true, true, true, true, 0);
 
                 hostEvent.saveInBackground(new SaveCallback() {
@@ -442,12 +462,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_CAMERA) {
-            // BEGIN_INCLUDE(permission_result)
-            // Received permission result for camera permission.
-            Log.i(TAG, "Received response for Camera permission request.");
-
-            // Check if the only required permission has been granted
+        if (requestCode == REQUEST_CAMERA_ACTIVITY) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Camera permission has been granted, preview can be displayed
                 Log.i(TAG, "CAMERA permission has now been granted. Showing preview.");
@@ -460,7 +475,8 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
 
             }
 
-        } else if (requestCode == REQUEST_CONTACTS) {
+        } else
+            if (requestCode == REQUEST_CONTACTS) {
             Log.i(TAG, "Received response for contact permissions request.");
 
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

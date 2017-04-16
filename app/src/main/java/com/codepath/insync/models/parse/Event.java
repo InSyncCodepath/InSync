@@ -3,6 +3,7 @@ package com.codepath.insync.models.parse;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.io.File;
 import java.util.Date;
 
 import com.parse.FindCallback;
@@ -173,6 +174,17 @@ public class Event extends ParseObject {
         this.setDescription(description);
         this.setLocation(location);
         //this.setProfileImage();
+
+    }
+
+    public Event(String eventName, String address, Date startDate, Date endDate, String description, ParseGeoPoint location, ParseFile profilePic){
+        this.setName(eventName);
+        this.setAddress(address);
+        this.setStartDate(startDate);
+        this.setEndDate(endDate);
+        this.setDescription(description);
+        this.setLocation(location);
+        this.setProfileImage(profilePic);
 
     }
 
