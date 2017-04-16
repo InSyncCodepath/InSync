@@ -19,8 +19,11 @@ import com.codepath.insync.listeners.OnLoginListener;
 import com.codepath.insync.models.parse.User;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+
+import static com.parse.ParseInstallation.getCurrentInstallation;
 
 
 public class SignupFragment extends Fragment {
@@ -79,6 +82,9 @@ public class SignupFragment extends Fragment {
                                         @Override
                                         public void done(ParseUser user, ParseException e) {
                                             if (e == null) {
+                                                ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+                                                installation.put("userId", user.getObjectId());
+                                                installation.saveInBackground();
                                                 loginListener.onLoginSuccess();
                                             } else {
                                                 Toast.makeText(

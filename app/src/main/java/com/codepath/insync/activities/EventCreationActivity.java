@@ -39,21 +39,32 @@ import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
 import com.codepath.insync.utils.Camera;
+import com.codepath.insync.utils.Constants;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
+import com.parse.FindCallback;
+import com.parse.FunctionCallback;
+import com.parse.GetCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseInstallation;
+import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+
+import retrofit2.http.HEAD;
 
 public class EventCreationActivity extends AppCompatActivity implements SimpleCursorRecyclerAdapterContacts.SimpleCursorAdapterInterface {
     ActivityCreateEventBinding binding;
@@ -327,7 +338,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
             @Override
             public void done(ParseException e) {
                 Log.d("Debug", event.getObjectId());
-
+                final List<String> userIds = new ArrayList<>();
                 for(int i = 0; i < invitees.size(); i++){
                     User user = null;
                     try {
@@ -344,10 +355,9 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                             public void done(ParseException e) {
                                 Log.d("Debug", userEvent.getObjectId()+" Object id");
                                 Log.d("Debug", "Event id=" + userEvent.getEvent() + "USer id" + userEvent.getUserIdKey());
+                                userIds.add(userEvent.getUserId());
                             }
                         });
-
-
 
 //                    userEvent.saveInBackground(new SaveCallback() {
 //                        @Override
@@ -358,6 +368,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
 //                        }
 //                    });
                 }
+                
                 final UserEventRelation hostEvent = new UserEventRelation(event, User.getCurrentUser().getObjectId(), true, true, true, true, 0);
 
                 hostEvent.saveInBackground(new SaveCallback() {
@@ -368,6 +379,9 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                     }
                 });
 
+
+                sendInviteNotifcations(event, userIds);
+
             }
         });
         setResult(RESULT_OK);
@@ -375,6 +389,27 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         finish();
     }
 
+    public void sendInviteNotifcations(Event event, List<String> userIds) {
+        HashMap<String, Object> payload = new HashMap<>();
+        HashMap<String, Object> notiInfo = new HashMap<>();
+        notiInfo.put("title", "You've been invited!");
+        notiInfo.put("text", event.getName());
+        notiInfo.put("eventId", event.getObjectId());
+        notiInfo.put("notificationType", Constants.NEW_EVENT);
+        payload.put("customData", notiInfo);
+        payload.put("userIds", userIds);
+        ParseCloud.callFunctionInBackground("pushChannelTest", payload, new FunctionCallback<Object>() {
+
+            @Override
+            public void done(Object object, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error sending push to cloud: " + e.toString ());
+                } else {
+                    Log.d(TAG, "Push sent successfully!");
+                }
+            }
+        });
+    }
     public void showContacts() {
         Log.i(TAG, "Show contacts button pressed. Checking permissions.");
 

@@ -286,7 +286,7 @@ public class EventDetailActivity extends AppCompatActivity implements
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
                 Log.d(TAG, "Appbar offset changed to: "+verticalOffset);
-                int vOffSetThreshold = isCurrent ? 700 : 480;
+                int vOffSetThreshold = isCurrent ? 650 : 350;
                 if (Math.abs(verticalOffset) > vOffSetThreshold) {
                     TextView tvEventName = (TextView) collapsingToolbar.findViewById(R.id.tvEDName);
                     collapsingToolbar.setTitle(tvEventName.getText().toString());
@@ -353,9 +353,9 @@ public class EventDetailActivity extends AppCompatActivity implements
         FragmentTransaction ft = fragmentManager.beginTransaction();
         if (isCurrent) {
             // Load current and upcoming event detail
-            UpcomingEventDetailFragment upcomingEventDetailFragment = new UpcomingEventDetailFragment();
+            UpcomingEventDetailFragment upcomingEventDetailFragment = UpcomingEventDetailFragment.newInstance(eventId);
             ft.replace(R.id.flMessages, upcomingEventDetailFragment);
-            messageSendFragment = new MessageSendFragment();
+            messageSendFragment = MessageSendFragment.newInstance(eventId);
             ft.replace(R.id.flMessageSend, messageSendFragment);
             setupUI(binding.clED);
         } else {

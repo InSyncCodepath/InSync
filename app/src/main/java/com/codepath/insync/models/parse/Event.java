@@ -64,7 +64,7 @@ public class Event extends ParseObject {
         return getParseFile(PROFILE_IMAGE_KEY);
     }
 
-    public ParseRelation getMessageRelation() {
+    public ParseRelation<Message> getMessageRelation() {
         return getRelation(MESSAGE_RELATION_KEY);
     }
 
@@ -108,7 +108,7 @@ public class Event extends ParseObject {
         put(PROFILE_IMAGE_KEY, profileImage);
     }
 
-    public void setMessageRelation(ParseRelation messageRelation) {
+    public void setMessageRelation(ParseRelation<Message> messageRelation) {
         put(MESSAGE_RELATION_KEY, messageRelation);
     }
 

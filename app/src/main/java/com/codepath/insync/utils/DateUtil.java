@@ -1,5 +1,6 @@
 package com.codepath.insync.utils;
 
+import com.codepath.insync.listeners.OnEventClickListener;
 import com.codepath.insync.models.parse.Event;
 import com.parse.ParseQuery;
 
@@ -17,7 +18,7 @@ public class DateUtil {
     private static String messageTimeFormat = "hh:mm a";
     private static String eventDateTimeFormat = "EEEEEEEEE, MMM dd yyyy 'at' hh:mma";
     private static int trackBufferHours = 1;
-    private static int currentBufferHours = 3;
+    private static int currentBufferHours = -3;
 
     public static String getTimeInFormat(Date inputDate) {
         SimpleDateFormat osdf = new SimpleDateFormat(messageTimeFormat, Locale.US);
@@ -37,12 +38,22 @@ public class DateUtil {
         return (cal.getTime().compareTo(now) <= 0 && endDate.compareTo(now) >= 0);
     }
 
-    public static ParseQuery<Event> getParstEventQuery() {
+    public static ParseQuery<Event> getCurrentEventQuery() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date()); // sets calendar time/date
+        cal.add(Calendar.HOUR_OF_DAY, currentBufferHours); // adds three buffer hours
+        ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
+        query.whereLessThanOrEqualTo("endDate", cal.getTime());
+        query.whereNotEqualTo("hasEnded", true);
+        return query;
+    }
+
+    public static ParseQuery<Event> getPastEventQuery() {
         Calendar cal = Calendar.getInstance(); // creates calendar
         cal.setTime(new Date()); // sets calendar time/date
         cal.add(Calendar.HOUR_OF_DAY, currentBufferHours); // adds three buffer hours
         ParseQuery<Event> queryTime = ParseQuery.getQuery(Event.class);
-        queryTime.whereLessThan("endDate", cal.getTime());
+        queryTime.whereGreaterThan("endDate", cal.getTime());
 
         ParseQuery<Event> queryEnded = ParseQuery.getQuery(Event.class);
         queryEnded.whereEqualTo("hasEnded", true);

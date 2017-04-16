@@ -14,6 +14,7 @@ public class Message extends ParseObject {
     public static final String SENDER_KEY = "sender";
     public static final String BODY_KEY = "body";
     public static final String MEDIA_KEY = "media";
+    public static final String CREATED_AT_KEY = "createdAt";
 
     public User getSender() {
         return new User(getParseUser(SENDER_KEY));
@@ -50,6 +51,16 @@ public class Message extends ParseObject {
             }
         }
         return bitmap;
+    }
+
+    public static Message newInstance(ParseObject object) {
+        Message message = new Message();
+        message.setBody(object.getString(BODY_KEY));
+        message.setMedia(object.getParseFile(MEDIA_KEY));
+        message.setSender(new User(object.getParseUser(SENDER_KEY)));
+        message.put(CREATED_AT_KEY, object.getDate(CREATED_AT_KEY));
+
+        return message;
     }
 
     public Bitmap getMediaImageBitmap() {

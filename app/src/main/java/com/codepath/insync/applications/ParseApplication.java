@@ -17,6 +17,7 @@ import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseInstallation;
 import com.parse.ParseLiveQueryClient;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -27,6 +28,8 @@ import com.parse.interceptors.ParseLogInterceptor;
 import com.parse.interceptors.ParseStethoInterceptor;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -66,26 +69,33 @@ public class ParseApplication extends Application implements OnVideoCreateListen
         // Connect to Parse server
         SubscriptionHandling<Message> messageSubscriptionHandling = parseLiveQueryClient.subscribe(messageParseQuery);
 
-        // Listen for CREATE AND UPDATE events
-        messageSubscriptionHandling.handleEvents(new SubscriptionHandling.HandleEventsCallback<Message>() {
+        ParseQuery<Event> currentEventQuery = DateUtil.getCurrentEventQuery();
+        SubscriptionHandling<Event> cEventSubscriptionHandling = parseLiveQueryClient.subscribe(currentEventQuery);
+        cEventSubscriptionHandling.handleEvents(new SubscriptionHandling.HandleEventsCallback<Event>() {
             @Override
-            public void onEvents(ParseQuery<Message> query, SubscriptionHandling.Event event, Message object) {
-                if (event.equals(SubscriptionHandling.Event.CREATE) ||
-                        event.equals(SubscriptionHandling.Event.UPDATE)) {
-                    Intent intent = new Intent("com.codepath.insync.Messages");
-                    intent.putExtra("new_messages", true);
-                    sendBroadcast(intent);
-                }
+            public void onEvents(ParseQuery<Event> query, SubscriptionHandling.Event event, Event object) {
+
+                Log.d(TAG, "Current event: "+object.getName()+". Current highlights video: " + object.getHighlightsVideo());
+                Intent intent = new Intent("com.codepath.insync.Messages");
+                intent.putExtra("new_messages", true);
+                sendBroadcast(intent);
             }
         });
 
-        ParseQuery<Event> eventParseQuery = DateUtil.getParstEventQuery();
-        SubscriptionHandling<Event> eventSubscriptionHandling = parseLiveQueryClient.subscribe(eventParseQuery);
-        eventSubscriptionHandling.handleEvents(new SubscriptionHandling.HandleEventsCallback<Event>() {
+        ParseQuery<Event> eventParseQuery = DateUtil.getPastEventQuery();
+        SubscriptionHandling<Event> pEventSubscriptionHandling = parseLiveQueryClient.subscribe(eventParseQuery);
+        pEventSubscriptionHandling.handleEvents(new SubscriptionHandling.HandleEventsCallback<Event>() {
             @Override
             public void onEvents(ParseQuery<Event> query, SubscriptionHandling.Event event, Event object) {
-                Log.d(TAG, "Event updated. Current highlights video: "+ object.getHighlightsVideo());
+                Calendar cal = Calendar.getInstance(); // creates calendar
+                cal.setTime(new Date()); // sets calendar time/date
+                cal.add(Calendar.HOUR_OF_DAY, -3); // adds three buffer hours
+                if(!object.hasEnded() && (object.getEndDate().compareTo(cal.getTime()) > 0)) {
+                    return;
+                }
+                Log.d(TAG, "Past event: "+object.getName()+". Current highlights video: " + object.getHighlightsVideo());
                 if (object.getHighlightsVideo() == null || object.getHighlightsVideo().trim().length() <= 0) {
+                    Log.d(TAG, object.getEndDate().toString());
                     createHighlights(object);
                 }
             }
