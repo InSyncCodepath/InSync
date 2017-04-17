@@ -89,7 +89,7 @@ public class CameraActivity extends AppCompatActivity {
         if (requestCode == CAMERA_RQ) {
 
             if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "Saved to: " + data.getDataString(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "Saved to: " + data.getDataString(), Toast.LENGTH_LONG).show();
                 String filePath = data.getData().getPath();
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("filePath",filePath);

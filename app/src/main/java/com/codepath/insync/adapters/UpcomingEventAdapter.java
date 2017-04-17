@@ -20,6 +20,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +44,8 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
 
     @Override
     public void onBindViewHolder(UpcomingEventViewHolder holder, int position) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("mm/dd");
+
         final Event event = events.get(position);
         final boolean canTrack = DateUtil.canTrackGuests(event.getStartDate(), event.getEndDate());
         User currentUser = User.getCurrentUser();
@@ -59,6 +62,10 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
         //holder.binding.tvDate.setText(event.getStartDate().toString());
         holder.eventName.setText(event.getName());
         holder.binding.tvAddress.setText(event.getAddress());
+        Date eventDate = event.getStartDate();
+
+        holder.eventDate.setText(eventDate.toString());
+
 
         Bitmap profileBitmap = event.getProfileImageBitmap();
         if (profileBitmap != null) {
@@ -88,7 +95,7 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
             super(itemView);
             binding = UpcomingEventItemBinding.bind(itemView);
             eventName = (TextView) itemView.findViewById(R.id.tvEventName);
-
+            eventDate = binding.tvDate;
         }
     }
 

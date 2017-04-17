@@ -1,26 +1,31 @@
 package com.codepath.insync.adapters;
 
 import android.content.Context;
+import android.graphics.SurfaceTexture;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 
 
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.PastEventItemBinding;
+import com.codepath.insync.listeners.OnVideoPrepareListener;
 import com.codepath.insync.models.parse.Event;
+import com.codepath.insync.utils.VideoPlayer;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 
-public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.PastEventViewHolder> {
+public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.PastEventViewHolder> implements TextureView.SurfaceTextureListener,
+        OnVideoPrepareListener {
     ArrayList<Event> events;
     Context context;
     EventDetailClickHandling listener;
-
+    VideoPlayer videoPlayer;
     @Override
     public PastEventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.
@@ -32,9 +37,11 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
 
     @Override
     public void onBindViewHolder(PastEventViewHolder holder, int position) {
+
         final Event event = events.get(position);
         Date now = new Date();
         final boolean isCurrent = event.getEndDate().compareTo(now) >= 0;
+        videoPlayer = new VideoPlayer(context, this, holder.binding.highlightsVideo);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,4 +75,30 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
     public interface EventDetailClickHandling {
         public void onEventItemClick(String eventId, boolean isCurrent, boolean canTrack);
     }
+
+    @Override
+    public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i1) {
+
+    }
+
+    @Override
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i1) {
+
+    }
+
+    @Override
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
+        return false;
+    }
+
+    @Override
+    public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+
+    }
+
+    @Override
+    public void onPrepare() {
+
+    }
+
 }

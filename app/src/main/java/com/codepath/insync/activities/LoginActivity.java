@@ -6,15 +6,22 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
+import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityLoginBinding;
 import com.codepath.insync.fragments.LoginFragment;
 import com.codepath.insync.fragments.SignupFragment;
 import com.codepath.insync.listeners.OnLoginListener;
 import com.crashlytics.android.Crashlytics;
+import com.parse.ParseFile;
+
+import java.io.File;
 
 import io.fabric.sdk.android.Fabric;
+
+import static java.security.AccessController.getContext;
 
 public class LoginActivity extends AppCompatActivity implements OnLoginListener {
 
@@ -100,4 +107,24 @@ public class LoginActivity extends AppCompatActivity implements OnLoginListener 
         ft.replace(R.id.flLogin, loginFragment);
         ft.commit();
     }
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == 10024) {
+//            if (resultCode == RESULT_OK) {
+//                String filePath = data.getStringExtra("filePath");
+////                Uri newUri = Uri.parse(filePath);
+//                File file = new File(filePath);
+////                String tempPath = "/cache/IMG_20170416_110438.jpg";
+////                File tempfile = new File(tempPath);
+////                parseFile = new ParseFile(file);
+////
+////                Glide.with(getContext()).load(file).into(binding.profilePic);
+////                binding.ivCamera.setVisibility(View.GONE);
+////                binding.profilePic.setVisibility(View.VISIBLE);
+//
+//            }
+//        }
+//    }
+
 }

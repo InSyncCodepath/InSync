@@ -19,14 +19,29 @@
             android:paddingTop="56dp">
 
 
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="72dp"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:layout_marginBottom="24dp"-->
+                <!--android:contentDescription="@string/app_logo"-->
+                <!--app:srcCompat="@drawable/ic_camera_alt_white_48px" />-->
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="72dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="24dp"
-                android:contentDescription="@string/app_logo"
-                app:srcCompat="@drawable/ic_camera_alt_white_48px" />
+                android:id="@+id/ivCamera"
+                app:srcCompat="@drawable/ic_camera_alt_white_48px"
+                />
 
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:id="@+id/profilePic"
+                android:visibility="gone"
+                android:layout_gravity="center_horizontal"
+                />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

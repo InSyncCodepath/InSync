@@ -90,6 +90,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     private static String[] PERMISSIONS_CONTACT = {Manifest.permission.READ_CONTACTS};
     InviteeAdapter adapter;
     ParseFile parseFile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -244,12 +245,11 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                 chipList = data.getStringArrayListExtra("result");
                 showGuests();
                 Log.d("INVITE", invitees.toString());
-            }
-            else {
+            } else {
                 Log.d("INVITE", "Error");
             }
         }
-        if(requestCode == REQUEST_CAMERA_ACTIVITY){
+        if (requestCode == REQUEST_CAMERA_ACTIVITY) {
             if (resultCode == RESULT_OK) {
                 String filePath = data.getStringExtra("filePath");
 //                Uri newUri = Uri.parse(filePath);
@@ -265,8 +265,8 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     }
 
     private void showGuests() {
-        for(int i=0; i < chipList.size(); i++){
-            if(!(invitees.contains(chipList.get(i)))){
+        for (int i = 0; i < chipList.size(); i++) {
+            if (!(invitees.contains(chipList.get(i)))) {
                 invitees.add(chipList.get(i));
             }
         }
@@ -295,7 +295,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         }
     };
 
-    TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener(){
+    TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
 
         @Override
         public void onTimeSet(TimePicker timePicker, int hour, int minute) {
@@ -305,7 +305,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         }
     };
 
-    TimePickerDialog.OnTimeSetListener endTimeListener = new TimePickerDialog.OnTimeSetListener(){
+    TimePickerDialog.OnTimeSetListener endTimeListener = new TimePickerDialog.OnTimeSetListener() {
 
         @Override
         public void onTimeSet(TimePicker timePicker, int hour, int minute) {
@@ -319,7 +319,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         String myFormat = "hh:mm a"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         etTime.setText(sdf.format(date));
-        if(etTime == startTime) {
+        if (etTime == startTime) {
             Date eventEndTime = eventStartDate.getTime();
             eventEndTime.setHours(eventEndTime.getHours() + 3);
             endTime.setText(sdf.format(eventEndTime));
@@ -352,28 +352,39 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     private void saveEventDetails() {
         eventName = binding.etEventName.getText().toString();
         eventDescription = binding.etDescription.getText().toString();
+        if (eventName.equals("")) {
+            Toast.makeText(EventCreationActivity.this, "Event Name can not be blank", Toast.LENGTH_LONG).show();
+        } else if (eventDescription.equals("")) {
+            Toast.makeText(EventCreationActivity.this, "Event Description can not be blank", Toast.LENGTH_LONG).show();
+        } else if (startDate.getText().equals("")) {
+            Toast.makeText(EventCreationActivity.this, "Event Date can not be blank", Toast.LENGTH_LONG).show();
+        } else if (startTime.getText().equals("")) {
+            Toast.makeText(EventCreationActivity.this, "Event Time can not be blank", Toast.LENGTH_LONG).show();
+        } else if (invitees.size()==0) {
+            Toast.makeText(EventCreationActivity.this, "Oops! Looks like you forgot to add guests", Toast.LENGTH_LONG).show();
+        } else  {
 //        final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint);
-        final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint, parseFile);
-        event.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                Log.d("Debug", event.getObjectId());
-                final List<String> userIds = new ArrayList<>();
-                for(int i = 0; i < invitees.size(); i++){
-                    User user = null;
-                    try {
-                        user = User.getUser(invitees.get(i));
-                    } catch (ParseException e1) {
-                        e1.printStackTrace();
-                    }
+            final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint, parseFile);
+            event.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    Log.d("Debug", event.getObjectId());
+                    final List<String> userIds = new ArrayList<>();
+                    for (int i = 0; i < invitees.size(); i++) {
+                        User user = null;
+                        try {
+                            user = User.getUser(invitees.get(i));
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
 //                    ParseObject userEvent = ParseObject.create("userEventRelation");
 //                    userEvent.put();
-                    //userEvent.newUserEventRelation(event, user, false, true, true, true, 4);
-                    final UserEventRelation userEvent = new UserEventRelation(event, user.getObjectId(), false, true, true, true, 2);
+                        //userEvent.newUserEventRelation(event, user, false, true, true, true, 4);
+                        final UserEventRelation userEvent = new UserEventRelation(event, user.getObjectId(), false, true, true, true, 2);
                         userEvent.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
-                                Log.d("Debug", userEvent.getObjectId()+" Object id");
+                                Log.d("Debug", userEvent.getObjectId() + " Object id");
                                 Log.d("Debug", "Event id=" + userEvent.getEvent() + " USer id" + userEvent.getUserIdKey());
                                 userIds.add(userEvent.getUserId());
                             }
@@ -387,26 +398,27 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
 //
 //                        }
 //                    });
-                }
-
-                final UserEventRelation hostEvent = new UserEventRelation(event, User.getCurrentUser().getObjectId(), true, true, true, true, 0);
-
-                hostEvent.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        Log.d("Debug", "Event id=" + hostEvent.getEvent() + "USer id" + hostEvent.getUserIdKey());
-
                     }
-                });
+
+                    final UserEventRelation hostEvent = new UserEventRelation(event, User.getCurrentUser().getObjectId(), true, true, true, true, 0);
+
+                    hostEvent.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            Log.d("Debug", "Event id=" + hostEvent.getEvent() + "USer id" + hostEvent.getUserIdKey());
+
+                        }
+                    });
 
 
-                sendInviteNotifcations(event, userIds);
+                    sendInviteNotifcations(event, userIds);
 
-            }
-        });
-        setResult(RESULT_OK);
+                }
+            });
+            setResult(RESULT_OK);
 
-        finish();
+            finish();
+        }
     }
 
     public void sendInviteNotifcations(Event event, List<String> userIds) {
@@ -423,13 +435,14 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
             @Override
             public void done(Object object, ParseException e) {
                 if (e != null) {
-                    Log.e(TAG, "Error sending push to cloud: " + e.toString ());
+                    Log.e(TAG, "Error sending push to cloud: " + e.toString());
                 } else {
                     Log.d(TAG, "Push sent successfully!");
                 }
             }
         });
     }
+
     public void showContacts() {
         Log.i(TAG, "Show contacts button pressed. Checking permissions.");
 
@@ -475,8 +488,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
 
             }
 
-        } else
-            if (requestCode == REQUEST_CONTACTS) {
+        } else if (requestCode == REQUEST_CONTACTS) {
             Log.i(TAG, "Received response for contact permissions request.");
 
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
