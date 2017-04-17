@@ -108,23 +108,4 @@ public class LoginActivity extends AppCompatActivity implements OnLoginListener 
         ft.commit();
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == 10024) {
-//            if (resultCode == RESULT_OK) {
-//                String filePath = data.getStringExtra("filePath");
-////                Uri newUri = Uri.parse(filePath);
-//                File file = new File(filePath);
-////                String tempPath = "/cache/IMG_20170416_110438.jpg";
-////                File tempfile = new File(tempPath);
-////                parseFile = new ParseFile(file);
-////
-////                Glide.with(getContext()).load(file).into(binding.profilePic);
-////                binding.ivCamera.setVisibility(View.GONE);
-////                binding.profilePic.setVisibility(View.VISIBLE);
-//
-//            }
-//        }
-//    }
-
 }

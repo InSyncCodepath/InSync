@@ -62,10 +62,7 @@ public class SignupFragment extends Fragment {
         if (requestCode == 1024) {
             if (resultCode == RESULT_OK) {
                 String filePath = data.getStringExtra("filePath");
-//                Uri newUri = Uri.parse(filePath);
                 File file = new File(filePath);
-//                String tempPath = "/cache/IMG_20170416_110438.jpg";
-//                File tempfile = new File(tempPath);
                 parseFile = new ParseFile(file);
 
                 Glide.with(getContext()).load(file).into(binding.profilePic);
@@ -139,49 +136,6 @@ public class SignupFragment extends Fragment {
                         });
                     }
                 });
-//                user.setUsername(binding.etSignupUsername.getText().toString());
-//                user.setPassword(binding.etSignupPassword.getText().toString());
-//                user.setEmail(binding.etSignupEmail.getText().toString());
-//                // Set custom properties
-//                user.setName(binding.etSignupName.getText().toString());
-//                user.setPhoneNumber(binding.etSignupPhone.getText().toString());
-//
-//                user.setProfileImage(parseFile);
-//                // Invoke signUpInBackground
-//                user.signup(new SignUpCallback() {
-//                    public void done(ParseException e) {
-//                        if (e == null) {
-//                            Toast.makeText(
-//                                    getActivity(),
-//                                    "Sign up successful!", Toast.LENGTH_SHORT)
-//                                    .show();
-//                            user.login(
-//                                    binding.etSignupUsername.getText().toString(),
-//                                    binding.etSignupPassword.getText().toString(),
-//                                    new LogInCallback() {
-//                                        @Override
-//                                        public void done(ParseUser user, ParseException e) {
-//                                            if (e == null) {
-//                                                ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-//                                                installation.put("userId", user.getObjectId());
-//                                                installation.saveInBackground();
-//                                                loginListener.onLoginSuccess();
-//                                            } else {
-//                                                Toast.makeText(
-//                                                        getActivity(),
-//                                                        "Error logging in. Please try again later!", Toast.LENGTH_SHORT)
-//                                                        .show();
-//                                            }
-//                                        }
-//                                    });
-//                        } else {
-//                            Toast.makeText(
-//                                    getActivity(),
-//                                    "Error signing up. Please try again later!", Toast.LENGTH_SHORT)
-//                                    .show();
-//                        }
-//                    }
-//                });
             }
         });
         binding.tvSignupLogin.setOnClickListener(new View.OnClickListener() {
