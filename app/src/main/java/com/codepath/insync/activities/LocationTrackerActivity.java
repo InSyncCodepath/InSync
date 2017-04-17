@@ -7,17 +7,19 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.DrawableRes;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -25,13 +27,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
-import android.widget.EditText;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
+
 
 import com.codepath.insync.Manifest;
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.CustomMapWindowAdapter;
+import com.codepath.insync.databinding.ActivityLocationTrackerBinding;
+import com.codepath.insync.models.parse.Event;
+import com.codepath.insync.models.parse.User;
+import com.codepath.insync.models.parse.UserEventRelation;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -42,38 +51,49 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
+import com.parse.FindCallback;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.HashMap;
+import java.util.List;
+
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 
 import static android.graphics.BitmapFactory.decodeResource;
+import static com.codepath.insync.R.id.contactsContainer;
 
 @RuntimePermissions
 public class LocationTrackerActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener,
-        GoogleMap.OnMapLongClickListener {
+        LocationListener {
 
     private static final String TAG = "LocationTrackerActivity";
     private SupportMapFragment mapFragment;
     private GoogleMap map;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    private long UPDATE_INTERVAL = 60000;  /* 60 secs */
-    private long FASTEST_INTERVAL = 5000; /* 5 secs */
+    private long UPDATE_INTERVAL = 120000;  /* 120 secs */
+    private long FASTEST_INTERVAL = 60000; /* 60 secs */
+    Marker currentMarker;
+    Marker prevMarker;
+    LatLng eventLocation;
+    String eventId;
+    RelativeLayout mapsContainer;
+    ActivityLocationTrackerBinding binding;
 
     /*
      * Define a request code to send to Google Play services This code is
@@ -84,8 +104,10 @@ public class LocationTrackerActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.location_tracker_activity);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_location_tracker);
+        mapsContainer = binding.rlLocationTracker;
 
+        processIntent();
         if (TextUtils.isEmpty(getResources().getString(R.string.google_maps_api_key))) {
             throw new IllegalStateException("You forgot to supply a Google Maps API key");
         }
@@ -105,13 +127,46 @@ public class LocationTrackerActivity extends AppCompatActivity implements
 
     }
 
+    private void processIntent() {
+        eventId = getIntent().getStringExtra("eventId");
+        eventLocation = new LatLng(
+                getIntent().getDoubleExtra("eventLatitude", 0.0),
+                getIntent().getDoubleExtra("eventLongitude", 0.0));
+        Event event = new Event();
+        event.setObjectId(eventId);
+        ParseQuery<UserEventRelation> userEventQuery = ParseQuery.getQuery(UserEventRelation.class);
+        userEventQuery.whereEqualTo("event", event);
+
+        ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+        userQuery.whereMatchesKeyInQuery("objectId", "userId", userEventQuery);
+
+        userQuery.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> users, ParseException e) {
+                if (e == null) {
+                    Log.d(TAG, "Found the following users");
+                    for (ParseUser user : users) {
+                        Log.d(TAG, ""+user.getParseGeoPoint("location")+" ");
+                    }
+                } else {
+                    Snackbar.make(mapsContainer, "Could not locate guests at this time. Please try later.",
+                            Snackbar.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        });
+    }
+
+    @SuppressWarnings("all")
+    @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
     protected void loadMap(GoogleMap googleMap) {
         map = googleMap;
         if (map != null) {
             // Map is ready
             Toast.makeText(this, "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
             LocationTrackerActivityPermissionsDispatcher.getMyLocationWithCheck(this);
-            map.setOnMapLongClickListener(this);
+            // The following line is for making the default blue dot disappear
+            map.setMyLocationEnabled(false);
 
         } else {
             Toast.makeText(this, "Error - Map was null!!", Toast.LENGTH_SHORT).show();
@@ -277,26 +332,72 @@ public class LocationTrackerActivity extends AppCompatActivity implements
         });
     }
 
+    public void animateMarker(final Marker marker, final LatLng toPosition,
+                              final boolean hideMarker) {
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+        Projection proj = map.getProjection();
+        Point startPoint = proj.toScreenLocation(marker.getPosition());
+        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
+        final long duration = 500;
+
+        final Interpolator interpolator = new LinearInterpolator();
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                float t = interpolator.getInterpolation((float) elapsed
+                        / duration);
+                double lng = t * toPosition.longitude + (1 - t)
+                        * startLatLng.longitude;
+                double lat = t * toPosition.latitude + (1 - t)
+                        * startLatLng.latitude;
+                marker.setPosition(new LatLng(lat, lng));
+
+                if (t < 1.0) {
+                    // Post again 16ms later.
+                    handler.postDelayed(this, 15);
+                } else {
+                    if (hideMarker) {
+                        marker.setVisible(false);
+                    } else {
+                        marker.setVisible(true);
+                    }
+                }
+            }
+        });
+    }
+
+
     @Override
     public void onLocationChanged(Location location) {
         // Report to the UI that the location was updated
         String msg = "Updated Location: " +
                 Double.toString(location.getLatitude()) + "," +
                 Double.toString(location.getLongitude());
+        Log.d(TAG, msg);
         //Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         //BitmapDescriptor defaultMarker =
         //        BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
 
         // Creates and adds marker to the map
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        Marker marker = map.addMarker(new MarkerOptions()
-                .position(latLng)
+        prevMarker = currentMarker;
+        if (prevMarker != null) {
+            prevMarker.remove();
+        }
+        currentMarker = map.addMarker(new MarkerOptions()
                 .title("Title")
                 //.snippet("Snippet")
                 //.icon(customMarker)
                 .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.drawable.test_map)))
+                .position(latLng)
                 .anchor(0.5f, 1));
+
         //dropPinEffect(marker);
+        animateMarker(currentMarker, latLng, false);
+
     }
 
     private Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
@@ -315,13 +416,16 @@ public class LocationTrackerActivity extends AppCompatActivity implements
         if (drawable != null)
             drawable.draw(canvas);
         customMarkerView.draw(canvas);
-        return returnedBitmap;
-    }
+        IconGenerator iconGenerator = new IconGenerator(LocationTrackerActivity.this);
 
+        iconGenerator.setContentView(customMarkerView);
+        iconGenerator.setStyle(IconGenerator.STYLE_BLUE);
+        return iconGenerator.makeIcon();
+    }
     /*
-     * Called by Location Services if the connection to the location client
-     * drops because of an error.
-     */
+         * Called by Location Services if the connection to the location client
+         * drops because of an error.
+         */
     @Override
     public void onConnectionSuspended(int i) {
         if (i == CAUSE_SERVICE_DISCONNECTED) {
@@ -360,68 +464,36 @@ public class LocationTrackerActivity extends AppCompatActivity implements
         }
     }
 
-    @Override
-    public void onMapLongClick(LatLng latLng) {
-        Toast.makeText(this, "Long Press", Toast.LENGTH_LONG).show();
-        showAlertDialogForPoint(latLng);
-
-        HashMap<String, String> payload = new HashMap<>();
-        payload.put("customData", "My message");
-        ParseCloud.callFunctionInBackground("pushChannelTest", payload, new FunctionCallback<Object>() {
-
-            @Override
-            public void done(Object object, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error sending push to cloud: " + e.toString ());
-                } else {
-                    Log.d(TAG, "Push sent successfully!");
-                }
-            }
-        });
-    }
-
-    private void showAlertDialogForPoint(final LatLng point) {
+    private void showAlertDialogForPoint(Marker marker) {
         // inflate message_item.xml view
-        final View messageView = LayoutInflater.from(LocationTrackerActivity.this).
-                inflate(R.layout.item_message_left, null);
+
         // Create alert dialog builder
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         // set message_item.xml to AlertDialog builder
-        alertDialogBuilder.setView(messageView);
+        alertDialogBuilder.setMessage("Send a nudge to: "+marker.getTitle());
 
         // Create alert dialog
         final AlertDialog alertDialog = alertDialogBuilder.create();
 
         // Configure dialog button (OK)
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK",
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "YES",
                 new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        IconGenerator iconGenerator = new IconGenerator(LocationTrackerActivity.this);
+                        HashMap<String, String> payload = new HashMap<>();
+                        payload.put("customData", "My message");
+                        ParseCloud.callFunctionInBackground("pushChannelTest", payload, new FunctionCallback<Object>() {
 
-                        // Possible color options:
-                        // STYLE_WHITE, STYLE_RED, STYLE_BLUE, STYLE_GREEN, STYLE_PURPLE, STYLE_ORANGE
-                        iconGenerator.setStyle(IconGenerator.STYLE_GREEN);
-                        EditText etTitle = (EditText) messageView.findViewById(R.id.etEDMessage);
-                        // Swap text here to live inside speech bubble
-                        Bitmap bitmap = iconGenerator.makeIcon(etTitle.getText().toString());
-                        // Use BitmapDescriptorFactory to create the marker
-                        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(bitmap);
-                        // Define color of marker icon
-                        BitmapDescriptor defaultMarker =
-                                BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
-                        // Extract content from alert dialog
-                        String title = ((EditText) alertDialog.findViewById(R.id.etEDMessage)).
-                                getText().toString();
-                        String snippet = ((EditText) alertDialog.findViewById(R.id.etEDMessage)).
-                                getText().toString();
-                        // Creates and adds marker to the map
-                        Marker marker = map.addMarker(new MarkerOptions()
-                                .position(point)
-                                .title(title)
-                                .snippet(snippet)
-                                .icon(icon));
+                            @Override
+                            public void done(Object object, ParseException e) {
+                                if (e != null) {
+                                    Log.e(TAG, "Error sending push to cloud: " + e.toString ());
+                                } else {
+                                    Log.d(TAG, "Push sent successfully!");
+                                }
+                            }
+                        });
                     }
                 });
 

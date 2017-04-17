@@ -2,9 +2,12 @@ package com.codepath.insync.activities;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -18,11 +21,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.codepath.insync.Manifest;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityEventListBinding;
 import com.codepath.insync.fragments.PastEventsFragment;
 import com.codepath.insync.fragments.UpcomingEventsFragment;
 import com.codepath.insync.listeners.OnEventClickListener;
+import com.codepath.insync.utils.LocationService;
 
 
 public class EventListActivity extends AppCompatActivity implements OnEventClickListener {
@@ -33,6 +38,8 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
     final int REQUEST_CODE = 1001;
     public UpcomingEventsFragment upcomingFragment;
     public PastEventsFragment pastFragment;
+    private static final int LOCATION_ACCESS_PERMISSION = 20;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +66,42 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
                 EventListActivity.this.startActivityForResult(startEventCreationIntent, REQUEST_CODE);
             }
         });
+        startLocationService();
 
+    }
+
+    private void startLocationService() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_ACCESS_PERMISSION
+            );
+        } else {
+            Intent lsIntent = new Intent(this, LocationService.class);
+            // Start the service
+            startService(lsIntent);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case LOCATION_ACCESS_PERMISSION:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    Intent lsIntent = new Intent(this, LocationService.class);
+                    // Start the service
+                    startService(lsIntent);
+                }
+                break;
+            default:
+                break;
+
+        }
     }
 
     @Override
