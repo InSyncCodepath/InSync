@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,8 +13,10 @@ import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +32,7 @@ import android.widget.TextView;
 import android.support.v7.graphics.Palette;
 import android.widget.Toast;
 
+import com.codepath.insync.Manifest;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityEventDetailBinding;
 import com.codepath.insync.fragments.ConfirmationFragment;
@@ -41,6 +45,7 @@ import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
 import com.codepath.insync.utils.Constants;
 import com.codepath.insync.utils.DateUtil;
+import com.codepath.insync.utils.LocationService;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -49,6 +54,8 @@ import com.parse.SaveCallback;
 
 import java.util.List;
 
+import permissions.dispatcher.NeedsPermission;
+
 
 public class EventDetailActivity extends AppCompatActivity implements
         UpcomingEventDetailFragment.OnViewTouchListener,
@@ -56,7 +63,8 @@ public class EventDetailActivity extends AppCompatActivity implements
         {
     private static final String TAG = "EventDetailActivity";
 
-    ActivityEventDetailBinding binding;
+
+            ActivityEventDetailBinding binding;
     CollapsingToolbarLayout collapsingToolbar;
     Event event;
     String eventId;
@@ -72,6 +80,7 @@ public class EventDetailActivity extends AppCompatActivity implements
     private boolean firstLoad;
     FragmentManager fragmentManager;
     BroadcastReceiver messageReceiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +114,7 @@ public class EventDetailActivity extends AppCompatActivity implements
 
                     loadViews();
                     loadFragments();
+
                 }
 
             }
@@ -115,11 +125,20 @@ public class EventDetailActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu for the current event
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            return super.onCreateOptionsMenu(menu);
+        }
         if (canTrack) {
             getMenuInflater().inflate(R.menu.menu_event_detail, menu);
         }
         return super.onCreateOptionsMenu(menu);
     }
+
+
 
     private void processIntent() {
         Intent intent = getIntent();
@@ -208,6 +227,9 @@ public class EventDetailActivity extends AppCompatActivity implements
                 return true;
             case R.id.action_track:
                 Intent intent = new Intent(EventDetailActivity.this, LocationTrackerActivity.class);
+                intent.putExtra("eventId", event.getObjectId());
+                intent.putExtra("eventLatitude", event.getLocation().getLatitude());
+                intent.putExtra("eventLongitude", event.getLocation().getLongitude());
                 startActivity(intent);
             case R.id.action_highlights:
                 handleHighlightsAction();
@@ -286,7 +308,7 @@ public class EventDetailActivity extends AppCompatActivity implements
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
                 Log.d(TAG, "Appbar offset changed to: "+verticalOffset);
-                int vOffSetThreshold = isCurrent ? 650 : 350;
+                int vOffSetThreshold = isCurrent ? 600 : 350;
                 if (Math.abs(verticalOffset) > vOffSetThreshold) {
                     TextView tvEventName = (TextView) collapsingToolbar.findViewById(R.id.tvEDName);
                     collapsingToolbar.setTitle(tvEventName.getText().toString());
