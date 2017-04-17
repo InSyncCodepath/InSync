@@ -17,6 +17,7 @@ import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseInstallation;
 import com.parse.ParseLiveQueryClient;
 import com.parse.ParseObject;
@@ -62,12 +63,27 @@ public class ParseApplication extends Application implements OnVideoCreateListen
         // Add support for live queries
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
 
-        ParseQuery<Message> messageParseQuery = ParseQuery.getQuery(Message.class);
+        ParseQuery<ParseUser> userParseQuery = ParseUser.getQuery();
         // This query can even be more granular (i.e. only refresh if the entry was added by some other user)
         // parseQuery.whereNotEqualTo(USER_ID_KEY, ParseUser.getCurrentUser().getObjectId());
 
         // Connect to Parse server
-        SubscriptionHandling<Message> messageSubscriptionHandling = parseLiveQueryClient.subscribe(messageParseQuery);
+        SubscriptionHandling<ParseUser> locationSubscriptionHandling = parseLiveQueryClient.subscribe(userParseQuery);
+
+        // Listen for UPDATE events
+        locationSubscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new
+                SubscriptionHandling.HandleEventCallback<ParseUser>() {
+                    @Override
+                    public void onEvent(ParseQuery<ParseUser> query, ParseUser object) {
+                        Log.d(TAG, "User update received. Broadcasting.");
+                        ParseGeoPoint location = object.getParseGeoPoint("location");
+                        Intent intent = new Intent("com.codepath.insync.Users");
+                        intent.putExtra("userId", object.getObjectId());
+                        intent.putExtra("userLatitude", location.getLatitude());
+                        intent.putExtra("userLongitude", location.getLongitude());
+                        sendBroadcast(intent);
+                    }
+                });
 
         ParseQuery<Event> currentEventQuery = DateUtil.getCurrentEventQuery();
         SubscriptionHandling<Event> cEventSubscriptionHandling = parseLiveQueryClient.subscribe(currentEventQuery);

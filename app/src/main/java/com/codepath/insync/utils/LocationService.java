@@ -10,17 +10,16 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.codepath.insync.Manifest;
+import com.codepath.insync.models.parse.User;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
+import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
+import com.parse.SaveCallback;
 
 import permissions.dispatcher.NeedsPermission;
 
@@ -31,9 +30,8 @@ public class LocationService extends Service implements
         LocationListener {
 
     private static final String TAG = "LocationService";
-
-    // use the websmithing defaultUploadWebsite for testing and then check your
-    // location with your browser here: https://www.websmithing.com/gpstracker/displaymap.php
+    private long UPDATE_INTERVAL = 60000;  /* 120 secs */
+    private long FASTEST_INTERVAL = 5000; /* 60 secs */
 
     private boolean currentlyProcessingLocation = false;
     private LocationRequest locationRequest;
@@ -91,7 +89,19 @@ public class LocationService extends Service implements
     public void onLocationChanged(Location location) {
         if (location != null) {
             Log.e(TAG, "position: " + location.getLatitude() + ", " + location.getLongitude() + " accuracy: " + location.getAccuracy());
-
+            ParseGeoPoint geoPoint = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
+            User user = User.getCurrentUser();
+            user.setLocation(geoPoint);
+            user.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        Log.d(TAG, "User location saved successfully");
+                    } else {
+                        Log.e(TAG, "User location could not be saved. Failed with error: "+e.getLocalizedMessage());
+                    }
+                }
+            });
         }
     }
 
@@ -113,9 +123,9 @@ public class LocationService extends Service implements
         Log.d(TAG, "onConnected");
 
         locationRequest = LocationRequest.create();
-        locationRequest.setInterval(1000); // milliseconds
-        locationRequest.setFastestInterval(1000); // the fastest rate in milliseconds at which your app can handle location updates
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(UPDATE_INTERVAL);
+        locationRequest.setFastestInterval(FASTEST_INTERVAL);
+        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 googleApiClient, locationRequest, this);
