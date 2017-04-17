@@ -5,9 +5,7 @@
     android:id="@+id/custom_map_marker"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="@dimen/padding4"
     android:background="@color/accent">
-
     <ImageView
         android:id="@+id/iv_custom_marker"
         android:layout_width="50dp"

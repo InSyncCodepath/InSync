@@ -57,7 +57,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.EventCreationActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".utils.Camera"
             android:theme="@style/AppTheme.NoActionBar"></activity>
@@ -84,6 +84,9 @@
             </intent-filter>
         </receiver>
 
+        <service
+            android:name=".utils.LocationService"
+            android:exported="false"/>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="98b4aaea624003eec876dae2a53a6629318ae4ac" />

@@ -1,5 +1,8 @@
 package com.codepath.insync.models.parse;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseClassName;
@@ -107,6 +110,18 @@ public class User extends ParseUser {
 
     }
 
+    public Bitmap getProfileImageBitmap() {
+        ParseFile profileImg = getProfileImage();
+        Bitmap bitmap = null;
+        if (profileImg != null) {
+            try {
+                bitmap = BitmapFactory.decodeStream(profileImg.getDataStream());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return bitmap;
+    }
 
     public void signup(SignUpCallback callback) {
         super.signUpInBackground(callback);
