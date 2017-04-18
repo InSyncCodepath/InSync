@@ -49,9 +49,8 @@ Here's a walkthrough of implemented user stories:
 First sprint
 http://recordit.co/a9OScepSED 
 
-Second sprint 
-https://drive.google.com/open?id=0B7fB7lsZXRbQSjBvSHRDRXhkdFE
-
+Second sprint (Added location and camera)
+https://drive.google.com/open?id=0B7fB7lsZXRbQUFZHWjdJenJVRlU
     Copyright [2017] [Insync Inc]
 
     Licensed under the Apache License, Version 2.0 (the "License");
