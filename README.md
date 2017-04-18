@@ -13,7 +13,7 @@ The following **required** functionality will be completed:
   * [x] Event Name and Description
   * [x] Date, time, location
   * [x] RSVP
-  * [] Attendees
+  * [X] Attendees
   * [] Invite message
 * [x] Partipants in an event can communicate via instant messages.
 * [x] Users will get event reminders.
