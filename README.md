@@ -7,35 +7,35 @@
 The following **required** functionality will be completed:
 
 * [x] User can login and can create an account.
-* [] User can search for other users by username
-* [] User can create a group and add people to that group
+* [x] User can search for other users by username
+* [x] User can create a group and add people to that group
 * [x] User can create an event with the following functionality:
   * [x] Event Name and Description
   * [x] Date, time, location
   * [x] RSVP
-  * [] Attendees
+  * [X] Attendees
   * [] Invite message
 * [x] Partipants in an event can communicate via instant messages.
-* [] Users will get event reminders.
+* [x] Users will get event reminders.
 * [] Users can share pictures/ video of the event in the chat.
 * [x] After the event, an album will be created which users can download. Optional: The album will expire after one week.
-* [] Users can see the location of the partipants in real time some time before the event.
-* [] Host can choose if the location tracker and invitee list is visible to the invitees or not.
+* [x] Users can see the location of the partipants in real time some time before the event.
+* [x] Host can choose if the location tracker and invitee list is visible to the invitees or not.
 
 The following **optional** features can be implemented:
 
 * [] User can send an invite link to their contacts 
 * [x] User can search for other users by phone number
-* [] User can upload a profile image.
+* [x] User can upload a profile image.
 * [] User with admin permissions can invite others to the group.
 * [] Both host and invitee can choose the visibility level of their calendar for the particular event.
-* [] Host can add an Event image
+* [x] Host can add an Event image
 * [] User can assign a co-host.
 * [] Host/ admin can edit/ cancel an event.
 * [] User with RSVP will get a choice if they want to continue receiving event updates.
-* [] In location tracker, user can see the location with a pin and profile image.
+* [x] In location tracker, user can see the location with a pin and profile image.
 * [] Host can create a poll to ask invitee preferences for example meal preferences.
-* [] Send reminders/ nudges to people to RSVP.
+* [x] Send reminders/ nudges to people to RSVP.
 * [] Location based and time based camera images will be added to the group directly, user can disable this feature
 
 The following **bonus** features can be implemented:
@@ -46,10 +46,11 @@ The following **bonus** features can be implemented:
 ##Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
-
+First sprint
 http://recordit.co/a9OScepSED 
 
-
+Second sprint (Added location and camera)
+https://drive.google.com/open?id=0B7fB7lsZXRbQUFZHWjdJenJVRlU
     Copyright [2017] [Insync Inc]
 
     Licensed under the Apache License, Version 2.0 (the "License");
