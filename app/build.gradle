@@ -92,4 +92,7 @@ dependencies {
     //Camera
     compile 'com.flurgle:camerakit:0.9.17'
     compile 'com.afollestad:material-camera:0.4.4'
+
+    //Gallery
+    compile 'com.github.lawloretienne:imagegallery:0.1.0'
 }

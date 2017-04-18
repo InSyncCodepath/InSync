@@ -43,6 +43,17 @@
                 android:layout_below="@id/profilePic"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/ic_camera_alt_white_48px" />
+            <!--                android:layout_toLeftOf="@+id/ivAttach"
+
+            <ImageView-->
+                <!--android:id="@+id/ivAttach"-->
+                <!--android:layout_width="45dp"-->
+                <!--android:layout_height="45dp"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_below="@id/profilePic"-->
+                <!--android:layout_marginTop="8dp"-->
+                <!--android:src="@drawable/ic_attach_file_white_48px" />-->
+
 
             <EditText
                 android:id="@+id/etEventName"
@@ -167,10 +178,14 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/inviteeHeader"
                 android:layout_margin="8dp" />
-            <!--<com.plumillonforge.android.chipview.ChipView-->
-            <!--android:id="@+id/chipview"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content" />-->
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:id="@+id/btnDelete"
+                android:layout_below="@id/inviteeList"
+                android:visibility="gone"/>
+
 
         </RelativeLayout>
     </ScrollView>

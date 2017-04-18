@@ -43,5 +43,6 @@
     <string name="get_highlights">Get Highlights</string>
     <string name="get_whereabouts">Get Whereabouts</string>
     <string name="see_details">SEE DETAILS</string>
+    <string name="phone_contacts">Phone Contacts</string>
 
 </resources>
