@@ -71,11 +71,11 @@ public class CommonUtil {
         return ParseQuery.or(queryList);
     }
 
-    public static void sendInviteLink(String phoneNum, String eventId, String eventName) {
+    public static void sendInviteLink(String phoneNum, String eventId) {
         String inviteLink =  "https://play.google.com/store/apps/details?id=com.codepath.insync&referrer="+phoneNum+"&"+eventId;
         HashMap<String, Object> payload = new HashMap<>();
         payload.put("phoneNumber", phoneNum);
-        payload.put("message", "You have been invited to "+eventName+" To RSVP and receive further event updates, install the app here: "+inviteLink);
+        payload.put("message", inviteLink);
         ParseCloud.callFunctionInBackground("sendUserMessage", payload, new FunctionCallback<Object>() {
 
             @Override
