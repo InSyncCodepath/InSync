@@ -304,7 +304,7 @@ public class EventDetailActivity extends AppCompatActivity implements
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
                 Log.d(TAG, "Appbar offset changed to: "+verticalOffset);
-                int vOffSetThreshold = isCurrent ? 600 : 350;
+                int vOffSetThreshold = isCurrent ? 520 : 350;
                 if (Math.abs(verticalOffset) > vOffSetThreshold) {
                     TextView tvEventName = (TextView) collapsingToolbar.findViewById(R.id.tvEDName);
                     collapsingToolbar.setTitle(tvEventName.getText().toString());

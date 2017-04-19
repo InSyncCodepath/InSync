@@ -5,8 +5,10 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -90,7 +92,8 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     private static String[] PERMISSIONS_CONTACT = {Manifest.permission.READ_CONTACTS};
     InviteeAdapter adapter;
     ParseFile parseFile;
-
+    private static final int SELECT_PICTURE = 1025;
+    private String selectedImagePath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,6 +169,21 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                 }
             }
         });
+//        findViewById(R.id.ivAttach)
+//                .setOnClickListener(new View.OnClickListener() {
+//
+//                    public void onClick(View arg0) {
+//
+//                        // in onCreate or any event where your want the user to
+//                        // select a file
+//                        Intent intent = new Intent();
+//                        intent.setType("image/*");
+//                        intent.setAction(Intent.ACTION_GET_CONTENT);
+//                        startActivityForResult(Intent.createChooser(intent,
+//                                "Select Picture"), SELECT_PICTURE);
+//                    }
+//                });
+
 
         startDate.setOnClickListener(new View.OnClickListener() {
 
@@ -259,6 +277,16 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                 parseFile = new ParseFile(file);
 
                 Glide.with(EventCreationActivity.this).load(file).into(profileImage);
+                profileImage.setVisibility(View.VISIBLE);
+            }
+        }
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_PICTURE) {
+                Uri selectedImageUri = data.getData();
+//                selectedImagePath = getPath(selectedImageUri);
+                selectedImagePath = selectedImageUri.getPath();
+                File file = new File(String.valueOf(selectedImageUri));
+                Glide.with(this).load(file).into(profileImage);
                 profileImage.setVisibility(View.VISIBLE);
             }
         }
@@ -507,6 +535,27 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+    public String getPath(Uri uri) {
+        // just some safety built in
+        if( uri == null ) {
+            // TODO perform some logging or show user feedback
+            return null;
+        }
+        // try to retrieve the image from the media store first
+        // this will only work for images selected from gallery
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        if( cursor != null ){
+            int column_index = cursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String path = cursor.getString(column_index);
+            cursor.close();
+            return path;
+        }
+        // this is our fallback here
+        return uri.getPath();
     }
 
     @Override

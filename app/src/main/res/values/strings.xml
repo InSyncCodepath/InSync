@@ -18,7 +18,7 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="event_profile_image">Event Profile Image</string>
-    <string name="message_hint">Type message...</string>
+    <string name="message_hint">Type message…</string>
     <string name="profile_left">Left Profile Image</string>
     <string name="profile_right">Right Profile Image</string>
     <string name="username_email">Username/ Email</string>
@@ -48,5 +48,5 @@
     <string name="don_t_have_the_code_resend">Don\'t have the code? Resend.</string>
     <string name="login">Login</string>
     <string name="x_xxx_xxx_xxxx">1-XXX-XXX-XXXX</string>
-
+    <string name="phone_contacts">Phone Contacts</string>
 </resources>

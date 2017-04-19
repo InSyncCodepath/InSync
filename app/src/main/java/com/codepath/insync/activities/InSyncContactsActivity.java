@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.TextView;
 
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityInSyncContactsBinding;
@@ -28,17 +29,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.codepath.insync.activities.EventCreationActivity.REQUEST_CODE;
+
 public class InSyncContactsActivity extends AppCompatActivity {
     ActivityInSyncContactsBinding binding;
     MultiAutoCompleteTextView searchContacts;
     ParseQuery<ParseUser> query = ParseUser.getQuery();
     ArrayList<String> users = new ArrayList<>();
     ArrayList<String> invitees = new ArrayList<>();
+    TextView phoneContacts;
+    public static final int PHONE_CONTACTS_REQUEST_CODE = 1026;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_in_sync_contacts);
         searchContacts = binding.searchContact;
+        phoneContacts = binding.phoneContacts;
         Toolbar toolbar = binding.toolbarInSyncContacts;
         setSupportActionBar(toolbar);
         query.findInBackground(new FindCallback<ParseUser>() {
@@ -69,8 +75,18 @@ public class InSyncContactsActivity extends AppCompatActivity {
 
             }
         });
+        phoneContacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showContactDetails();
+            }
+        });
 
+    }
 
+    private void showContactDetails() {
+        Intent phoneContactActivityIntent = ContactActivity.newIntent(this);
+        this.startActivityForResult(phoneContactActivityIntent, PHONE_CONTACTS_REQUEST_CODE);
     }
 
     @Override
