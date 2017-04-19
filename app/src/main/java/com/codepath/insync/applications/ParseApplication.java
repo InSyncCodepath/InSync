@@ -11,14 +11,13 @@ import com.codepath.insync.models.parse.Message;
 import com.codepath.insync.models.parse.Music;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
-import com.codepath.insync.utils.DateUtil;
+import com.codepath.insync.utils.CommonUtil;
 import com.codepath.insync.utils.MediaClient;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
-import com.parse.ParseInstallation;
 import com.parse.ParseLiveQueryClient;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -85,7 +84,7 @@ public class ParseApplication extends Application implements OnVideoCreateListen
                     }
                 });
 
-        ParseQuery<Event> currentEventQuery = DateUtil.getCurrentEventQuery();
+        ParseQuery<Event> currentEventQuery = CommonUtil.getCurrentEventQuery();
         SubscriptionHandling<Event> cEventSubscriptionHandling = parseLiveQueryClient.subscribe(currentEventQuery);
         cEventSubscriptionHandling.handleEvents(new SubscriptionHandling.HandleEventsCallback<Event>() {
             @Override
@@ -98,7 +97,7 @@ public class ParseApplication extends Application implements OnVideoCreateListen
             }
         });
 
-        ParseQuery<Event> eventParseQuery = DateUtil.getPastEventQuery();
+        ParseQuery<Event> eventParseQuery = CommonUtil.getPastEventQuery();
         SubscriptionHandling<Event> pEventSubscriptionHandling = parseLiveQueryClient.subscribe(eventParseQuery);
         pEventSubscriptionHandling.handleEvents(new SubscriptionHandling.HandleEventsCallback<Event>() {
             @Override

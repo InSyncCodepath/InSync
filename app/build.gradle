@@ -16,15 +16,24 @@ android {
         applicationId "com.codepath.insync"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 1
+        versionCode 7
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+    }
+    signingConfigs {
+        release {
+            storeFile file("insync-release-key.keystore")
+            storePassword "insync"
+            keyAlias "insymc-release-key"
+            keyPassword "insync"
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
@@ -95,4 +104,9 @@ dependencies {
 
     //Gallery
     compile 'com.github.lawloretienne:imagegallery:0.1.0'
+
+    compile 'com.android.support:support-annotations:25.2.0'
+    compile 'com.android.support:support-v13:25.2.0'
+    compile 'com.android.support:support-vector-drawable:25.2.0'
+
 }

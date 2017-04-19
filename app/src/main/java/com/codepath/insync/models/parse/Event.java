@@ -131,7 +131,7 @@ public class Event extends ParseObject {
         if (profileImg != null) {
             try {
                 bitmap = BitmapFactory.decodeStream(profileImg.getDataStream());
-            } catch (ParseException e) {
+            } catch (ParseException | OutOfMemoryError e) {
                 e.printStackTrace();
             }
         }
