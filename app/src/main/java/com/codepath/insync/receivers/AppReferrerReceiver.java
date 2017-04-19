@@ -25,20 +25,17 @@ public  class AppReferrerReceiver extends BroadcastReceiver {
 
     private void processPush(Context context, Intent intent) {
         String action = intent.getAction();
-        Log.d(TAG, "got action " + action);
         if (action.equals(installAction)) {
             Object referrer = intent.getExtras().get("referrer");
             if (referrer == null) {
                 return;
             }
-            Log.d(TAG, "Install action received: "+referrer.toString());
+
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor editor = preferences.edit();
-            String[] newUserData = referrer.toString().split("&");
-            editor.putString("phoneNum", newUserData[0]);
-            editor.putString("eventId", newUserData[1]);
+            editor.putString("referrer", referrer.toString());
 
-            editor.apply();
+            editor.commit();
         }
     }
 }

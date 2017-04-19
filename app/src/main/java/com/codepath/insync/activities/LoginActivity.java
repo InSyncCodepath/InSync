@@ -51,17 +51,17 @@ public class LoginActivity extends AppCompatActivity implements OnLoginListener 
 
         FragmentTransaction ft = fragmentManager.beginTransaction();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String phoneNum = sharedPreferences.getString("phoneNum", null);
-        String eventId =  sharedPreferences.getString("eventId", null);
-        if (phoneNum == null) {
+        String referrerStr = sharedPreferences.getString("referrer", null);
+
+        if (referrerStr == null) {
             LoginFragment loginFragment = new LoginFragment();
             ft.replace(R.id.flLogin, loginFragment);
         } else {
-            PhoneLoginFragment phoneLoginFragment = PhoneLoginFragment.newInstance(phoneNum, eventId);
+            String[] userData = referrerStr.split("&");
+            PhoneLoginFragment phoneLoginFragment = PhoneLoginFragment.newInstance(userData[0], userData[1]);
             ft.replace(R.id.flLogin, phoneLoginFragment);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.remove("phoneNum");
-            editor.remove("eventId");
+            editor.remove("referrer");
             editor.apply();
         }
         ft.commit();
