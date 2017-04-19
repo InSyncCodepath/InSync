@@ -1,13 +1,19 @@
 package com.codepath.insync.utils;
 
+import android.util.Log;
+
 import com.codepath.insync.listeners.OnEventClickListener;
 import com.codepath.insync.models.parse.Event;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -65,7 +71,21 @@ public class CommonUtil {
         return ParseQuery.or(queryList);
     }
 
-    public static String getInviteLink(String phoneNum, String eventId) {
-        return "https://play.google.com/store/apps/details?id=com.codepath.insync&referrer="+phoneNum+"&"+eventId;
+    public static void sendInviteLink(String phoneNum, String eventId, String eventName) {
+        String inviteLink =  "https://play.google.com/store/apps/details?id=com.codepath.insync&referrer="+phoneNum+"&"+eventId;
+        HashMap<String, Object> payload = new HashMap<>();
+        payload.put("phoneNumber", phoneNum);
+        payload.put("message", "You have been invited to "+eventName+" To RSVP and receive further event updates, install the app here: "+inviteLink);
+        ParseCloud.callFunctionInBackground("sendUserMessage", payload, new FunctionCallback<Object>() {
+
+            @Override
+            public void done(Object object, ParseException e) {
+                if (e != null) {
+                    Log.e("sendInviteLink", "Error sending sms push to cloud: " + e.toString());
+                } else {
+                    Log.d("sendInviteLink", "SMS Push sent successfully!");
+                }
+            }
+        });
     }
 }
