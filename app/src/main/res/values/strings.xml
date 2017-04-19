@@ -43,5 +43,10 @@
     <string name="get_highlights">Get Highlights</string>
     <string name="get_whereabouts">Get Whereabouts</string>
     <string name="see_details">SEE DETAILS</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="verification_code">Verification Code</string>
+    <string name="don_t_have_the_code_resend">Don\'t have the code? Resend.</string>
+    <string name="login">Login</string>
+    <string name="x_xxx_xxx_xxxx">1-XXX-XXX-XXXX</string>
 
 </resources>

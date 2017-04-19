@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.codepath.insync.R;
 import com.codepath.insync.models.parse.Message;
-import com.codepath.insync.utils.DateUtil;
+import com.codepath.insync.utils.CommonUtil;
 
 
 import java.util.List;
@@ -136,7 +136,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Message message = mMessages.get(position);
         Bitmap profileBitmap = message.getProfileImageBitmap();
         Bitmap mediaBitmap = message.getMediaImageBitmap();
-        String messageTime = DateUtil.getTimeInFormat(message.getCreatedAt());
+        String messageTime = CommonUtil.getTimeInFormat(message.getCreatedAt());
 
         // Set item views based on your views and data model
         switch (holder.getItemViewType()) {

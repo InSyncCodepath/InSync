@@ -14,7 +14,7 @@ import java.util.Locale;
 import static com.parse.ParseQuery.or;
 
 
-public class DateUtil {
+public class CommonUtil {
     private static String messageTimeFormat = "hh:mm a";
     private static String eventDateTimeFormat = "EEEEEEEEE, MMM dd yyyy 'at' hh:mma";
     private static int trackBufferHours = 1;
@@ -65,4 +65,7 @@ public class DateUtil {
         return ParseQuery.or(queryList);
     }
 
+    public static String getInviteLink(String phoneNum, String eventId) {
+        return "https://play.google.com/store/apps/details?id=com.codepath.insync&referrer="+phoneNum+"&"+eventId;
+    }
 }

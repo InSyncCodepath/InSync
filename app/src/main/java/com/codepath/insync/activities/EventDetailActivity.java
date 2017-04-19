@@ -13,7 +13,6 @@ import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -44,8 +43,7 @@ import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
 import com.codepath.insync.utils.Constants;
-import com.codepath.insync.utils.DateUtil;
-import com.codepath.insync.utils.LocationService;
+import com.codepath.insync.utils.CommonUtil;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -53,8 +51,6 @@ import com.parse.ParseException;
 import com.parse.SaveCallback;
 
 import java.util.List;
-
-import permissions.dispatcher.NeedsPermission;
 
 
 public class EventDetailActivity extends AppCompatActivity implements
@@ -281,7 +277,7 @@ public class EventDetailActivity extends AppCompatActivity implements
         }
         binding.tvEDName.setText(event.getName());
         binding.tvEDDescription.setText(event.getDescription());
-        binding.tvEDDate.setText(DateUtil.getDateTimeInFormat(event.getStartDate()));
+        binding.tvEDDate.setText(CommonUtil.getDateTimeInFormat(event.getStartDate()));
         binding.tvEDLocation.setText(event.getAddress());
     }
 

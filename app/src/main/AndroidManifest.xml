@@ -61,17 +61,21 @@
         <activity
             android:name=".utils.Camera"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-
+        <receiver
+            android:name=".receivers.AppReferrerReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
         <service android:name="com.parse.PushService" />
-
         <receiver
             android:name=".receivers.ParseCBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
                 <action android:name="com.parse.push.intent.DELETE" />
-                <action android:name="com.parse.push.intent.OPEN" />
-            </intent-filter>
+                <action android:name="com.parse.push.intent.OPEN" /></intent-filter>
         </receiver>
         <receiver
             android:name="com.parse.GcmBroadcastReceiver"
