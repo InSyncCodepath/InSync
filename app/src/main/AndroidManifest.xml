@@ -65,7 +65,10 @@
             android:name=".activities.LocationTrackerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.EventCreationActivity"
+        android:name=".activities.EventCreationActivity"
+        android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.EventCreationActivityNoAnim"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".utils.Camera"

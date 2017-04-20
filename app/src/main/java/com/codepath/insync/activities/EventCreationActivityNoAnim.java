@@ -42,7 +42,6 @@ import com.codepath.insync.databinding.ActivityCreateEventBinding;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
-import com.codepath.insync.utils.Camera;
 import com.codepath.insync.utils.Constants;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -50,15 +49,11 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
-import com.parse.FindCallback;
 import com.parse.FunctionCallback;
-import com.parse.GetCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
-import com.parse.ParseInstallation;
-import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import java.io.File;
@@ -70,11 +65,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import retrofit2.http.HEAD;
-
-public class EventCreationActivity extends AppCompatActivity implements SimpleCursorRecyclerAdapterContacts.SimpleCursorAdapterInterface {
+public class EventCreationActivityNoAnim extends AppCompatActivity implements SimpleCursorRecyclerAdapterContacts.SimpleCursorAdapterInterface {
     ActivityCreateEventBinding binding;
-    public final String TAG = EventCreationActivity.class.getName();
+    public final String TAG = EventCreationActivityNoAnim.class.getName();
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     Calendar eventStartDate = Calendar.getInstance();
     Calendar eventEndDate = Calendar.getInstance();
@@ -159,7 +152,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                     try {
                         Intent intent =
                                 new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                                        .build(EventCreationActivity.this);
+                                        .build(EventCreationActivityNoAnim.this);
                         startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
                     } catch (GooglePlayServicesRepairableException e) {
                         // TODO: Handle the error.
@@ -169,27 +162,27 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                 }
             }
         });
-//        findViewById(R.id.ivAttach)
-//                .setOnClickListener(new View.OnClickListener() {
-//
-//                    public void onClick(View arg0) {
-//
-//                        // in onCreate or any event where your want the user to
-//                        // select a file
-//                        Intent intent = new Intent();
-//                        intent.setType("image/*");
-//                        intent.setAction(Intent.ACTION_GET_CONTENT);
-//                        startActivityForResult(Intent.createChooser(intent,
-//                                "Select Picture"), SELECT_PICTURE);
-//                    }
-//                });
+        findViewById(R.id.ivAttach)
+                .setOnClickListener(new View.OnClickListener() {
+
+                    public void onClick(View arg0) {
+
+                        // in onCreate or any event where your want the user to
+                        // select a file
+                        Intent intent = new Intent();
+                        intent.setType("image/*");
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        startActivityForResult(Intent.createChooser(intent,
+                                "Select Picture"), SELECT_PICTURE);
+                    }
+                });
 
 
         startDate.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(EventCreationActivity.this, startDateListener, eventStartDate
+                new DatePickerDialog(EventCreationActivityNoAnim.this, startDateListener, eventStartDate
                         .get(Calendar.YEAR), eventStartDate.get(Calendar.MONTH),
                         eventStartDate.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -198,7 +191,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new TimePickerDialog(EventCreationActivity.this, startTimeListener, eventStartDate.get(Calendar.HOUR), eventStartDate.get(Calendar.MINUTE), false).show();
+                new TimePickerDialog(EventCreationActivityNoAnim.this, startTimeListener, eventStartDate.get(Calendar.HOUR), eventStartDate.get(Calendar.MINUTE), false).show();
             }
         });
 
@@ -206,7 +199,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
 
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(EventCreationActivity.this, endDateListener, eventEndDate
+                new DatePickerDialog(EventCreationActivityNoAnim.this, endDateListener, eventEndDate
                         .get(Calendar.YEAR), eventEndDate.get(Calendar.MONTH),
                         eventEndDate.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -215,7 +208,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         endTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new TimePickerDialog(EventCreationActivity.this, endTimeListener, eventEndDate.get(Calendar.HOUR), eventEndDate.get(Calendar.MINUTE), false).show();
+                new TimePickerDialog(EventCreationActivityNoAnim.this, endTimeListener, eventEndDate.get(Calendar.HOUR), eventEndDate.get(Calendar.MINUTE), false).show();
             }
         });
 
@@ -223,8 +216,8 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         setProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(EventCreationActivity.this, "Click me", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(EventCreationActivity.this, CameraActivity.class);
+                Toast.makeText(EventCreationActivityNoAnim.this, "Click me", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(EventCreationActivityNoAnim.this, CameraActivity.class);
                 startActivityForResult(intent, 1023);
             }
         });
@@ -238,7 +231,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     }
 
     public static Intent newIntent(Activity callingActivity) {
-        Intent intent = new Intent(callingActivity, EventCreationActivity.class);
+        Intent intent = new Intent(callingActivity, EventCreationActivityNoAnim.class);
         return intent;
     }
 
@@ -276,17 +269,19 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
 //                File tempfile = new File(tempPath);
                 parseFile = new ParseFile(file);
 
-                Glide.with(EventCreationActivity.this).load(file).into(profileImage);
+                Glide.with(EventCreationActivityNoAnim.this).load(file).into(profileImage);
                 profileImage.setVisibility(View.VISIBLE);
             }
         }
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
+//                String filePath = data.getStringExtra("filePath");
+//                File file = new File(filePath);
                 Uri selectedImageUri = data.getData();
-//                selectedImagePath = getPath(selectedImageUri);
-                selectedImagePath = selectedImageUri.getPath();
+                selectedImagePath = getPath(selectedImageUri);
+//                selectedImagePath = selectedImageUri.getPath();
                 File file = new File(String.valueOf(selectedImageUri));
-                Glide.with(this).load(file).into(profileImage);
+                Glide.with(EventCreationActivityNoAnim.this).load(file).into(profileImage);
                 profileImage.setVisibility(View.VISIBLE);
             }
         }
@@ -381,15 +376,15 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         eventName = binding.etEventName.getText().toString();
         eventDescription = binding.etDescription.getText().toString();
         if (eventName.equals("")) {
-            Toast.makeText(EventCreationActivity.this, "Event Name can not be blank", Toast.LENGTH_LONG).show();
+            Toast.makeText(EventCreationActivityNoAnim.this, "Event Name can not be blank", Toast.LENGTH_LONG).show();
         } else if (eventDescription.equals("")) {
-            Toast.makeText(EventCreationActivity.this, "Event Description can not be blank", Toast.LENGTH_LONG).show();
+            Toast.makeText(EventCreationActivityNoAnim.this, "Event Description can not be blank", Toast.LENGTH_LONG).show();
         } else if (startDate.getText().equals("")) {
-            Toast.makeText(EventCreationActivity.this, "Event Date can not be blank", Toast.LENGTH_LONG).show();
+            Toast.makeText(EventCreationActivityNoAnim.this, "Event Date can not be blank", Toast.LENGTH_LONG).show();
         } else if (startTime.getText().equals("")) {
-            Toast.makeText(EventCreationActivity.this, "Event Time can not be blank", Toast.LENGTH_LONG).show();
+            Toast.makeText(EventCreationActivityNoAnim.this, "Event Time can not be blank", Toast.LENGTH_LONG).show();
         } else if (invitees.size()==0) {
-            Toast.makeText(EventCreationActivity.this, "Oops! Looks like you forgot to add guests", Toast.LENGTH_LONG).show();
+            Toast.makeText(EventCreationActivityNoAnim.this, "Oops! Looks like you forgot to add guests", Toast.LENGTH_LONG).show();
         } else  {
 //        final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint);
             final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint, parseFile);

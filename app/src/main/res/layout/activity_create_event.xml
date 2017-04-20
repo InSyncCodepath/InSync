@@ -39,20 +39,20 @@
                 android:id="@+id/ivCamera"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
+                android:layout_below="@id/profilePic"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_camera_alt_white_48px"
+                android:layout_toLeftOf="@+id/ivAttach"/>
+
+
+            <ImageView
+                android:id="@+id/ivAttach"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_alignParentRight="true"
                 android:layout_below="@id/profilePic"
                 android:layout_marginTop="8dp"
-                android:src="@drawable/ic_camera_alt_white_48px" />
-            <!--                android:layout_toLeftOf="@+id/ivAttach"
-
-            <ImageView-->
-                <!--android:id="@+id/ivAttach"-->
-                <!--android:layout_width="45dp"-->
-                <!--android:layout_height="45dp"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:layout_below="@id/profilePic"-->
-                <!--android:layout_marginTop="8dp"-->
-                <!--android:src="@drawable/ic_attach_file_white_48px" />-->
+                android:src="@drawable/ic_attach_file_white_48px" />
 
 
             <EditText

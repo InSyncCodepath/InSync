@@ -270,7 +270,7 @@ public class EventDetailActivity extends AppCompatActivity implements
     private void loadViews() {
         Bitmap bitmap = event.getProfileImageBitmap();
         if (bitmap != null) {
-            binding.ivEDProfile.setImageBitmap(bitmap);
+            binding.ivEventImage.setImageBitmap(bitmap);
         }
         if (!isCurrent) {
             binding.rgEDRsvp.setVisibility(View.GONE);

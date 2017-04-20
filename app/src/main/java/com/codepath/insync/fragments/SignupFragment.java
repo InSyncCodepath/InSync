@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
 import com.codepath.insync.activities.CameraActivity;
-import com.codepath.insync.activities.EventCreationActivity;
 import com.codepath.insync.databinding.FragmentSignupBinding;
 import com.codepath.insync.listeners.OnLoginListener;
 import com.codepath.insync.models.parse.User;
@@ -32,7 +31,6 @@ import com.parse.SignUpCallback;
 import java.io.File;
 
 import static android.app.Activity.RESULT_OK;
-import static com.parse.ParseInstallation.getCurrentInstallation;
 
 
 public class SignupFragment extends Fragment {

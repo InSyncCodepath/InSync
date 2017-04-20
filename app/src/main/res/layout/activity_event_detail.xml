@@ -44,23 +44,25 @@
                         app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed">
 
                         <ImageView
-                            android:id="@+id/ivEDProfile"
+                            android:id="@+id/ivEventImage"
                             android:layout_width="@dimen/image_width"
                             android:layout_height="@dimen/image_height"
                             android:layout_marginStart="@dimen/margin8"
                             android:layout_marginTop="@dimen/margin24"
                             android:contentDescription="@string/event_profile_image"
                             android:scaleType="fitXY"
-                            app:srcCompat="@drawable/ic_camera_alt_white_48px" />
+                            app:srcCompat="@drawable/ic_camera_alt_white_48px"
+                            android:transitionName="profile"
+                            />
 
 
                         <TextView
                             android:id="@+id/tvEDName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignTop="@id/ivEDProfile"
+                            android:layout_alignTop="@id/ivEventImage"
                             android:layout_marginStart="@dimen/margin8"
-                            android:layout_toEndOf="@id/ivEDProfile"
+                            android:layout_toEndOf="@id/ivEventImage"
                             android:textColor="@android:color/black"
                             android:textSize="@dimen/event_heading"
                             tools:text="Netfix Demo Day"
