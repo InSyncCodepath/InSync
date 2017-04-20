@@ -1,27 +1,24 @@
 package com.codepath.insync.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
-import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityLoginBinding;
 import com.codepath.insync.fragments.LoginFragment;
+import com.codepath.insync.fragments.PhoneLoginFragment;
 import com.codepath.insync.fragments.SignupFragment;
 import com.codepath.insync.listeners.OnLoginListener;
 import com.crashlytics.android.Crashlytics;
-import com.parse.ParseFile;
-
-import java.io.File;
 
 import io.fabric.sdk.android.Fabric;
 
-import static java.security.AccessController.getContext;
 
 public class LoginActivity extends AppCompatActivity implements OnLoginListener {
 
@@ -52,30 +49,23 @@ public class LoginActivity extends AppCompatActivity implements OnLoginListener 
         setUpToolbar();
 
 
-        if (savedInstanceState == null) {
-            FragmentTransaction ft = fragmentManager.beginTransaction();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String referrerStr = sharedPreferences.getString("referrer", null);
+
+        if (referrerStr == null) {
             LoginFragment loginFragment = new LoginFragment();
             ft.replace(R.id.flLogin, loginFragment);
-            ft.commit();
+        } else {
+            String[] userData = referrerStr.split("&");
+            PhoneLoginFragment phoneLoginFragment = PhoneLoginFragment.newInstance(userData[0], userData[1]);
+            ft.replace(R.id.flLogin, phoneLoginFragment);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove("referrer");
+            editor.apply();
         }
+        ft.commit();
     }
-    /*
-        public void forceCrash(View view){
-        HashMap<String, String> payload = new HashMap<>();
-        payload.put("customData", "My message");
-        ParseCloud.callFunctionInBackground("pushChannelTest", payload, new FunctionCallback<Object>() {
-
-            @Override
-            public void done(Object object, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error sending push to cloud: "+e.toString());
-                } else {
-                    Log.d(TAG, "Push sent successfully!");
-                }
-            }
-        });
-    }
-     */
 
     private void setUpToolbar() {
         setSupportActionBar(binding.tbLogin);

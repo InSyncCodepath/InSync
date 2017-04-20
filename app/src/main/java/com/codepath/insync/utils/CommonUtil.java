@@ -1,20 +1,26 @@
 package com.codepath.insync.utils;
 
+import android.util.Log;
+
 import com.codepath.insync.listeners.OnEventClickListener;
 import com.codepath.insync.models.parse.Event;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import static com.parse.ParseQuery.or;
 
 
-public class DateUtil {
+public class CommonUtil {
     private static String messageTimeFormat = "hh:mm a";
     private static String eventDateTimeFormat = "EEEEEEEEE, MMM dd yyyy 'at' hh:mma";
     private static int trackBufferHours = 1;
@@ -65,4 +71,21 @@ public class DateUtil {
         return ParseQuery.or(queryList);
     }
 
+    public static void sendInviteLink(String phoneNum, String eventId) {
+        String inviteLink =  "https://play.google.com/store/apps/details?id=com.codepath.insync&referrer="+phoneNum+"&"+eventId;
+        HashMap<String, Object> payload = new HashMap<>();
+        payload.put("phoneNumber", phoneNum);
+        payload.put("message", inviteLink);
+        ParseCloud.callFunctionInBackground("sendUserMessage", payload, new FunctionCallback<Object>() {
+
+            @Override
+            public void done(Object object, ParseException e) {
+                if (e != null) {
+                    Log.e("sendInviteLink", "Error sending sms push to cloud: " + e.toString());
+                } else {
+                    Log.d("sendInviteLink", "SMS Push sent successfully!");
+                }
+            }
+        });
+    }
 }
