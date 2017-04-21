@@ -22,12 +22,14 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.DrawableRes;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
@@ -35,6 +37,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.CustomMapWindowAdapter;
 import com.codepath.insync.databinding.ActivityLocationTrackerBinding;
@@ -63,6 +70,11 @@ import com.parse.ParseUser;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
+import static android.R.attr.resource;
 
 
 public class LocationTrackerActivity extends AppCompatActivity {
@@ -151,39 +163,58 @@ public class LocationTrackerActivity extends AppCompatActivity {
 
         userQuery.findInBackground(new FindCallback<ParseUser>() {
             @Override
-            public void done(List<ParseUser> users, ParseException e) {
+            public void done(List<ParseUser> parseUsers, ParseException e) {
                 if (e == null) {
-                    Log.d(TAG, "Found the following users");
-                    for (ParseUser user : users) {
-                        ParseGeoPoint userLocation = user.getParseGeoPoint("location");
+                    Log.d(TAG, "Found the following users: "+parseUsers.size());
+                    for (ParseUser parseUser : parseUsers) {
+                        final User user = new User(parseUser);
+                        ParseGeoPoint userLocation = user.getLocation();
                         if (userLocation == null) {
                             continue;
                         }
-                        LatLng currLocation = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
-                        Marker userMarker;
+                        final LatLng currLocation = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
 
                         if (userMap.containsKey(user.getObjectId())) {
-                            userMarker = userMap.get(user.getObjectId());
+                            Marker userMarker = userMap.get(user.getObjectId());
+                            animateMarker(userMarker, currLocation, false);
                         } else {
-                            Bitmap bitmap = new User(user).getProfileImageBitmap();
-                            if (bitmap == null) {
-                                bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_default);
-                                if (user.getObjectId().equals(User.getCurrentUser().getObjectId())) {
-                                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test_map);
-                                }
+                            String imageUrl = null;
+                            if (user.getProfileImage() != null) {
+                                imageUrl = user.getProfileImage().getUrl();
                             }
+                            if (imageUrl != null) {
+                                Glide.with(getApplicationContext())
+                                        .load(imageUrl)
+                                        .placeholder(R.drawable.ic_profile)
+                                        .crossFade()
+                                        .bitmapTransform(new RoundedCornersTransformation(getApplicationContext(), 4, 0))
+                                        .into(new SimpleTarget<GlideDrawable>() {
+                                            @Override
+                                            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
 
-                            userMarker = map.addMarker(new MarkerOptions()
-                                    .title("Title")
-                                    //.snippet("Snippet")
-                                    //.icon(customMarker)
-                                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(bitmap)))
-                                    .position(currLocation)
-                                    .anchor(0.5f, 1));
-                            userMap.put(user.getObjectId(), userMarker);
+                                                Marker userMarker = map.addMarker(new MarkerOptions()
+                                                        .title(user.getName())
+                                                        //.snippet("Snippet")
+                                                        //.icon(customMarker)
+                                                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmap(resource)))
+                                                        .position(currLocation)
+                                                        .anchor(0.5f, 1));
+                                                userMap.put(user.getObjectId(), userMarker);
+                                                animateMarker(userMarker, currLocation, false);
+                                            }
+                                        });
+                            } else {
+                                Marker userMarker = map.addMarker(new MarkerOptions()
+                                        .title(user.getName())
+                                        //.snippet("Snippet")
+                                        //.icon(customMarker)
+                                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmap(null)))
+                                        .position(currLocation)
+                                        .anchor(0.5f, 1));
+                                userMap.put(user.getObjectId(), userMarker);
+                                animateMarker(userMarker, currLocation, false);
+                            }
                         }
-                        animateMarker(userMarker, currLocation, false);
-
                     }
                     ParseGeoPoint currUserGeo = User.getCurrentUser().getParseGeoPoint("location");
                     if (currUserGeo != null) {
@@ -308,12 +339,17 @@ public class LocationTrackerActivity extends AppCompatActivity {
         });
     }
 
-    private Bitmap getMarkerBitmapFromView(Bitmap imageBitMap) {
+    private Bitmap getMarkerBitmap(GlideDrawable glideDrawable) {
+        final View customMarkerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.layout_custom_map_marker, null);
+        final ImageView markerImageView = (ImageView) customMarkerView.findViewById(R.id.iv_custom_marker);
+        final IconGenerator iconGenerator = new IconGenerator(LocationTrackerActivity.this);
 
-        View customMarkerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.layout_custom_map_marker, null);
-        ImageView markerImageView = (ImageView) customMarkerView.findViewById(R.id.iv_custom_marker);
-        markerImageView.setImageBitmap(imageBitMap);
-        customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        if (glideDrawable == null) {
+            markerImageView.setImageResource(R.drawable.ic_profile);
+        } else {
+            markerImageView.setImageDrawable(glideDrawable);
+        }
+/*        customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
         customMarkerView.buildDrawingCache();
         Bitmap returnedBitmap = Bitmap.createBitmap(customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight(),
@@ -323,11 +359,17 @@ public class LocationTrackerActivity extends AppCompatActivity {
         Drawable drawable = customMarkerView.getBackground();
         if (drawable != null)
             drawable.draw(canvas);
-        customMarkerView.draw(canvas);
-        IconGenerator iconGenerator = new IconGenerator(LocationTrackerActivity.this);
+        customMarkerView.draw(canvas);*/
+
+        // Define the size you want from dimensions file
+
+        Drawable shapeDrawable = ResourcesCompat.getDrawable(getResources(),
+                R.drawable.shape_circle, null);
+        //iconGenerator.setBackground(shapeDrawable);
 
         iconGenerator.setContentView(customMarkerView);
-        iconGenerator.setStyle(IconGenerator.STYLE_BLUE);
+        iconGenerator.setColor(R.color.accent);
+        iconGenerator.setStyle(IconGenerator.STYLE_GREEN);
         return iconGenerator.makeIcon();
     }
 

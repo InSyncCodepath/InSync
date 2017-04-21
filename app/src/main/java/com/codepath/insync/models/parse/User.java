@@ -104,10 +104,21 @@ public class User extends ParseUser {
     }
 
     public User(ParseUser parseUser) {
-        setUsername(parseUser.getUsername());
-        //setEmail(parseUser.getEmail());
         setObjectId(parseUser.getObjectId());
-
+        setUsername(parseUser.getUsername());
+        if (parseUser.getEmail() != null) {
+            setEmail(parseUser.getEmail());
+        }
+        setName(parseUser.getString(NAME_KEY));
+        if (parseUser.getParseFile(PROFILE_IMAGE_KEY) != null) {
+            setProfileImage(parseUser.getParseFile(PROFILE_IMAGE_KEY));
+        }
+        if (parseUser.getParseGeoPoint(LOCATION_KEY) != null) {
+            setLocation(parseUser.getParseGeoPoint(LOCATION_KEY));
+        }
+        if (parseUser.getString(PHONE_NUMBER_KEY) != null) {
+            setPhoneNumber(parseUser.getString(PHONE_NUMBER_KEY));
+        }
     }
 
     public Bitmap getProfileImageBitmap() {
