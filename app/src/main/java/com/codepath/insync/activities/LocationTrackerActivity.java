@@ -24,6 +24,7 @@ import android.support.annotation.DrawableRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,6 +45,8 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.CustomMapWindowAdapter;
+import com.codepath.insync.adapters.EDImageAdapter;
+import com.codepath.insync.adapters.LTImageAdapter;
 import com.codepath.insync.databinding.ActivityLocationTrackerBinding;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
@@ -63,10 +66,12 @@ import com.parse.FindCallback;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +85,7 @@ import static android.R.attr.resource;
 public class LocationTrackerActivity extends AppCompatActivity {
 
     private static final String TAG = "LocationTrackerActivity";
+    private static final int ZOOM_FACTOR = 10;
     private SupportMapFragment mapFragment;
     private GoogleMap map;
     LatLng eventLocation;
@@ -91,6 +97,9 @@ public class LocationTrackerActivity extends AppCompatActivity {
     Map<String, Marker> userMap;
     boolean mfirstLoad;
     BroadcastReceiver messageReceiver;
+    List<User> ltUsers;
+    LTImageAdapter ltImageAdapter;
+    LinearLayoutManager linearLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +111,8 @@ public class LocationTrackerActivity extends AppCompatActivity {
         userMap = new HashMap<>();
         mfirstLoad = true;
         processIntent();
+        setupRecyclerView();
+
 
         mapsContainer.setVisibility(View.INVISIBLE);
         if (TextUtils.isEmpty(getResources().getString(R.string.google_maps_api_key))) {
@@ -154,6 +165,26 @@ public class LocationTrackerActivity extends AppCompatActivity {
         updateUsersLocations();
     }
 
+    private void setupRecyclerView() {
+        ltUsers = new ArrayList<>();
+        ltImageAdapter = new LTImageAdapter(this, ltUsers, R.layout.item_ltimage);
+        binding.rvLTImages.setAdapter(ltImageAdapter);
+        linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        binding.rvLTImages.setLayoutManager(linearLayoutManager);
+        ltImageAdapter.setOnItemClickListener(new LTImageAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                User user = ltUsers.get(position);
+                ParseGeoPoint userLocation = user.getLocation();
+                if (userLocation == null) {
+                    return;
+                }
+                LatLng currLocation = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
+                setLocation(currLocation);
+            }
+        });
+    }
+
     private void updateUsersLocations() {
         ParseQuery<UserEventRelation> userEventQuery = ParseQuery.getQuery(UserEventRelation.class);
         userEventQuery.whereEqualTo("event", event);
@@ -182,6 +213,8 @@ public class LocationTrackerActivity extends AppCompatActivity {
                             if (user.getProfileImage() != null) {
                                 imageUrl = user.getProfileImage().getUrl();
                             }
+                            ltUsers.add(user);
+                            ltImageAdapter.notifyItemInserted(ltUsers.size()-1);
                             if (imageUrl != null) {
                                 Glide.with(getApplicationContext())
                                         .load(imageUrl)
@@ -297,7 +330,7 @@ public class LocationTrackerActivity extends AppCompatActivity {
     private void setLocation(LatLng latLng) {
 
         Toast.makeText(this, "GPS location was found!", Toast.LENGTH_SHORT).show();
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_FACTOR);
         //map.animateCamera(cameraUpdate);
         map.moveCamera(cameraUpdate);
     }

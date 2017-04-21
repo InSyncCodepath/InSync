@@ -5,11 +5,25 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		>
-
+        <TextView
+            android:id="@+id/tvLTTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/attendees_whereabouts"
+            android:layout_margin="@dimen/margin8"
+            android:textStyle="bold"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvLTImages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvLTTitle"
+            />
         <FrameLayout
             android:id="@+id/mapContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rvLTImages">
 
             <fragment
                 android:id="@+id/map"

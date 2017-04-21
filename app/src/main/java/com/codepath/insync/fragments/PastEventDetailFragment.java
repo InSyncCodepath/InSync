@@ -40,7 +40,8 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     public static final String TAG = "PastEventDetailFragment";
     FragmentPastEventDetailBinding binding;
     Event event;
-    List<ParseFile> edImages;
+    List<String> edImages;
+    List<ParseFile> parseFiles;
     EDImageAdapter edImageAdapter;
     LinearLayoutManager linearLayoutManager;
     VideoPlayer videoPlayer;
@@ -70,8 +71,9 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
             event.setHighlightsVideo(eventHighlights);
         }
 
+        parseFiles = new ArrayList<>();
         edImages = new ArrayList<>();
-        edImageAdapter = new EDImageAdapter(getActivity(), edImages);
+        edImageAdapter = new EDImageAdapter(getActivity(), edImages, R.layout.item_edimage);
     }
 
     @Override
@@ -117,8 +119,15 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
             public void done(List<ParseObject> objects, ParseException e) {
                 if (e == null) {
                     edImages.clear();
+                    parseFiles.clear();
                     for (ParseObject imageObject: objects) {
-                        edImages.add(imageObject.getParseFile("image"));
+                        String imageUrl = null;
+                        ParseFile imgFile = imageObject.getParseFile("image");
+                        if (imgFile != null) {
+                            imageUrl = imageObject.getParseFile("image").getUrl();
+                            parseFiles.add(imgFile);
+                        }
+                        edImages.add(imageUrl);
                     }
                     edImageAdapter.notifyDataSetChanged();
                     if (event.getHighlightsVideo() == null) {
@@ -162,7 +171,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
 
     public void animateImages() {
         AnimationDrawable anim = new AnimationDrawable();
-        for (ParseFile image : edImages) {
+        for (ParseFile image : parseFiles) {
             try {
                 Bitmap bitmap = BitmapFactory.decodeStream(image.getDataStream());
                 anim.addFrame(new BitmapDrawable(getResources(), bitmap), Constants.CLIP_DURATION*1000);
