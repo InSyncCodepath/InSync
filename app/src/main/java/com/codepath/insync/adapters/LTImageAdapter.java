@@ -1,23 +1,16 @@
 package com.codepath.insync.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.codepath.insync.R;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.parse.ParseException;
+import com.codepath.insync.models.parse.User;
 import com.parse.ParseFile;
 
 import java.util.List;
@@ -26,11 +19,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
-import static com.codepath.insync.R.id.map;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 
-public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHolder> {
+public class LTImageAdapter extends RecyclerView.Adapter<LTImageAdapter.ViewHolder> {
 
 
     // Define listener member variable
@@ -46,7 +38,8 @@ public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public @BindView(R.id.ivEDImage) ImageView ivEDImage;
+        public @BindView(R.id.ivLTImage) ImageView ivLTImage;
+        public @BindView(R.id.tvLTName) TextView tvLTName;
 
         public ViewHolder(final View itemView) {
                 // Stores the itemView in a public final member variable that can be used
@@ -71,13 +64,13 @@ public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHold
     }
 
     // Store a member variable for the messages
-    private List<String> mEDImages;
+    private List<User> mEDImages;
     // Store the context for easy access
     private Context mContext;
     private int ressource;
 
     // Pass in the message array into the constructor
-    public EDImageAdapter(Context context, List<String> edImages, int layout_resource) {
+    public LTImageAdapter(Context context, List<User> edImages, int layout_resource) {
         mEDImages = edImages;
         mContext = context;
         ressource = layout_resource;
@@ -90,7 +83,7 @@ public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHold
 
 
     @Override
-    public EDImageAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public LTImageAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
         // Inflate the custom image view layout
@@ -105,15 +98,27 @@ public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHold
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
         // Get the data model based on position
-        String imageUrl = mEDImages.get(position);
-        holder.ivEDImage.setImageResource(R.drawable.ic_profile);
+        User user = mEDImages.get(position);
+        ParseFile imgFile = user.getProfileImage();
+        String imageUrl = null;
+        if (imgFile != null) {
+            imageUrl = imgFile.getUrl();
+        }
+
+        holder.tvLTName.setText(user.getName().split(" ")[0]);
+        /*if (position == 0) {
+            holder.ivLTImage.setImageResource(R.drawable.ic_camera_alt_white_48px);
+        } else {*/
+            holder.ivLTImage.setImageResource(R.drawable.ic_profile);
+        //}
+
         if (imageUrl != null) {
             Glide.with(mContext)
                     .load(imageUrl)
                     .placeholder(R.drawable.ic_profile)
                     .crossFade()
-                    .bitmapTransform(new RoundedCornersTransformation(getApplicationContext(), 4, 0))
-                    .into(holder.ivEDImage);
+                    .bitmapTransform(new RoundedCornersTransformation(mContext, 8, 0))
+                    .into(holder.ivLTImage);
         }
 
 
@@ -134,7 +139,7 @@ public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHold
 
     }
 
-    public void addAll(List<String> newEDImages) {
+    public void addAll(List<User> newEDImages) {
         int position = mEDImages.size();
         for (int i=0; i < newEDImages.size(); i++) {
             mEDImages.add(newEDImages.get(i));
