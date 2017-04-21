@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.support.v7.graphics.Palette;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.codepath.insync.Manifest;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityEventDetailBinding;
@@ -48,9 +49,13 @@ import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 
+import com.parse.ParseFile;
 import com.parse.SaveCallback;
 
 import java.util.List;
+
+import static android.R.attr.bitmap;
+import static java.security.AccessController.getContext;
 
 
 public class EventDetailActivity extends AppCompatActivity implements
@@ -227,11 +232,14 @@ public class EventDetailActivity extends AppCompatActivity implements
                 intent.putExtra("eventLatitude", event.getLocation().getLatitude());
                 intent.putExtra("eventLongitude", event.getLocation().getLongitude());
                 startActivity(intent);
+                break;
             case R.id.action_highlights:
                 handleHighlightsAction();
+                break;
             default:
-                return super.onOptionsItemSelected(item);
+                break;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void handleHighlightsAction() {
@@ -268,9 +276,13 @@ public class EventDetailActivity extends AppCompatActivity implements
     }
 
     private void loadViews() {
-        Bitmap bitmap = event.getProfileImageBitmap();
-        if (bitmap != null) {
-            binding.ivEventImage.setImageBitmap(bitmap);
+        ParseFile profileImage = event.getProfileImage();
+        if (profileImage != null) {
+            Glide.with(this)
+                    .load(profileImage.getUrl())
+                    .placeholder(R.drawable.ic_attach_file_white_48px)
+                    .crossFade()
+                    .into(binding.ivEDProfile);
         }
         if (!isCurrent) {
             binding.rgEDRsvp.setVisibility(View.GONE);
