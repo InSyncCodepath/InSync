@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -16,6 +16,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,7 +29,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.support.v7.graphics.Palette;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -53,9 +53,6 @@ import com.parse.ParseFile;
 import com.parse.SaveCallback;
 
 import java.util.List;
-
-import static android.R.attr.bitmap;
-import static java.security.AccessController.getContext;
 
 
 public class EventDetailActivity extends AppCompatActivity implements
@@ -294,12 +291,13 @@ public class EventDetailActivity extends AppCompatActivity implements
     }
 
     private void setupToolbar() {
+
         collapsingToolbar = binding.ctlEventDetail;
 
         setSupportActionBar(binding.tbEventDetail);
         getSupportActionBar().setTitle("");
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
+        /*Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
                 R.drawable.palette);
         Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
             @SuppressWarnings("ResourceType")
@@ -309,19 +307,29 @@ public class EventDetailActivity extends AppCompatActivity implements
                 collapsingToolbar.setContentScrimColor(vibrantColor);
                 collapsingToolbar.setStatusBarScrimColor(R.color.accent);
             }
-        });
+        });*/
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            collapsingToolbar.setContentScrimColor(getColor(R.color.light_green));
+            collapsingToolbar.setStatusBarScrimColor(getColor(R.color.accent));
+        }
+
 
         binding.abEventDetail.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
                 Log.d(TAG, "Appbar offset changed to: "+verticalOffset);
+                // Calculate ActionBar height
                 int vOffSetThreshold = isCurrent ? 520 : 350;
+
                 if (Math.abs(verticalOffset) > vOffSetThreshold) {
                     TextView tvEventName = (TextView) collapsingToolbar.findViewById(R.id.tvEDName);
                     collapsingToolbar.setTitle(tvEventName.getText().toString());
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     binding.rlToolbar.setVisibility(View.INVISIBLE);
+                    Drawable toolbarDrawable = ResourcesCompat.getDrawable(getResources(),
+                            R.drawable.theme_gradient, null);
+                    collapsingToolbar.setBackground(toolbarDrawable);
                 } else {
                     collapsingToolbar.setTitle(Constants.EMPTY_STR);
                     getSupportActionBar().setDisplayHomeAsUpEnabled(false);

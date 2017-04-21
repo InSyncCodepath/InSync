@@ -6,5 +6,5 @@
     android:height="24dp">
     <path
         android:pathData="M12 0C7.802 0 4 3.403 4 7.602 4 11.8 7.469 16.812 12 24 16.531 16.812 20 11.8 20 7.602 20 3.403 16.199 0 12 0Zm0 11C10.343 11 9 9.657 9 8 9 6.343 10.343 5 12 5c1.657 0 3 1.343 3 3 0 1.657 -1.343 3 -3 3z"
-        android:fillColor="@color/primary_light" />
+        android:fillColor="@color/icons" />
 </vector>
