@@ -10,11 +10,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.UpcomingEventItemBinding;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.utils.CommonUtil;
 import com.codepath.insync.models.parse.User;
+import com.parse.ParseFile;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,10 +63,13 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
 
         holder.eventDate.setText(eventDate.toString());
 
-
-        Bitmap profileBitmap = event.getProfileImageBitmap();
-        if (profileBitmap != null) {
-            holder.binding.ivEventImage.setImageBitmap(profileBitmap);
+        ParseFile profileImage = event.getProfileImage();
+        if (profileImage != null) {
+            Glide.with(context)
+                    .load(profileImage.getUrl())
+                    .placeholder(R.drawable.ic_attach_file_white_48px)
+                    .crossFade()
+                    .into(holder.binding.ivEventImage);
         }
 
         //holder.binding.tvTime.setText();

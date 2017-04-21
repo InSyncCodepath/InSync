@@ -1,5 +1,7 @@
 package com.codepath.insync.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,6 +16,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -24,6 +27,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.ViewTreeObserver;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
@@ -68,7 +73,8 @@ public class LocationTrackerActivity extends AppCompatActivity {
     LatLng eventLocation;
     String eventId;
     Event event;
-    RelativeLayout mapsContainer;
+    //RelativeLayout mapsContainer;
+    View mapsContainer;
     ActivityLocationTrackerBinding binding;
     Map<String, Marker> userMap;
     boolean mfirstLoad;
@@ -77,12 +83,15 @@ public class LocationTrackerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.do_not_move, R.anim.do_not_move);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_location_tracker);
-        mapsContainer = binding.rlLocationTracker;
+        //mapsContainer = binding.rlLocationTracker;
+        mapsContainer = findViewById(R.id.mapContainer);
         userMap = new HashMap<>();
         mfirstLoad = true;
-
         processIntent();
+
+        mapsContainer.setVisibility(View.INVISIBLE);
         if (TextUtils.isEmpty(getResources().getString(R.string.google_maps_api_key))) {
             throw new IllegalStateException("You forgot to supply a Google Maps API key");
         }
@@ -181,7 +190,18 @@ public class LocationTrackerActivity extends AppCompatActivity {
                         LatLng currUserLoc = new LatLng(currUserGeo.getLatitude(), currUserGeo.getLongitude());
                         if (mfirstLoad) {
                             setLocation(currUserLoc);
+                            circularRevealActivity();
                             mfirstLoad = false;
+                            /*ViewTreeObserver viewTreeObserver = mapsContainer.getViewTreeObserver();
+                            if (viewTreeObserver.isAlive()) {
+                                viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                                    @Override
+                                    public void onGlobalLayout() {
+                                        circularRevealActivity();
+                                        mapsContainer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                    }
+                                });
+                            }*/
                         }
 
                     }
@@ -193,6 +213,25 @@ public class LocationTrackerActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void circularRevealActivity() {
+
+        int cx = mapsContainer.getLeft();
+        int cy = mapsContainer.getTop();
+
+        float finalRadius = Math.max(mapsContainer.getWidth(), mapsContainer.getHeight()) * 2.0f;
+
+        // create the animator for this view (the start radius is zero)
+        Animator circularReveal = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            circularReveal = ViewAnimationUtils.createCircularReveal(mapsContainer, cx, cy, 0, finalRadius);
+        }
+        circularReveal.setDuration(2000);
+
+        // make the view visible and start the animation
+        mapsContainer.setVisibility(View.VISIBLE);
+        circularReveal.start();
     }
 
     protected void loadMap(GoogleMap googleMap) {
@@ -228,7 +267,8 @@ public class LocationTrackerActivity extends AppCompatActivity {
 
         Toast.makeText(this, "GPS location was found!", Toast.LENGTH_SHORT).show();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
-        map.animateCamera(cameraUpdate);
+        //map.animateCamera(cameraUpdate);
+        map.moveCamera(cameraUpdate);
     }
 
     public void animateMarker(final Marker marker, final LatLng toPosition,

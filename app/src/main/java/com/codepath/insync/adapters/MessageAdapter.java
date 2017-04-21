@@ -10,9 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
 import com.codepath.insync.models.parse.Message;
 import com.codepath.insync.utils.CommonUtil;
+import com.parse.ParseFile;
 
 
 import java.util.List;
@@ -134,7 +136,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         // Get the data model based on position
         Message message = mMessages.get(position);
-        Bitmap profileBitmap = message.getProfileImageBitmap();
+        ParseFile profileImage = message.getMedia();
+
         Bitmap mediaBitmap = message.getMediaImageBitmap();
         String messageTime = CommonUtil.getTimeInFormat(message.getCreatedAt());
 
@@ -150,8 +153,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 viewLeft.ivProfileLeft.setImageResource(R.drawable.ic_profile);
 
                 // populate the profile image if it exists
-                if (profileBitmap != null) {
-                    viewLeft.ivProfileLeft.setImageBitmap(profileBitmap);
+                if (profileImage != null) {
+                    Glide.with(mContext)
+                            .load(profileImage.getUrl())
+                            .placeholder(R.drawable.ic_attach_file_white_48px)
+                            .crossFade()
+                            .into(viewLeft.ivProfileLeft);
                 }
 
                 // populate the message media if it exists
@@ -173,8 +180,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 viewRight.ivProfileRight.setImageResource(R.drawable.ic_profile);
 
                 // populate the profile image if it exists
-                if (profileBitmap != null) {
-                    viewRight.ivProfileRight.setImageBitmap(profileBitmap);
+                if (profileImage != null) {
+                    Glide.with(mContext)
+                            .load(profileImage.getUrl())
+                            .placeholder(R.drawable.ic_attach_file_white_48px)
+                            .crossFade()
+                            .into(viewRight.ivProfileRight);
                 }
 
                 // populate the message media if it exists

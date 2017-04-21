@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity implements OnLoginListener 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String referrerStr = sharedPreferences.getString("referrer", null);
 
-        if (referrerStr == null) {
+        if (referrerStr == null || referrerStr.split("&").length < 2) {
             LoginFragment loginFragment = new LoginFragment();
             ft.replace(R.id.flLogin, loginFragment);
         } else {
