@@ -5,7 +5,7 @@
     android:id="@+id/custom_map_marker"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/accent">
+    android:background="@color/primary_light">
     <ImageView
         android:id="@+id/iv_custom_marker"
         android:layout_width="50dp"

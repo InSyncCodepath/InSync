@@ -26,6 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
+import static android.R.attr.resource;
 import static com.codepath.insync.R.id.map;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -74,13 +75,13 @@ public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHold
     private List<String> mEDImages;
     // Store the context for easy access
     private Context mContext;
-    private int ressource;
+    private int resource;
 
     // Pass in the message array into the constructor
     public EDImageAdapter(Context context, List<String> edImages, int layout_resource) {
         mEDImages = edImages;
         mContext = context;
-        ressource = layout_resource;
+        resource = layout_resource;
     }
 
     // Easy access to the context object in the recyclerview
@@ -94,7 +95,7 @@ public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHold
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
         // Inflate the custom image view layout
-        View edImageView = inflater.inflate(ressource, parent, false);
+        View edImageView = inflater.inflate(resource, parent, false);
 
         // Return a new holder instance
         ViewHolder viewHolder = new ViewHolder(edImageView);

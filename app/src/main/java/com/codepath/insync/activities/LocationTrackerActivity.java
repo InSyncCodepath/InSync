@@ -1,28 +1,17 @@
 package com.codepath.insync.activities;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.annotation.DrawableRes;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -30,22 +19,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
+
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.CustomMapWindowAdapter;
-import com.codepath.insync.adapters.EDImageAdapter;
 import com.codepath.insync.adapters.LTImageAdapter;
 import com.codepath.insync.databinding.ActivityLocationTrackerBinding;
 import com.codepath.insync.models.parse.Event;
@@ -63,10 +47,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
 import com.parse.FindCallback;
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -76,10 +57,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
-import static android.R.attr.resource;
 
 
 public class LocationTrackerActivity extends AppCompatActivity {
@@ -91,7 +70,6 @@ public class LocationTrackerActivity extends AppCompatActivity {
     LatLng eventLocation;
     String eventId;
     Event event;
-    //RelativeLayout mapsContainer;
     View mapsContainer;
     ActivityLocationTrackerBinding binding;
     Map<String, Marker> userMap;
@@ -106,13 +84,11 @@ public class LocationTrackerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.do_not_move, R.anim.do_not_move);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_location_tracker);
-        //mapsContainer = binding.rlLocationTracker;
         mapsContainer = findViewById(R.id.mapContainer);
         userMap = new HashMap<>();
         mfirstLoad = true;
         processIntent();
         setupRecyclerView();
-
 
         mapsContainer.setVisibility(View.INVISIBLE);
         if (TextUtils.isEmpty(getResources().getString(R.string.google_maps_api_key))) {
@@ -129,7 +105,9 @@ public class LocationTrackerActivity extends AppCompatActivity {
                 }
             });
         } else {
-            Toast.makeText(this, "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
+            Snackbar.make(mapsContainer, "Could not locate guests at this time. Please try later.",
+                    Snackbar.LENGTH_SHORT).show();
+            finish();
         }
 
     }
@@ -270,7 +248,7 @@ public class LocationTrackerActivity extends AppCompatActivity {
 
                     }
                 } else {
-                    Snackbar.make(mapsContainer, "Could not locate guests at this time. Please try later.",
+                    Snackbar.make(mapsContainer, "Could not locate attendees at this time. Please try later.",
                             Snackbar.LENGTH_SHORT).show();
                     finish();
                 }
@@ -291,20 +269,23 @@ public class LocationTrackerActivity extends AppCompatActivity {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             circularReveal = ViewAnimationUtils.createCircularReveal(mapsContainer, cx, cy, 0, finalRadius);
         }
-        circularReveal.setDuration(2000);
 
         // make the view visible and start the animation
         mapsContainer.setVisibility(View.VISIBLE);
-        circularReveal.start();
+        if (circularReveal != null) {
+            circularReveal.setDuration(2000);
+            circularReveal.start();
+        }
+
     }
 
     protected void loadMap(GoogleMap googleMap) {
         map = googleMap;
-        if (map != null) {
-            // Map is ready
-            Toast.makeText(this, "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Error - Map was null!!", Toast.LENGTH_SHORT).show();
+        if (map == null) {
+            // Map is null
+            Snackbar.make(mapsContainer, "Could not locate attendees at this time. Please try later.",
+                    Snackbar.LENGTH_SHORT).show();
+            finish();
         }
     }
 
@@ -328,8 +309,6 @@ public class LocationTrackerActivity extends AppCompatActivity {
 
 
     private void setLocation(LatLng latLng) {
-
-        Toast.makeText(this, "GPS location was found!", Toast.LENGTH_SHORT).show();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_FACTOR);
         //map.animateCamera(cameraUpdate);
         map.moveCamera(cameraUpdate);
@@ -382,74 +361,14 @@ public class LocationTrackerActivity extends AppCompatActivity {
         } else {
             markerImageView.setImageDrawable(glideDrawable);
         }
-/*        customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
-        customMarkerView.buildDrawingCache();
-        Bitmap returnedBitmap = Bitmap.createBitmap(customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight(),
-                Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(returnedBitmap);
-        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
-        Drawable drawable = customMarkerView.getBackground();
-        if (drawable != null)
-            drawable.draw(canvas);
-        customMarkerView.draw(canvas);*/
-
-        // Define the size you want from dimensions file
-
-        Drawable shapeDrawable = ResourcesCompat.getDrawable(getResources(),
-                R.drawable.shape_circle, null);
-        //iconGenerator.setBackground(shapeDrawable);
 
         iconGenerator.setContentView(customMarkerView);
         iconGenerator.setColor(R.color.accent);
-        iconGenerator.setStyle(IconGenerator.STYLE_GREEN);
+        iconGenerator.setStyle(IconGenerator.STYLE_BLUE);
         return iconGenerator.makeIcon();
     }
 
-    private void showAlertDialogForPoint(Marker marker) {
-        // inflate message_item.xml view
-
-        // Create alert dialog builder
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        // set message_item.xml to AlertDialog builder
-        alertDialogBuilder.setMessage("Send a nudge to: "+marker.getTitle());
-
-        // Create alert dialog
-        final AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // Configure dialog button (OK)
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "YES",
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        HashMap<String, String> payload = new HashMap<>();
-                        payload.put("customData", "My message");
-                        ParseCloud.callFunctionInBackground("pushChannelTest", payload, new FunctionCallback<Object>() {
-
-                            @Override
-                            public void done(Object object, ParseException e) {
-                                if (e != null) {
-                                    Log.e(TAG, "Error sending push to cloud: " + e.toString ());
-                                } else {
-                                    Log.d(TAG, "Push sent successfully!");
-                                }
-                            }
-                        });
-                    }
-                });
-
-        // Configure dialog button (Cancel)
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-        // Display the dialog
-        alertDialog.show();
+    public void onHomeClick(View view) {
+        finish();
     }
-
-
 }
