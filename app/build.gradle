@@ -14,7 +14,9 @@ android {
     dataBinding.enabled = true
     defaultConfig {
         applicationId "com.codepath.insync"
-        minSdkVersion 19
+        //minSdkVersion 19
+        //setting to 21 to try out shared view animation
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 15
         versionName "1.0"

@@ -9,6 +9,7 @@
     </style>
 
     <style name="AppTheme.NoActionBar">
+        <item name="android:windowContentTransitions">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="homeAsUpIndicator">@drawable/ic_arrow_back</item>
@@ -78,4 +79,15 @@
         <item name="android:background">@color/actionbar_bg</item>
         <item name="background">@color/actionbar_bg</item>
     </style>
+
+    <style name="EventCreation">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_below">@id/profilePic</item>
+        <item name="android:layout_toLeftOf">@id/ivCamera</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:visibility">visible</item>
+        <item name="android:layout_margin">24dp</item>
+    </style>
+
 </resources>

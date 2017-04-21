@@ -23,7 +23,6 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,7 +38,6 @@ import com.codepath.insync.Manifest;
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.InviteeAdapter;
 import com.codepath.insync.adapters.SimpleCursorRecyclerAdapterContacts;
-import com.codepath.insync.databinding.ActivityCreateEventAnimBinding;
 import com.codepath.insync.databinding.ActivityCreateEventBinding;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
@@ -67,10 +65,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class EventCreationActivity extends AppCompatActivity implements SimpleCursorRecyclerAdapterContacts.SimpleCursorAdapterInterface {
-//    ActivityCreateEventBinding binding;
-    ActivityCreateEventAnimBinding binding;
-    public final String TAG = EventCreationActivity.class.getName();
+public class EventCreationActivityNoAnim extends AppCompatActivity implements SimpleCursorRecyclerAdapterContacts.SimpleCursorAdapterInterface {
+    ActivityCreateEventBinding binding;
+    public final String TAG = EventCreationActivityNoAnim.class.getName();
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     Calendar eventStartDate = Calendar.getInstance();
     Calendar eventEndDate = Calendar.getInstance();
@@ -79,7 +76,6 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     ImageView setProfileImage, profileImage;
     ParseGeoPoint geoPoint;
     RelativeLayout contactsContainer;
-    Button btnNext;
     public static final int REQUEST_CODE = 1002;
     private static final int REQUEST_CAMERA_ACTIVITY = 1023;
     private static final int REQUEST_CONTACTS = 1;
@@ -94,7 +90,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_create_event_anim);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_create_event);
         startDate = binding.etStartDate;
         startTime = binding.etStartTime;
         endDate = binding.etEndDate;
@@ -103,11 +99,9 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         setProfileImage = binding.ivCamera;
         profileImage = binding.profilePic;
         contactsContainer = binding.contactsContainer;
-        btnNext = binding.next;
         Toolbar toolbar = binding.toolbarCreate;
         setSupportActionBar(toolbar);
-        eventName = binding.etEventName.getText().toString();
-        eventDescription = binding.etDescription.getText().toString();
+
         inviteeList = binding.inviteeList;
 
         ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(this)
@@ -151,20 +145,6 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         adapter = new InviteeAdapter(this, invitees);
         inviteeList.setAdapter(adapter);
 
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(binding.etEventName.getVisibility()==View.VISIBLE){
-                    if (binding.etEventName.getText().equals("")) {
-                        Toast.makeText(EventCreationActivity.this, "Event Name can not be blank", Toast.LENGTH_LONG).show();
-                    } else {
-                        binding.etEventName.setVisibility(View.GONE);
-                        binding.ivCamera.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-        });
-
         location.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
@@ -172,7 +152,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                     try {
                         Intent intent =
                                 new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                                        .build(EventCreationActivity.this);
+                                        .build(EventCreationActivityNoAnim.this);
                         startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
                     } catch (GooglePlayServicesRepairableException e) {
                         // TODO: Handle the error.
@@ -202,7 +182,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
 
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(EventCreationActivity.this, startDateListener, eventStartDate
+                new DatePickerDialog(EventCreationActivityNoAnim.this, startDateListener, eventStartDate
                         .get(Calendar.YEAR), eventStartDate.get(Calendar.MONTH),
                         eventStartDate.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -211,7 +191,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new TimePickerDialog(EventCreationActivity.this, startTimeListener, eventStartDate.get(Calendar.HOUR), eventStartDate.get(Calendar.MINUTE), false).show();
+                new TimePickerDialog(EventCreationActivityNoAnim.this, startTimeListener, eventStartDate.get(Calendar.HOUR), eventStartDate.get(Calendar.MINUTE), false).show();
             }
         });
 
@@ -219,7 +199,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
 
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(EventCreationActivity.this, endDateListener, eventEndDate
+                new DatePickerDialog(EventCreationActivityNoAnim.this, endDateListener, eventEndDate
                         .get(Calendar.YEAR), eventEndDate.get(Calendar.MONTH),
                         eventEndDate.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -228,7 +208,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         endTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new TimePickerDialog(EventCreationActivity.this, endTimeListener, eventEndDate.get(Calendar.HOUR), eventEndDate.get(Calendar.MINUTE), false).show();
+                new TimePickerDialog(EventCreationActivityNoAnim.this, endTimeListener, eventEndDate.get(Calendar.HOUR), eventEndDate.get(Calendar.MINUTE), false).show();
             }
         });
 
@@ -236,9 +216,8 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         setProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(EventCreationActivity.this, "Click me", Toast.LENGTH_LONG).show();
-                setProfileImage.setVisibility(View.GONE);
-                Intent intent = new Intent(EventCreationActivity.this, CameraActivity.class);
+                Toast.makeText(EventCreationActivityNoAnim.this, "Click me", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(EventCreationActivityNoAnim.this, CameraActivity.class);
                 startActivityForResult(intent, 1023);
             }
         });
@@ -252,7 +231,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     }
 
     public static Intent newIntent(Activity callingActivity) {
-        Intent intent = new Intent(callingActivity, EventCreationActivity.class);
+        Intent intent = new Intent(callingActivity, EventCreationActivityNoAnim.class);
         return intent;
     }
 
@@ -290,17 +269,19 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
 //                File tempfile = new File(tempPath);
                 parseFile = new ParseFile(file);
 
-                Glide.with(EventCreationActivity.this).load(file).into(profileImage);
+                Glide.with(EventCreationActivityNoAnim.this).load(file).into(profileImage);
                 profileImage.setVisibility(View.VISIBLE);
             }
         }
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
+//                String filePath = data.getStringExtra("filePath");
+//                File file = new File(filePath);
                 Uri selectedImageUri = data.getData();
-//                selectedImagePath = getPath(selectedImageUri);
-                selectedImagePath = selectedImageUri.getPath();
+                selectedImagePath = getPath(selectedImageUri);
+//                selectedImagePath = selectedImageUri.getPath();
                 File file = new File(String.valueOf(selectedImageUri));
-                Glide.with(this).load(file).into(profileImage);
+                Glide.with(EventCreationActivityNoAnim.this).load(file).into(profileImage);
                 profileImage.setVisibility(View.VISIBLE);
             }
         }
@@ -392,14 +373,18 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     }
 
     private void saveEventDetails() {
-        if (eventDescription.equals("")) {
-            Toast.makeText(EventCreationActivity.this, "Event Description can not be blank", Toast.LENGTH_LONG).show();
+        eventName = binding.etEventName.getText().toString();
+        eventDescription = binding.etDescription.getText().toString();
+        if (eventName.equals("")) {
+            Toast.makeText(EventCreationActivityNoAnim.this, "Event Name can not be blank", Toast.LENGTH_LONG).show();
+        } else if (eventDescription.equals("")) {
+            Toast.makeText(EventCreationActivityNoAnim.this, "Event Description can not be blank", Toast.LENGTH_LONG).show();
         } else if (startDate.getText().equals("")) {
-            Toast.makeText(EventCreationActivity.this, "Event Date can not be blank", Toast.LENGTH_LONG).show();
+            Toast.makeText(EventCreationActivityNoAnim.this, "Event Date can not be blank", Toast.LENGTH_LONG).show();
         } else if (startTime.getText().equals("")) {
-            Toast.makeText(EventCreationActivity.this, "Event Time can not be blank", Toast.LENGTH_LONG).show();
+            Toast.makeText(EventCreationActivityNoAnim.this, "Event Time can not be blank", Toast.LENGTH_LONG).show();
         } else if (invitees.size()==0) {
-            Toast.makeText(EventCreationActivity.this, "Oops! Looks like you forgot to add guests", Toast.LENGTH_LONG).show();
+            Toast.makeText(EventCreationActivityNoAnim.this, "Oops! Looks like you forgot to add guests", Toast.LENGTH_LONG).show();
         } else  {
 //        final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint);
             final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint, parseFile);

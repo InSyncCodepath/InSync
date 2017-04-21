@@ -7,7 +7,9 @@ import android.databinding.DataBindingUtil;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -28,6 +30,8 @@ import com.codepath.insync.fragments.PastEventsFragment;
 import com.codepath.insync.fragments.UpcomingEventsFragment;
 import com.codepath.insync.listeners.OnEventClickListener;
 import com.codepath.insync.utils.LocationService;
+
+import static com.codepath.insync.R.id.ivEventImage;
 
 
 public class EventListActivity extends AppCompatActivity implements OnEventClickListener {
@@ -62,7 +66,7 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent startEventCreationIntent = EventCreationActivity.newIntent(EventListActivity.this);
+                Intent startEventCreationIntent = EventCreationActivityNoAnim.newIntent(EventListActivity.this);
                 EventListActivity.this.startActivityForResult(startEventCreationIntent, REQUEST_CODE);
             }
         });
@@ -139,12 +143,18 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
     public void onItemClick(String eventId, boolean isCurrent, boolean canTrack) {
         Bundle animationBundle =
                 ActivityOptions.makeCustomAnimation(this, R.anim.slide_from_left, R.anim.slide_to_left).toBundle();
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(this, (View) findViewById(R.id.ivEventImage), "profile");
+//        Pair<View, String> p1 = Pair.create((View) findViewById(R.id.ivEventImage), "profile");
+
         Intent eventDetailIntent = new Intent(EventListActivity.this, EventDetailActivity.class);
         eventDetailIntent.putExtra("eventId", eventId);
         eventDetailIntent.putExtra("isCurrent", isCurrent);
         eventDetailIntent.putExtra("canTrack", canTrack);
+        //startActivity(eventDetailIntent);
+        startActivity(eventDetailIntent, options.toBundle());
 
-        startActivity(eventDetailIntent, animationBundle);
+        //startActivity(eventDetailIntent, animationBundle);
     }
 
 

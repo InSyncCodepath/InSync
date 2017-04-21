@@ -17,7 +17,8 @@
             <android.support.design.widget.AppBarLayout
                 android:id="@+id/appbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="60dp">
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbarCreate"
@@ -39,38 +40,30 @@
                 android:id="@+id/ivCamera"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
+                android:layout_centerHorizontal="true"
                 android:layout_below="@id/profilePic"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/ic_camera_alt_white_48px"
-                android:layout_toLeftOf="@+id/ivAttach"/>
+                android:visibility="gone"/>
+            <!--                android:layout_toLeftOf="@+id/ivAttach"
 
-
-            <ImageView
-                android:id="@+id/ivAttach"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_alignParentRight="true"
-                android:layout_below="@id/profilePic"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_attach_file_white_48px" />
+            <ImageView-->
+            <!--android:id="@+id/ivAttach"-->
+            <!--android:layout_width="45dp"-->
+            <!--android:layout_height="45dp"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_below="@id/profilePic"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:src="@drawable/ic_attach_file_white_48px" />-->
 
 
             <EditText
                 android:id="@+id/etEventName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/profilePic"
-                android:layout_toLeftOf="@id/ivCamera"
                 android:hint="@string/event_name"
-                android:textSize="24sp" />
+                style="@style/EventCreation"
+                android:animateLayoutChanges="true"
+                />
 
-            <ImageView
-                android:id="@+id/ivClock"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_below="@id/etEventName"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_watch_later_white_48px" />
 
             <LinearLayout
                 android:id="@+id/startDateTimeContainer"
@@ -79,7 +72,16 @@
                 android:layout_below="@id/etEventName"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_toRightOf="@id/ivClock">
+                android:visibility="gone"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/ivClock"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_below="@id/etEventName"
+                    android:layout_marginTop="8dp"
+                    android:src="@drawable/ic_watch_later_white_48px"
+                    android:visibility="gone"/>
 
                 <EditText
                     android:id="@+id/etStartDate"
@@ -106,7 +108,8 @@
                 android:layout_below="@id/startDateTimeContainer"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_toRightOf="@id/ivClock">
+                android:visibility="gone"
+                android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/etEndDate"
@@ -124,6 +127,15 @@
                     android:layout_weight="1"
                     android:hint="@string/end_time" />
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/locationContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/endDateTimeContainer"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/ivLocationPin"
@@ -143,25 +155,46 @@
                 android:layout_toRightOf="@id/ivLocationPin"
                 android:hint="@string/location" />
 
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/detailsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/locationContainer"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                android:orientation="horizontal">
+
             <ImageView
                 android:id="@+id/ivDetails"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_below="@id/etLocation"
+                android:layout_below="@id/locationContainer"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/ic_mode_edit_white_48px" />
-
             <EditText
                 android:id="@+id/etDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/etLocation"
+                android:layout_below="@+id/locationContainer"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_toRightOf="@+id/ivDetails"
                 android:hint="Details"
                 android:minLines="2" />
+            </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/inviteeContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detailsContainer"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                android:orientation="vertical">
             <TextView
                 android:id="@+id/inviteeHeader"
                 android:layout_width="wrap_content"
@@ -186,6 +219,16 @@
                 android:layout_below="@id/inviteeList"
                 android:visibility="gone"/>
 
+            </LinearLayout>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/next"
+                android:layout_below="@id/inviteeContainer"
+                android:layout_alignParentRight="true"
+                android:background="@color/accent"
+                android:layout_margin="26dp"
+                android:id="@+id/next"/>
 
         </RelativeLayout>
     </ScrollView>
