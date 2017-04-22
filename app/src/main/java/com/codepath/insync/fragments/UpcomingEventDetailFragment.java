@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -22,11 +23,15 @@ import com.codepath.insync.adapters.MessageAdapter;
 import com.codepath.insync.databinding.FragmentUpcomingEventDetailBinding;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
+import com.codepath.insync.utils.Camera;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,10 +131,14 @@ public class UpcomingEventDetailFragment extends Fragment {
         binding.rvChat.setLayoutManager(linearLayoutManager);
 
     }
-    private void addImage(){
-
+    public void addCameraImage(String filePath){
+        messageAdapter.addCameraImage(filePath);
     }
 
+    public void addGalleryImage(Uri fileUri){
+        messageAdapter.addGalleryImage(fileUri);
+
+    }
     private void refreshMessages() {
         // Construct query to execute
         ParseQuery<Message> parseQuery = event.getMessageRelation().getQuery();

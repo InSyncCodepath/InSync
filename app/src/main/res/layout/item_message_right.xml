@@ -36,6 +36,12 @@
         tools:text="What is the name of the place you went hiking last weekend?"
         >
     </TextView>
+    <ImageView
+        android:layout_width="175dp"
+        android:layout_height="175dp"
+        android:id="@+id/sendPictureLeft"
+        android:layout_below="@id/tvBodyLeft"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/tvTimeRight"

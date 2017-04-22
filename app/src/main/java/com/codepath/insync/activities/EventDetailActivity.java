@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
@@ -45,6 +46,7 @@ import com.codepath.insync.fragments.MessageSendFragment;
 import com.codepath.insync.fragments.PastEventDetailFragment;
 import com.codepath.insync.fragments.PastEventWaitFragment;
 import com.codepath.insync.fragments.UpcomingEventDetailFragment;
+import com.codepath.insync.interfaces.ImageInterface;
 import com.codepath.insync.listeners.OnImageClickListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
@@ -64,7 +66,8 @@ import java.util.List;
 public class EventDetailActivity extends AppCompatActivity implements
         UpcomingEventDetailFragment.OnViewTouchListener,
         ConfirmationFragment.UpdateDraftDialogListener,
-        OnImageClickListener {
+        OnImageClickListener,
+        ImageInterface{
     private static final String TAG = "EventDetailActivity";
     ActivityEventDetailBinding binding;
     CollapsingToolbarLayout collapsingToolbar;
@@ -83,6 +86,7 @@ public class EventDetailActivity extends AppCompatActivity implements
     private boolean firstLoad;
     FragmentManager fragmentManager;
     RelativeLayout rlEventDetail;
+    UpcomingEventDetailFragment upcomingEventDetailFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -367,9 +371,9 @@ public class EventDetailActivity extends AppCompatActivity implements
         FragmentTransaction ft = fragmentManager.beginTransaction();
         if (isCurrent) {
             // Load current and upcoming event detail
-            UpcomingEventDetailFragment upcomingEventDetailFragment = UpcomingEventDetailFragment.newInstance(eventId);
+            upcomingEventDetailFragment = UpcomingEventDetailFragment.newInstance(eventId);
             ft.replace(R.id.flMessages, upcomingEventDetailFragment);
-            messageSendFragment = MessageSendFragment.newInstance(eventId);
+            messageSendFragment = MessageSendFragment.newInstance(this, eventId);
             ft.replace(R.id.flMessageSend, messageSendFragment);
             setupUI(binding.clED);
         } else {
@@ -444,5 +448,15 @@ public class EventDetailActivity extends AppCompatActivity implements
                 .addSharedElement(ivGalleryImage, "galleryImage");
         // Apply the transaction
         ft.commit();
+    }
+
+    @Override
+    public void cameraImage(String filePath) {
+        upcomingEventDetailFragment.addCameraImage(filePath);
+    }
+
+    @Override
+    public void galleryImage(Uri fileUri) {
+        upcomingEventDetailFragment.addGalleryImage(fileUri);
     }
 }

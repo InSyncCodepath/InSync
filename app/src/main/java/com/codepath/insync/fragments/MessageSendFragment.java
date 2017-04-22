@@ -19,6 +19,7 @@ import com.codepath.insync.R;
 import com.codepath.insync.activities.CameraActivity;
 import com.codepath.insync.activities.EventCreationActivityNoAnim;
 import com.codepath.insync.databinding.FragmentMessageSendBinding;
+import com.codepath.insync.interfaces.ImageInterface;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
 import com.codepath.insync.models.parse.User;
@@ -49,10 +50,14 @@ public class MessageSendFragment extends Fragment {
     public static final int REQUEST_CAMERA_ACTIVITY = 1027;
     public static final int SELECT_PICTURE = 1028;
     Context context;
-    public static MessageSendFragment newInstance(String eventId) {
+    ImageInterface imageInterfaceListener;
+
+    public static MessageSendFragment newInstance(ImageInterface imageInterface, String eventId) {
+
         Bundle args = new Bundle();
 
         MessageSendFragment messageSendFragment = new MessageSendFragment();
+        messageSendFragment.imageInterfaceListener = imageInterface;
         args.putString("eventId", eventId);
 
         messageSendFragment.setArguments(args);
@@ -70,8 +75,8 @@ public class MessageSendFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        btnCamera = (FloatingActionButton) view.findViewById(R.id.menu_item_camera);
-        btnGallery = (FloatingActionButton) view.findViewById(R.id.menu_item_gallery);
+        btnCamera = (FloatingActionButton) view.findViewById(R.id.menuItemCamera);
+        btnGallery = (FloatingActionButton) view.findViewById(R.id.menuItemGallery);
         context = getContext();
 
         btnCamera.setOnClickListener(new View.OnClickListener() {
@@ -103,8 +108,32 @@ public class MessageSendFragment extends Fragment {
         return binding.getRoot();
     }
 
-    void setupImagePosting() {
-
+    void setupImagePosting(ParseFile parseFile) {
+        final Message message = new Message();
+        message.setMedia(parseFile);
+        message.setSender(User.getCurrentUser());
+        message.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e == null) {
+                    Toast.makeText(getActivity(), "Your Photo was successfully sent!",
+                            Toast.LENGTH_SHORT).show();
+                    event.getMessageRelation().add(message);
+                    event.updateEvent(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                Log.d(TAG, "Message was successfully linked to the event.");
+                            } else {
+                                Log.e(TAG, "Message link to event failed with error: "+ e.getLocalizedMessage());
+                            }
+                        }
+                    });
+                } else {
+                    Log.e(TAG, "Failed to save message", e);
+                }
+            }
+        });
     }
 
     void setupMessagePosting() {
@@ -118,7 +147,6 @@ public class MessageSendFragment extends Fragment {
                 // Using new `Message` Parse-backed model now
                 final Message message = new Message();
                 message.setBody(data);
-
                 message.setSender(User.getCurrentUser());
 
                 message.saveInBackground(new SaveCallback() {
@@ -159,7 +187,8 @@ public class MessageSendFragment extends Fragment {
 //                String tempPath = "/cache/IMG_20170416_110438.jpg";
 //                File tempfile = new File(tempPath);
                 parseFile = new ParseFile(file);
-
+                setupImagePosting(parseFile);
+                imageInterfaceListener.cameraImage(filePath);
 //                Glide.with(MessageSendFragment.this).load(file).into(profileImage);
 //                profileImage.setVisibility(View.VISIBLE);
             }
@@ -175,12 +204,11 @@ public class MessageSendFragment extends Fragment {
                 Uri selectedImageUri = data.getData();
                 try {
                     parseFile = new ParseFile(Camera.readBytes(context, selectedImageUri));
+                    setupImagePosting(parseFile);
+                    imageInterfaceListener.galleryImage(selectedImageUri);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-
-
             }
         }
     }

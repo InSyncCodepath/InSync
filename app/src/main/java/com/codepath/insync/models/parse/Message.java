@@ -59,7 +59,6 @@ public class Message extends ParseObject {
         message.setMedia(object.getParseFile(MEDIA_KEY));
         message.setSender(new User(object.getParseUser(SENDER_KEY)));
         message.put(CREATED_AT_KEY, object.getDate(CREATED_AT_KEY));
-
         return message;
     }
 

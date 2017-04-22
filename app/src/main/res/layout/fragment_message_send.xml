@@ -37,7 +37,7 @@
                 app:layout_behavior=".BottomNavigationBehavior"
                 tools:targetApi="lollipop" />
             <com.github.clans.fab.FloatingActionMenu
-                android:id="@+id/menu"
+                android:id="@+id/floatingActionMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -46,14 +46,14 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp">
                 <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/menu_item_camera"
+                    android:id="@+id/menuItemCamera"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_camera_alt_white_48px"
                     fab:fab_size="mini"
                     fab:fab_label="Menu item 1" />
                 <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/menu_item_gallery"
+                    android:id="@+id/menuItemGallery"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_attach_file_white_48px"
