@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.IntRange;
@@ -302,6 +303,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                 File file = new File(String.valueOf(selectedImageUri));
                 Glide.with(this).load(file).into(profileImage);
                 profileImage.setVisibility(View.VISIBLE);
+                parseFile = new ParseFile(file);
             }
         }
     }
@@ -557,11 +559,12 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         String[] projection = { MediaStore.Images.Media.DATA };
         Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
         if( cursor != null ){
-            int column_index = cursor
-                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
-            String path = cursor.getString(column_index);
+            int columnIndex = cursor.getColumnIndex(projection[0]);
+            String path = cursor.getString(columnIndex);
             cursor.close();
+            //yourSelectedImage = BitmapFactory.decodeFile(filePath);
             return path;
         }
         // this is our fallback here

@@ -1,7 +1,11 @@
 package com.codepath.insync.fragments;
 
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,22 +14,42 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
+import com.codepath.insync.activities.CameraActivity;
+import com.codepath.insync.activities.EventCreationActivityNoAnim;
 import com.codepath.insync.databinding.FragmentMessageSendBinding;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
 import com.codepath.insync.models.parse.User;
+import com.codepath.insync.utils.Camera;
+import com.github.clans.fab.FloatingActionButton;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.SaveCallback;
+
+import java.io.File;
+import java.io.IOException;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 
 public class MessageSendFragment extends Fragment {
     private static String TAG = "MessageSendFragment";
     FragmentMessageSendBinding binding;
     Event event;
-
+    ParseFile parseFile;
+    com.github.clans.fab.FloatingActionButton btnCamera, btnGallery;
+    public static final int REQUEST_CAMERA_ACTIVITY = 1027;
+    public static final int SELECT_PICTURE = 1028;
+    Context context;
     public static MessageSendFragment newInstance(String eventId) {
-
         Bundle args = new Bundle();
 
         MessageSendFragment messageSendFragment = new MessageSendFragment();
@@ -44,6 +68,32 @@ public class MessageSendFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        btnCamera = (FloatingActionButton) view.findViewById(R.id.menu_item_camera);
+        btnGallery = (FloatingActionButton) view.findViewById(R.id.menu_item_gallery);
+        context = getContext();
+
+        btnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), CameraActivity.class);
+                startActivityForResult(intent, REQUEST_CAMERA_ACTIVITY);
+            }
+        });
+
+        btnGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(Intent.createChooser(intent,
+                        "Select Picture"), SELECT_PICTURE);
+            }
+        });
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -51,6 +101,10 @@ public class MessageSendFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_message_send, container, false);
         setupMessagePosting();
         return binding.getRoot();
+    }
+
+    void setupImagePosting() {
+
     }
 
     void setupMessagePosting() {
@@ -93,6 +147,42 @@ public class MessageSendFragment extends Fragment {
                 binding.etEDMessage.setText(null);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CAMERA_ACTIVITY) {
+            if (resultCode == RESULT_OK) {
+                String filePath = data.getStringExtra("filePath");
+//                Uri newUri = Uri.parse(filePath);
+                File file = new File(filePath);
+//                String tempPath = "/cache/IMG_20170416_110438.jpg";
+//                File tempfile = new File(tempPath);
+                parseFile = new ParseFile(file);
+
+//                Glide.with(MessageSendFragment.this).load(file).into(profileImage);
+//                profileImage.setVisibility(View.VISIBLE);
+            }
+        }
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_PICTURE) {
+
+//                Glide.with(MessageSendFragment.this).load(data.getData()).into(profileImage);
+//                profileImage.setVisibility(View.VISIBLE);
+
+//                String filePath = data.getStringExtra("filePath");
+//                File file = new File(filePath);
+                Uri selectedImageUri = data.getData();
+                try {
+                    parseFile = new ParseFile(Camera.readBytes(context, selectedImageUri));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+
+            }
+        }
     }
 
     public void clearViewFocus() {

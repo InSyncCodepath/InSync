@@ -3,11 +3,15 @@ package com.codepath.insync.activities;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
@@ -42,12 +46,14 @@ import com.codepath.insync.databinding.ActivityCreateEventBinding;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
+import com.codepath.insync.utils.Camera;
 import com.codepath.insync.utils.Constants;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
@@ -56,7 +62,14 @@ import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.SaveCallback;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,6 +77,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+
+import static android.R.attr.bitmap;
 
 public class EventCreationActivityNoAnim extends AppCompatActivity implements SimpleCursorRecyclerAdapterContacts.SimpleCursorAdapterInterface {
     ActivityCreateEventBinding binding;
@@ -87,6 +102,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
     ParseFile parseFile;
     private static final int SELECT_PICTURE = 1025;
     private String selectedImagePath;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,9 +185,11 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
 
                         // in onCreate or any event where your want the user to
                         // select a file
-                        Intent intent = new Intent();
-                        intent.setType("image/*");
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
+//                        Intent intent = new Intent();
+//                        intent.setType("image/*");
+//                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        Intent intent = new Intent(Intent.ACTION_PICK,
+                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         startActivityForResult(Intent.createChooser(intent,
                                 "Select Picture"), SELECT_PICTURE);
                     }
@@ -235,6 +253,29 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
         return intent;
     }
 
+
+    private void showGuests() {
+        for (int i = 0; i < chipList.size(); i++) {
+            if (!(invitees.contains(chipList.get(i)))) {
+                invitees.add(chipList.get(i));
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+
+
+    DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            eventStartDate.set(Calendar.YEAR, year);
+            eventStartDate.set(Calendar.MONTH, monthOfYear);
+            eventStartDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateDate(startDate, eventStartDate.getTime());
+        }
+    };
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
@@ -275,38 +316,72 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
         }
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
-//                String filePath = data.getStringExtra("filePath");
-//                File file = new File(filePath);
-//                Uri selectedImageUri = data.getData();
-//                selectedImagePath = getPath(selectedImageUri);
-//                selectedImagePath = selectedImageUri.getPath();
-//                File file = new File(String.valueOf(selectedImageUri));
-//                File file = new File(data.getData().getPath());
+
                 Glide.with(EventCreationActivityNoAnim.this).load(data.getData()).into(profileImage);
                 profileImage.setVisibility(View.VISIBLE);
+//                String filePath = data.getStringExtra("filePath");
+//                File file = new File(filePath);
+                Uri selectedImageUri = data.getData();
+                try {
+                    parseFile = new ParseFile(Camera.readBytes(this, selectedImageUri));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+////                selectedImagePath = getPath(selectedImageUri);
+////                selectedImagePath = selectedImageUri.getPath();
+////                File file = new File(String.valueOf(selectedImageUri));
+////                File file = new File(data.getData().getPath());
+//
+//                //codepath
+//                try {
+//                    Bitmap selectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+//
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//
+//                Glide.with(EventCreationActivityNoAnim.this).load(data.getData()).into(profileImage);
+//                profileImage.setVisibility(View.VISIBLE);
+//                //ParseFile parseFile = new ParseFile();
+//                Uri selectedImage = data.getData();
+//                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//
+//                // Get the cursor
+//                Cursor cursor = getContentResolver().query(selectedImage,
+//                        filePathColumn, null, null, null);
+//                // Move to first row
+//                cursor.moveToFirst();
+//
+//                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                String imgDecodableString = cursor.getString(columnIndex);
+//
+//                cursor.close();
+//                File file = new File(String.valueOf(selectedImageUri));
+//                parseFile = new ParseFile(file);
+
+
+
+//                File file = Environment.getExternalStorageDirectory();
+//                OutputStream os = null;
+//                try {
+//                    os = new BufferedOutputStream(new FileOutputStream(file));
+//
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+//                try {
+//                    Bitmap selectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+//                    selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, os);
+//                    os.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+
+
             }
         }
     }
-
-    private void showGuests() {
-        for (int i = 0; i < chipList.size(); i++) {
-            if (!(invitees.contains(chipList.get(i)))) {
-                invitees.add(chipList.get(i));
-            }
-        }
-        adapter.notifyDataSetChanged();
-    }
-
-    DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                              int dayOfMonth) {
-            eventStartDate.set(Calendar.YEAR, year);
-            eventStartDate.set(Calendar.MONTH, monthOfYear);
-            eventStartDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            updateDate(startDate, eventStartDate.getTime());
-        }
-    };
 
     DatePickerDialog.OnDateSetListener endDateListener = new DatePickerDialog.OnDateSetListener() {
         @Override
@@ -387,32 +462,47 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
         } else if (invitees.size()==0) {
             Toast.makeText(EventCreationActivityNoAnim.this, "Oops! Looks like you forgot to add guests", Toast.LENGTH_LONG).show();
         } else  {
-//        final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint);
-            final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint, parseFile);
-            event.saveInBackground(new SaveCallback() {
-                @Override
+            parseFile.saveInBackground(new SaveCallback() {
                 public void done(ParseException e) {
-                    Log.d("Debug", event.getObjectId());
-                    final List<String> userIds = new ArrayList<>();
-                    for (int i = 0; i < invitees.size(); i++) {
-                        User user = null;
-                        try {
-                            user = User.getUser(invitees.get(i));
-                        } catch (ParseException e1) {
-                            e1.printStackTrace();
-                        }
+                    // If successful add file to user and signUpInBackground
+                    if(null == e)
+                        savetoParse();
+                }
+            });
+//
+            setResult(RESULT_OK);
+
+            finish();
+        }
+    }
+
+    private void savetoParse() {
+        //final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint);
+        final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint, parseFile);
+        event.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                Log.d("Debug", event.getObjectId());
+                final List<String> userIds = new ArrayList<>();
+                for (int i = 0; i < invitees.size(); i++) {
+                    User user = null;
+                    try {
+                        user = User.getUser(invitees.get(i));
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
+                    }
 //                    ParseObject userEvent = ParseObject.create("userEventRelation");
 //                    userEvent.put();
-                        //userEvent.newUserEventRelation(event, user, false, true, true, true, 4);
-                        final UserEventRelation userEvent = new UserEventRelation(event, user.getObjectId(), false, true, true, true, 2);
-                        userEvent.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                Log.d("Debug", userEvent.getObjectId() + " Object id");
-                                Log.d("Debug", "Event id=" + userEvent.getEvent() + " USer id" + userEvent.getUserIdKey());
-                                userIds.add(userEvent.getUserId());
-                            }
-                        });
+                    //userEvent.newUserEventRelation(event, user, false, true, true, true, 4);
+                    final UserEventRelation userEvent = new UserEventRelation(event, user.getObjectId(), false, true, true, true, 2);
+                    userEvent.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            Log.d("Debug", userEvent.getObjectId() + " Object id");
+                            Log.d("Debug", "Event id=" + userEvent.getEvent() + " USer id" + userEvent.getUserIdKey());
+                            userIds.add(userEvent.getUserId());
+                        }
+                    });
 
 //                    userEvent.saveInBackground(new SaveCallback() {
 //                        @Override
@@ -422,28 +512,25 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
 //
 //                        }
 //                    });
-                    }
-
-                    final UserEventRelation hostEvent = new UserEventRelation(event, User.getCurrentUser().getObjectId(), true, true, true, true, 0);
-
-                    hostEvent.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            Log.d("Debug", "Event id=" + hostEvent.getEvent() + "USer id" + hostEvent.getUserIdKey());
-
-                        }
-                    });
-
-
-                    sendInviteNotifcations(event, userIds);
-
                 }
-            });
-            setResult(RESULT_OK);
 
-            finish();
-        }
+                final UserEventRelation hostEvent = new UserEventRelation(event, User.getCurrentUser().getObjectId(), true, true, true, true, 0);
+
+                hostEvent.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        Log.d("Debug", "Event id=" + hostEvent.getEvent() + "USer id" + hostEvent.getUserIdKey());
+
+                    }
+                });
+
+
+                sendInviteNotifcations(event, userIds);
+
+            }
+        });
     }
+
 
     public void sendInviteNotifcations(Event event, List<String> userIds) {
         HashMap<String, Object> payload = new HashMap<>();

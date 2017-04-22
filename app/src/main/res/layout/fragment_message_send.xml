@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fab="http://schemas.android.com/tools">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -11,15 +12,15 @@
             android:layout_height="wrap_content">
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fabEDSend"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/etEDMessage"
-                android:layout_alignParentEnd="true"
-                android:layout_gravity="bottom|end"
-                android:layout_marginBottom="@dimen/margin30"
-                android:layout_marginEnd="@dimen/margin8"
-                app:srcCompat="@drawable/ic_send" />
+            android:id="@+id/fabEDSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/etEDMessage"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="@dimen/margin30"
+            android:layout_marginEnd="@dimen/margin8"
+            app:srcCompat="@drawable/ic_send" />
 
             <EditText
                 android:id="@+id/etEDMessage"
@@ -35,6 +36,30 @@
                 android:inputType="textShortMessage"
                 app:layout_behavior=".BottomNavigationBehavior"
                 tools:targetApi="lollipop" />
+            <com.github.clans.fab.FloatingActionMenu
+                android:id="@+id/menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp">
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/menu_item_camera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_camera_alt_white_48px"
+                    fab:fab_size="mini"
+                    fab:fab_label="Menu item 1" />
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/menu_item_gallery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_attach_file_white_48px"
+                    fab:fab_size="mini"
+                    fab:fab_label="Menu item 2" />
+            </com.github.clans.fab.FloatingActionMenu>
         </android.support.design.widget.BottomNavigationView>
     </RelativeLayout>
 </layout>

@@ -34,8 +34,13 @@
         android:layout_marginEnd="@dimen/margin16"
         android:layout_below="@id/ivMessageRight"
         tools:text="What is the name of the place you went hiking last weekend?"
-        >
-    </TextView>
+        />
+    <ImageView
+        android:layout_width="175dp"
+        android:layout_height="175dp"
+        android:id="@+id/sendPicture"
+        android:layout_below="@id/tvBodyRight"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/tvTimeLeft"

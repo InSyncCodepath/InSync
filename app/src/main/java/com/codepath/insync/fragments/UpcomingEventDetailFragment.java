@@ -126,6 +126,9 @@ public class UpcomingEventDetailFragment extends Fragment {
         binding.rvChat.setLayoutManager(linearLayoutManager);
 
     }
+    private void addImage(){
+
+    }
 
     private void refreshMessages() {
         // Construct query to execute

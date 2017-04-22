@@ -117,4 +117,8 @@ dependencies {
     // Circular Image View
     compile 'de.hdodenhof:circleimageview:2.1.0'
 
+    //Floating action menu
+    compile 'com.github.clans:fab:1.6.4'
+
+
 }
