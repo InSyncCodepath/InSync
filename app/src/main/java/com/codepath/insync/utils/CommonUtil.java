@@ -1,7 +1,12 @@
 package com.codepath.insync.utils;
 
+import android.content.Context;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
 
+import com.codepath.insync.R;
 import com.codepath.insync.listeners.OnEventClickListener;
 import com.codepath.insync.models.parse.Event;
 import com.parse.FunctionCallback;
@@ -17,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import static com.codepath.insync.R.id.rlEventDetail;
 import static com.parse.ParseQuery.or;
 
 
@@ -87,5 +93,12 @@ public class CommonUtil {
                 }
             }
         });
+    }
+
+    public static void createSnackbar(View parentView, Context context, String message) {
+        Snackbar snackBar = Snackbar.make(parentView, message, Snackbar.LENGTH_SHORT);
+        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackBar.getView();
+        layout.setBackgroundColor(ContextCompat.getColor(context, R.color.accent));
+        snackBar.show();
     }
 }
