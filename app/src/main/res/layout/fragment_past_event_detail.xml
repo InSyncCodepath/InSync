@@ -4,14 +4,25 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
+        <FrameLayout
             android:id="@+id/ivHighlights"
             android:layout_width="match_parent"
             android:layout_margin="@dimen/margin8"
             android:layout_height="200dp"
-            android:scaleType="fitXY"
-            android:background="@color/primary_dark"
-            />
+            android:background="@color/primary_dark">
+            <ImageView
+                android:id="@+id/slide_1"
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop" />
+            <ImageView
+                android:id="@+id/slide_2"
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop" />
+        </FrameLayout>
         <TextureView
             android:id="@+id/tvHighlights"
             android:layout_width="match_parent"

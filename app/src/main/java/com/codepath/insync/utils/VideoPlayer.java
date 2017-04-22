@@ -4,11 +4,12 @@ import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.widget.MediaController;
 
-import com.codepath.insync.listeners.OnVideoPrepareListener;
+import com.codepath.insync.listeners.OnVideoUpdateListener;
 
 public class VideoPlayer implements MediaPlayer.OnBufferingUpdateListener,
         MediaPlayer.OnCompletionListener,
@@ -18,12 +19,12 @@ public class VideoPlayer implements MediaPlayer.OnBufferingUpdateListener,
     private MediaPlayer mediaPlayer;
     private MediaController mcontroller;
     private Context mContext;
-    private OnVideoPrepareListener videoPrepareListener;
+    private OnVideoUpdateListener videoUpdateListener;
     private View controllerAnchorView;
 
-    public VideoPlayer(Context context, OnVideoPrepareListener listener, View anchorView) {
+    public VideoPlayer(Context context, OnVideoUpdateListener listener, View anchorView) {
         mContext = context;
-        videoPrepareListener = listener;
+        videoUpdateListener = listener;
         controllerAnchorView = anchorView;
     }
 
@@ -73,12 +74,16 @@ public class VideoPlayer implements MediaPlayer.OnBufferingUpdateListener,
 
     @Override
     public void onCompletion(MediaPlayer mp) {
+        Log.d("VideoPlayer", "Completed");
+        mp.reset();
+        mp.seekTo(0);
+        videoUpdateListener.onComplete();
 
     }
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-        videoPrepareListener.onPrepare();
+        videoUpdateListener.onPrepare();
         start();
 
         mcontroller.setMediaPlayer(this);
@@ -101,7 +106,9 @@ public class VideoPlayer implements MediaPlayer.OnBufferingUpdateListener,
 
     @Override
     public void pause() {
+
         mediaPlayer.pause();
+        videoUpdateListener.onComplete();
     }
 
     @Override
