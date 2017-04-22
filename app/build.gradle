@@ -89,6 +89,10 @@ dependencies {
     //Chipview
     compile 'com.github.Plumillon:ChipView:1.2.0'
 
+    // Recycler view and animator
+    compile 'com.android.support:recyclerview-v7:25.2.0'
+    compile 'jp.wasabeef:recyclerview-animators:2.2.3'
+
     // Retrofit and Gson
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.google.code.gson:gson:2.8.0'

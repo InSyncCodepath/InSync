@@ -60,6 +60,7 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.SaveCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -403,7 +404,7 @@ public class EventDetailActivity extends AppCompatActivity implements
             ft.remove(messageSendFragment);
             binding.flMessageSend.setVisibility(View.GONE);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-            pastEventWaitFragment = PastEventWaitFragment.newInstance(true, null);
+            pastEventWaitFragment = PastEventWaitFragment.newInstance(true, null, -1);
             ft.replace(R.id.flMessages, pastEventWaitFragment);
             ft.commit();
             CommonUtil.createSnackbar(rlEventDetail, this, "Your event has ended. The highlights are being created!");
@@ -423,13 +424,13 @@ public class EventDetailActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onItemClick(String imageUrl) {
+    public void onItemClick(ArrayList<String> images, int position) {
         Transition changeTransform = TransitionInflater.from(this).
                 inflateTransition(R.transition.change_image_transform);
         binding.flMessageSend.setVisibility(View.GONE);
         Transition explodeTransform = TransitionInflater.from(this).inflateTransition(android.R.transition.explode);
         Transition slideBottom = TransitionInflater.from(this).inflateTransition(android.R.transition.slide_bottom);
-        pastEventWaitFragment = PastEventWaitFragment.newInstance(false, imageUrl);
+        pastEventWaitFragment = PastEventWaitFragment.newInstance(false, images, position);
         // Setup exit transition on first fragment
         pastEventDetailFragment.setSharedElementReturnTransition(changeTransform);
         pastEventDetailFragment.setExitTransition(explodeTransform);

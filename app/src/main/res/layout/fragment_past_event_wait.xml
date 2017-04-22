@@ -4,7 +4,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/primary_light">
+        android:background="@drawable/vertical_gradient">
 
         <ProgressBar
             android:id="@+id/pbMediaUpdate"
@@ -13,22 +13,11 @@
             android:layout_centerInParent="true"
 
             />
-        <android.support.v7.widget.CardView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:card_view="http://schemas.android.com/..."
-            android:layout_margin="@dimen/margin8"
-            card_view:cardcornerradius="4dp"
-            android:layout_centerInParent="true"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvGallery"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/ivScaleImage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:transitionName="galleryImage"
-                android:scaleType="fitXY"
-                android:minHeight="100dp"
-                />
-        </android.support.v7.widget.CardView>
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            />
     </RelativeLayout>
 </layout>

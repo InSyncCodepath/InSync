@@ -44,7 +44,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     public static final String TAG = "PastEventDetailFragment";
     FragmentPastEventDetailBinding binding;
     Event event;
-    List<String> edImages;
+    ArrayList<String> edImages;
     List<ParseFile> parseFiles;
     EDImageAdapter edImageAdapter;
     GridLayoutManager gridLayoutManager;
@@ -159,7 +159,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         edImageAdapter.setOnItemClickListener(new EDImageAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
-                onImageClickListener.onItemClick(edImages.get(position));
+                onImageClickListener.onItemClick(edImages, position);
             }
         });
     }
