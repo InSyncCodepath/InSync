@@ -87,7 +87,7 @@ public class ParseApplication extends Application {
                 if (object.hasEnded() || (object.getEndDate().compareTo(cal.getTime()) < 0)) {
                     return;
                 }
-                Log.d(TAG, "Current event: "+object.getName()+". Current highlights video: " + object.getHighlightsVideo());
+                Log.d(TAG, "Current event: "+object.getName());
                 Intent intent = new Intent("com.codepath.insync.Messages");
                 intent.putExtra("new_messages", true);
                 sendBroadcast(intent);

@@ -49,7 +49,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     ImageView slide_0;
     ImageView slide_1;
     ImageView lastSlide;
-    int count = 0;
+    int count;
     int lastDownAnim;
     int lastUpAnim;
 
@@ -214,6 +214,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     }
 
     private void animateSlideShow() {
+        count = 0;
         lastSlide = slide_0;
         lastDownAnim = R.anim.transition_down_center;
         lastUpAnim = R.anim.transition_up_center;
