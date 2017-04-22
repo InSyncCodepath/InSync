@@ -9,10 +9,4 @@
         android:icon="@drawable/ic_check_white_48px"
         app:showAsAction="always" />
 
-    <item android:id="@+id/action_search"
-        android:orderInCategory="5"
-        android:title="Search"
-        android:icon="@android:drawable/ic_menu_search"
-        app:showAsAction="always|collapseActionView"
-        app:actionViewClass="android.support.v7.widget.SearchView" />
 </menu>

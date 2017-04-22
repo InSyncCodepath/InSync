@@ -8,26 +8,42 @@ import android.provider.ContactsContract;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.MultiAutoCompleteTextView;
 
 import com.codepath.insync.R;
+import com.codepath.insync.adapters.ContactAdapter;
 import com.codepath.insync.adapters.SimpleCursorRecyclerAdapterContacts;
 import com.codepath.insync.databinding.ActivityContactBinding;
+import com.codepath.insync.models.Contact;
 
 import java.util.ArrayList;
 
 public class ContactActivity extends AppCompatActivity {
     SimpleCursorRecyclerAdapterContacts adapter;
+    MultiAutoCompleteTextView searchContacts;
     ActivityContactBinding binding;
     RecyclerView contactList;
     public static final int CONTACT_LOADER_ID = 10;
     ArrayList<String> guestList;
-
+    Toolbar toolbar;
+    ArrayList<Contact> contactArrayList;
+    //ArrayList<Contact> contacts;
+    //ContactAdapter contactAdapter;
+    //SearchView searchView;
     private LoaderManager.LoaderCallbacks<Cursor> contactsLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -46,13 +62,20 @@ public class ContactActivity extends AppCompatActivity {
                     ContactsContract.CommonDataKinds.Phone.CONTENT_URI, // URI
                     projectionFields, selection, null, ContactsContract.Contacts.DISPLAY_NAME + " ASC"
             );
+
+
             // Return the loader for use
             return cursorLoader;
         }
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-            adapter.swapCursor(cursor);
+            cursor.moveToFirst();
+            while(!cursor.isAfterLast()) {
+                //contactArrayList.add();
+            }
+
+                adapter.swapCursor(cursor);
             adapter.notifyDataSetChanged();
         }
 
@@ -66,6 +89,8 @@ public class ContactActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_contact);
+        toolbar = binding.toolbarContact;
+        setSupportActionBar(toolbar);
         contactList = binding.contactList;
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         contactList.setLayoutManager(layoutManager);
@@ -73,14 +98,51 @@ public class ContactActivity extends AppCompatActivity {
         contactList.setAdapter(adapter);
         getSupportLoaderManager().initLoader(CONTACT_LOADER_ID,
                 new Bundle(), contactsLoader);
+
+        contactArrayList = adapter.showContacts();
+        //contactAdapter = new ContactAdapter(ContactActivity.this, contacts);
+        //ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(this, R.layout.contact_item, contacts);
+        //searchContacts = binding.searchContact;
+        //searchContacts.setAdapter(adapter);
+        //searchContacts.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+
+//        Log.d("Debug", searchContacts.getListSelection()+"");
+//        searchContacts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_contact, menu);
-        MenuItem addContact = (MenuItem) menu.findItem(R.id.action_add);
-
-        return true;
-
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_contact, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        //searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        //searchView.setSuggestionsAdapter(adapter);
+        Cursor cursor = adapter.getCursor();
+        setupCursorAdapter();
+        //searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//
+//                searchView.clearFocus();
+//
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                return false;
+//            }
+//        });
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

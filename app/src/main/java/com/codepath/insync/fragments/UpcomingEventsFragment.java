@@ -73,6 +73,37 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
         cal.setTime(new Date()); // sets calendar time/date
         cal.add(Calendar.HOUR_OF_DAY, bufferHours); // subtract 3 hours
         eventClickListener = (OnEventClickListener) getActivity();
+        showEvents();
+//        User currentUser = User.getCurrentUser();
+//        ParseQuery<UserEventRelation> query = ParseQuery.getQuery(UserEventRelation.class);
+//        query.selectKeys(Arrays.asList("event"));
+//        query.include("event");
+//        query.whereEqualTo("userId", currentUser.getObjectId());
+//        query.findInBackground(new FindCallback<UserEventRelation>() {
+//            @Override
+//            public void done(List<UserEventRelation> objects, ParseException e) {
+//                for (int i = 0; i < objects.size(); i++) {
+//                    Event userEvent = (Event) objects.get(i).get("event");
+//                    if(!userEvent.hasEnded() && (userEvent.getEndDate().compareTo(cal.getTime()) > 0)) {
+//                        events.add(userEvent);
+//                    }
+//                }
+//                Collections.sort(events, new Comparator<Event>() {
+//                    @Override
+//                    public int compare(Event event1, Event event2) {
+//                        return event1.getStartDate().compareTo(event2.getStartDate());
+//                    }
+//                });
+//                upcomingEventAdapter.notifyDataSetChanged();
+//
+//
+//            }
+//        });
+
+        return view;
+    }
+
+    public void showEvents(){
         User currentUser = User.getCurrentUser();
         ParseQuery<UserEventRelation> query = ParseQuery.getQuery(UserEventRelation.class);
         query.selectKeys(Arrays.asList("event"));
@@ -98,18 +129,15 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
 
             }
         });
-
-        return view;
     }
-
-
     @Override
     public void onEventItemClick(String eventId, boolean isCurrent, boolean canTrack) {
        eventClickListener.onItemClick(eventId, isCurrent, canTrack);
     }
 
     public void reloadList() {
-        upcomingEventAdapter.notifyDataSetChanged();
+//        upcomingEventAdapter.notifyDataSetChanged();
+        showEvents();
     }
 }
 

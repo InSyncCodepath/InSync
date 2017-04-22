@@ -20,7 +20,7 @@ The following **required** functionality will be completed:
 * [] Users can share pictures/ video of the event in the chat.
 * [x] After the event, an album will be created which users can download. Optional: The album will expire after one week.
 * [x] Users can see the location of the partipants in real time some time before the event.
-* [x] Host can choose if the location tracker and invitee list is visible to the invitees or not.
+* [x] Host can choose if the location tracker and invitee list is visible to the contacts or not.
 
 The following **optional** features can be implemented:
 

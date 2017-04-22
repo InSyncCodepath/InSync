@@ -277,11 +277,12 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
             if (requestCode == SELECT_PICTURE) {
 //                String filePath = data.getStringExtra("filePath");
 //                File file = new File(filePath);
-                Uri selectedImageUri = data.getData();
-                selectedImagePath = getPath(selectedImageUri);
+//                Uri selectedImageUri = data.getData();
+//                selectedImagePath = getPath(selectedImageUri);
 //                selectedImagePath = selectedImageUri.getPath();
-                File file = new File(String.valueOf(selectedImageUri));
-                Glide.with(EventCreationActivityNoAnim.this).load(file).into(profileImage);
+//                File file = new File(String.valueOf(selectedImageUri));
+//                File file = new File(data.getData().getPath());
+                Glide.with(EventCreationActivityNoAnim.this).load(data.getData()).into(profileImage);
                 profileImage.setVisibility(View.VISIBLE);
             }
         }

@@ -87,7 +87,7 @@ public class InSyncContactsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_contact, menu);
+        getMenuInflater().inflate(R.menu.menu_contact_insync, menu);
         return true;
 
     }
@@ -99,10 +99,10 @@ public class InSyncContactsActivity extends AppCompatActivity {
             addGuests();
             return true;
         }
-//        if (id == R.id.action_search) {
-//
-//            return true;
-//        }
+        if (id == R.id.action_search) {
+
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
