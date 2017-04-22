@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -56,6 +57,9 @@ public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHold
 
                 ButterKnife.bind(this, itemView);
 
+                ivEDImage.getLayoutParams().width = width;
+                ivEDImage.getLayoutParams().height = width;
+
                 itemView.setOnClickListener(new View.OnClickListener() {
                     // Triggers click upwards to the adapter on click
                     @Override
@@ -76,12 +80,14 @@ public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHold
     // Store the context for easy access
     private Context mContext;
     private int resource;
+    private int width;
 
     // Pass in the message array into the constructor
-    public EDImageAdapter(Context context, List<String> edImages, int layout_resource) {
+    public EDImageAdapter(Context context, List<String> edImages, int layout_resource, int window_width) {
         mEDImages = edImages;
         mContext = context;
         resource = layout_resource;
+        width = (window_width - (8*4))/3;
     }
 
     // Easy access to the context object in the recyclerview

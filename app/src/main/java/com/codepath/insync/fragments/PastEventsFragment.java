@@ -82,17 +82,6 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
                     Event userEvent = (Event) objects.get(i).get("event");
                     if(userEvent.hasEnded() || (userEvent.getEndDate().compareTo(cal.getTime()) <= 0)){
                         events.add(userEvent);
-                        userEvent.setHasEnded(true);
-                        userEvent.updateEvent(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if (e == null) {
-                                    Log.d(TAG, "Past event status updated successfully!");
-                                } else {
-                                    Log.e(TAG, "Could not update past event flag");
-                                }
-                            }
-                        });
                     }
                 }
                 Collections.sort(events, new Comparator<Event>() {

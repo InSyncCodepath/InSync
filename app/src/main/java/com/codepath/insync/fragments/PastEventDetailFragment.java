@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -21,6 +23,7 @@ import android.widget.ImageView;
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.EDImageAdapter;
 import com.codepath.insync.databinding.FragmentPastEventDetailBinding;
+import com.codepath.insync.listeners.OnImageClickListener;
 import com.codepath.insync.listeners.OnVideoUpdateListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Music;
@@ -44,7 +47,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     List<String> edImages;
     List<ParseFile> parseFiles;
     EDImageAdapter edImageAdapter;
-    LinearLayoutManager linearLayoutManager;
+    GridLayoutManager gridLayoutManager;
     VideoPlayer videoPlayer;
     ImageView slide_0;
     ImageView slide_1;
@@ -52,6 +55,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     int count;
     int lastDownAnim;
     int lastUpAnim;
+    OnImageClickListener onImageClickListener;
 
     private Handler timerHandler = new Handler();
 
@@ -79,7 +83,12 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
 
         parseFiles = new ArrayList<>();
         edImages = new ArrayList<>();
-        edImageAdapter = new EDImageAdapter(getActivity(), edImages, R.layout.item_edimage);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+        edImageAdapter = new EDImageAdapter(getActivity(), edImages, R.layout.item_edimage, width);
+        onImageClickListener = (OnImageClickListener) getActivity();
     }
 
     @Override
@@ -131,8 +140,9 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
                         if (imgFile != null) {
                             imageUrl = imageObject.getParseFile("image").getUrl();
                             parseFiles.add(imgFile);
+                            edImages.add(imageUrl);
+
                         }
-                        edImages.add(imageUrl);
                     }
                     edImageAdapter.notifyDataSetChanged();
                 } else {
@@ -144,8 +154,14 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
 
     private void setupRecyclerView() {
         binding.rvEDImages.setAdapter(edImageAdapter);
-        linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        binding.rvEDImages.setLayoutManager(linearLayoutManager);
+        gridLayoutManager = new GridLayoutManager(getActivity(), 3);
+        binding.rvEDImages.setLayoutManager(gridLayoutManager);
+        edImageAdapter.setOnItemClickListener(new EDImageAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                onImageClickListener.onItemClick(edImages.get(position));
+            }
+        });
     }
 
     @Override
@@ -214,6 +230,9 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     }
 
     private void animateSlideShow() {
+        if (parseFiles.size() == 0) {
+            return;
+        }
         count = 0;
         lastSlide = slide_0;
         lastDownAnim = R.anim.transition_down_center;
