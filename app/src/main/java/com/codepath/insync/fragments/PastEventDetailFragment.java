@@ -4,11 +4,11 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.SurfaceTexture;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,13 +16,15 @@ import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.EDImageAdapter;
 import com.codepath.insync.databinding.FragmentPastEventDetailBinding;
-import com.codepath.insync.listeners.OnVideoPrepareListener;
+import com.codepath.insync.listeners.OnVideoUpdateListener;
 import com.codepath.insync.models.parse.Event;
-import com.codepath.insync.utils.Constants;
+import com.codepath.insync.models.parse.Music;
 import com.codepath.insync.utils.VideoPlayer;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -35,7 +37,7 @@ import java.util.List;
 
 
 public class PastEventDetailFragment extends Fragment implements TextureView.SurfaceTextureListener,
-        OnVideoPrepareListener
+        OnVideoUpdateListener
 {
     public static final String TAG = "PastEventDetailFragment";
     FragmentPastEventDetailBinding binding;
@@ -45,6 +47,16 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     EDImageAdapter edImageAdapter;
     LinearLayoutManager linearLayoutManager;
     VideoPlayer videoPlayer;
+    ImageView slide_0;
+    ImageView slide_1;
+    ImageView lastSlide;
+    int count = 0;
+    int lastDownAnim;
+    int lastUpAnim;
+
+    private Handler timerHandler = new Handler();
+
+
 
     public static PastEventDetailFragment newInstance(String eventId, String eventName, String eventHighlights) {
 
@@ -88,6 +100,9 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
 
         binding.tvHighlights.setSurfaceTextureListener(this);
         videoPlayer = new VideoPlayer(getContext(), this, binding.tvHighlights);
+        slide_0 = binding.slide1;
+        slide_1 = binding.slide2;
+
 
         setupRecyclerView();
         setupTouchListener();
@@ -130,10 +145,11 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
                         edImages.add(imageUrl);
                     }
                     edImageAdapter.notifyDataSetChanged();
-                    if (event.getHighlightsVideo() == null) {
-                        binding.pbMediaUpdate.setVisibility(View.GONE);
-                        animateImages();
-                    }
+
+                    binding.pbMediaUpdate.setVisibility(View.GONE);
+                    binding.ivHighlights.setBackgroundColor(
+                            ContextCompat.getColor(getContext(), android.R.color.transparent));
+                    animateSlideShow();
                 } else {
                     Log.e(TAG, "Error fetching event album");
                 }
@@ -151,7 +167,20 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         videoPlayer.setupPlayer(surface);
-        videoPlayer.playVideo(event.getHighlightsVideo());
+        Music.findMusic("party", new FindCallback<Music>() {
+            @Override
+            public void done(List<Music> musics, ParseException e) {
+                if (e == null) {
+
+                    String audioUrl = musics.get(0).getAudio().getUrl();
+                    videoPlayer.playVideo(audioUrl);
+                } else {
+                    Log.e(TAG, "Music lookup failed with error: "+e.getLocalizedMessage());
+
+                }
+            }
+        });
+
     }
 
     @Override
@@ -169,32 +198,82 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
 
     }
 
-    public void animateImages() {
-        AnimationDrawable anim = new AnimationDrawable();
-        for (ParseFile image : parseFiles) {
-            try {
-                Bitmap bitmap = BitmapFactory.decodeStream(image.getDataStream());
-                anim.addFrame(new BitmapDrawable(getResources(), bitmap), Constants.CLIP_DURATION*1000);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        binding.ivHighlights.setImageDrawable(anim);
-        anim.setEnterFadeDuration(Constants.FADE_DURATION);
-        anim.setExitFadeDuration(Constants.FADE_DURATION);
-        anim.setOneShot(false);
-        anim.start();
-    }
-
     @Override
     public void onPrepare() {
         binding.pbMediaUpdate.setVisibility(View.GONE);
-        binding.tvHighlights.setOpaque(true);
+        //binding.tvHighlights.setOpaque(true);
+    }
+
+    @Override
+    public void onComplete() {
+        stopAnimation();
     }
 
     @Override
     public void onPause() {
         videoPlayer.stopVideo();
+        stopAnimation();
         super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        videoPlayer.stopVideo();
+        stopAnimation();
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        videoPlayer.stopVideo();
+        stopAnimation();
+        super.onDestroy();
+    }
+
+    private void animateSlideShow() {
+        lastSlide = slide_0;
+        lastDownAnim = R.anim.transition_down_center;
+        lastUpAnim = R.anim.transition_up_center;
+        timerHandler.post(timer);
+    }
+
+    private Runnable timer = new Runnable() {
+        public void run() {
+            if (lastSlide == slide_0) {
+                slide_1.setImageResource(0);
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeStream(parseFiles.get((count) % (parseFiles.size())).getDataStream());
+                    slide_1.setImageBitmap(bitmap);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                lastDownAnim = lastDownAnim == R.anim.transition_down ? R.anim.transition_down_center : R.anim.transition_down;
+                slide_1.startAnimation(AnimationUtils
+                        .loadAnimation(getContext(),
+                                lastDownAnim));
+                lastSlide = slide_1;
+            } else {
+                slide_0.setImageResource(0);
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeStream(parseFiles.get((count) % (parseFiles.size())).getDataStream());
+                    slide_0.setImageBitmap(bitmap);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                lastUpAnim = lastUpAnim == R.anim.transition_up ? R.anim.transition_up_center : R.anim.transition_up;
+                slide_0.startAnimation(AnimationUtils
+                        .loadAnimation(getContext(),
+                                lastUpAnim));
+                lastSlide = slide_0;
+            }
+            count++;
+            timerHandler.postDelayed(timer, 4000);
+        }
+    };
+
+    public void stopAnimation() {
+        timerHandler.removeCallbacks(timer);
+        slide_0.clearAnimation();
+        slide_1.clearAnimation();
     }
 }

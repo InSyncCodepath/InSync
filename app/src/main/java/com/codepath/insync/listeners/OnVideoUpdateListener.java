@@ -1,6 +1,7 @@
 package com.codepath.insync.listeners;
 
 
-public interface OnVideoPrepareListener {
+public interface OnVideoUpdateListener {
     void onPrepare();
+    void onComplete();
 }

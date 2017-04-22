@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.PastEventItemBinding;
-import com.codepath.insync.listeners.OnVideoPrepareListener;
+import com.codepath.insync.listeners.OnVideoUpdateListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.utils.VideoPlayer;
 
@@ -21,7 +21,7 @@ import java.util.Date;
 
 
 public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.PastEventViewHolder> implements TextureView.SurfaceTextureListener,
-        OnVideoPrepareListener {
+        OnVideoUpdateListener {
     ArrayList<Event> events;
     Context context;
     EventDetailClickHandling listener;
@@ -101,4 +101,8 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
 
     }
 
+    @Override
+    public void onComplete() {
+
+    }
 }
