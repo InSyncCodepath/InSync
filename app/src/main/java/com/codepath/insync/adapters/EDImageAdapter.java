@@ -56,9 +56,11 @@ public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHold
                 super(itemView);
 
                 ButterKnife.bind(this, itemView);
+                if (width > 0) {
+                    ivEDImage.getLayoutParams().width = width;
+                    ivEDImage.getLayoutParams().height = width;
+                }
 
-                ivEDImage.getLayoutParams().width = width;
-                ivEDImage.getLayoutParams().height = width;
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     // Triggers click upwards to the adapter on click
@@ -87,7 +89,12 @@ public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHold
         mEDImages = edImages;
         mContext = context;
         resource = layout_resource;
-        width = (window_width - (8*4))/3;
+        if (window_width > 0) {
+            width = (window_width - (8*4))/3;
+        } else {
+            width = 0;
+        }
+
     }
 
     // Easy access to the context object in the recyclerview
@@ -131,7 +138,7 @@ public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHold
         return mEDImages.size();
     }
     
-    public ParseFile getItem(int position) {
+    public String getItem(int position) {
         return getItem(position);
     }
 
