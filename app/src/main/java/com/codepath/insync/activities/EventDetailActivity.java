@@ -13,6 +13,7 @@ import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -28,6 +29,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,12 +59,9 @@ import java.util.List;
 
 public class EventDetailActivity extends AppCompatActivity implements
         UpcomingEventDetailFragment.OnViewTouchListener,
-        ConfirmationFragment.UpdateDraftDialogListener
-        {
+        ConfirmationFragment.UpdateDraftDialogListener {
     private static final String TAG = "EventDetailActivity";
-
-
-            ActivityEventDetailBinding binding;
+    ActivityEventDetailBinding binding;
     CollapsingToolbarLayout collapsingToolbar;
     Event event;
     String eventId;
@@ -73,12 +72,11 @@ public class EventDetailActivity extends AppCompatActivity implements
     int numPending;
     int currentRbnId;
     MessageSendFragment messageSendFragment;
-            PastEventWaitFragment pastEventWaitFragment;
+    PastEventWaitFragment pastEventWaitFragment;
     UserEventRelation currentUserEvent;
     private boolean firstLoad;
     FragmentManager fragmentManager;
-    BroadcastReceiver messageReceiver;
-
+    RelativeLayout rlEventDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,37 +85,9 @@ public class EventDetailActivity extends AppCompatActivity implements
 
         fragmentManager = getSupportFragmentManager();
         firstLoad = true;
+        rlEventDetail = binding.rlEventDetail;
         processIntent();
         setupToolbar();
-    }
-
-    @Override
-    public void onPause() {
-        unregisterReceiver(messageReceiver);
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        IntentFilter filter = new IntentFilter("com.codepath.insync.Events");
-        messageReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getBooleanExtra("event_has_ended", false)) {
-                    String eventHighlights = intent.getStringExtra("event_highlights");
-                    if (eventHighlights != null) {
-                        event.setHighlightsVideo(eventHighlights);
-                    }
-
-                    loadViews();
-                    loadFragments();
-
-                }
-
-            }
-        };
-        registerReceiver(messageReceiver, filter);
     }
 
     @Override
@@ -398,7 +368,7 @@ public class EventDetailActivity extends AppCompatActivity implements
             setupUI(binding.clED);
         } else {
             PastEventDetailFragment pastEventDetailFragment =
-                    PastEventDetailFragment.newInstance(event.getObjectId(), event.getName(), event.getHighlightsVideo());
+                    PastEventDetailFragment.newInstance(event.getObjectId(), event.getName());
             ft.replace(R.id.flMessages, pastEventDetailFragment);
         }
 
@@ -426,20 +396,19 @@ public class EventDetailActivity extends AppCompatActivity implements
             pastEventWaitFragment = new PastEventWaitFragment();
             ft.replace(R.id.flMessages, pastEventWaitFragment);
             ft.commit();
+            CommonUtil.createSnackbar(rlEventDetail, this, "Your event has ended. The highlights are being created!");
             event.updateEvent(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
                     if (e == null) {
                         Log.d(TAG, "Past event status updated successfully!");
+                        loadViews();
+                        loadFragments();
                     } else {
                         Log.e(TAG, "Could not update past event flag");
                     }
                 }
             });
-            Toast.makeText(
-                    getApplicationContext(),
-                    "Your event has ended. Your highlights are being created!",
-                    Toast.LENGTH_SHORT).show();
         }
     }
 

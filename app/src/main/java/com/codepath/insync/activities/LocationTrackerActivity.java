@@ -11,7 +11,6 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -35,6 +34,7 @@ import com.codepath.insync.databinding.ActivityLocationTrackerBinding;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
+import com.codepath.insync.utils.CommonUtil;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -105,8 +105,7 @@ public class LocationTrackerActivity extends AppCompatActivity {
                 }
             });
         } else {
-            Snackbar.make(mapsContainer, "Could not locate guests at this time. Please try later.",
-                    Snackbar.LENGTH_SHORT).show();
+            CommonUtil.createSnackbar(mapsContainer, this, "Could not locate guests at this time. Please try later.");
             finish();
         }
 
@@ -248,8 +247,9 @@ public class LocationTrackerActivity extends AppCompatActivity {
 
                     }
                 } else {
-                    Snackbar.make(mapsContainer, "Could not locate attendees at this time. Please try later.",
-                            Snackbar.LENGTH_SHORT).show();
+                    CommonUtil.createSnackbar(
+                            mapsContainer, getApplicationContext(), "Could not locate guests at this time. Please try later.");
+
                     finish();
                 }
             }
@@ -283,8 +283,7 @@ public class LocationTrackerActivity extends AppCompatActivity {
         map = googleMap;
         if (map == null) {
             // Map is null
-            Snackbar.make(mapsContainer, "Could not locate attendees at this time. Please try later.",
-                    Snackbar.LENGTH_SHORT).show();
+            CommonUtil.createSnackbar(mapsContainer, this, "Could not locate guests at this time. Please try later.");
             finish();
         }
     }

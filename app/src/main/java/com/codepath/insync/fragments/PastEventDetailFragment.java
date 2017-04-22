@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,14 +57,13 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
 
 
 
-    public static PastEventDetailFragment newInstance(String eventId, String eventName, String eventHighlights) {
+    public static PastEventDetailFragment newInstance(String eventId, String eventName) {
 
         Bundle args = new Bundle();
 
         PastEventDetailFragment pastEventDetailFragment = new PastEventDetailFragment();
         args.putString("eventId", eventId);
         args.putString("eventName", eventName);
-        args.putString("eventHighlights", eventHighlights);
 
         pastEventDetailFragment.setArguments(args);
         return pastEventDetailFragment;
@@ -78,10 +76,6 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         event = new Event();
         event.setObjectId(getArguments().getString("eventId"));
         event.setName(getArguments().getString("eventName"));
-        String eventHighlights = getArguments().getString("eventHighlights");
-        if (eventHighlights != null && eventHighlights.trim().length() > 0) {
-            event.setHighlightsVideo(eventHighlights);
-        }
 
         parseFiles = new ArrayList<>();
         edImages = new ArrayList<>();
@@ -93,10 +87,6 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_past_event_detail, container, false);
-
-        if (event.getHighlightsVideo() == null || event.getHighlightsVideo().equals("")) {
-            binding.tvHighlights.setVisibility(View.INVISIBLE);
-        }
 
         binding.tvHighlights.setSurfaceTextureListener(this);
         videoPlayer = new VideoPlayer(getContext(), this, binding.tvHighlights);
@@ -145,17 +135,11 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
                         edImages.add(imageUrl);
                     }
                     edImageAdapter.notifyDataSetChanged();
-
-                    binding.pbMediaUpdate.setVisibility(View.GONE);
-                    binding.ivHighlights.setBackgroundColor(
-                            ContextCompat.getColor(getContext(), android.R.color.transparent));
-                    animateSlideShow();
                 } else {
                     Log.e(TAG, "Error fetching event album");
                 }
             }
         });
-
     }
 
     private void setupRecyclerView() {
@@ -171,7 +155,6 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
             @Override
             public void done(List<Music> musics, ParseException e) {
                 if (e == null) {
-
                     String audioUrl = musics.get(0).getAudio().getUrl();
                     videoPlayer.playVideo(audioUrl);
                 } else {
@@ -201,7 +184,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     @Override
     public void onPrepare() {
         binding.pbMediaUpdate.setVisibility(View.GONE);
-        //binding.tvHighlights.setOpaque(true);
+        animateSlideShow();
     }
 
     @Override
