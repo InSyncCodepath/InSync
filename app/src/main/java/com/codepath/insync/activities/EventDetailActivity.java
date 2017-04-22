@@ -20,6 +20,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -42,6 +45,7 @@ import com.codepath.insync.fragments.MessageSendFragment;
 import com.codepath.insync.fragments.PastEventDetailFragment;
 import com.codepath.insync.fragments.PastEventWaitFragment;
 import com.codepath.insync.fragments.UpcomingEventDetailFragment;
+import com.codepath.insync.listeners.OnImageClickListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
@@ -59,7 +63,8 @@ import java.util.List;
 
 public class EventDetailActivity extends AppCompatActivity implements
         UpcomingEventDetailFragment.OnViewTouchListener,
-        ConfirmationFragment.UpdateDraftDialogListener {
+        ConfirmationFragment.UpdateDraftDialogListener,
+        OnImageClickListener {
     private static final String TAG = "EventDetailActivity";
     ActivityEventDetailBinding binding;
     CollapsingToolbarLayout collapsingToolbar;
@@ -73,6 +78,7 @@ public class EventDetailActivity extends AppCompatActivity implements
     int currentRbnId;
     MessageSendFragment messageSendFragment;
     PastEventWaitFragment pastEventWaitFragment;
+    PastEventDetailFragment pastEventDetailFragment;
     UserEventRelation currentUserEvent;
     private boolean firstLoad;
     FragmentManager fragmentManager;
@@ -191,7 +197,7 @@ public class EventDetailActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                this.finish();
+                supportFinishAfterTransition();
                 return true;
             case R.id.action_track:
                 Intent intent = new Intent(EventDetailActivity.this, LocationTrackerActivity.class);
@@ -367,7 +373,7 @@ public class EventDetailActivity extends AppCompatActivity implements
             ft.replace(R.id.flMessageSend, messageSendFragment);
             setupUI(binding.clED);
         } else {
-            PastEventDetailFragment pastEventDetailFragment =
+            pastEventDetailFragment =
                     PastEventDetailFragment.newInstance(event.getObjectId(), event.getName());
             ft.replace(R.id.flMessages, pastEventDetailFragment);
         }
@@ -393,7 +399,7 @@ public class EventDetailActivity extends AppCompatActivity implements
             ft.remove(messageSendFragment);
             binding.flMessageSend.setVisibility(View.GONE);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-            pastEventWaitFragment = new PastEventWaitFragment();
+            pastEventWaitFragment = PastEventWaitFragment.newInstance(true, null);
             ft.replace(R.id.flMessages, pastEventWaitFragment);
             ft.commit();
             CommonUtil.createSnackbar(rlEventDetail, this, "Your event has ended. The highlights are being created!");
@@ -412,4 +418,31 @@ public class EventDetailActivity extends AppCompatActivity implements
         }
     }
 
+    @Override
+    public void onItemClick(String imageUrl) {
+        Transition changeTransform = TransitionInflater.from(this).
+                inflateTransition(R.transition.change_image_transform);
+        binding.flMessageSend.setVisibility(View.GONE);
+        Transition explodeTransform = TransitionInflater.from(this).inflateTransition(android.R.transition.explode);
+        Transition slideBottom = TransitionInflater.from(this).inflateTransition(android.R.transition.slide_bottom);
+        pastEventWaitFragment = PastEventWaitFragment.newInstance(false, imageUrl);
+        // Setup exit transition on first fragment
+        pastEventDetailFragment.setSharedElementReturnTransition(changeTransform);
+        pastEventDetailFragment.setExitTransition(explodeTransform);
+        binding.abEventDetail.setExpanded(false, true);
+        // Setup enter transition on second fragment
+        pastEventWaitFragment.setSharedElementEnterTransition(changeTransform);
+        pastEventWaitFragment.setEnterTransition(slideBottom);
+
+        // Find the shared element (in Fragment A)
+        ImageView ivGalleryImage = (ImageView) findViewById(R.id.ivEDImage);
+
+        // Add second fragment by replacing first
+        FragmentTransaction ft = fragmentManager.beginTransaction()
+                .replace(R.id.flMessages, pastEventWaitFragment)
+                .addToBackStack("transaction")
+                .addSharedElement(ivGalleryImage, "galleryImage");
+        // Apply the transaction
+        ft.commit();
+    }
 }

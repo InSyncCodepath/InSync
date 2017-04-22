@@ -59,7 +59,10 @@ public class VideoPlayer implements MediaPlayer.OnBufferingUpdateListener,
             mediaPlayer.reset();
             mediaPlayer.release();
             mediaPlayer = null;
-            mcontroller.hide();
+            if (mcontroller != null) {
+                mcontroller.hide();
+            }
+
         }
     }
 
@@ -75,7 +78,6 @@ public class VideoPlayer implements MediaPlayer.OnBufferingUpdateListener,
     @Override
     public void onCompletion(MediaPlayer mp) {
         Log.d("VideoPlayer", "Completed");
-        mp.reset();
         mp.seekTo(0);
         videoUpdateListener.onComplete();
 
