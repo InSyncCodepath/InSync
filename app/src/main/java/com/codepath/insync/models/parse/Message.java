@@ -16,6 +16,7 @@ public class Message extends ParseObject {
     public static final String MEDIA_KEY = "media";
     public static final String CREATED_AT_KEY = "createdAt";
 
+
     public User getSender() {
         return new User(getParseUser(SENDER_KEY));
     }

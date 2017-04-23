@@ -1,6 +1,8 @@
 package com.codepath.insync.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +14,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
 import com.codepath.insync.models.parse.Message;
-import com.codepath.insync.models.parse.User;
+import com.codepath.insync.utils.Camera;
 import com.codepath.insync.utils.CommonUtil;
 import com.parse.ParseFile;
+
+
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
@@ -22,6 +28,7 @@ import butterknife.ButterKnife;
 
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    ParseFile parseFile;
     // view types
     private final int LEFT = 0, RIGHT = 1;
 
@@ -133,9 +140,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         // Get the data model based on position
         Message message = mMessages.get(position);
-        ParseFile mediaImage = message.getMedia();
         ParseFile profileImage = message.getSender().getProfileImage();
 
+        Bitmap mediaBitmap = message.getMediaImageBitmap();
         String messageTime = CommonUtil.getTimeInFormat(message.getCreatedAt());
 
         // Set item views based on your views and data model
@@ -158,13 +165,16 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             .into(viewLeft.ivProfileLeft);
                 }
 
-                if (mediaImage != null) {
+                // populate the message media if it exists
+//                if (mediaBitmap != null) {
+//                    viewLeft.ivMessageRight.setVisibility(View.VISIBLE);
+//                    viewLeft.ivMessageRight.setImageBitmap(mediaBitmap);
+//                } else {
+//                    viewLeft.ivMessageRight.setVisibility(View.GONE);
+//                }
+                if (mediaBitmap != null) {
                     viewLeft.ivPicture.setVisibility(View.VISIBLE);
-                    Glide.with(mContext)
-                            .load(mediaImage.getUrl())
-                            .placeholder(R.drawable.ic_camera_alt_white_48px)
-                            .crossFade()
-                            .into(viewLeft.ivPicture);
+                    viewLeft.ivPicture.setImageBitmap(mediaBitmap);
                 } else {
                     viewLeft.ivPicture.setVisibility(View.GONE);
                 }
@@ -188,13 +198,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             .into(viewRight.ivProfileRight);
                 }
 
-                if (mediaImage != null) {
+                // populate the message media if it exists
+                if (mediaBitmap != null) {
                     viewRight.ivPicture.setVisibility(View.VISIBLE);
-                    Glide.with(mContext)
-                            .load(mediaImage.getUrl())
-                            .placeholder(R.drawable.ic_camera_alt_white_48px)
-                            .crossFade()
-                            .into(viewRight.ivPicture);
+                    viewRight.ivPicture.setImageBitmap(mediaBitmap);
                 } else {
                     viewRight.ivPicture.setVisibility(View.GONE);
                 }
@@ -230,11 +237,19 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemViewType(int position) {
         int newPosition = getItemCount() - position - 1;
-        User sender = mMessages.get(newPosition).getSender();
-        if (sender.getObjectId().equals(User.getCurrentUser().getObjectId())) {
-            return RIGHT;
-        } else {
-            return LEFT;
+        return (newPosition % 2 == 0) ? LEFT : RIGHT;
+    }
+
+    public void addCameraImage(String filePath) {
+        File file = new File(filePath);
+        parseFile = new ParseFile(file);
+    }
+
+    public void addGalleryImage(Uri fileUri) {
+        try {
+            parseFile = new ParseFile(Camera.readBytes(getContext(), fileUri));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
