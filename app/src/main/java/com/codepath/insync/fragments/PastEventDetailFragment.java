@@ -63,13 +63,14 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
 
 
 
-    public static PastEventDetailFragment newInstance(String eventId, String eventName) {
+    public static PastEventDetailFragment newInstance(String eventId, String eventName, String theme) {
 
         Bundle args = new Bundle();
 
         PastEventDetailFragment pastEventDetailFragment = new PastEventDetailFragment();
         args.putString("eventId", eventId);
         args.putString("eventName", eventName);
+        args.putString("theme", theme);
 
         pastEventDetailFragment.setArguments(args);
         return pastEventDetailFragment;
@@ -83,6 +84,10 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         event = new Event();
         event.setObjectId(getArguments().getString("eventId"));
         event.setName(getArguments().getString("eventName"));
+        String theme = getArguments().getString("theme");
+        if (theme != null) {
+            event.setTheme(theme);
+        }
 
         parseFiles = new ArrayList<>();
         edImages = new ArrayList<>();
@@ -189,7 +194,8 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         videoPlayer.setupPlayer(surface);
-        Music.findMusic("party", new FindCallback<Music>() {
+        String theme = event.getTheme() == null ? "default": event.getTheme();
+        Music.findMusic(theme, new FindCallback<Music>() {
             @Override
             public void done(List<Music> musics, ParseException e) {
                 if (e == null) {

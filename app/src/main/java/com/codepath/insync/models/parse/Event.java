@@ -17,6 +17,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.SaveCallback;
 
+import static android.R.attr.description;
+
 
 @ParseClassName("Event")
 public class Event extends ParseObject {
@@ -29,8 +31,8 @@ public class Event extends ParseObject {
     public static final String PROFILE_IMAGE_KEY = "profileImage";
     public static final String MESSAGE_RELATION_KEY = "messageRelation";
     public static final String HIGHLIGHTS_VIDEO_KEY = "highlightsVideo";
-    public static final String OBJECT_ID_KEY = "objectId";
     public static final String HAS_ENDED_KEY = "hasEnded";
+    public static final String THEME_KEY = "theme";
 
     public String getName() {
         return getString(NAME_KEY);
@@ -66,6 +68,10 @@ public class Event extends ParseObject {
 
     public String getHighlightsVideo() {
         return getString(HIGHLIGHTS_VIDEO_KEY);
+    }
+
+    public String getTheme() {
+        return getString(THEME_KEY);
     }
 
     public boolean hasEnded() {
@@ -110,6 +116,11 @@ public class Event extends ParseObject {
 
     public void setHasEnded(boolean hasEnded) {
         put(HAS_ENDED_KEY, hasEnded);
+    }
+
+
+    public void setTheme(String theme) {
+        put(THEME_KEY, theme);
     }
 
     public Bitmap getProfileImageBitmap() {
@@ -164,7 +175,7 @@ public class Event extends ParseObject {
 
     }
 
-    public Event(String eventName, String address, Date startDate, Date endDate, String description, ParseGeoPoint location, ParseFile profilePic){
+    public Event(String eventName, String address, Date startDate, Date endDate, String description, ParseGeoPoint location, ParseFile profilePic, String theme){
         this.setName(eventName);
         this.setAddress(address);
         this.setStartDate(startDate);
@@ -172,6 +183,9 @@ public class Event extends ParseObject {
         this.setDescription(description);
         this.setLocation(location);
         this.setProfileImage(profilePic);
+        if (theme != null) {
+            setTheme(theme);
+        }
 
     }
 

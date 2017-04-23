@@ -478,7 +478,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
 
     private void savetoParse() {
         //final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint);
-        final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint, parseFile);
+        final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint, parseFile, null);
         event.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

@@ -380,7 +380,7 @@ public class EventDetailActivity extends AppCompatActivity implements
         } else {
             binding.flMessageSend.setVisibility(View.GONE);
             pastEventDetailFragment =
-                    PastEventDetailFragment.newInstance(event.getObjectId(), event.getName());
+                    PastEventDetailFragment.newInstance(event.getObjectId(), event.getName(), event.getTheme());
             ft.replace(R.id.flMessages, pastEventDetailFragment);
         }
 

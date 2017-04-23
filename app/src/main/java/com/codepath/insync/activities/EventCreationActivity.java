@@ -404,7 +404,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
             Toast.makeText(EventCreationActivity.this, "Oops! Looks like you forgot to add guests", Toast.LENGTH_LONG).show();
         } else  {
 //        final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint);
-            final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint, parseFile);
+            final Event event = new Event(eventName, location.getText().toString(), eventStartDate.getTime(), eventStartDate.getTime(), eventDescription, geoPoint, parseFile, null);
             event.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
