@@ -20,12 +20,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.PastEventViewHolder> implements TextureView.SurfaceTextureListener,
-        OnVideoUpdateListener {
+public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.PastEventViewHolder> implements TextureView.SurfaceTextureListener{
     ArrayList<Event> events;
     Context context;
     EventDetailClickHandling listener;
-    VideoPlayer videoPlayer;
     @Override
     public PastEventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.
@@ -41,7 +39,6 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
         final Event event = events.get(position);
         Date now = new Date();
         final boolean isCurrent = event.getEndDate().compareTo(now) >= 0;
-        videoPlayer = new VideoPlayer(context, this, holder.binding.highlightsVideo);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,16 +90,6 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
 
     @Override
     public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
-
-    }
-
-    @Override
-    public void onPrepare() {
-
-    }
-
-    @Override
-    public void onComplete() {
 
     }
 }

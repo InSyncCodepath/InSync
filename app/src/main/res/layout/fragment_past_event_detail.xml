@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:background="@color/wild_sand">
         <FrameLayout
             android:id="@+id/ivHighlights"
             android:layout_width="match_parent"
             android:layout_margin="@dimen/margin8"
             android:layout_height="200dp"
-            android:background="@color/primary_dark">
+            android:background="@color/primary_light"
+            android:elevation="8dp">
             <ImageView
                 android:id="@+id/slide_1"
                 android:layout_gravity="center_vertical"
@@ -22,22 +24,40 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop" />
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabEDPlay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_play"
+                />
+            <TextView
+                android:id="@+id/tvEDWarning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:text="Hightlights are not available for this event!"
+                android:textColor="@color/wild_sand"/>
+            <ProgressBar
+                android:id="@+id/pbMediaUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+
+                />
         </FrameLayout>
+
+
         <TextureView
             android:id="@+id/tvHighlights"
             android:layout_width="match_parent"
             android:layout_margin="@dimen/margin8"
             android:layout_height="200dp"
             />
-        <ProgressBar
-            android:id="@+id/pbMediaUpdate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/margin64"
-            android:visibility="gone"
 
-            />
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvEDImages"
             android:layout_width="wrap_content"

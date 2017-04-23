@@ -258,7 +258,7 @@ public class EventDetailActivity extends AppCompatActivity implements
         if (profileImage != null) {
             Glide.with(this)
                     .load(profileImage.getUrl())
-                    .placeholder(R.drawable.ic_attach_file_white_48px)
+                    .placeholder(R.drawable.ic_camera_alt_white_48px)
                     .crossFade()
                     .into(binding.ivEDProfile);
         }
@@ -378,6 +378,7 @@ public class EventDetailActivity extends AppCompatActivity implements
             ft.replace(R.id.flMessageSend, messageSendFragment);
             setupUI(binding.clED);
         } else {
+            binding.flMessageSend.setVisibility(View.GONE);
             pastEventDetailFragment =
                     PastEventDetailFragment.newInstance(event.getObjectId(), event.getName());
             ft.replace(R.id.flMessages, pastEventDetailFragment);
