@@ -23,6 +23,8 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.SaveCallback;
 
+import java.util.Date;
+
 
 public class MessageSendFragment extends Fragment {
     private static String TAG = "MessageSendFragment";
@@ -89,7 +91,7 @@ public class MessageSendFragment extends Fragment {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-
+                    messageChangeListener.onFocused();
                 }
             }
         });
@@ -99,6 +101,7 @@ public class MessageSendFragment extends Fragment {
         final Message message = new Message();
         message.setMedia(parseFile);
         message.setSender(User.getCurrentUser());
+        messageChangeListener.onMessageCreated(message);
         message.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -133,7 +136,7 @@ public class MessageSendFragment extends Fragment {
         final Message message = new Message();
         message.setBody(data);
         message.setSender(User.getCurrentUser());
-
+        messageChangeListener.onMessageCreated(message);
         message.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

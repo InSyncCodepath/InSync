@@ -126,6 +126,14 @@ public class UpcomingEventDetailFragment extends Fragment {
 
     }
 
+    public void updateMessage(Message message) {
+        messages.add(0, message);
+        messageAdapter.notifyItemInserted(0);
+    }
+
+    public void updateScroll() {
+        //linearLayoutManager.scrollToPosition(0);
+    }
     private void refreshMessages() {
         // Construct query to execute
         ParseQuery<Message> parseQuery = event.getMessageRelation().getQuery();
@@ -150,12 +158,7 @@ public class UpcomingEventDetailFragment extends Fragment {
         int newSize = newTweets.size();
         tweetsArrayAdapter.notifyItemRangeInserted(curSize, newSize);
          */
-                    // Scroll to the bottom of the list on initial load 
-                    if (mFirstLoad) {
-                        Log.d(TAG, "Loading messages for the first time.");
-                        linearLayoutManager.scrollToPosition(0);
-                        mFirstLoad = false;
-                    }
+                    linearLayoutManager.scrollToPosition(0);
                 } else {
                     Log.e(TAG, "Error Loading Messages" + e);
                 }
