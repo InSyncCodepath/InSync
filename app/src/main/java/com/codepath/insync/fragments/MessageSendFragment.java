@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +23,6 @@ import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.utils.Camera;
-import com.github.clans.fab.FloatingActionButton;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.SaveCallback;
@@ -37,7 +38,6 @@ public class MessageSendFragment extends Fragment {
     FragmentMessageSendBinding binding;
     Event event;
     ParseFile parseFile;
-    com.github.clans.fab.FloatingActionButton btnCamera, btnGallery;
     public static final int REQUEST_CAMERA_ACTIVITY = 1027;
     public static final int SELECT_PICTURE = 1028;
     Context context;
@@ -64,27 +64,7 @@ public class MessageSendFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        btnCamera = (FloatingActionButton) view.findViewById(R.id.menuItemCamera);
-        btnGallery = (FloatingActionButton) view.findViewById(R.id.menuItemGallery);
         context = getContext();
-
-        btnCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), CameraActivity.class);
-                startActivityForResult(intent, REQUEST_CAMERA_ACTIVITY);
-            }
-        });
-
-        btnGallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(Intent.createChooser(intent,
-                        "Select Picture"), SELECT_PICTURE);
-            }
-        });
     }
 
     @Override
@@ -94,7 +74,55 @@ public class MessageSendFragment extends Fragment {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_message_send, container, false);
         setupMessagePosting();
+        setupClickListeners();
+        setupTextListener();
         return binding.getRoot();
+    }
+
+    private void setupTextListener() {
+        binding.fabEDSend.setVisibility(View.GONE);
+        binding.etEDMessage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (count == 0) {
+                    binding.fabEDSend.setVisibility(View.GONE);
+                    binding.floatingActionMenu.setVisibility(View.VISIBLE);
+                } else {
+                    binding.fabEDSend.setVisibility(View.VISIBLE);
+                    binding.floatingActionMenu.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void setupClickListeners() {
+        binding.menuItemCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), CameraActivity.class);
+                startActivityForResult(intent, REQUEST_CAMERA_ACTIVITY);
+            }
+        });
+
+        binding.menuItemGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(Intent.createChooser(intent,
+                        "Select Picture"), SELECT_PICTURE);
+            }
+        });
     }
 
     void setupImagePosting(ParseFile parseFile) {
