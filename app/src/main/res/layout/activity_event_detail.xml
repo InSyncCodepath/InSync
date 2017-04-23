@@ -28,6 +28,7 @@
                     android:id="@+id/ctlEventDetail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:elevation="16dp"
                     android:fitsSystemWindows="true"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -41,9 +42,10 @@
                         android:id="@+id/rlToolbar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@android:color/white"
+                        android:background="@drawable/theme_gradient"
                         android:fitsSystemWindows="true"
-                        app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed">
+                        app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed"
+                        >
 
                         <ImageView
                             android:id="@+id/ivEDProfile"

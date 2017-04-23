@@ -4,11 +4,13 @@ import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.widget.MediaController;
 
+import com.codepath.insync.R;
 import com.codepath.insync.listeners.OnVideoUpdateListener;
 
 public class VideoPlayer implements MediaPlayer.OnBufferingUpdateListener,
@@ -33,7 +35,7 @@ public class VideoPlayer implements MediaPlayer.OnBufferingUpdateListener,
         mediaPlayer.setSurface(new Surface(surface));
     }
 
-    public void playVideo(String videoUrl) {
+    public void prepareVideo(String videoUrl) {
         if (mediaPlayer != null) {
             try {
                 mediaPlayer.setDataSource(videoUrl);
@@ -46,10 +48,20 @@ public class VideoPlayer implements MediaPlayer.OnBufferingUpdateListener,
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 mediaPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT);
                 mcontroller = new MediaController(mContext);
+                mcontroller.setBackgroundColor(ContextCompat.getColor(mContext, R.color.accent));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void playVideo() {
+        start();
+
+        mcontroller.setMediaPlayer(this);
+        mcontroller.setAnchorView(controllerAnchorView);
+        mcontroller.setEnabled(true);
+        mcontroller.show(Constants.CONTROL_SHOW_DURATION);
     }
 
     public void stopVideo() {
@@ -86,12 +98,6 @@ public class VideoPlayer implements MediaPlayer.OnBufferingUpdateListener,
     @Override
     public void onPrepared(MediaPlayer mp) {
         videoUpdateListener.onPrepare();
-        start();
-
-        mcontroller.setMediaPlayer(this);
-        mcontroller.setAnchorView(controllerAnchorView);
-        mcontroller.setEnabled(true);
-        mcontroller.show(Constants.CONTROL_SHOW_DURATION);
     }
 
     @Override
@@ -101,16 +107,15 @@ public class VideoPlayer implements MediaPlayer.OnBufferingUpdateListener,
 
     @Override
     public void start() {
-
         mediaPlayer.start();
-
+        videoUpdateListener.onStartVideo();
     }
 
     @Override
     public void pause() {
 
         mediaPlayer.pause();
-        videoUpdateListener.onComplete();
+        videoUpdateListener.onPauseVideo();
     }
 
     @Override

@@ -56,6 +56,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     int lastDownAnim;
     int lastUpAnim;
     OnImageClickListener onImageClickListener;
+    boolean isPlayerEnabled;
 
     private Handler timerHandler = new Handler();
 
@@ -77,6 +78,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        isPlayerEnabled = false;
         event = new Event();
         event.setObjectId(getArguments().getString("eventId"));
         event.setName(getArguments().getString("eventName"));
@@ -104,15 +106,30 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
 
 
         setupRecyclerView();
-        setupTouchListener();
+        setupClickListener();
         return binding.getRoot();
+    }
+
+    private void setupClickListener() {
+        setupTouchListener();
+        binding.fabEDPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                videoPlayer.playVideo();
+                count = 0;
+                lastSlide = slide_0;
+                lastDownAnim = R.anim.transition_down_center;
+                lastUpAnim = R.anim.transition_up_center;
+                binding.fabEDPlay.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void setupTouchListener() {
         binding.tvHighlights.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
 
-                if (event.getAction() == MotionEvent.ACTION_UP){
+                if (event.getAction() == MotionEvent.ACTION_UP && isPlayerEnabled){
                     videoPlayer.showController();
                 }
                 return true;
@@ -172,7 +189,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
             public void done(List<Music> musics, ParseException e) {
                 if (e == null) {
                     String audioUrl = musics.get(0).getAudio().getUrl();
-                    videoPlayer.playVideo(audioUrl);
+                    videoPlayer.prepareVideo(audioUrl);
                 } else {
                     Log.e(TAG, "Music lookup failed with error: "+e.getLocalizedMessage());
 
@@ -200,11 +217,47 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     @Override
     public void onPrepare() {
         binding.pbMediaUpdate.setVisibility(View.GONE);
+        if (parseFiles.size() <= 0) {
+            binding.tvEDWarning.setVisibility(View.VISIBLE);
+            return;
+        }
+        binding.fabEDPlay.setVisibility(View.VISIBLE);
+
+        try {
+            Bitmap bitmap = BitmapFactory.decodeStream(parseFiles.get(0).getDataStream());
+            slide_1.setImageBitmap(bitmap);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onStartVideo() {
+        isPlayerEnabled = true;
         animateSlideShow();
     }
 
     @Override
+    public void onPauseVideo() {
+        stopAnimation();
+    }
+
+    @Override
     public void onComplete() {
+        if (parseFiles.size() <= 0) {
+            binding.tvEDWarning.setVisibility(View.VISIBLE);
+            return;
+        }
+        binding.fabEDPlay.setVisibility(View.VISIBLE);
+
+        try {
+            Bitmap bitmap = BitmapFactory.decodeStream(parseFiles.get(0).getDataStream());
+            slide_1.setImageBitmap(bitmap);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        isPlayerEnabled = false;
         stopAnimation();
     }
 
@@ -233,10 +286,6 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         if (parseFiles.size() == 0) {
             return;
         }
-        count = 0;
-        lastSlide = slide_0;
-        lastDownAnim = R.anim.transition_down_center;
-        lastUpAnim = R.anim.transition_up_center;
         timerHandler.post(timer);
     }
 

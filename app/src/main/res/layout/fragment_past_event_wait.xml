@@ -4,7 +4,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/vertical_gradient">
+        android:background="@drawable/theme_gradient">
 
         <ProgressBar
             android:id="@+id/pbMediaUpdate"

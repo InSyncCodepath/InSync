@@ -120,11 +120,11 @@ public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHold
 
         // Get the data model based on position
         String imageUrl = mEDImages.get(position);
-        holder.ivEDImage.setImageResource(R.drawable.ic_profile);
+        holder.ivEDImage.setImageResource(R.drawable.ic_camera_alt_white_48px);
         if (imageUrl != null) {
             Glide.with(mContext)
                     .load(imageUrl)
-                    .placeholder(R.drawable.ic_profile)
+                    .placeholder(R.drawable.ic_camera_alt_white_48px)
                     .crossFade()
                     .bitmapTransform(new RoundedCornersTransformation(getApplicationContext(), 4, 0))
                     .into(holder.ivEDImage);

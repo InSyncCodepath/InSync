@@ -6,6 +6,7 @@
     xmlns:card_view="http://schemas.android.com/..."
     android:layout_margin="@dimen/margin8"
     card_view:cardcornerradius="4dp"
+    app:cardElevation="8dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     <ImageView
