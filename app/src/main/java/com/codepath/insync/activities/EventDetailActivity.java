@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -43,9 +45,11 @@ import com.codepath.insync.fragments.PastEventDetailFragment;
 import com.codepath.insync.fragments.PastEventWaitFragment;
 import com.codepath.insync.fragments.UpcomingEventDetailFragment;
 import com.codepath.insync.listeners.OnImageClickListener;
+import com.codepath.insync.listeners.OnMessageChangeListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
+import com.codepath.insync.utils.Camera;
 import com.codepath.insync.utils.Constants;
 import com.codepath.insync.utils.CommonUtil;
 import com.parse.FindCallback;
@@ -55,6 +59,8 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.SaveCallback;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,8 +68,13 @@ import java.util.List;
 public class EventDetailActivity extends AppCompatActivity implements
         UpcomingEventDetailFragment.OnViewTouchListener,
         ConfirmationFragment.UpdateDraftDialogListener,
-        OnImageClickListener{
+        OnImageClickListener,
+        OnMessageChangeListener{
+
     private static final String TAG = "EventDetailActivity";
+    private static final int REQUEST_CAMERA_ACTIVITY = 1027;
+    private static final int SELECT_PICTURE = 1028;
+
     ActivityEventDetailBinding binding;
     CollapsingToolbarLayout collapsingToolbar;
     Event event;
@@ -91,6 +102,8 @@ public class EventDetailActivity extends AppCompatActivity implements
         fragmentManager = getSupportFragmentManager();
         firstLoad = true;
         rlEventDetail = binding.rlEventDetail;
+        binding.fabEDSend.setVisibility(View.GONE);
+
         processIntent();
         setupToolbar();
     }
@@ -110,8 +123,6 @@ public class EventDetailActivity extends AppCompatActivity implements
         }
         return super.onCreateOptionsMenu(menu);
     }
-
-
 
     private void processIntent() {
         Intent intent = getIntent();
@@ -134,6 +145,50 @@ public class EventDetailActivity extends AppCompatActivity implements
             }
         });
 
+    }
+
+    private void setupChatClickListeners() {
+        binding.fabEDSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                messageSendFragment.setupMessagePosting();
+            }
+        });
+        binding.fabEDCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EventDetailActivity.this, CameraActivity.class);
+                startActivityForResult(intent, REQUEST_CAMERA_ACTIVITY);
+                binding.famEDMedia.toggle(true);
+            }
+        });
+
+        binding.fabEDGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(Intent.createChooser(intent,
+                        "Select Picture"), SELECT_PICTURE);
+                binding.famEDMedia.toggle(true);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CAMERA_ACTIVITY && resultCode == RESULT_OK) {
+            String filePath = data.getStringExtra("filePath");
+            File file = new File(filePath);
+            messageSendFragment.setupImagePosting(new ParseFile(file));
+        } else if (requestCode == SELECT_PICTURE && resultCode == RESULT_OK) {
+            Uri selectedImageUri = data.getData();
+            try {
+                messageSendFragment.setupImagePosting(new ParseFile(Camera.readBytes(this, selectedImageUri)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void findAttendance() {
@@ -196,7 +251,7 @@ public class EventDetailActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                supportFinishAfterTransition();
+                finish();
                 return true;
             case R.id.action_track:
                 Intent intent = new Intent(EventDetailActivity.this, LocationTrackerActivity.class);
@@ -375,8 +430,10 @@ public class EventDetailActivity extends AppCompatActivity implements
             messageSendFragment = MessageSendFragment.newInstance(eventId);
             ft.replace(R.id.flMessageSend, messageSendFragment);
             setupUI(binding.clED);
+            setupChatClickListeners();
         } else {
             binding.flMessageSend.setVisibility(View.GONE);
+            binding.famEDMedia.setVisibility(View.GONE);
             pastEventDetailFragment =
                     PastEventDetailFragment.newInstance(event.getObjectId(), event.getName(), event.getTheme());
             ft.replace(R.id.flMessages, pastEventDetailFragment);
@@ -448,5 +505,17 @@ public class EventDetailActivity extends AppCompatActivity implements
                 .addSharedElement(ivGalleryImage, "galleryImage");
         // Apply the transaction
         ft.commit();
+    }
+
+    @Override
+    public void onTextChange(int count) {
+        Log.d(TAG, "Count: "+count);
+        if (count == 0) {
+            binding.famEDMedia.setVisibility(View.VISIBLE);
+            binding.fabEDSend.setVisibility(View.GONE);
+        } else {
+            binding.famEDMedia.setVisibility(View.GONE);
+            binding.fabEDSend.setVisibility(View.VISIBLE);
+        }
     }
 }

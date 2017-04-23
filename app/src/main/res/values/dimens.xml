@@ -30,4 +30,5 @@
     <dimen name="edittext_margin_top">10dp</dimen>
     <dimen name="spinner_margin_left">10dp</dimen>
     <dimen name="card_margin_top">40dp</dimen>
+    <dimen name="margin4">4dp</dimen>
 </resources>
