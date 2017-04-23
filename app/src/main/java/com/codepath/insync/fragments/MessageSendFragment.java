@@ -97,10 +97,11 @@ public class MessageSendFragment extends Fragment {
         });
     }
 
-    public void setupImagePosting(ParseFile parseFile) {
+    public void setupImagePosting(String messageBody, ParseFile parseFile) {
         final Message message = new Message();
         message.setMedia(parseFile);
         message.setSender(User.getCurrentUser());
+        message.setBody(messageBody);
         messageChangeListener.onMessageCreated(message);
         message.saveInBackground(new SaveCallback() {
             @Override

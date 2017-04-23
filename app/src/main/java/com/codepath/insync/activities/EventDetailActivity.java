@@ -180,12 +180,14 @@ public class EventDetailActivity extends AppCompatActivity implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CAMERA_ACTIVITY && resultCode == RESULT_OK) {
             String filePath = data.getStringExtra("filePath");
+            String message = data.getStringExtra("message");
             File file = new File(filePath);
-            messageSendFragment.setupImagePosting(new ParseFile(file));
+            messageSendFragment.setupImagePosting(message, new ParseFile(file));
         } else if (requestCode == SELECT_PICTURE && resultCode == RESULT_OK) {
             Uri selectedImageUri = data.getData();
+            String message = data.getStringExtra("message");
             try {
-                messageSendFragment.setupImagePosting(new ParseFile(Camera.readBytes(this, selectedImageUri)));
+                messageSendFragment.setupImagePosting(message, new ParseFile(Camera.readBytes(this, selectedImageUri)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
