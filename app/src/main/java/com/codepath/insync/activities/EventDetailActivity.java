@@ -1,24 +1,21 @@
 package com.codepath.insync.activities;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.Transition;
@@ -35,7 +32,6 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepath.insync.Manifest;
@@ -46,7 +42,6 @@ import com.codepath.insync.fragments.MessageSendFragment;
 import com.codepath.insync.fragments.PastEventDetailFragment;
 import com.codepath.insync.fragments.PastEventWaitFragment;
 import com.codepath.insync.fragments.UpcomingEventDetailFragment;
-import com.codepath.insync.interfaces.ImageInterface;
 import com.codepath.insync.listeners.OnImageClickListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
@@ -67,8 +62,7 @@ import java.util.List;
 public class EventDetailActivity extends AppCompatActivity implements
         UpcomingEventDetailFragment.OnViewTouchListener,
         ConfirmationFragment.UpdateDraftDialogListener,
-        OnImageClickListener,
-        ImageInterface{
+        OnImageClickListener{
     private static final String TAG = "EventDetailActivity";
     ActivityEventDetailBinding binding;
     CollapsingToolbarLayout collapsingToolbar;
@@ -276,7 +270,11 @@ public class EventDetailActivity extends AppCompatActivity implements
         collapsingToolbar = binding.ctlEventDetail;
 
         setSupportActionBar(binding.tbEventDetail);
-        getSupportActionBar().setTitle("");
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle("");
+        }
+
 
         /*Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
                 R.drawable.palette);
@@ -374,7 +372,7 @@ public class EventDetailActivity extends AppCompatActivity implements
             // Load current and upcoming event detail
             upcomingEventDetailFragment = UpcomingEventDetailFragment.newInstance(eventId);
             ft.replace(R.id.flMessages, upcomingEventDetailFragment);
-            messageSendFragment = MessageSendFragment.newInstance(this, eventId);
+            messageSendFragment = MessageSendFragment.newInstance(eventId);
             ft.replace(R.id.flMessageSend, messageSendFragment);
             setupUI(binding.clED);
         } else {
@@ -450,15 +448,5 @@ public class EventDetailActivity extends AppCompatActivity implements
                 .addSharedElement(ivGalleryImage, "galleryImage");
         // Apply the transaction
         ft.commit();
-    }
-
-    @Override
-    public void cameraImage(String filePath) {
-        upcomingEventDetailFragment.addCameraImage(filePath);
-    }
-
-    @Override
-    public void galleryImage(Uri fileUri) {
-        upcomingEventDetailFragment.addGalleryImage(fileUri);
     }
 }

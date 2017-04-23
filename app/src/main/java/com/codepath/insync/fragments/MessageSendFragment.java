@@ -14,30 +14,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
 import com.codepath.insync.activities.CameraActivity;
-import com.codepath.insync.activities.EventCreationActivityNoAnim;
 import com.codepath.insync.databinding.FragmentMessageSendBinding;
-import com.codepath.insync.interfaces.ImageInterface;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.utils.Camera;
 import com.github.clans.fab.FloatingActionButton;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseGeoPoint;
 import com.parse.SaveCallback;
 
 import java.io.File;
 import java.io.IOException;
 
-import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 
@@ -50,14 +41,12 @@ public class MessageSendFragment extends Fragment {
     public static final int REQUEST_CAMERA_ACTIVITY = 1027;
     public static final int SELECT_PICTURE = 1028;
     Context context;
-    ImageInterface imageInterfaceListener;
 
-    public static MessageSendFragment newInstance(ImageInterface imageInterface, String eventId) {
+    public static MessageSendFragment newInstance(String eventId) {
 
         Bundle args = new Bundle();
 
         MessageSendFragment messageSendFragment = new MessageSendFragment();
-        messageSendFragment.imageInterfaceListener = imageInterface;
         args.putString("eventId", eventId);
 
         messageSendFragment.setArguments(args);
@@ -182,30 +171,17 @@ public class MessageSendFragment extends Fragment {
         if (requestCode == REQUEST_CAMERA_ACTIVITY) {
             if (resultCode == RESULT_OK) {
                 String filePath = data.getStringExtra("filePath");
-//                Uri newUri = Uri.parse(filePath);
                 File file = new File(filePath);
-//                String tempPath = "/cache/IMG_20170416_110438.jpg";
-//                File tempfile = new File(tempPath);
                 parseFile = new ParseFile(file);
                 setupImagePosting(parseFile);
-                imageInterfaceListener.cameraImage(filePath);
-//                Glide.with(MessageSendFragment.this).load(file).into(profileImage);
-//                profileImage.setVisibility(View.VISIBLE);
             }
         }
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
-
-//                Glide.with(MessageSendFragment.this).load(data.getData()).into(profileImage);
-//                profileImage.setVisibility(View.VISIBLE);
-
-//                String filePath = data.getStringExtra("filePath");
-//                File file = new File(filePath);
                 Uri selectedImageUri = data.getData();
                 try {
                     parseFile = new ParseFile(Camera.readBytes(context, selectedImageUri));
                     setupImagePosting(parseFile);
-                    imageInterfaceListener.galleryImage(selectedImageUri);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
