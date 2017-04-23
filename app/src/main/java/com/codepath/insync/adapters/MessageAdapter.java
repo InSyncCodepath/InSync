@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
 import com.codepath.insync.models.parse.Message;
+import com.codepath.insync.models.parse.User;
 import com.codepath.insync.utils.Camera;
 import com.codepath.insync.utils.CommonUtil;
 import com.parse.ParseFile;
@@ -25,6 +26,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.media.CamcorderProfile.get;
 
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -140,9 +143,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         // Get the data model based on position
         Message message = mMessages.get(position);
-        ParseFile profileImage = message.getMedia();
+        ParseFile mediaImage = message.getMedia();
+        ParseFile profileImage = message.getSender().getProfileImage();
 
-        Bitmap mediaBitmap = message.getMediaImageBitmap();
         String messageTime = CommonUtil.getTimeInFormat(message.getCreatedAt());
 
         // Set item views based on your views and data model
@@ -165,16 +168,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             .into(viewLeft.ivProfileLeft);
                 }
 
-                // populate the message media if it exists
-//                if (mediaBitmap != null) {
-//                    viewLeft.ivMessageRight.setVisibility(View.VISIBLE);
-//                    viewLeft.ivMessageRight.setImageBitmap(mediaBitmap);
-//                } else {
-//                    viewLeft.ivMessageRight.setVisibility(View.GONE);
-//                }
-                if (mediaBitmap != null) {
+                if (mediaImage != null) {
                     viewLeft.ivPicture.setVisibility(View.VISIBLE);
-                    viewLeft.ivPicture.setImageBitmap(mediaBitmap);
+                    Glide.with(mContext)
+                            .load(mediaImage.getUrl())
+                            .placeholder(R.drawable.ic_camera_alt_white_48px)
+                            .crossFade()
+                            .into(viewLeft.ivPicture);
                 } else {
                     viewLeft.ivPicture.setVisibility(View.GONE);
                 }
@@ -198,10 +198,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             .into(viewRight.ivProfileRight);
                 }
 
-                // populate the message media if it exists
-                if (mediaBitmap != null) {
+                if (mediaImage != null) {
                     viewRight.ivPicture.setVisibility(View.VISIBLE);
-                    viewRight.ivPicture.setImageBitmap(mediaBitmap);
+                    Glide.with(mContext)
+                            .load(mediaImage.getUrl())
+                            .placeholder(R.drawable.ic_camera_alt_white_48px)
+                            .crossFade()
+                            .into(viewRight.ivPicture);
                 } else {
                     viewRight.ivPicture.setVisibility(View.GONE);
                 }
@@ -237,7 +240,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemViewType(int position) {
         int newPosition = getItemCount() - position - 1;
-        return (newPosition % 2 == 0) ? LEFT : RIGHT;
+        User sender = mMessages.get(newPosition).getSender();
+        if (sender.getObjectId().equals(User.getCurrentUser().getObjectId())) {
+            return RIGHT;
+        } else {
+            return LEFT;
+        }
     }
 
     public void addCameraImage(String filePath) {
