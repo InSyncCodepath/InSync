@@ -1,6 +1,7 @@
 package com.codepath.insync.adapters;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,9 +42,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public class ViewHolderLeft extends RecyclerView.ViewHolder {
         public @BindView(R.id.ivProfileLeft) ImageView ivProfileLeft;
         public @BindView(R.id.ivMessageRight) ImageView ivMessageRight;
+        public @BindView(R.id.cvMessageRight) CardView cvMessageRight;
         public @BindView(R.id.tvBodyRight) TextView tvBodyRight;
         public @BindView(R.id.tvTimeLeft) TextView tvTimeLeft;
-        public @BindView(R.id.sendPictureRight) ImageView ivPicture;
         public ViewHolderLeft(final View itemView) {
                 // Stores the itemView in a public final member variable that can be used
                 // to access the context from any ViewHolder instance.
@@ -69,9 +70,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public class ViewHolderRight extends RecyclerView.ViewHolder {
         public @BindView(R.id.ivProfileRight) ImageView ivProfileRight;
         public @BindView(R.id.ivMessageLeft) ImageView ivMessageLeft;
+        public @BindView(R.id.cvMessageLeft) CardView cvMessageLeft;
         public @BindView(R.id.tvBodyLeft) TextView tvBodyLeft;
         public @BindView(R.id.tvTimeRight) TextView tvTimeRight;
-        public @BindView(R.id.sendPictureLeft) ImageView ivPicture;
         public ViewHolderRight(final View itemView) {
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
@@ -154,21 +155,21 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 if (profileImage != null) {
                     Glide.with(mContext)
                             .load(profileImage.getUrl())
-                            .placeholder(R.drawable.ic_attach_file_white_48px)
+                            .placeholder(R.drawable.ic_profile)
+                            .bitmapTransform(new RoundedCornersTransformation(mContext, 6, 0))
                             .crossFade()
                             .into(viewLeft.ivProfileLeft);
                 }
 
                 if (mediaImage != null) {
-                    viewLeft.ivPicture.setVisibility(View.VISIBLE);
+                    viewLeft.cvMessageRight.setVisibility(View.VISIBLE);
                     Glide.with(mContext)
                             .load(mediaImage.getUrl())
                             .placeholder(R.drawable.ic_camera_alt_white_48px)
-                            .bitmapTransform(new RoundedCornersTransformation(mContext, 4, 0))
                             .crossFade()
-                            .into(viewLeft.ivPicture);
+                            .into(viewLeft.ivMessageRight);
                 } else {
-                    viewLeft.ivPicture.setVisibility(View.GONE);
+                    viewLeft.cvMessageRight.setVisibility(View.GONE);
                 }
 
                 break;
@@ -185,22 +186,22 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 if (profileImage != null) {
                     Glide.with(mContext)
                             .load(profileImage.getUrl())
-                            .placeholder(R.drawable.ic_attach_file_white_48px)
+                            .placeholder(R.drawable.ic_profile)
+                            .bitmapTransform(new RoundedCornersTransformation(mContext, 6, 0))
                             .crossFade()
                             .into(viewRight.ivProfileRight);
                 }
 
                 // populate the message media if it exists
                 if (mediaImage != null) {
-                    viewRight.ivPicture.setVisibility(View.VISIBLE);
+                    viewRight.cvMessageLeft.setVisibility(View.VISIBLE);
                     Glide.with(mContext)
                             .load(mediaImage.getUrl())
-                            .placeholder(R.drawable.ic_camera_alt_white_48px)
-                            .bitmapTransform(new RoundedCornersTransformation(mContext, 4, 0))
+                            .placeholder(R.drawable.ic_profile)
                             .crossFade()
-                            .into(viewRight.ivPicture);
+                            .into(viewRight.ivMessageLeft);
                 } else {
-                    viewRight.ivPicture.setVisibility(View.GONE);
+                    viewRight.cvMessageLeft.setVisibility(View.GONE);
                 }
                 break;
         }
@@ -233,8 +234,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
-        int newPosition = getItemCount() - position - 1;
-        User sender = mMessages.get(newPosition).getSender();
+        User sender = mMessages.get(position).getSender();
         if (sender.getObjectId().equals(User.getCurrentUser().getObjectId())) {
             return RIGHT;
         } else {

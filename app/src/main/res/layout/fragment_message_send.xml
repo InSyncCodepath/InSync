@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:fab="http://schemas.android.com/tools">
-    <android.support.design.widget.CoordinatorLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/wild_sand">
@@ -30,47 +30,45 @@
                 android:inputType="textShortMessage"
                 app:layout_behavior=".BottomNavigationBehavior"
                 tools:targetApi="lollipop" />
-
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabEDSend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                app:fabSize="mini"
+                app:srcCompat="@drawable/ic_send" />
+            <com.github.clans.fab.FloatingActionMenu
+                android:id="@+id/floatingActionMenu"
+                app:menu_colorNormal="@color/accent"
+                app:menu_colorPressed="@color/wild_sand"
+                app:menu_colorRipple="@color/wild_sand"
+                app:menu_fab_size="mini"
+                app:menu_openDirection="up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical">
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/menuItemCamera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_camera_alt_white_48px"
+                    app:fab_size="mini"
+                    app:fab_colorNormal="@color/accent"
+                    app:fab_colorPressed="@color/wild_sand"
+                    app:fab_colorRipple="@color/wild_sand"
+                    fab:fab_label="Menu item 1" />
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/menuItemGallery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_attach_file_white_48px"
+                    app:fab_size="mini"
+                    app:fab_colorNormal="@color/accent"
+                    app:fab_colorPressed="@color/wild_sand"
+                    app:fab_colorRipple="@color/wild_sand"
+                    fab:fab_label="Menu item 2" />
+            </com.github.clans.fab.FloatingActionMenu>
         </android.support.design.widget.BottomNavigationView>
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabEDSend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_anchor="@id/bnvEDMessage"
-            app:layout_anchorGravity="end|center_vertical"
-            app:fabSize="mini"
-            app:srcCompat="@drawable/ic_send" />
-        <com.github.clans.fab.FloatingActionMenu
-            android:id="@+id/floatingActionMenu"
-            app:menu_colorNormal="@color/accent"
-            app:menu_colorPressed="@color/wild_sand"
-            app:menu_colorRipple="@color/wild_sand"
-            app:menu_fab_size="mini"
-            app:menu_openDirection="up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_anchor="@id/bnvEDMessage"
-            app:layout_anchorGravity="end|center_vertical">
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/menuItemCamera"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_camera_alt_white_48px"
-                app:fab_size="mini"
-                app:fab_colorNormal="@color/accent"
-                app:fab_colorPressed="@color/wild_sand"
-                app:fab_colorRipple="@color/wild_sand"
-                fab:fab_label="Menu item 1" />
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/menuItemGallery"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_attach_file_white_48px"
-                app:fab_size="mini"
-                app:fab_colorNormal="@color/accent"
-                app:fab_colorPressed="@color/wild_sand"
-                app:fab_colorRipple="@color/wild_sand"
-                fab:fab_label="Menu item 2" />
-        </com.github.clans.fab.FloatingActionMenu>
-    </android.support.design.widget.CoordinatorLayout>
+
+    </RelativeLayout>
 </layout>
