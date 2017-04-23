@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
+        android:background="@color/wild_sand"
         tools:context="com.codepath.insync.activities.EventDetailActivity">
 
         <android.support.design.widget.CoordinatorLayout

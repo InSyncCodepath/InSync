@@ -22,6 +22,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 
@@ -42,11 +43,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public class ViewHolderLeft extends RecyclerView.ViewHolder {
-        public @BindView(R.id.ivProfileLeft) ImageView ivProfileLeft;
+        public @BindView(R.id.ivProfileLeft) CircleImageView ivProfileLeft;
         public @BindView(R.id.ivMessageRight) ImageView ivMessageRight;
         public @BindView(R.id.cvMessageRight) CardView cvMessageRight;
         public @BindView(R.id.tvBodyRight) TextView tvBodyRight;
         public @BindView(R.id.tvTimeLeft) TextView tvTimeLeft;
+        public @BindView(R.id.tvCaptionRight) TextView tvCaptionRight;
         public ViewHolderLeft(final View itemView) {
                 // Stores the itemView in a public final member variable that can be used
                 // to access the context from any ViewHolder instance.
@@ -70,11 +72,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public class ViewHolderRight extends RecyclerView.ViewHolder {
-        public @BindView(R.id.ivProfileRight) ImageView ivProfileRight;
+        public @BindView(R.id.ivProfileRight) CircleImageView ivProfileRight;
         public @BindView(R.id.ivMessageLeft) ImageView ivMessageLeft;
         public @BindView(R.id.cvMessageLeft) CardView cvMessageLeft;
         public @BindView(R.id.tvBodyLeft) TextView tvBodyLeft;
         public @BindView(R.id.tvTimeRight) TextView tvTimeRight;
+        public @BindView(R.id.tvCaptionLeft) TextView tvCaptionLeft;
         public ViewHolderRight(final View itemView) {
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
@@ -144,13 +147,23 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             createdAt = new Date();
         }
         String messageTime = CommonUtil.getTimeInFormat(createdAt);
+        String messageBody = message.getBody();
+        if (messageBody == null || messageBody.trim().length() == 0) {
+            messageBody = null;
+        }
 
         // Set item views based on your views and data model
         switch (holder.getItemViewType()) {
             case LEFT:
                 ViewHolderLeft viewLeft = (ViewHolderLeft) holder;
                 // set the text view
-                viewLeft.tvBodyRight.setText(message.getBody());
+                if (messageBody == null || mediaImage != null) {
+                    viewLeft.tvBodyRight.setVisibility(View.GONE);
+                } else {
+                    viewLeft.tvBodyRight.setVisibility(View.VISIBLE);
+                    viewLeft.tvBodyRight.setText(messageBody);
+                }
+
                 viewLeft.tvTimeLeft.setText(messageTime);
 
                 // reset the recycle view to the default profile image
@@ -168,6 +181,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                 if (mediaImage != null) {
                     viewLeft.cvMessageRight.setVisibility(View.VISIBLE);
+                    viewLeft.tvCaptionRight.setText(messageBody);
                     Glide.with(mContext)
                             .load(mediaImage.getUrl())
                             .placeholder(R.drawable.ic_camera_alt_white_48px)
@@ -181,7 +195,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             default:
                 ViewHolderRight viewRight = (ViewHolderRight) holder;
                 // set the text view
-                viewRight.tvBodyLeft.setText(message.getBody());
+                if (messageBody == null || mediaImage != null) {
+                    viewRight.tvBodyLeft.setVisibility(View.GONE);
+                } else {
+                    viewRight.tvBodyLeft.setVisibility(View.VISIBLE);
+                    viewRight.tvBodyLeft.setText(messageBody);
+                }
+
                 viewRight.tvTimeRight.setText(messageTime);
 
                 // reset the recycle view to the default profile image
@@ -189,6 +209,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                 // populate the profile image if it exists
                 if (profileImage != null) {
+                    viewRight.tvCaptionLeft.setText(messageBody);
                     Glide.with(mContext)
                             .load(profileImage.getUrl())
                             .placeholder(R.drawable.ic_profile)

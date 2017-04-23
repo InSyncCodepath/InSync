@@ -1,15 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.codepath.insync.activities.CameraActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.flurgle.camerakit.CameraView
-        android:id="@+id/camera"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true" />
+        android:layout_height="match_parent"
+        android:background="@color/wild_sand"
+        tools:context="com.codepath.insync.activities.CameraActivity">
 
-</RelativeLayout>
+        <com.flurgle.camerakit.CameraView
+            android:id="@+id/camera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true" />
+
+        <ImageView
+            android:id="@+id/ivSelectedImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:scaleType="fitXY"
+            android:visibility="gone" />
+
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/clSendSelected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/etSelectedMessage"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/tvHeight"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="@dimen/margin8"
+                android:layout_marginEnd="@dimen/margin48"
+                android:layout_marginStart="@dimen/margin8"
+                android:layout_marginTop="@dimen/margin8"
+                android:elevation="8dp"
+                android:hint="@string/message_hint"
+                android:imeOptions="actionSend"
+                android:inputType="textShortMessage"
+                tools:targetApi="lollipop" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabEDSendSelected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/margin4"
+                app:fabSize="mini"
+                app:srcCompat="@drawable/ic_send" />
+        </android.support.design.widget.CoordinatorLayout>
+
+
+    </RelativeLayout>
+</layout>
