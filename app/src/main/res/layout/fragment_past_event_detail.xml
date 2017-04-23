@@ -58,11 +58,27 @@
             android:layout_height="200dp"
             />
 
+        <TextView
+            android:id="@+id/tvTitleGallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/gallery"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/tvHighlights"
+            android:layout_marginTop="@dimen/margin16"
+            android:textColor="@color/primary_dark"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold"
+            android:shadowRadius="8"
+            android:shadowColor="@android:color/darker_gray"
+            android:elevation="8dp"
+            android:visibility="gone"
+            android:textAllCaps="true"/>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvEDImages"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvHighlights"
+            android:layout_below="@id/tvTitleGallery"
             />
     </RelativeLayout>
 </layout>

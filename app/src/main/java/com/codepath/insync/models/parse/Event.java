@@ -28,14 +28,9 @@ public class Event extends ParseObject {
     public static final String DESCRIPTION_KEY = "description";
     public static final String PROFILE_IMAGE_KEY = "profileImage";
     public static final String MESSAGE_RELATION_KEY = "messageRelation";
-    public static final String ALBUM_RELATION_KEY = "albumRelation";
     public static final String HIGHLIGHTS_VIDEO_KEY = "highlightsVideo";
     public static final String OBJECT_ID_KEY = "objectId";
     public static final String HAS_ENDED_KEY = "hasEnded";
-
-    public static String getObjectIdKey() {
-        return OBJECT_ID_KEY;
-    }
 
     public String getName() {
         return getString(NAME_KEY);
@@ -67,10 +62,6 @@ public class Event extends ParseObject {
 
     public ParseRelation<Message> getMessageRelation() {
         return getRelation(MESSAGE_RELATION_KEY);
-    }
-
-    public ParseRelation<ParseObject> getAlbumRelation() {
-        return getRelation(ALBUM_RELATION_KEY);
     }
 
     public String getHighlightsVideo() {
@@ -111,10 +102,6 @@ public class Event extends ParseObject {
 
     public void setMessageRelation(ParseRelation<Message> messageRelation) {
         put(MESSAGE_RELATION_KEY, messageRelation);
-    }
-
-    public void setAlbumRelation(ParseRelation albumRelation) {
-        put(ALBUM_RELATION_KEY, albumRelation);
     }
 
     public void setHighlightsVideo(String highlightsVideo) {

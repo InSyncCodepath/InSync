@@ -26,6 +26,7 @@ import com.codepath.insync.databinding.FragmentPastEventDetailBinding;
 import com.codepath.insync.listeners.OnImageClickListener;
 import com.codepath.insync.listeners.OnVideoUpdateListener;
 import com.codepath.insync.models.parse.Event;
+import com.codepath.insync.models.parse.Message;
 import com.codepath.insync.models.parse.Music;
 import com.codepath.insync.utils.VideoPlayer;
 import com.parse.FindCallback;
@@ -143,25 +144,29 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         binding.tvHighlights.setOpaque(false);
         binding.pbMediaUpdate.setVisibility(View.VISIBLE);
 
-        ParseQuery<ParseObject> parseQuery = event.getAlbumRelation().getQuery();
+        ParseQuery<Message> parseQuery = event.getMessageRelation().getQuery();
+        parseQuery.whereExists("media");
 
-        parseQuery.findInBackground(new FindCallback<ParseObject>() {
+        parseQuery.findInBackground(new FindCallback<Message>() {
             @Override
-            public void done(List<ParseObject> objects, ParseException e) {
+            public void done(List<Message> objects, ParseException e) {
                 if (e == null) {
                     edImages.clear();
                     parseFiles.clear();
                     for (ParseObject imageObject: objects) {
                         String imageUrl = null;
-                        ParseFile imgFile = imageObject.getParseFile("image");
+                        ParseFile imgFile = imageObject.getParseFile("media");
                         if (imgFile != null) {
-                            imageUrl = imageObject.getParseFile("image").getUrl();
+                            imageUrl = imageObject.getParseFile("media").getUrl();
                             parseFiles.add(imgFile);
                             edImages.add(imageUrl);
 
                         }
                     }
                     edImageAdapter.notifyDataSetChanged();
+                    if (parseFiles.size() > 0) {
+                        binding.tvTitleGallery.setVisibility(View.VISIBLE);
+                    }
                 } else {
                     Log.e(TAG, "Error fetching event album");
                 }
