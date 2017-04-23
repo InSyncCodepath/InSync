@@ -1,8 +1,6 @@
 package com.codepath.insync.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,23 +13,15 @@ import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
 import com.codepath.insync.models.parse.Message;
 import com.codepath.insync.models.parse.User;
-import com.codepath.insync.utils.Camera;
 import com.codepath.insync.utils.CommonUtil;
 import com.parse.ParseFile;
-
-
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.media.CamcorderProfile.get;
-
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    ParseFile parseFile;
     // view types
     private final int LEFT = 0, RIGHT = 1;
 
@@ -245,19 +235,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             return RIGHT;
         } else {
             return LEFT;
-        }
-    }
-
-    public void addCameraImage(String filePath) {
-        File file = new File(filePath);
-        parseFile = new ParseFile(file);
-    }
-
-    public void addGalleryImage(Uri fileUri) {
-        try {
-            parseFile = new ParseFile(Camera.readBytes(getContext(), fileUri));
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
