@@ -16,6 +16,8 @@ import com.codepath.insync.models.parse.Message;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.utils.CommonUtil;
 import com.parse.ParseFile;
+
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -137,8 +139,11 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Message message = mMessages.get(position);
         ParseFile profileImage = message.getSender().getProfileImage();
         ParseFile mediaImage = message.getMedia();
-
-        String messageTime = CommonUtil.getTimeInFormat(message.getCreatedAt());
+        Date createdAt = message.getCreatedAt();
+        if (createdAt == null) {
+            createdAt = new Date();
+        }
+        String messageTime = CommonUtil.getTimeInFormat(createdAt);
 
         // Set item views based on your views and data model
         switch (holder.getItemViewType()) {

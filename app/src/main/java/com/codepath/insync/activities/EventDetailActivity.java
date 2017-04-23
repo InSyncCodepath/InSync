@@ -47,6 +47,7 @@ import com.codepath.insync.fragments.UpcomingEventDetailFragment;
 import com.codepath.insync.listeners.OnImageClickListener;
 import com.codepath.insync.listeners.OnMessageChangeListener;
 import com.codepath.insync.models.parse.Event;
+import com.codepath.insync.models.parse.Message;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
 import com.codepath.insync.utils.Camera;
@@ -517,5 +518,15 @@ public class EventDetailActivity extends AppCompatActivity implements
             binding.famEDMedia.setVisibility(View.GONE);
             binding.fabEDSend.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onMessageCreated(Message message) {
+        upcomingEventDetailFragment.updateMessage(message);
+    }
+
+    @Override
+    public void onFocused() {
+        upcomingEventDetailFragment.updateScroll();
     }
 }
