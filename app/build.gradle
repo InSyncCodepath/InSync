@@ -124,5 +124,6 @@ dependencies {
     //Floating action menu
     compile 'com.github.clans:fab:1.6.4'
 
-
+    // Splash screen
+    compile 'com.github.ViksaaSkool:AwesomeSplash:v1.0.0'
 }
