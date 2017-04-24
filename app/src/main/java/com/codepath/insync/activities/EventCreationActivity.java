@@ -111,39 +111,6 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         eventDescription = binding.etDescription.getText().toString();
         inviteeList = binding.inviteeList;
 
-        ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(this)
-                //set vertical gravity for all items in a row. Default = Gravity.CENTER_VERTICAL
-                .setChildGravity(Gravity.TOP)
-                //whether RecyclerView can scroll. TRUE by default
-                .setScrollingEnabled(true)
-                //set maximum views count in a particular row
-                .setMaxViewsInRow(4)
-                //set gravity resolver where you can determine gravity for item in position.
-                //This method have priority over previous one
-                .setGravityResolver(new IChildGravityResolver() {
-                    @Override
-                    public int getItemGravity(int position) {
-                        return Gravity.CENTER;
-                    }
-                })
-                //you are able to break row due to your conditions. Row breaker should return true for that views
-                .setRowBreaker(new IRowBreaker() {
-                    @Override
-                    public boolean isItemBreakRow(@IntRange(from = 0) int position) {
-                        return position == 8 || position == 12 || position == 4;
-                    }
-                })
-                //a layoutOrientation of layout manager, could be VERTICAL OR HORIZONTAL. HORIZONTAL by default
-                .setOrientation(ChipsLayoutManager.HORIZONTAL)
-                // row strategy for views in completed row, could be STRATEGY_DEFAULT, STRATEGY_FILL_VIEW,
-                //STRATEGY_FILL_SPACE or STRATEGY_CENTER
-                .setRowStrategy(ChipsLayoutManager.STRATEGY_DEFAULT)
-                // whether strategy is applied to last row. FALSE by default
-                .withLastRow(true)
-                .build();
-        //inviteeList.setLayoutManager(chipsLayoutManager);
-
-
 //        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.HORIZONTAL);
 //        inviteeList.setLayoutManager(staggeredGridLayoutManager);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);

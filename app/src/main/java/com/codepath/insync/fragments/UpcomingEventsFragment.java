@@ -2,7 +2,9 @@ package com.codepath.insync.fragments;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,6 +32,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import static com.codepath.insync.R.id.swipeContainer;
 import static com.codepath.insync.R.string.username;
 import static com.codepath.insync.models.parse.UserEventRelation.getEventPointerKey;
 
@@ -37,7 +40,7 @@ import static com.codepath.insync.models.parse.UserEventRelation.getEventPointer
 public class UpcomingEventsFragment extends Fragment implements UpcomingEventAdapter.EventDetailClickHandling {
     FragmentUpcomingEventListBinding binding;
     OnEventClickListener eventClickListener;
-
+    SwipeRefreshLayout swipeContainer;
     private static final String ARG_SECTION_NUMBER = "section_number";
     RecyclerView upcomingList;
     ArrayList<Event> events = new ArrayList<>();
@@ -69,7 +72,16 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
         upcomingEventAdapter = new UpcomingEventAdapter(this, getContext(), events);
         upcomingList.setAdapter(upcomingEventAdapter);
         upcomingList.setLayoutManager(linearLayoutManager);
+        swipeContainer = binding.swipeContainer;
 
+        //binding.swipeContainer;
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                showEvents();
+            }
+
+        });
         cal.setTime(new Date()); // sets calendar time/date
         cal.add(Calendar.HOUR_OF_DAY, bufferHours); // subtract 3 hours
         eventClickListener = (OnEventClickListener) getActivity();
@@ -138,7 +150,7 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
 
     public void reloadList() {
 //        upcomingEventAdapter.notifyDataSetChanged();
-        //showEvents();
+        showEvents();
     }
 }
 

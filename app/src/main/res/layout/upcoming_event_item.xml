@@ -32,7 +32,9 @@
             android:layout_toRightOf="@id/ivEventImage"
             android:textSize="20sp"
             tools:text="Event Name"
-            style="@style/eventListTextView" />
+            style="@style/eventListTextView"
+            android:transitionName="eventName"
+            />
 
         <TextView
             android:id="@+id/tvDate"
