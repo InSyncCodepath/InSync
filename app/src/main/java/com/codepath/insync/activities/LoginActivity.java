@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import com.codepath.insync.R;
@@ -70,6 +71,7 @@ public class LoginActivity extends AppCompatActivity implements OnLoginListener 
     private void setUpToolbar() {
         setSupportActionBar(binding.tbLogin);
         binding.tbLogin.setTitle("Login");
+        binding.tbLogin.setTitleTextColor(ContextCompat.getColor(this, R.color.primary_text));
     }
 
 

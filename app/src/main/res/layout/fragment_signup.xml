@@ -7,10 +7,12 @@
         android:id="@+id/svSignup"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@color/primary"
+        android:background="@color/lighter_green"
+        android:scrollbars="none"
         android:fitsSystemWindows="true">
 
         <LinearLayout
+            android:id="@+id/llSignup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -18,34 +20,20 @@
             android:paddingRight="24dp"
             android:paddingTop="56dp">
 
-
-            <!--<ImageView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="72dp"-->
-                <!--android:layout_gravity="center_horizontal"-->
-                <!--android:layout_marginBottom="24dp"-->
-                <!--android:contentDescription="@string/app_logo"-->
-                <!--app:srcCompat="@drawable/ic_camera_alt_white_48px" />-->
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="72dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="24dp"
-                android:id="@+id/ivCamera"
-                app:srcCompat="@drawable/ic_camera_alt_white_48px"
+                android:layout_marginTop="@dimen/margin24"
+                android:layout_marginBottom="@dimen/margin24"
+                android:id="@+id/ivLogo"
+                app:srcCompat="@drawable/ic_launch"
                 />
 
-            <ImageView
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:id="@+id/profilePic"
-                android:visibility="gone"
-                android:layout_gravity="center_horizontal"
-                />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
+                android:background="@color/icons"
                 android:descendantFocusability="beforeDescendants"
                 android:elevation="24dp"
                 android:focusableInTouchMode="true"
@@ -56,7 +44,7 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="4dp"
                     android:layout_marginTop="8dp">
 
                     <EditText
@@ -71,7 +59,7 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="4dp"
                     android:layout_marginTop="8dp">
 
                     <EditText
@@ -82,26 +70,11 @@
                         android:inputType="textPersonName" />
                 </android.support.design.widget.TextInputLayout>
 
-                <!-- Email Label -->
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp">
-
-                    <EditText
-                        android:id="@+id/etSignupEmail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/email"
-                        android:inputType="textEmailAddress" />
-                </android.support.design.widget.TextInputLayout>
-
                 <!-- Password Label -->
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="4dp"
                     android:layout_marginTop="8dp">
 
                     <EditText
@@ -133,7 +106,7 @@
                     android:id="@+id/tvSignupBtn"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="@dimen/margin8"
                     android:background="@color/primary_light"
                     android:gravity="center"
                     android:padding="12dp"
@@ -144,10 +117,12 @@
                 android:id="@+id/tvSignupLogin"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin24"
+                android:layout_marginBottom="@dimen/margin16"
                 android:layout_marginTop="@dimen/margin24"
                 android:gravity="center"
                 android:text="@string/already_a_member_login"
+                android:textStyle="bold"
+                android:textColor="@color/primary_dark"
                 android:textSize="16sp" />
 
         </LinearLayout>

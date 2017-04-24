@@ -6,8 +6,9 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@color/primary"
+        android:background="@color/lighter_green"
         android:fitsSystemWindows="true"
+        android:scrollbars="none"
         android:id="@+id/svLogin">
 
         <LinearLayout
@@ -22,14 +23,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="72dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin24"
                 android:layout_marginBottom="24dp"
                 android:contentDescription="@string/app_logo"
-                app:srcCompat="@drawable/ic_camera_alt_white_48px" />
+                app:srcCompat="@drawable/ic_launch" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
+                android:background="@color/icons"
                 android:elevation="24dp"
                 android:orientation="vertical"
                 android:descendantFocusability="beforeDescendants"
@@ -39,7 +41,7 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="4dp"
                     android:layout_marginTop="8dp">
 
                     <EditText
@@ -72,7 +74,7 @@
                     android:id="@+id/tvPhoneLoginBtn"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="@dimen/margin8"
                     android:background="@color/primary_light"
                     android:drawableEnd="@drawable/ic_arrow_right"
                     android:padding="12dp"
@@ -87,6 +89,8 @@
                 android:layout_marginTop="@dimen/margin24"
                 android:gravity="center"
                 android:text="@string/don_t_have_the_code_resend"
+                android:textColor="@color/primary_dark"
+                android:textStyle="bold"
                 android:textSize="16sp" />
 
         </LinearLayout>
