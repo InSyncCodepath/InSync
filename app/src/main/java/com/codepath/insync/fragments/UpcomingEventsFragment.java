@@ -104,6 +104,7 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
     }
 
     public void showEvents(){
+        events.clear();
         User currentUser = User.getCurrentUser();
         ParseQuery<UserEventRelation> query = ParseQuery.getQuery(UserEventRelation.class);
         query.selectKeys(Arrays.asList("event"));
@@ -137,7 +138,7 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
 
     public void reloadList() {
 //        upcomingEventAdapter.notifyDataSetChanged();
-        showEvents();
+        //showEvents();
     }
 }
 

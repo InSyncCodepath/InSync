@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -27,6 +28,7 @@ public class ContactActivity extends AppCompatActivity {
     RecyclerView contactList;
     public static final int CONTACT_LOADER_ID = 10;
     ArrayList<String> guestList;
+    Toolbar toolbar;
 
     private LoaderManager.LoaderCallbacks<Cursor> contactsLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
@@ -73,6 +75,8 @@ public class ContactActivity extends AppCompatActivity {
         contactList.setAdapter(adapter);
         getSupportLoaderManager().initLoader(CONTACT_LOADER_ID,
                 new Bundle(), contactsLoader);
+        toolbar = binding.toolbarContact;
+        setSupportActionBar(toolbar);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
