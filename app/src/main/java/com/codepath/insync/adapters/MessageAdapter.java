@@ -56,6 +56,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public @BindView(R.id.cvMessageRight) CardView cvMessageRight;
         public @BindView(R.id.tvBodyRight) TextView tvBodyRight;
         public @BindView(R.id.tvCaptionRight) TextView tvCaptionRight;
+        public @BindView(R.id.tvFirstName) TextView tvFirstName;
         public ViewHolderLeft(final View itemView) {
                 // Stores the itemView in a public final member variable that can be used
                 // to access the context from any ViewHolder instance.
@@ -170,6 +171,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         switch (holder.getItemViewType()) {
             case LEFT:
                 ViewHolderLeft viewLeft = (ViewHolderLeft) holder;
+                //set name
+                viewLeft.tvFirstName.setText(message.getSender().getName().split(" ")[0]);
                 // set the text view
                 if (messageBody.length() == 0 || mediaImage != null) {
                     viewLeft.tvBodyRight.setVisibility(View.GONE);
