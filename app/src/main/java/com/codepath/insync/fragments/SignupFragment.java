@@ -14,12 +14,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
 import com.codepath.insync.activities.CameraActivity;
 import com.codepath.insync.databinding.FragmentSignupBinding;
 import com.codepath.insync.listeners.OnLoginListener;
 import com.codepath.insync.models.parse.User;
+import com.codepath.insync.utils.CommonUtil;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -37,6 +37,8 @@ public class SignupFragment extends Fragment {
     FragmentSignupBinding binding;
     OnLoginListener loginListener;
     ParseFile parseFile;
+    // Create the ParseUser
+    final User user = new User();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,10 +66,20 @@ public class SignupFragment extends Fragment {
                 File file = new File(filePath);
                 parseFile = new ParseFile(file);
 
-                Glide.with(getContext()).load(file).into(binding.profilePic);
-                //binding.ivCamera.setVisibility(View.GONE);
-                binding.profilePic.setVisibility(View.VISIBLE);
+                user.setProfileImage(parseFile);
+                user.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            CommonUtil.createSnackbar(binding.svSignup, getContext(), "Your profile picture has been added!");
+                        } else {
+                            CommonUtil.createSnackbar(binding.svSignup, getContext(), "Your profile picture could not be added! Please try again later.");
+                        }
 
+                        loginListener.onLoginSuccess();
+
+                    }
+                });
             }
         }
     }
@@ -83,8 +95,7 @@ public class SignupFragment extends Fragment {
         binding.tvSignupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create the ParseUser
-                final User user = new User();
+
                 // Set core properties
                 user.setUsername(binding.etSignupUsername.getText().toString());
                 user.setPassword(binding.etSignupPassword.getText().toString());
@@ -111,7 +122,9 @@ public class SignupFragment extends Fragment {
                                                 ParseInstallation installation = ParseInstallation.getCurrentInstallation();
                                                 installation.put("userId", user.getObjectId());
                                                 installation.saveInBackground();
-                                                loginListener.onLoginSuccess();
+                                                Intent intent = new Intent(getActivity(), CameraActivity.class);
+                                                startActivityForResult(intent, 1024);
+                                                //loginListener.onLoginSuccess();
                                             } else {
                                                 Toast.makeText(
                                                         getActivity(),
