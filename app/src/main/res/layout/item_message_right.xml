@@ -18,29 +18,38 @@
     <android.support.v7.widget.CardView
         android:id="@+id/cvMessageLeft"
         android:layout_width="200dp"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_toStartOf="@id/ivProfileRight"
         app:cardBackgroundColor="@color/primary_light"
         app:contentPadding="@dimen/padding4"
         android:layout_marginStart="@dimen/margin16"
         android:layout_marginEnd="@dimen/margin16">
-        <ImageView
-            android:id="@+id/ivMessageLeft"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            tools:src="@drawable/ic_camera_alt_white_48px" />
-        <TextView
-            android:id="@+id/tvCaptionLeft"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginStart="@dimen/margin4"
-            tools:text="Caption"/>
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/ivMessageLeft"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:scaleType="fitXY"
+                android:layout_marginBottom="@dimen/margin4"
+                tools:src="@drawable/ic_camera_alt_white_48px" />
+            <TextView
+                android:id="@+id/tvCaptionLeft"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_below="@id/ivMessageLeft"
+                android:layout_marginStart="@dimen/margin4"
+                tools:text="Caption"/>
+        </RelativeLayout>
+
     </android.support.v7.widget.CardView>
 
     <TextView
         android:padding="@dimen/padding8"
+        android:paddingStart="@dimen/padding16"
+        android:paddingEnd="@dimen/padding16"
         android:id="@+id/tvBodyLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,16 +59,5 @@
         android:layout_marginEnd="@dimen/margin16"
         android:layout_below="@id/cvMessageLeft"
         android:background="@drawable/rounded_text_view_light_green"
-        tools:text="What is the name of the place you went hiking last weekend?"
-        >
-    </TextView>
-
-    <TextView
-        android:id="@+id/tvTimeRight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ivProfileRight"
-        android:layout_marginTop="@dimen/margin8"
-        android:layout_alignStart="@id/ivProfileRight"
-        tools:text="4:30PM"/>
+        tools:text="What is the name of the place you went hiking last weekend?" />
 </RelativeLayout>

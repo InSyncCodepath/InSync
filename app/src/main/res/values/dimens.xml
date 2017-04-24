@@ -32,4 +32,5 @@
     <dimen name="card_margin_top">40dp</dimen>
     <dimen name="margin4">4dp</dimen>
     <dimen name="padding8">8dp</dimen>
+    <dimen name="padding16">16dp</dimen>
 </resources>
