@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
-import com.codepath.insync.models.Contact;
 
 import java.util.ArrayList;
 
@@ -31,7 +30,6 @@ public class SimpleCursorRecyclerAdapterContacts extends CursorRecyclerAdapter<S
     private Context context;
     boolean isSelectedContact [];
     ArrayList<String> invitees;
-    ArrayList<Contact> contacts;
     public SimpleCursorRecyclerAdapterContacts(Context context, int layout, Cursor c, String[] from, int[] to) {
         super(c);
         //this.listener = listener;
@@ -57,14 +55,6 @@ public class SimpleCursorRecyclerAdapterContacts extends CursorRecyclerAdapter<S
         if(invitees == null) {
             invitees = new ArrayList<>();
         }
-        if(contacts == null) {
-            contacts =  new ArrayList<>();
-        }
-        cursor.moveToPosition(position);
-        final Contact contact = new Contact(cursor.getString(cursor.getColumnIndex("display_name")),
-                cursor.getString(cursor.getColumnIndex("phone_number")),
-                cursor.getString(cursor.getColumnIndex("image_url")), false);
-        contacts.add(contact);
         final int count = mTo.length;
         final int[] from = mFrom;
 
@@ -76,13 +66,11 @@ public class SimpleCursorRecyclerAdapterContacts extends CursorRecyclerAdapter<S
                     cursor.moveToPosition(position);
                     if(!(invitees.contains(cursor.getString(cursor.getColumnIndex("display_name"))))){
                         invitees.add(cursor.getString(cursor.getColumnIndex("display_name")));
-                        contact.setSelected(true);
                     }
                 } else {
                     isSelectedContact[position] = false;
                     cursor.moveToPosition(position);
                     invitees.remove(cursor.getString(cursor.getColumnIndex("display_name")));
-                    contact.setSelected(false);
                 }
             }
         });
@@ -98,9 +86,6 @@ public class SimpleCursorRecyclerAdapterContacts extends CursorRecyclerAdapter<S
         } else {
             holder.isSelected.setChecked(false);
         }
-}
-    public ArrayList<Contact> showContacts(){
-        return contacts;
     }
     public ArrayList<String> showInvitees(){
         return invitees;
