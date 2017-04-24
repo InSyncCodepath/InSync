@@ -36,4 +36,5 @@ public class Constants {
     public static final int NEW_EVENT = 0;
     public static final int RSVP_REMINDER = 1;
     public static final int NUDGE = 2;
+    public static final String INSYNC_LOGO = "InSync";
 }
