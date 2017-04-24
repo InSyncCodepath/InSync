@@ -78,6 +78,7 @@ public class LocationTrackerActivity extends AppCompatActivity {
     List<User> ltUsers;
     LTImageAdapter ltImageAdapter;
     LinearLayoutManager linearLayoutManager;
+    private boolean shouldUpdateLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +88,7 @@ public class LocationTrackerActivity extends AppCompatActivity {
         mapsContainer = findViewById(R.id.mapContainer);
         userMap = new HashMap<>();
         mfirstLoad = true;
+        shouldUpdateLocation = false;
         processIntent();
         setupRecyclerView();
 
@@ -124,8 +126,12 @@ public class LocationTrackerActivity extends AppCompatActivity {
         messageReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d(TAG, "Broadcast received. Updating location");
-                updateUsersLocations();
+                Log.d(TAG, "Broadcast received. Should update location: "+shouldUpdateLocation);
+                if (shouldUpdateLocation) {
+                    shouldUpdateLocation = false;
+                    updateUsersLocations();
+                }
+
             }
         };
         registerReceiver(messageReceiver, filter);
@@ -252,6 +258,7 @@ public class LocationTrackerActivity extends AppCompatActivity {
 
                     finish();
                 }
+                shouldUpdateLocation = true;
             }
         });
 
