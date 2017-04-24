@@ -58,7 +58,7 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 final User user = new User();
                 user.login(
-                        binding.etLoginEmail.getText().toString(),
+                        binding.etLogin.getText().toString(),
                         binding.etLoginPassword.getText().toString(),
                         new LogInCallback() {
                             @Override
@@ -92,7 +92,7 @@ public class LoginFragment extends Fragment {
                 public boolean onTouch(View v, MotionEvent event) {
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    binding.etLoginEmail.clearFocus();
+                    binding.etLogin.clearFocus();
                     binding.etLoginPassword.clearFocus();
 
                     return false;
