@@ -236,7 +236,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     viewRight.cvMessageLeft.setVisibility(View.VISIBLE);
                     Glide.with(mContext)
                             .load(mediaImage.getUrl())
-                            .placeholder(R.drawable.ic_profile)
+                            .placeholder(R.drawable.ic_camera_alt_white_48px)
                             .crossFade()
                             .into(viewRight.ivMessageLeft);
                 } else {

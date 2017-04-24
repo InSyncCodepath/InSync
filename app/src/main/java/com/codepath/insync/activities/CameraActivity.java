@@ -3,15 +3,21 @@ package com.codepath.insync.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.afollestad.materialcamera.MaterialCamera;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityCameraBinding;
+
+import java.io.IOException;
 
 
 public class CameraActivity extends AppCompatActivity {
@@ -26,9 +32,28 @@ public class CameraActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_camera);
         setupClickListener();
         camera = new MaterialCamera(this);
+        filePath = null;
 
-        camera.stillShot()
-                .start(CAMERA_RQ);
+        String imageUri = getIntent().getStringExtra("image_uri");
+        if (imageUri == null) {
+            camera.stillShot()
+                    .start(CAMERA_RQ);
+        } else {
+            Bitmap selectedImage = null;
+            try {
+                selectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(imageUri));
+            } catch (IOException e) {
+                e.printStackTrace();
+                finish();
+            }
+
+            binding.ivSelectedImage.setVisibility(View.VISIBLE);
+            binding.clSendSelected.setVisibility(View.VISIBLE);
+            binding.camera.setVisibility(View.GONE);
+            binding.ivSelectedImage.setImageBitmap(selectedImage);
+
+        }
+
     }
 
     private void setupClickListener() {

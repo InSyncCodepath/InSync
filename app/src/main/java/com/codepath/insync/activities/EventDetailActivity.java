@@ -94,6 +94,7 @@ public class EventDetailActivity extends AppCompatActivity implements
     FragmentManager fragmentManager;
     RelativeLayout rlEventDetail;
     UpcomingEventDetailFragment upcomingEventDetailFragment;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,18 +180,29 @@ public class EventDetailActivity extends AppCompatActivity implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CAMERA_ACTIVITY && resultCode == RESULT_OK) {
+            String message = data.getStringExtra("message");
             String filePath = data.getStringExtra("filePath");
-            String message = data.getStringExtra("message");
-            File file = new File(filePath);
-            messageSendFragment.setupImagePosting(message, new ParseFile(file));
-        } else if (requestCode == SELECT_PICTURE && resultCode == RESULT_OK) {
-            Uri selectedImageUri = data.getData();
-            String message = data.getStringExtra("message");
-            try {
-                messageSendFragment.setupImagePosting(message, new ParseFile(Camera.readBytes(this, selectedImageUri)));
-            } catch (IOException e) {
-                e.printStackTrace();
+            ParseFile parseFile = null;
+            if (filePath != null) {
+                File file = new File(filePath);
+                parseFile = new ParseFile(file);
+            } else {
+                try {
+                    parseFile = new ParseFile(Camera.readBytes(getApplicationContext(), imageUri));
+                    imageUri = null;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+            if (parseFile != null) {
+                messageSendFragment.setupImagePosting(message, parseFile);
+            }
+
+        } else if (requestCode == SELECT_PICTURE && resultCode == RESULT_OK) {
+            Intent intent = new Intent(EventDetailActivity.this, CameraActivity.class);
+            imageUri = data.getData();
+            intent.putExtra("image_uri", imageUri.toString());
+            startActivityForResult(intent, REQUEST_CAMERA_ACTIVITY);
         }
     }
 
