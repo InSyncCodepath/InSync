@@ -68,8 +68,8 @@
                             android:layout_alignTop="@id/ivEDProfile"
                             android:layout_marginStart="@dimen/margin8"
                             android:layout_toEndOf="@id/ivEDProfile"
-                            android:textColor="@android:color/black"
                             android:textSize="@dimen/event_heading"
+                            android:textStyle="bold"
                             tools:text="Netfix Demo Day"
 
                             />
@@ -92,7 +92,6 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="@dimen/margin16"
                             android:text="@string/when"
-                            android:textColor="@android:color/black"
                             android:textSize="@dimen/event_heading" />
 
                         <TextView
@@ -111,7 +110,6 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="@dimen/margin16"
                             android:text="@string/where"
-                            android:textColor="@android:color/black"
                             android:textSize="@dimen/event_heading" />
 
                         <TextView
@@ -129,7 +127,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:gravity="center"
-                            android:orientation="horizontal" >
+                            android:orientation="horizontal">
 
                             <RadioButton
                                 android:id="@+id/rbnAttending"
@@ -140,6 +138,7 @@
                                 android:button="@null"
                                 android:gravity="center"
                                 android:padding="5dp"
+                                android:textColor="@color/primary_text"
                                 tools:text="10 Attending" />
                             <RadioButton
                                 android:id="@+id/rbnPending"
@@ -150,6 +149,7 @@
                                 android:button="@null"
                                 android:gravity="center"
                                 android:padding="5dp"
+                                android:textColor="@color/primary_text"
                                 tools:text="10 Waiting" />
                             <RadioButton
                                 android:id="@+id/rbnDecline"
@@ -160,6 +160,7 @@
                                 android:button="@null"
                                 android:gravity="center"
                                 android:padding="5dp"
+                                android:textColor="@color/primary_text"
                                 tools:text="10 Regrets" />
 
                         </RadioGroup>

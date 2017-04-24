@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.support.v4.app.DialogFragment;
 import android.app.AlertDialog;
 
+import com.codepath.insync.R;
+
 
 public class ConfirmationFragment extends DialogFragment {
 
@@ -32,7 +34,7 @@ public class ConfirmationFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialog);
         alertDialogBuilder.setMessage(getArguments().getString("message"));
         String positive = getArguments().getString("positive");
         String negative = getArguments().getString("negative");

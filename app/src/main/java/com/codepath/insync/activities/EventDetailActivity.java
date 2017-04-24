@@ -370,10 +370,10 @@ public class EventDetailActivity extends AppCompatActivity implements
                 Log.d(TAG, "Appbar offset changed to: "+verticalOffset);
                 // Calculate ActionBar height
                 int vOffSetThreshold = isCurrent ? 520 : 350;
-
                 if (Math.abs(verticalOffset) > vOffSetThreshold) {
                     TextView tvEventName = (TextView) collapsingToolbar.findViewById(R.id.tvEDName);
                     collapsingToolbar.setTitle(tvEventName.getText().toString());
+                    collapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_text));
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     binding.rlToolbar.setVisibility(View.INVISIBLE);
                     Drawable toolbarDrawable = ResourcesCompat.getDrawable(getResources(),

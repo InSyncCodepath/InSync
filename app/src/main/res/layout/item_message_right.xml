@@ -41,6 +41,7 @@
                 android:textSize="18sp"
                 android:layout_below="@id/ivMessageLeft"
                 android:layout_marginStart="@dimen/margin4"
+                android:textColor="@color/light_black_text"
                 tools:text="Caption"/>
         </RelativeLayout>
 
@@ -59,5 +60,6 @@
         android:layout_marginEnd="@dimen/margin16"
         android:layout_below="@id/cvMessageLeft"
         android:background="@drawable/rounded_text_view_light_green"
+        android:textColor="@color/light_black_text"
         tools:text="What is the name of the place you went hiking last weekend?" />
 </RelativeLayout>
