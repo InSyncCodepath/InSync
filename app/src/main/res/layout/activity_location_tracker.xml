@@ -24,7 +24,6 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:text="@string/attendees_whereabouts"
-            android:textColor="@color/primary_text"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_margin="@dimen/margin8"
             />

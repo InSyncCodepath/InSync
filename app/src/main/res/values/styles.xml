@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
         <item name="android:statusBarColor" tools:targetApi="lollipop">@color/dark_blue_green</item>
+        <item name="android:textColor">@color/primary_text</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -91,4 +92,14 @@
         <item name="android:layout_margin">24dp</item>
     </style>
 
+    <style name="alert_dialog_button">
+        <item name="android:textColor">@color/accent</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/primary_light</item>
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textColorPrimary">@color/primary_text</item>
+        <item name="android:buttonBarButtonStyle">@style/alert_dialog_button</item>
+    </style>
 </resources>
