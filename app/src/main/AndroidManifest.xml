@@ -158,7 +158,8 @@
             android:name=".activities.InSyncContactsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.CameraActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
     </application>
 
 </manifest>

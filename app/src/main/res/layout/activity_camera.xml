@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:visibility="gone" />
 
         <android.support.design.widget.CoordinatorLayout
@@ -28,12 +28,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/margin8"
             android:visibility="gone">
 
             <EditText
                 android:id="@+id/etSelectedMessage"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/tvHeight"
+                android:paddingStart="@dimen/padding4"
+                android:paddingEnd="@dimen/padding4"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginBottom="@dimen/margin8"
@@ -41,7 +44,8 @@
                 android:layout_marginStart="@dimen/margin8"
                 android:layout_marginTop="@dimen/margin8"
                 android:elevation="8dp"
-                android:hint="@string/message_hint"
+                android:background="@drawable/rounded_edit_text"
+                android:hint="@string/add_a_caption"
                 android:imeOptions="actionSend"
                 android:inputType="textShortMessage"
                 tools:targetApi="lollipop" />
@@ -50,7 +54,7 @@
                 android:id="@+id/fabEDSendSelected"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
+                android:layout_gravity="end|center_vertical"
                 android:layout_margin="@dimen/margin4"
                 app:fabSize="mini"
                 app:srcCompat="@drawable/ic_send" />

@@ -23,6 +23,8 @@
                 android:layout_marginBottom="@dimen/margin8"
                 android:layout_marginTop="@dimen/margin8"
                 android:layout_gravity="bottom"
+                android:paddingStart="@dimen/padding4"
+                android:paddingEnd="@dimen/padding4"
                 android:background="@drawable/rounded_edit_text"
                 android:elevation="8dp"
                 android:hint="@string/message_hint"

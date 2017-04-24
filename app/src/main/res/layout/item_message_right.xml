@@ -20,7 +20,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_toStartOf="@id/ivProfileRight"
-        app:cardBackgroundColor="@color/primary_light"
+        app:cardBackgroundColor="@color/lighter_green"
         app:contentPadding="@dimen/padding4"
         android:layout_marginStart="@dimen/margin16"
         android:layout_marginEnd="@dimen/margin16">

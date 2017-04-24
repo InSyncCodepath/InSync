@@ -23,8 +23,6 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.SaveCallback;
 
-import java.util.Date;
-
 
 public class MessageSendFragment extends Fragment {
     private static String TAG = "MessageSendFragment";
@@ -101,7 +99,10 @@ public class MessageSendFragment extends Fragment {
         final Message message = new Message();
         message.setMedia(parseFile);
         message.setSender(User.getCurrentUser());
-        message.setBody(messageBody);
+        if (messageBody != null) {
+            message.setBody(messageBody);
+        }
+
         messageChangeListener.onMessageCreated(message);
         message.saveInBackground(new SaveCallback() {
             @Override
