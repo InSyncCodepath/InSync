@@ -338,7 +338,7 @@ public class EventDetailActivity extends AppCompatActivity implements
             Picasso.with(this).load(profileImage.getUrl())
                     .placeholder(R.drawable.ic_camera_alt_white_48px)
                     .resize(binding.ivEDProfile.getWidth(), 0)
-                    .transform(new RoundedCornersTransformation(10, 10)).into(binding.ivEDProfile,
+                    .transform(new RoundedCornersTransformation(10, 0)).into(binding.ivEDProfile,
                     new Callback() {
                         @Override
                         public void onSuccess() {
@@ -556,10 +556,18 @@ public class EventDetailActivity extends AppCompatActivity implements
         ImageView ivGalleryImage = (ImageView) findViewById(R.id.ivEDImage);
 
         // Add second fragment by replacing first
-        FragmentTransaction ft = fragmentManager.beginTransaction()
-                .replace(R.id.flMessages, pastEventWaitFragment)
+        FragmentTransaction ft;
+        ft = fragmentManager.beginTransaction()
+                .add(R.id.flMessages, pastEventWaitFragment)
+                .hide(pastEventWaitFragment);
+
+        ft.commit();
+        fragmentManager.executePendingTransactions();
+        ft = fragmentManager.beginTransaction()
                 .addToBackStack("transaction")
-                .addSharedElement(ivGalleryImage, "galleryImage");
+                .addSharedElement(ivGalleryImage, "galleryImage")
+                //.remove(pastEventDetailFragment)
+                .show(pastEventWaitFragment);
         // Apply the transaction
         ft.commit();
     }
