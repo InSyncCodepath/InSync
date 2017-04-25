@@ -501,6 +501,9 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
                             Log.d("Debug", userEvent.getObjectId() + " Object id");
                             Log.d("Debug", "Event id=" + userEvent.getEvent() + " USer id" + userEvent.getUserIdKey());
                             userIds.add(userEvent.getUserId());
+                            if (userIds.size() == invitees.size()) {
+                                sendInviteNotifcations(event, userIds);
+                            }
                         }
                     });
 
@@ -525,7 +528,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
                 });
 
 
-                sendInviteNotifcations(event, userIds);
+
 
             }
         });
