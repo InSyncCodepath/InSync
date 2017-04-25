@@ -101,7 +101,7 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
 
         // Define custom views
         RemoteViews contentView = new RemoteViews(BuildConfig.APPLICATION_ID, R.layout.notification_invite);
-        contentView.setImageViewResource(R.id.ivInviteNoti, R.mipmap.ic_launcher);
+        contentView.setImageViewResource(R.id.ivInviteNoti, R.mipmap.ic_insync_launch);
         contentView.setTextViewText(R.id.tvInviteTitle, notiObj.optString("title"));
         contentView.setTextViewText(R.id.tvInviteText, notiObj.optString("text"));
 
@@ -119,7 +119,7 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
 
         // Now we can attach the pendingIntent to a new notification using setContentIntent
         Notification notification = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.messenger_bubble_large_blue)
+                .setSmallIcon(R.mipmap.ic_insync_launch)
                 .setContent(contentView)
                 .setAutoCancel(true) // Hides the notification after its been selected
                 //.setDefaults(Notification.DEFAULT_ALL)

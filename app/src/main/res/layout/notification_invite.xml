@@ -4,10 +4,10 @@
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/icons"
+    android:background="@android:color/white"
     android:padding="10dp" >
     <ImageView
-        android:src="@drawable/ic_launch"
+        android:src="@mipmap/ic_insync_launch"
         android:id="@+id/ivInviteNoti"
         android:layout_width="24dp"
         android:layout_height="24dp"
