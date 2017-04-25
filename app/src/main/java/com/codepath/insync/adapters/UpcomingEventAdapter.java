@@ -60,9 +60,14 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
         holder.eventName.setText(event.getName());
         holder.binding.tvAddress.setText(event.getAddress());
         Date eventDate = event.getStartDate();
-
-        holder.eventDate.setText(eventDate.toString());
-
+        int month = eventDate.getMonth() + 1;
+        int date = eventDate.getDate();
+        int hours = eventDate.getHours();
+        int min = eventDate.getMinutes();
+        String startTime = new SimpleDateFormat("hh:mm aa").format(eventDate);
+        String startDate = month+"/"+date;
+        holder.eventDate.setText(startDate);
+        holder.eventTime.setText(startTime);
         ParseFile profileImage = event.getProfileImage();
         if (profileImage != null) {
             Glide.with(context)
@@ -96,6 +101,7 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
             binding = UpcomingEventItemBinding.bind(itemView);
             eventName = (TextView) itemView.findViewById(R.id.tvEventName);
             eventDate = binding.tvDate;
+            eventTime = binding.tvTime;
         }
     }
 

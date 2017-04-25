@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/ivEventImage"
-            android:textSize="20sp"
+            android:textSize="24sp"
             tools:text="Event Name"
             style="@style/eventListTextView"
             android:transitionName="eventName"
@@ -43,7 +43,8 @@
             android:layout_below="@+id/tvEventName"
             android:layout_toRightOf="@id/ivEventImage"
             tools:text="6th April"
-            style="@style/eventListTextView"/>
+            style="@style/eventListTextView"
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/tvTime"
@@ -52,20 +53,21 @@
             android:layout_below="@+id/tvEventName"
             android:layout_toRightOf="@id/tvDate"
             tools:text="9:00 pm"
-            style="@style/eventListTextView"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvLocation"
-            android:layout_below="@+id/tvDate"
-            android:layout_toRightOf="@id/ivEventImage"
-            tools:text="Location"
-            style="@style/eventListTextView"/>
+            style="@style/eventListTextView"
+            android:textSize="20sp"/>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/tvLocation"-->
+            <!--android:layout_below="@+id/tvDate"-->
+            <!--android:layout_toRightOf="@id/ivEventImage"-->
+            <!--tools:text="Location"-->
+            <!--style="@style/eventListTextView"/>-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tvAddress"
-            android:layout_below="@+id/tvLocation"
+            android:layout_below="@+id/tvDate"
             android:layout_toRightOf="@id/ivEventImage"
             tools:text="Address"
             style="@style/eventListTextView"/>

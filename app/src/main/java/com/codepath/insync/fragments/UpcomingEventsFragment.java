@@ -142,6 +142,7 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
 
             }
         });
+        swipeContainer.setRefreshing(false);
     }
     @Override
     public void onEventItemClick(String eventId, boolean isCurrent, boolean canTrack) {
