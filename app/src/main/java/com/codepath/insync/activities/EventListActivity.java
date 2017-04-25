@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -21,6 +22,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.codepath.insync.Manifest;
@@ -140,17 +142,18 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
     }
 
     @Override
-    public void onItemClick(String eventId, boolean isCurrent, boolean canTrack) {
+    public void onItemClick(String eventId, boolean isCurrent, boolean canTrack, ImageView sharedImageView) {
         Bundle animationBundle =
                 ActivityOptions.makeCustomAnimation(this, R.anim.slide_from_left, R.anim.slide_to_left).toBundle();
         ActivityOptionsCompat options = ActivityOptionsCompat.
-                makeSceneTransitionAnimation(this, (View) findViewById(R.id.ivEventImage), "profile");
+                makeSceneTransitionAnimation(this, sharedImageView, eventId);
 //        Pair<View, String> p1 = Pair.create((View) findViewById(R.id.ivEventImage), "profile");
 
         Intent eventDetailIntent = new Intent(EventListActivity.this, EventDetailActivity.class);
         eventDetailIntent.putExtra("eventId", eventId);
         eventDetailIntent.putExtra("isCurrent", isCurrent);
         eventDetailIntent.putExtra("canTrack", canTrack);
+        eventDetailIntent.putExtra("transition_name", eventId);
         //startActivity(eventDetailIntent);
         startActivity(eventDetailIntent, options.toBundle());
 

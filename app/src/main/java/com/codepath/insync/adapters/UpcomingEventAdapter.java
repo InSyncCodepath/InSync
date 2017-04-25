@@ -3,6 +3,7 @@ package com.codepath.insync.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +41,7 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
     }
 
     @Override
-    public void onBindViewHolder(UpcomingEventViewHolder holder, int position) {
+    public void onBindViewHolder(final UpcomingEventViewHolder holder, int position) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("mm/dd");
 
         final Event event = events.get(position);
@@ -53,7 +54,7 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onEventItemClick(event.getObjectId(), true, canTrack);
+                listener.onEventItemClick(event.getObjectId(), true, canTrack, holder.binding.ivEventImage);
             }
         });
         //holder.binding.tvDate.setText(event.getStartDate().toString());
@@ -76,7 +77,7 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
                     .crossFade()
                     .into(holder.binding.ivEventImage);
         }
-
+        ViewCompat.setTransitionName(holder.binding.ivEventImage, event.getObjectId());
         //holder.binding.tvTime.setText();
     }
 
@@ -106,7 +107,7 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
     }
 
     public interface EventDetailClickHandling {
-        public void onEventItemClick(String eventId, boolean isCurrent, boolean canTrack);
+        public void onEventItemClick(String eventId, boolean isCurrent, boolean canTrack, ImageView imageView);
     }
 }
 

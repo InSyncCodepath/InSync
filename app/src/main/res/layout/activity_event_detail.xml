@@ -57,7 +57,6 @@
                             android:contentDescription="@string/event_profile_image"
                             android:scaleType="fitXY"
                             app:srcCompat="@drawable/ic_camera_alt_white_48px"
-                            android:transitionName="profile"
                             />
 
 

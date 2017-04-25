@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,7 +36,6 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.codepath.insync.Manifest;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityEventDetailBinding;
@@ -59,11 +59,15 @@ import com.parse.ParseException;
 
 import com.parse.ParseFile;
 import com.parse.SaveCallback;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 
 public class EventDetailActivity extends AppCompatActivity implements
@@ -106,6 +110,7 @@ public class EventDetailActivity extends AppCompatActivity implements
         rlEventDetail = binding.rlEventDetail;
         binding.fabEDSend.setVisibility(View.GONE);
 
+        postponeEnterTransition();
         processIntent();
         setupToolbar();
     }
@@ -131,6 +136,7 @@ public class EventDetailActivity extends AppCompatActivity implements
         eventId = intent.getStringExtra("eventId");
         isCurrent = intent.getBooleanExtra("isCurrent", false);
         canTrack = intent.getBooleanExtra("canTrack", false);
+        binding.ivEDProfile.setTransitionName(intent.getStringExtra("transition_name"));
         Event.findEvent(eventId, new GetCallback<Event>() {
             @Override
             public void done(Event eventObj, ParseException e) {
@@ -320,11 +326,34 @@ public class EventDetailActivity extends AppCompatActivity implements
     private void loadViews() {
         ParseFile profileImage = event.getProfileImage();
         if (profileImage != null) {
-            Glide.with(this)
+            /*Glide.with(this)
                     .load(profileImage.getUrl())
-                    .placeholder(R.drawable.ic_camera_alt_white_48px)
                     .crossFade()
-                    .into(binding.ivEDProfile);
+                    .into(new SimpleTarget<GlideDrawable>() {
+                        @Override
+                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            scheduleStartPostponedTransition(binding.ivEDProfile);
+                        }
+                    });*/
+            Picasso.with(this).load(profileImage.getUrl())
+                    .placeholder(R.drawable.ic_camera_alt_white_48px)
+                    .resize(binding.ivEDProfile.getWidth(), 0)
+                    .transform(new RoundedCornersTransformation(10, 10)).into(binding.ivEDProfile,
+                    new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            // Call the "scheduleStartPostponedTransition()" method
+                            // below when you know for certain that the shared element is
+                            // ready for the transition to begin.
+                            scheduleStartPostponedTransition(binding.ivEDProfile);
+                        }
+
+                        @Override
+                        public void onError() {
+                            // ...
+                        }
+                    });
+
         }
         if (!isCurrent) {
             binding.rgEDRsvp.setVisibility(View.GONE);
@@ -333,6 +362,19 @@ public class EventDetailActivity extends AppCompatActivity implements
         binding.tvEDDescription.setText(event.getDescription());
         binding.tvEDDate.setText(CommonUtil.getDateTimeInFormat(event.getStartDate()));
         binding.tvEDLocation.setText(event.getAddress());
+    }
+
+    private void scheduleStartPostponedTransition(final View sharedElement) {
+        sharedElement.getViewTreeObserver().addOnPreDrawListener(
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        binding.ivEDProfile.getViewTreeObserver().removeOnPreDrawListener(this);
+                        supportStartPostponedEnterTransition();
+                        return true;
+                    }
+                }
+        );
     }
 
     private void setupToolbar() {
