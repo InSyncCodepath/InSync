@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.UpcomingEventAdapter;
@@ -145,8 +146,8 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
         swipeContainer.setRefreshing(false);
     }
     @Override
-    public void onEventItemClick(String eventId, boolean isCurrent, boolean canTrack) {
-       eventClickListener.onItemClick(eventId, isCurrent, canTrack);
+    public void onEventItemClick(String eventId, boolean isCurrent, boolean canTrack, ImageView imageView) {
+       eventClickListener.onItemClick(eventId, isCurrent, canTrack, imageView);
     }
 
     public void reloadList() {

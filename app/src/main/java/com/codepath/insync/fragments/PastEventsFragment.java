@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.PastEventAdapter;
@@ -100,8 +101,8 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
     }
 
     @Override
-    public void onEventItemClick(String eventId, boolean isCurrent, boolean canTrack) {
-        eventClickListener.onItemClick(eventId, isCurrent, canTrack);
+    public void onEventItemClick(String eventId, boolean isCurrent, boolean canTrack, ImageView imageView) {
+        eventClickListener.onItemClick(eventId, isCurrent, canTrack, imageView);
     }
 }
 

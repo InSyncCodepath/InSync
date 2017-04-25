@@ -8,6 +8,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ import java.util.Date;
 import java.util.List;
 
 import static android.R.attr.animation;
+import static com.codepath.insync.R.id.ivEventImage;
 
 
 public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.PastEventViewHolder> implements TextureView.SurfaceTextureListener {
@@ -68,7 +70,7 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onEventItemClick(event.getObjectId(), false, false);
+                listener.onEventItemClick(event.getObjectId(), false, false, holder.binding.ivHighlights);
             }
         });
         holder.eventName.setText(event.getName());
@@ -80,6 +82,7 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
                     .crossFade()
                     .into(holder.binding.ivHighlights);
         }
+        ViewCompat.setTransitionName(holder.itemView, event.getObjectId());
 //        Glide.with(context).load(event.getProfileImage()).into(holder.binding.ivHighlights);
 //
 //        ParseQuery<Message> parseQuery = event.getMessageRelation().getQuery();
@@ -154,7 +157,7 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
     }
 
     public interface EventDetailClickHandling {
-        public void onEventItemClick(String eventId, boolean isCurrent, boolean canTrack);
+        public void onEventItemClick(String eventId, boolean isCurrent, boolean canTrack, ImageView imageView);
     }
 
     @Override
