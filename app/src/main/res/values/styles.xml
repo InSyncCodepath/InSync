@@ -102,4 +102,7 @@
         <item name="android:textColorPrimary">@color/primary_text</item>
         <item name="android:buttonBarButtonStyle">@style/alert_dialog_button</item>
     </style>
+    <style name="EventDateTimePickerStyle" parent="@android:style/Theme.DeviceDefault.Dialog">
+        <item name="android:colorAccent" tools:targetApi="lollipop">@color/accent</item>
+    </style>
 </resources>
