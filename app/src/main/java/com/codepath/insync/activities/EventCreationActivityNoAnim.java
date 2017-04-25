@@ -200,7 +200,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
 
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(EventCreationActivityNoAnim.this, startDateListener, eventStartDate
+                new DatePickerDialog(EventCreationActivityNoAnim.this, R.style.EventDateTimePickerStyle, startDateListener, eventStartDate
                         .get(Calendar.YEAR), eventStartDate.get(Calendar.MONTH),
                         eventStartDate.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -209,7 +209,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new TimePickerDialog(EventCreationActivityNoAnim.this, startTimeListener, eventStartDate.get(Calendar.HOUR), eventStartDate.get(Calendar.MINUTE), false).show();
+                new TimePickerDialog(EventCreationActivityNoAnim.this, R.style.EventDateTimePickerStyle, startTimeListener, eventStartDate.get(Calendar.HOUR), eventStartDate.get(Calendar.MINUTE), false).show();
             }
         });
 
@@ -217,7 +217,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
 
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(EventCreationActivityNoAnim.this, endDateListener, eventEndDate
+                new DatePickerDialog(EventCreationActivityNoAnim.this, R.style.EventDateTimePickerStyle, endDateListener, eventEndDate
                         .get(Calendar.YEAR), eventEndDate.get(Calendar.MONTH),
                         eventEndDate.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -226,7 +226,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
         endTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new TimePickerDialog(EventCreationActivityNoAnim.this, endTimeListener, eventEndDate.get(Calendar.HOUR), eventEndDate.get(Calendar.MINUTE), false).show();
+                new TimePickerDialog(EventCreationActivityNoAnim.this, R.style.EventDateTimePickerStyle, endTimeListener, eventEndDate.get(Calendar.HOUR), eventEndDate.get(Calendar.MINUTE), false).show();
             }
         });
 
@@ -236,6 +236,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
             public void onClick(View view) {
                 Toast.makeText(EventCreationActivityNoAnim.this, "Click me", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(EventCreationActivityNoAnim.this, CameraActivity.class);
+                intent.putExtra("is_profile_pic", true);
                 startActivityForResult(intent, 1023);
             }
         });
