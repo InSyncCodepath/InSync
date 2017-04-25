@@ -17,6 +17,7 @@ import com.codepath.insync.R;
 import com.codepath.insync.databinding.FragmentLoginBinding;
 import com.codepath.insync.listeners.OnLoginListener;
 import com.codepath.insync.models.parse.User;
+import com.codepath.insync.utils.CommonUtil;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
@@ -67,16 +68,12 @@ public class LoginFragment extends Fragment {
                                     ParseInstallation installation = ParseInstallation.getCurrentInstallation();
                                     installation.put("userId", user.getObjectId());
                                     installation.saveInBackground();
-                                    Toast.makeText(
-                                            getActivity(),
-                                            "Login successful!", Toast.LENGTH_SHORT)
-                                            .show();
+                                    CommonUtil.createSnackbar(binding.svLogin, getContext(),
+                                            "Login successful!", R.color.primary);
                                     loginListener.onLoginSuccess();
                                 } else {
-                                    Toast.makeText(
-                                            getActivity(),
-                                            "Error logging in. Please try again later!", Toast.LENGTH_SHORT)
-                                            .show();
+                                    CommonUtil.createSnackbar(binding.svLogin, getContext(),
+                                            "Error logging in. Please try again later!", R.color.primary);
                                 }
                             }
                         });

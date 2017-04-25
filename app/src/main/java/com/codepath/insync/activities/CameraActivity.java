@@ -25,6 +25,7 @@ public class CameraActivity extends AppCompatActivity {
     private final static int CAMERA_RQ = 6969;
     ActivityCameraBinding binding;
     String filePath;
+    boolean isProfilePic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class CameraActivity extends AppCompatActivity {
         filePath = null;
 
         String imageUri = getIntent().getStringExtra("image_uri");
+        isProfilePic = getIntent().getBooleanExtra("is_profile_pic", false);
         if (imageUri == null) {
             camera.stillShot()
                     .start(CAMERA_RQ);
@@ -78,11 +80,19 @@ public class CameraActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
                 filePath = data.getData().getPath();
+                if (isProfilePic) {
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("filePath",filePath);
 
-                binding.ivSelectedImage.setVisibility(View.VISIBLE);
-                binding.clSendSelected.setVisibility(View.VISIBLE);
-                binding.camera.setVisibility(View.GONE);
-                binding.ivSelectedImage.setImageBitmap(BitmapFactory.decodeFile(filePath));
+                    setResult(Activity.RESULT_OK,returnIntent);
+                    finish();
+                } else {
+                    binding.ivSelectedImage.setVisibility(View.VISIBLE);
+                    binding.clSendSelected.setVisibility(View.VISIBLE);
+                    binding.camera.setVisibility(View.GONE);
+                    binding.ivSelectedImage.setImageBitmap(BitmapFactory.decodeFile(filePath));
+                }
+
 
             } else if (data != null) {
                 Exception e = (Exception) data.getSerializableExtra(MaterialCamera.ERROR_EXTRA);
