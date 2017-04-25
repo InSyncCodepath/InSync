@@ -20,7 +20,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:layout_marginBottom="4dp"
-                />
+                android:layout_margin="8dp"
+                android:textColor="@color/light_black_text"/>
             <!--<TextureView-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="180dp"-->
