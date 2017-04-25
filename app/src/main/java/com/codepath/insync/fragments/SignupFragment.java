@@ -3,6 +3,7 @@ package com.codepath.insync.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.codepath.insync.R;
 import com.codepath.insync.activities.CameraActivity;
@@ -47,6 +47,7 @@ public class SignupFragment extends Fragment {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_signup, container, false);
         loginListener = (OnLoginListener) getActivity();
+        parseFile = null;
         setupUI(binding.svSignup);
         setupClickListeners();
         return binding.getRoot();
@@ -66,18 +67,13 @@ public class SignupFragment extends Fragment {
                 File file = new File(filePath);
                 parseFile = new ParseFile(file);
 
-                user.setProfileImage(parseFile);
-                user.saveInBackground(new SaveCallback() {
+                binding.civProfilePic.setImageBitmap(BitmapFactory.decodeFile(filePath));
+                parseFile.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
-                        if (e == null) {
-                            CommonUtil.createSnackbar(binding.svSignup, getContext(), "Your profile picture has been added!");
-                        } else {
-                            CommonUtil.createSnackbar(binding.svSignup, getContext(), "Your profile picture could not be added! Please try again later.");
+                        if (e != null) {
+                            CommonUtil.createSnackbar(binding.svSignup, getContext(), "Your profile picture could not be added! Please try again later.", R.color.primary);
                         }
-
-                        loginListener.onLoginSuccess();
-
                     }
                 });
             }
@@ -85,13 +81,14 @@ public class SignupFragment extends Fragment {
     }
 
     private void setupClickListeners() {
-        /*binding.ivCamera.setOnClickListener(new View.OnClickListener() {
+        binding.fabSignUpAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), CameraActivity.class);
+                intent.putExtra("is_profile_pic", true);
                 startActivityForResult(intent, 1024);
             }
-        });*/
+        });
         binding.tvSignupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,16 +99,14 @@ public class SignupFragment extends Fragment {
                 // Set custom properties
                 user.setName(binding.etSignupName.getText().toString());
                 user.setPhoneNumber(binding.etSignupPhone.getText().toString());
-
-                //user.setProfileImage(parseFile);
+                if (parseFile != null) {
+                    user.setProfileImage(parseFile);
+                }
                 // Invoke signUpInBackground
                 user.signup(new SignUpCallback() {
                     public void done(ParseException e) {
                         if (e == null) {
-                            Toast.makeText(
-                                    getActivity(),
-                                    "Sign up successful!", Toast.LENGTH_SHORT)
-                                    .show();
+                            CommonUtil.createSnackbar(binding.svSignup, getContext(), "Sign up successful!", R.color.primary);
                             user.login(
                                     binding.etSignupUsername.getText().toString(),
                                     binding.etSignupPassword.getText().toString(),
@@ -122,22 +117,15 @@ public class SignupFragment extends Fragment {
                                                 ParseInstallation installation = ParseInstallation.getCurrentInstallation();
                                                 installation.put("userId", user.getObjectId());
                                                 installation.saveInBackground();
-                                                Intent intent = new Intent(getActivity(), CameraActivity.class);
-                                                startActivityForResult(intent, 1024);
-                                                //loginListener.onLoginSuccess();
+                                                loginListener.onLoginSuccess();
                                             } else {
-                                                Toast.makeText(
-                                                        getActivity(),
-                                                        "Error logging in. Please try again later!", Toast.LENGTH_SHORT)
-                                                        .show();
+                                                CommonUtil.createSnackbar(binding.svSignup, getContext(),
+                                                        "Error logging in. Please try again later!", R.color.primary);
                                             }
                                         }
                                     });
                         } else {
-                            Toast.makeText(
-                                    getActivity(),
-                                    "Error signing up. Please try again later!", Toast.LENGTH_SHORT)
-                                    .show();
+                            CommonUtil.createSnackbar(binding.svSignup, getContext(), "Error signing up. Please try again later!", R.color.primary);
                         }
                     }
                 });

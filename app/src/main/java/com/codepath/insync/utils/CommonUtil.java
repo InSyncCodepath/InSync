@@ -101,4 +101,11 @@ public class CommonUtil {
         layout.setBackgroundColor(ContextCompat.getColor(context, R.color.accent));
         snackBar.show();
     }
+
+    public static void createSnackbar(View parentView, Context context, String message, int color) {
+        Snackbar snackBar = Snackbar.make(parentView, message, Snackbar.LENGTH_SHORT);
+        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackBar.getView();
+        layout.setBackgroundColor(ContextCompat.getColor(context, color));
+        snackBar.show();
+    }
 }
