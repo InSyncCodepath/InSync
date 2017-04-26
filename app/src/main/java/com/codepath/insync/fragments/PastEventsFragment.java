@@ -3,6 +3,7 @@ package com.codepath.insync.fragments;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,6 +45,7 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
     ArrayList<Event> events = new ArrayList<>();
     PastEventAdapter pastEventAdapter;
     CardView emptyListCard;
+    SwipeRefreshLayout swipeContainer;
     public PastEventsFragment() {
 
     }
@@ -69,9 +71,25 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
         pastList.setAdapter(pastEventAdapter);
         eventClickListener = (OnEventClickListener) getActivity();
         emptyListCard = binding.emptyListCard;
+        swipeContainer = binding.swipeContainer;
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                showPastEvents();
+            }
+
+        });
         cal.setTime(new Date()); // sets calendar time/date
         cal.add(Calendar.HOUR_OF_DAY, bufferHours); // subtract 3 hours
         eventClickListener = (OnEventClickListener) getActivity();
+        showPastEvents();
+
+        return view;
+    }
+
+    private void showPastEvents() {
+        events.clear();
         User currentUser = User.getCurrentUser();
         ParseQuery<UserEventRelation> query = ParseQuery.getQuery(UserEventRelation.class);
         query.selectKeys(Arrays.asList("event"));
@@ -101,8 +119,7 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
 
             }
         });
-
-        return view;
+        swipeContainer.setRefreshing(false);
     }
 
     @Override

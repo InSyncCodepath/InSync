@@ -27,6 +27,8 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -76,8 +78,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import static com.codepath.insync.activities.InSyncContactsActivity.PHONE_CONTACTS_REQUEST_CODE;
+
 public class EventCreationActivity extends AppCompatActivity implements SimpleCursorRecyclerAdapterContacts.SimpleCursorAdapterInterface {
-    //    ActivityCreateEventBinding binding;
     ActivityCreateEventAnimBinding binding;
     public final String TAG = EventCreationActivity.class.getName();
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -99,6 +102,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     InviteeAdapter adapter;
     ParseFile parseFile;
     private static final int SELECT_PICTURE = 1025;
+    public static final int PHONE_CONTACTS_REQUEST_CODE = 1026;
     private String selectedImagePath;
     CardView eventNameCard, eventDetailCard, eventPeopleCard;
     @Override
@@ -149,12 +153,17 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
 //            }
 //        });
 
+        final Animation animationFadeIn = AnimationUtils.loadAnimation(this, R.anim.fadein);
+        final Animation animationFadeOut = AnimationUtils.loadAnimation(this, R.anim.fadeout);
+
         stepOneNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 eventName = binding.etEventName.getText().toString();
                 eventDescription = binding.etDescription.getText().toString();
+                eventNameCard.startAnimation(animationFadeOut);
                 eventNameCard.setVisibility(View.GONE);
+                eventDetailCard.startAnimation(animationFadeIn);
                 eventDetailCard.setVisibility(View.VISIBLE);
             }
         });
@@ -209,6 +218,8 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
 //                });
 
 
+
+
         startDate.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -255,6 +266,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                 openDialog();
             }
         });
+
 
     }
 
@@ -461,6 +473,9 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                                 Log.d("Debug", userEvent.getObjectId() + " Object id");
                                 Log.d("Debug", "Event id=" + userEvent.getEvent() + " USer id" + userEvent.getUserIdKey());
                                 userIds.add(userEvent.getUserId());
+                                if (userIds.size() == invitees.size()) {
+                                    sendInviteNotifcations(event, userIds);
+                                    }
                             }
                         });
 
@@ -484,8 +499,6 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                         }
                     });
 
-
-                    sendInviteNotifcations(event, userIds);
 
                 }
             });
@@ -632,6 +645,31 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(Intent.createChooser(intent,
                         "Select Picture"), SELECT_PICTURE);
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    private void openContactDialog() {
+        View view = getLayoutInflater().inflate(R.layout.sheet_contact, null);
+        final BottomSheetDialog dialog = new BottomSheetDialog(this);
+        dialog.setContentView(view);
+        TextView insyncContact = (TextView) view.findViewById(R.id.bttmInsynContact);
+        TextView phoneContact = (TextView) view.findViewById(R.id.bttmPhoneContacts);
+        insyncContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventCreationActivity.this, InSyncContactsActivity.class);
+                startActivityForResult(intent, REQUEST_CODE);
+                dialog.dismiss();
+            }
+        });
+        phoneContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventCreationActivity.this, ContactActivity.class);
+                startActivityForResult(intent, PHONE_CONTACTS_REQUEST_CODE);
                 dialog.dismiss();
             }
         });
