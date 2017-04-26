@@ -17,6 +17,8 @@ import com.parse.SignUpCallback;
 
 import java.util.List;
 
+import static com.codepath.insync.R.string.username;
+
 
 @ParseClassName("User")
 public class User extends ParseUser {
@@ -32,15 +34,37 @@ public class User extends ParseUser {
         return USERNAME_KEY;
     }
 
-    public static User getUser(String username) throws ParseException {
+//    public static User getUser(String username) throws ParseException {
+////        ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+////        query.whereEqualTo("user", user);
+////        List<ParseObject> objects = query.find();
+////        ParseObject parseObject = objects.get(0);
+//        //user = new User(parseObject);
+//
+//        ParseQuery<ParseUser> query = ParseUser.getQuery();
+//        query.whereEqualTo("username", username);
+//        List<ParseUser> objects = query.find();
+//        ParseUser parseUser = objects.get(0);
+//        user = new User(parseUser);
+//
+////                findInBackground(new FindCallback<ParseUser>() {
+////            @Override
+////            public void done(List<ParseUser> objects, ParseException e) {
+////                user = (User) objects.get(0);
+////            }
+////
+////        });
+//        return user;
+//    }
+    public static User getUser(String name) throws ParseException {
 //        ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
 //        query.whereEqualTo("user", user);
 //        List<ParseObject> objects = query.find();
 //        ParseObject parseObject = objects.get(0);
         //user = new User(parseObject);
 
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("username", username);
+        ParseQuery<ParseUser> query = User.getQuery();
+        query.whereEqualTo("name", name);
         List<ParseUser> objects = query.find();
         ParseUser parseUser = objects.get(0);
         user = new User(parseUser);

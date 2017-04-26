@@ -101,6 +101,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     private static final int REQUEST_CONTACTS = 1;
     RecyclerView inviteeList;
     ArrayList<String> invitees = new ArrayList<>();
+    ArrayList<String> insyncInvitees = new ArrayList<>();
     ArrayList<String> chipList = new ArrayList<>();
     private static String[] PERMISSIONS_CONTACT = {Manifest.permission.READ_CONTACTS};
     InviteeAdapter adapter;
@@ -359,7 +360,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
 //                for(int i = 0; i< contactArrayList.size(); i++){
 //                    invitees.add(contactArrayList.get(i).getName());
 //                }
-                invitees.add(contact.getName());
+                //invitees.add(contact.getName());
                 adapter.notifyDataSetChanged();
             }
         }
@@ -382,6 +383,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         for (int i = 0; i < chipList.size(); i++) {
             if (!(invitees.contains(chipList.get(i)))) {
                 invitees.add(chipList.get(i));
+                insyncInvitees.add(chipList.get(i));
             }
         }
         adapter.notifyDataSetChanged();
