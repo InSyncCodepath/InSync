@@ -14,7 +14,7 @@
         android:contentDescription="@string/event_image"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         android:transitionName="galleryImage"
         app:srcCompat="@drawable/ic_camera_alt_white_48px"
         tools:targetApi="lollipop" />
