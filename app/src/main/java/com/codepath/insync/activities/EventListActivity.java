@@ -4,21 +4,18 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.util.Pair;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,8 +29,7 @@ import com.codepath.insync.fragments.PastEventsFragment;
 import com.codepath.insync.fragments.UpcomingEventsFragment;
 import com.codepath.insync.listeners.OnEventClickListener;
 import com.codepath.insync.utils.LocationService;
-
-import static com.codepath.insync.R.id.ivEventImage;
+import com.eftimoff.viewpagertransformers.ForegroundToBackgroundTransformer;
 
 
 public class EventListActivity extends AppCompatActivity implements OnEventClickListener {
@@ -60,6 +56,7 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
         // Set up the ViewPager with the sections adapter.
         viewPager = binding.viewpager;
         viewPager.setAdapter(viewPagerAdapter);
+        viewPager.setPageTransformer(true, new ForegroundToBackgroundTransformer());
         TabLayout tabLayout = binding.slidingTabs;
         tabLayout.setupWithViewPager(viewPager);
 
