@@ -188,7 +188,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 if (profileImage != null) {
                     Glide.with(mContext)
                             .load(profileImage.getUrl())
-                            .placeholder(R.drawable.ic_profile)
+                            //.placeholder(R.drawable.ic_profile)
                             .bitmapTransform(new RoundedCornersTransformation(mContext, 6, 0))
                             .crossFade()
                             .into(viewLeft.ivProfileLeft);
@@ -199,7 +199,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     viewLeft.tvCaptionRight.setText(styledResultText);
                     Glide.with(mContext)
                             .load(mediaImage.getUrl())
-                            .placeholder(R.drawable.ic_camera_alt_white_48px)
+                            //.placeholder(R.drawable.ic_camera_alt_white_48px)
                             .crossFade()
                             .into(viewLeft.ivMessageRight);
                 } else {
@@ -225,7 +225,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     viewRight.tvCaptionLeft.setText(styledResultText);
                     Glide.with(mContext)
                             .load(profileImage.getUrl())
-                            .placeholder(R.drawable.ic_profile)
+                            //.placeholder(R.drawable.ic_profile)
                             .bitmapTransform(new RoundedCornersTransformation(mContext, 6, 0))
                             .crossFade()
                             .into(viewRight.ivProfileRight);
@@ -236,7 +236,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     viewRight.cvMessageLeft.setVisibility(View.VISIBLE);
                     Glide.with(mContext)
                             .load(mediaImage.getUrl())
-                            .placeholder(R.drawable.ic_camera_alt_white_48px)
+                            //.placeholder(R.drawable.ic_camera_alt_white_48px)
                             .crossFade()
                             .into(viewRight.ivMessageLeft);
                 } else {
