@@ -196,8 +196,11 @@ public class LocationTrackerActivity extends AppCompatActivity {
                             if (user.getProfileImage() != null) {
                                 imageUrl = user.getProfileImage().getUrl();
                             }
-                            ltUsers.add(user);
-                            ltImageAdapter.notifyItemInserted(ltUsers.size()-1);
+                            if (ltUsers.size() < parseUsers.size()) {
+                                ltUsers.add(user);
+                                ltImageAdapter.notifyItemInserted(ltUsers.size()-1);
+                            }
+
                             if (imageUrl != null) {
                                 Glide.with(getApplicationContext())
                                         .load(imageUrl)
