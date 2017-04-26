@@ -37,14 +37,13 @@ public class InSyncContactsActivity extends AppCompatActivity {
     ParseQuery<ParseUser> query = ParseUser.getQuery();
     ArrayList<String> users = new ArrayList<>();
     ArrayList<String> invitees = new ArrayList<>();
-    TextView phoneContacts;
+    //TextView phoneContacts;
     public static final int PHONE_CONTACTS_REQUEST_CODE = 1026;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_in_sync_contacts);
         searchContacts = binding.searchContact;
-        phoneContacts = binding.phoneContacts;
         Toolbar toolbar = binding.toolbarInSyncContacts;
         setSupportActionBar(toolbar);
         query.findInBackground(new FindCallback<ParseUser>() {
@@ -59,7 +58,7 @@ public class InSyncContactsActivity extends AppCompatActivity {
         });
         Log.d("USERS",users.toString());
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                (this,android.R.layout.simple_list_item_1,users);
+                (this,R.layout.insync_contact_autocomplete,users);
         searchContacts.setAdapter(adapter);
         searchContacts.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 
@@ -73,12 +72,6 @@ public class InSyncContactsActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
-        });
-        phoneContacts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showContactDetails();
             }
         });
 
@@ -101,10 +94,6 @@ public class InSyncContactsActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_add) {
             addGuests();
-            return true;
-        }
-        if (id == R.id.action_search) {
-
             return true;
         }
 

@@ -28,15 +28,6 @@
             android:layout_marginTop="80dp"
             android:ems="10" />
 
-        <TextView
-            android:id="@+id/phoneContacts"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="@string/phone_contacts"
-            android:layout_below="@id/searchContact"
-            android:gravity="center_horizontal|center_vertical"
-            android:textSize="30sp"
-            android:background="@color/accent" />
     </RelativeLayout>
 
 </layout>

@@ -48,6 +48,7 @@ import com.codepath.insync.adapters.InviteeAdapter;
 import com.codepath.insync.adapters.SimpleCursorRecyclerAdapterContacts;
 import com.codepath.insync.databinding.ActivityCreateEventAnimBinding;
 import com.codepath.insync.databinding.ActivityCreateEventBinding;
+import com.codepath.insync.models.Contact;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
@@ -65,6 +66,8 @@ import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.SaveCallback;
 
+import org.parceler.Parcels;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -78,6 +81,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import static android.R.attr.id;
 import static com.codepath.insync.activities.InSyncContactsActivity.PHONE_CONTACTS_REQUEST_CODE;
 
 public class EventCreationActivity extends AppCompatActivity implements SimpleCursorRecyclerAdapterContacts.SimpleCursorAdapterInterface {
@@ -171,8 +175,12 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         stepTwoNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                eventDetailCard.setAnimation(animationFadeOut);
                 eventDetailCard.setVisibility(View.GONE);
+
+                eventPeopleCard.setAnimation(animationFadeIn);
                 eventPeopleCard.setVisibility(View.VISIBLE);
+
             }
         });
 
@@ -181,7 +189,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         addUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showContacts();
+                openContactDialog();
             }
         });
 
@@ -341,6 +349,12 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                 Glide.with(EventCreationActivity.this).load(selectedImageUri).into(profileImage);
                 profileImage.setVisibility(View.VISIBLE);
                 parseFile = new ParseFile(inputData);
+            }
+        }
+        if(requestCode == PHONE_CONTACTS_REQUEST_CODE){
+            if(resultCode == RESULT_OK){
+                super.onActivityResult(requestCode, resultCode, data);
+                ArrayList<Contact> contactArrayList = Parcels.unwrap(getIntent().getParcelableExtra("result"));
             }
         }
     }

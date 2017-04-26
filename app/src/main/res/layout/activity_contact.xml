@@ -15,18 +15,11 @@
                 android:id="@+id/toolbarContact">
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
-        <MultiAutoCompleteTextView
-            android:id="@+id/searchContact"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_below="@id/appbar"
-            android:layout_marginTop="80dp"
-            android:ems="10" />
+
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/contactList"
-            android:layout_below="@id/searchContact"/>
+            android:layout_below="@id/appbar"/>
     </RelativeLayout>
 </layout>
