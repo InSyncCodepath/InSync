@@ -18,7 +18,7 @@
                 android:layout_height="@dimen/tvHeight"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="@dimen/margin48"
+                android:layout_marginEnd="54dp"
                 android:layout_marginStart="@dimen/margin8"
                 android:layout_marginBottom="@dimen/margin8"
                 android:layout_marginTop="@dimen/margin8"
