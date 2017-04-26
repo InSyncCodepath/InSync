@@ -65,7 +65,7 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent startEventCreationIntent = EventCreationActivity.newIntent(EventListActivity.this);
+                Intent startEventCreationIntent = EventCreationActivityNoAnim.newIntent(EventListActivity.this);
                 EventListActivity.this.startActivityForResult(startEventCreationIntent, REQUEST_CODE);
             }
         });
