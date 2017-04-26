@@ -109,6 +109,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     public static final int PHONE_CONTACTS_REQUEST_CODE = 1026;
     private String selectedImagePath;
     CardView eventNameCard, eventDetailCard, eventPeopleCard;
+    ArrayList<Contact> contactArrayList =new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -354,7 +355,12 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         if(requestCode == PHONE_CONTACTS_REQUEST_CODE){
             if(resultCode == RESULT_OK){
                 super.onActivityResult(requestCode, resultCode, data);
-                ArrayList<Contact> contactArrayList = Parcels.unwrap(getIntent().getParcelableExtra("result"));
+                Contact contact = Parcels.unwrap(data.getParcelableExtra("result"));
+//                for(int i = 0; i< contactArrayList.size(); i++){
+//                    invitees.add(contactArrayList.get(i).getName());
+//                }
+                invitees.add(contact.getName());
+                adapter.notifyDataSetChanged();
             }
         }
     }

@@ -51,7 +51,7 @@ public class InSyncContactsActivity extends AppCompatActivity {
             public void done(List<ParseUser> objects, ParseException e) {
                 if (objects != null) {
                     for (int i = 0; i < objects.size(); i++) {
-                        users.add(objects.get(i).getUsername());
+                        users.add((String) objects.get(i).get("name"));
                     }
                 }
             }

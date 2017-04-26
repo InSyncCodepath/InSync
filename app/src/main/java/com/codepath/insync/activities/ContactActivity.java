@@ -112,10 +112,11 @@ public class ContactActivity extends AppCompatActivity {
     private void getInviteeList() {
         //guestList = adapter.showInvitees();
         guestList = adapter.showContactInvitees();
+        Contact contact = guestList.get(0);
         Intent returnIntent = new Intent();
         Bundle bundle = new Bundle();
         //bundle.pu
-        returnIntent.putExtra("result", Parcels.wrap(guestList));
+        returnIntent.putExtra("result", Parcels.wrap(contact));
         setResult(Activity.RESULT_OK,returnIntent);
         finish();
     }

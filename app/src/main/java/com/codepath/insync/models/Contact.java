@@ -41,10 +41,10 @@ public class Contact {
         isSelected = selected;
     }
 
-    String name;
-    String phoneNumber;
-    String imageUrl;
-    boolean isSelected;
+    public String name;
+    public String phoneNumber;
+    public String imageUrl;
+    public boolean isSelected;
 
     public Contact(){
         
