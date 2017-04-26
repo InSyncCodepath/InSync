@@ -117,7 +117,7 @@ public class LTImageAdapter extends RecyclerView.Adapter<LTImageAdapter.ViewHold
                     .load(imageUrl)
                     .placeholder(R.drawable.ic_profile)
                     .crossFade()
-                    .bitmapTransform(new RoundedCornersTransformation(mContext, 8, 0))
+                    .bitmapTransform(new RoundedCornersTransformation(mContext, 10, 0))
                     .into(holder.ivLTImage);
         }
 

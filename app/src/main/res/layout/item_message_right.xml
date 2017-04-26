@@ -31,7 +31,7 @@
                 android:id="@+id/ivMessageLeft"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 android:layout_marginBottom="@dimen/margin4"
                 tools:src="@drawable/ic_camera_alt_white_48px" />
             <TextView
