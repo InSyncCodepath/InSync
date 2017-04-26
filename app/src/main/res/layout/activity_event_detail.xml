@@ -91,6 +91,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="@dimen/margin16"
                             android:text="@string/when"
+                            android:textStyle="bold"
                             android:textSize="@dimen/event_heading" />
 
                         <TextView
@@ -109,6 +110,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="@dimen/margin16"
                             android:text="@string/where"
+                            android:textStyle="bold"
                             android:textSize="@dimen/event_heading" />
 
                         <TextView
