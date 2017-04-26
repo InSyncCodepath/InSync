@@ -151,6 +151,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
 
         ParseQuery<Message> parseQuery = event.getMessageRelation().getQuery();
         parseQuery.whereExists("media");
+        parseQuery.orderByAscending("createdAt");
 
         parseQuery.findInBackground(new FindCallback<Message>() {
             @Override

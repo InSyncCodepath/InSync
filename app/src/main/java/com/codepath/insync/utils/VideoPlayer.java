@@ -125,7 +125,12 @@ public class VideoPlayer implements MediaPlayer.OnBufferingUpdateListener,
 
     @Override
     public int getCurrentPosition() {
-        return mediaPlayer.getCurrentPosition();
+        if (mediaPlayer != null) {
+            return mediaPlayer.getCurrentPosition();
+        } else {
+            return 0;
+        }
+
     }
 
     @Override

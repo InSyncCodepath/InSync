@@ -5,6 +5,7 @@
     android:layout_margin="@dimen/margin16"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:cardBackgroundColor="@color/wild_sand"
     app:cardCornerRadius="16dp"
     app:cardElevation="8dp">
     <ImageView
@@ -12,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:transitionName="galleryImage"
-        android:scaleType="fitXY"
+        android:scaleType="fitCenter"
         android:minHeight="100dp"
         />
 </android.support.v7.widget.CardView>
