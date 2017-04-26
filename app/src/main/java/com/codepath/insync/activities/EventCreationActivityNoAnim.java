@@ -91,6 +91,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
     ImageView setProfileImage, profileImage;
     ParseGeoPoint geoPoint;
     RelativeLayout contactsContainer;
+    //Next buttons
     public static final int REQUEST_CODE = 1002;
     private static final int REQUEST_CAMERA_ACTIVITY = 1023;
     private static final int REQUEST_CONTACTS = 1;

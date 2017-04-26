@@ -34,8 +34,8 @@
                     android:layout_height="120dp"
                     android:src="@drawable/ic_profile"
                     app:civ_border_width="2dp"
-                    app:civ_fill_color="@color/secondary_text"
-                    app:civ_border_color="@color/secondary_text"/>
+                    app:civ_fill_color="@color/signup_login_text"
+                    app:civ_border_color="@color/signup_login_text"/>
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/fabSignUpAdd"
                     android:layout_width="wrap_content"
