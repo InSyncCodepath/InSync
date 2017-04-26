@@ -5,11 +5,17 @@ import android.content.Intent;
 
 import com.codepath.insync.R;
 import com.codepath.insync.models.parse.User;
+import com.codepath.insync.utils.CommonUtil;
 import com.codepath.insync.utils.Constants;
 import com.daimajia.androidanimations.library.Techniques;
+import com.parse.Parse;
+import com.parse.ParseUser;
 import com.viksaa.sssplash.lib.activity.AwesomeSplash;
 import com.viksaa.sssplash.lib.cnst.Flags;
 import com.viksaa.sssplash.lib.model.ConfigSplash;
+
+import static com.codepath.insync.utils.CommonUtil.sendInviteLink;
+import static com.parse.ParseUser.logOut;
 
 public class SplashActivity extends AwesomeSplash {
 
@@ -36,6 +42,7 @@ public class SplashActivity extends AwesomeSplash {
         configSplash.setAnimTitleDuration(500);
         configSplash.setAnimTitleTechnique(Techniques.FlipInX);
         //configSplash.setTitleFont("fonts/myfont.ttf"); //TODO: ADD FONT
+        //CommonUtil.sendInviteLink("+1-952-688-6255", "zV1YKPVe6F");
 
     }
 
@@ -56,4 +63,4 @@ public class SplashActivity extends AwesomeSplash {
 
     }
 
-}
+}//

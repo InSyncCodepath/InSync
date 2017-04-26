@@ -19,14 +19,33 @@
             android:paddingRight="24dp"
             android:paddingTop="56dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="72dp"
+            <android.support.design.widget.CoordinatorLayout
+                android:id="@+id/clSignupUpload"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/margin24"
-                android:layout_marginBottom="24dp"
-                android:contentDescription="@string/app_logo"
-                app:srcCompat="@drawable/ic_launch" />
+                android:layout_marginBottom="@dimen/margin24">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civProfilePic"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:src="@drawable/ic_profile"
+                    app:civ_border_width="2dp"
+                    app:civ_fill_color="@color/secondary_text"
+                    app:civ_border_color="@color/secondary_text"/>
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fabSignUpAdd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|bottom"
+                    app:fabSize="mini"
+                    android:layout_marginBottom="@dimen/margin4"
+                    android:layout_marginEnd="@dimen/margin4"
+                    app:srcCompat="@drawable/ic_camera_alt_white_48px" />
+            </android.support.design.widget.CoordinatorLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -88,7 +107,7 @@
                 android:layout_marginBottom="@dimen/margin24"
                 android:layout_marginTop="@dimen/margin24"
                 android:gravity="center"
-                android:text="@string/don_t_have_the_code_resend"
+                android:text="Don't have the code? Sign up."
                 android:textColor="@color/primary_dark"
                 android:textStyle="bold"
                 android:textSize="16sp" />
