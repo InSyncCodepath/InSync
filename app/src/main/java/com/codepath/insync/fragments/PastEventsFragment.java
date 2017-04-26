@@ -90,17 +90,17 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
                     @Override
                     public int compare(Event event1, Event event2) {
                         return event1.getStartDate().compareTo(event2.getStartDate());
+
                     }
                 });
                 pastEventAdapter.notifyDataSetChanged();
-
+                if(events.size() == 0){
+                    pastList.setVisibility(View.GONE);
+                    emptyListCard.setVisibility(View.VISIBLE);
+                }
 
             }
         });
-        if(events.size() == 0){
-            pastList.setVisibility(View.GONE);
-            emptyListCard.setVisibility(View.VISIBLE);
-        }
 
         return view;
     }

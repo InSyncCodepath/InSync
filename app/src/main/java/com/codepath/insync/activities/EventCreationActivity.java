@@ -150,20 +150,19 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                 }
             }
         });
-        findViewById(R.id.ivAttach)
-                .setOnClickListener(new View.OnClickListener() {
-
-                    public void onClick(View arg0) {
-
-                        // in onCreate or any event where your want the user to
-                        // select a file
-                        Intent intent = new Intent();
-                        intent.setType("image/*");
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(Intent.createChooser(intent,
-                                "Select Picture"), SELECT_PICTURE);
-                    }
-                });
+//        findViewById(R.id.ivAttach).setOnClickListener(new View.OnClickListener() {
+//
+//                    public void onClick(View arg0) {
+//
+//                        // in onCreate or any event where your want the user to
+//                        // select a file
+//                        Intent intent = new Intent();
+//                        intent.setType("image/*");
+//                        intent.setAction(Intent.ACTION_GET_CONTENT);
+//                        startActivityForResult(Intent.createChooser(intent,
+//                                "Select Picture"), SELECT_PICTURE);
+//                    }
+//                });
 
 
         startDate.setOnClickListener(new View.OnClickListener() {
