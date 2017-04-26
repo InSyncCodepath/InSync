@@ -3,6 +3,7 @@ package com.codepath.insync.fragments;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -42,7 +43,7 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
     OnEventClickListener eventClickListener;
     ArrayList<Event> events = new ArrayList<>();
     PastEventAdapter pastEventAdapter;
-
+    CardView emptyListCard;
     public PastEventsFragment() {
 
     }
@@ -67,7 +68,7 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
         pastEventAdapter = new PastEventAdapter(this, getContext(), events);
         pastList.setAdapter(pastEventAdapter);
         eventClickListener = (OnEventClickListener) getActivity();
-
+        emptyListCard = binding.emptyListCard;
         cal.setTime(new Date()); // sets calendar time/date
         cal.add(Calendar.HOUR_OF_DAY, bufferHours); // subtract 3 hours
         eventClickListener = (OnEventClickListener) getActivity();
@@ -96,6 +97,10 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
 
             }
         });
+        if(events.size() == 0){
+            pastList.setVisibility(View.GONE);
+            emptyListCard.setVisibility(View.VISIBLE);
+        }
 
         return view;
     }

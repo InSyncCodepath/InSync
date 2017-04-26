@@ -22,7 +22,8 @@
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbarCreate"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:popupTheme="@style/AppTheme.PopupOverlay">
                 </android.support.v7.widget.Toolbar>
             </android.support.design.widget.AppBarLayout>
 

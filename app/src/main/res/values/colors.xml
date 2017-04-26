@@ -24,6 +24,7 @@
     <color name="icons">@color/seashell</color>
     <color name="divider">@color/regent_grey</color>
 
+
     <color name="rbn_background">#ffffff</color>
     <color name="attending_green_selected">#43a047</color>
     <color name="attending_green_unselected">#81c784</color>
@@ -31,5 +32,6 @@
     <color name="decline_red_unselected">#e57373</color>
     <color name="pending_amber_selected">#ffb300</color>
     <color name="pending_amber_unselected">#ffe082</color>
+    <color name="listview_background">#aaefefef</color>
 
 </resources>

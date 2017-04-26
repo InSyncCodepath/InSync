@@ -7,8 +7,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:elevation="4dp"
-        app:cardCornerRadius="10dp">
+        app:cardCornerRadius="12dp"
+        android:elevation="8dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -21,7 +21,7 @@
                 android:textSize="20sp"
                 android:layout_marginBottom="4dp"
                 android:layout_margin="8dp"
-                android:textColor="@color/light_black_text"/>
+                android:textColor="@color/light_black_text" />
             <!--<TextureView-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="180dp"-->
@@ -32,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_below="@id/tvEventName"
-                android:layout_marginBottom="4dp"
+                android:layout_margin="4dp"
                 />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
