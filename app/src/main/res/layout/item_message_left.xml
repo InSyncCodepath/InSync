@@ -29,6 +29,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin16"
+        android:layout_toEndOf="@id/ivProfileLeft"
         android:layout_alignStart="@+id/tvBodyRight"
         android:layout_alignTop="@id/ivProfileLeft"
         app:contentPadding="@dimen/padding4"
@@ -40,7 +41,7 @@
                 android:id="@+id/ivMessageRight"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 tools:src="@drawable/ic_camera_alt_white_48px"
                 />
             <TextView

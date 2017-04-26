@@ -175,7 +175,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 viewLeft.tvFirstName.setText(message.getSender().getName().split(" ")[0]);
                 // set the text view
                 if (messageBody.length() == 0 || mediaImage != null) {
-                    viewLeft.tvBodyRight.setVisibility(View.GONE);
+                    viewLeft.tvBodyRight.setVisibility(View.INVISIBLE);
                 } else {
                     viewLeft.tvBodyRight.setVisibility(View.VISIBLE);
                     viewLeft.tvBodyRight.setText(styledResultText);
