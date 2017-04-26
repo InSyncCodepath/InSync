@@ -12,13 +12,16 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -29,6 +32,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -59,7 +63,11 @@ import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -69,7 +77,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class EventCreationActivity extends AppCompatActivity implements SimpleCursorRecyclerAdapterContacts.SimpleCursorAdapterInterface {
-//    ActivityCreateEventBinding binding;
+    //    ActivityCreateEventBinding binding;
     ActivityCreateEventAnimBinding binding;
     public final String TAG = EventCreationActivity.class.getName();
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -80,7 +88,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     ImageView setProfileImage, profileImage;
     ParseGeoPoint geoPoint;
     RelativeLayout contactsContainer;
-    Button btnNext;
+    Button stepOneNext, stepTwoNext, stepSave, addUser;
     public static final int REQUEST_CODE = 1002;
     private static final int REQUEST_CAMERA_ACTIVITY = 1023;
     private static final int REQUEST_CONTACTS = 1;
@@ -92,6 +100,7 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     ParseFile parseFile;
     private static final int SELECT_PICTURE = 1025;
     private String selectedImagePath;
+    CardView eventNameCard, eventDetailCard, eventPeopleCard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,12 +113,19 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         setProfileImage = binding.ivCamera;
         profileImage = binding.profilePic;
         contactsContainer = binding.contactsContainer;
-        btnNext = binding.next;
+//        btnNext = binding.next;
+        stepOneNext = binding.stepOneNext;
+        stepTwoNext = binding.stepTwoNext;
+//        stepSave = binding.stepSave;
+        addUser = binding.btnAddUser;
         Toolbar toolbar = binding.toolbarCreate;
         setSupportActionBar(toolbar);
-        eventName = binding.etEventName.getText().toString();
-        eventDescription = binding.etDescription.getText().toString();
+        //getSupportActionBar().setTitle(Html.fromHtml("<font color='#ffffff'>"+"Create"+"</font>"));
+
         inviteeList = binding.inviteeList;
+        eventNameCard = binding.eventNameCard;
+        eventDetailCard = binding.eventTimeDetails;
+        eventPeopleCard = binding.eventAddFriends;
 
 //        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.HORIZONTAL);
 //        inviteeList.setLayoutManager(staggeredGridLayoutManager);
@@ -119,17 +135,44 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         adapter = new InviteeAdapter(this, invitees);
         inviteeList.setAdapter(adapter);
 
-        btnNext.setOnClickListener(new View.OnClickListener() {
+//        btnNext.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(binding.etEventName.getVisibility()==View.VISIBLE){
+//                    if (binding.etEventName.getText().equals("")) {
+//                        Toast.makeText(EventCreationActivity.this, "Event Name can not be blank", Toast.LENGTH_LONG).show();
+//                    } else {
+//                        binding.etEventName.setVisibility(View.GONE);
+////                        binding.ivCamera.setVisibility(View.VISIBLE);
+//                    }
+//                }
+//            }
+//        });
+
+        stepOneNext.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if(binding.etEventName.getVisibility()==View.VISIBLE){
-                    if (binding.etEventName.getText().equals("")) {
-                        Toast.makeText(EventCreationActivity.this, "Event Name can not be blank", Toast.LENGTH_LONG).show();
-                    } else {
-                        binding.etEventName.setVisibility(View.GONE);
-                        binding.ivCamera.setVisibility(View.VISIBLE);
-                    }
-                }
+            public void onClick(View v) {
+                eventName = binding.etEventName.getText().toString();
+                eventDescription = binding.etDescription.getText().toString();
+                eventNameCard.setVisibility(View.GONE);
+                eventDetailCard.setVisibility(View.VISIBLE);
+            }
+        });
+
+        stepTwoNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                eventDetailCard.setVisibility(View.GONE);
+                eventPeopleCard.setVisibility(View.VISIBLE);
+            }
+        });
+
+//oncrete
+
+        addUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showContacts();
             }
         });
 
@@ -150,7 +193,8 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
                 }
             }
         });
-//        findViewById(R.id.ivAttach).setOnClickListener(new View.OnClickListener() {
+//        findViewById(R.id.ivAttach)
+//                .setOnClickListener(new View.OnClickListener() {
 //
 //                    public void onClick(View arg0) {
 //
@@ -203,14 +247,18 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         setProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(EventCreationActivity.this, "Click me", Toast.LENGTH_LONG).show();
-                setProfileImage.setVisibility(View.GONE);
-                Intent intent = new Intent(EventCreationActivity.this, CameraActivity.class);
-                startActivityForResult(intent, 1023);
+//                Toast.makeText(EventCreationActivity.this, "Click me", Toast.LENGTH_LONG).show();
+//                setProfileImage.setVisibility(View.GONE);
+//                Intent intent = new Intent(EventCreationActivity.this, CameraActivity.class);
+//                intent.putExtra("setProfileImage", true);
+//                startActivityForResult(intent, 1023);
+                openDialog();
             }
         });
 
     }
+
+
 
     private void updateDate(EditText etDate, Date date) {
         String myFormat = "MM/dd/yy"; //In which you need put here
@@ -265,14 +313,38 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
             if (requestCode == SELECT_PICTURE) {
                 Uri selectedImageUri = data.getData();
 //                selectedImagePath = getPath(selectedImageUri);
-                selectedImagePath = selectedImageUri.getPath();
+//                selectedImagePath = selectedImageUri.getPath();
+                InputStream iStream = null;
+                byte[] inputData = null;
+                try {
+                    iStream = getContentResolver().openInputStream(selectedImageUri);
+                    inputData = getBytes(iStream);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 File file = new File(String.valueOf(selectedImageUri));
-                Glide.with(this).load(file).into(profileImage);
+                Glide.with(EventCreationActivity.this).load(selectedImageUri).into(profileImage);
                 profileImage.setVisibility(View.VISIBLE);
-                parseFile = new ParseFile(file);
+                parseFile = new ParseFile(inputData);
             }
         }
     }
+
+    public byte[] getBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        int len = 0;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
+    }
+
 
     private void showGuests() {
         for (int i = 0; i < chipList.size(); i++) {
@@ -349,10 +421,6 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
         int id = item.getItemId();
         if (id == R.id.action_create) {
             saveEventDetails();
-            return true;
-        }
-        if (id == R.id.action_invite) {
-            showContacts();
             return true;
         }
 
@@ -540,5 +608,33 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     @Override
     public void showInvitees() {
 
+    }
+
+    private void openDialog() {
+        View view = getLayoutInflater().inflate(R.layout.sheet_main, null);
+        final BottomSheetDialog dialog = new BottomSheetDialog(this);
+        dialog.setContentView(view);
+        TextView camera_sel = (TextView) view.findViewById(R.id.bttmCamera);
+        TextView gallery_sel = (TextView) view.findViewById(R.id.bttmGallery);
+        camera_sel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventCreationActivity.this, CameraActivity.class);
+                intent.putExtra("is_profile_pic", true);
+                startActivityForResult(intent, 1023);
+                dialog.dismiss();
+            }
+        });
+        gallery_sel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(Intent.createChooser(intent,
+                        "Select Picture"), SELECT_PICTURE);
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }

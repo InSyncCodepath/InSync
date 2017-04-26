@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:padding="4dp">
+
+    <TextView
+        android:id="@+id/bttmCamera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:drawableTop="@android:drawable/ic_menu_camera"
+        android:drawablePadding="8dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:padding="16dp"
+        android:text="Camera"
+        android:textColor="@android:color/darker_gray"
+        android:textStyle="bold"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/bttmGallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:drawablePadding="8dp"
+        android:drawableTop="@android:drawable/ic_menu_gallery"
+        android:gravity="center_horizontal|center_vertical"
+        android:padding="16dp"
+        android:text="Gallery"
+        android:textColor="@android:color/darker_gray"
+        android:textStyle="bold"
+        android:textSize="18sp" />
+
+</LinearLayout>
