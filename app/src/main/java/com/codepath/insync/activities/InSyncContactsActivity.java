@@ -17,10 +17,14 @@ import android.widget.TextView;
 
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityInSyncContactsBinding;
+import com.codepath.insync.models.Contact;
+import com.codepath.insync.models.parse.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import org.parceler.Parcels;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -120,5 +124,12 @@ public class InSyncContactsActivity extends AppCompatActivity {
     public static Intent newIntent(Activity callingActivity) {
         Intent intent = new Intent(callingActivity, InSyncContactsActivity.class);
         return intent;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ArrayList<Contact> contactArrayList = Parcels.unwrap(getIntent().getParcelableExtra("result"));
+
     }
 }

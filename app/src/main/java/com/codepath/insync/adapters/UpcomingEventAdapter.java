@@ -42,7 +42,7 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
 
     @Override
     public void onBindViewHolder(final UpcomingEventViewHolder holder, int position) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("mm/dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM - dd");
 
         final Event event = events.get(position);
         final boolean canTrack = CommonUtil.canTrackGuests(event.getStartDate(), event.getEndDate());
@@ -61,12 +61,14 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
         holder.eventName.setText(event.getName());
         holder.binding.tvAddress.setText(event.getAddress());
         Date eventDate = event.getStartDate();
+
         int month = eventDate.getMonth() + 1;
         int date = eventDate.getDate();
         int hours = eventDate.getHours();
         int min = eventDate.getMinutes();
         String startTime = new SimpleDateFormat("hh:mm aa").format(eventDate);
-        String startDate = month+"/"+date;
+        String startDate = new SimpleDateFormat("MMM-dd").format(eventDate);
+                //month+"/"+date;
         holder.eventDate.setText(startDate);
         holder.eventTime.setText(startTime);
         ParseFile profileImage = event.getProfileImage();

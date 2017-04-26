@@ -6,6 +6,7 @@ package com.codepath.insync.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
+import com.codepath.insync.models.Contact;
 
 import java.util.ArrayList;
 
@@ -30,6 +32,7 @@ public class SimpleCursorRecyclerAdapterContacts extends CursorRecyclerAdapter<S
     private Context context;
     boolean isSelectedContact [];
     ArrayList<String> invitees;
+    ArrayList<Contact> contactInvitees;
     public SimpleCursorRecyclerAdapterContacts(Context context, int layout, Cursor c, String[] from, int[] to) {
         super(c);
         //this.listener = listener;
@@ -55,22 +58,34 @@ public class SimpleCursorRecyclerAdapterContacts extends CursorRecyclerAdapter<S
         if(invitees == null) {
             invitees = new ArrayList<>();
         }
+        if(contactInvitees == null) {
+            contactInvitees = new ArrayList<>();
+        }
         final int count = mTo.length;
         final int[] from = mFrom;
 
         holder.isSelected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                cursor.moveToPosition(position);
+                final Contact contact = new Contact(cursor.getString(cursor.getColumnIndex("display_name")),
+                        cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)),
+                        cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI)), isChecked);
                 if(isChecked){
                     isSelectedContact[position] = true;
-                    cursor.moveToPosition(position);
+
                     if(!(invitees.contains(cursor.getString(cursor.getColumnIndex("display_name"))))){
                         invitees.add(cursor.getString(cursor.getColumnIndex("display_name")));
+                        contact.setSelected(true);
+                        contactInvitees.add(contact);
+
                     }
                 } else {
                     isSelectedContact[position] = false;
-                    cursor.moveToPosition(position);
                     invitees.remove(cursor.getString(cursor.getColumnIndex("display_name")));
+                    contact.setSelected(false);
+                    contactInvitees.remove(contact);
                 }
             }
         });
@@ -87,9 +102,15 @@ public class SimpleCursorRecyclerAdapterContacts extends CursorRecyclerAdapter<S
             holder.isSelected.setChecked(false);
         }
     }
+
+    public ArrayList<Contact> showContactInvitees(){
+        return contactInvitees;
+    }
+
     public ArrayList<String> showInvitees(){
         return invitees;
     }
+
     public void setAdapterListener(SimpleCursorAdapterInterface listener) {
         this.listener = listener;
     }

@@ -1,9 +1,13 @@
 package com.codepath.insync.models;
 
+import org.parceler.Parcel;
+
+import java.io.Serializable;
+
 /**
  * Created by Gauri Gadkari on 4/20/17.
  */
-
+@Parcel
 public class Contact {
     public String getName() {
         return name;
@@ -41,6 +45,10 @@ public class Contact {
     String phoneNumber;
     String imageUrl;
     boolean isSelected;
+
+    public Contact(){
+        
+    }
 
     public Contact(String name, String phoneNumber, String imageUrl, boolean isSelected){
         this.name = name;

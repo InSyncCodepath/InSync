@@ -19,6 +19,9 @@ import android.view.MenuItem;
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.SimpleCursorRecyclerAdapterContacts;
 import com.codepath.insync.databinding.ActivityContactBinding;
+import com.codepath.insync.models.Contact;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -27,7 +30,8 @@ public class ContactActivity extends AppCompatActivity {
     ActivityContactBinding binding;
     RecyclerView contactList;
     public static final int CONTACT_LOADER_ID = 10;
-    ArrayList<String> guestList;
+    //ArrayList<String> guestList;
+    ArrayList<Contact> guestList;
     Toolbar toolbar;
 
     private LoaderManager.LoaderCallbacks<Cursor> contactsLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
@@ -103,12 +107,15 @@ public class ContactActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
     private void getInviteeList() {
-        guestList = adapter.showInvitees();
+        //guestList = adapter.showInvitees();
+        guestList = adapter.showContactInvitees();
         Intent returnIntent = new Intent();
         Bundle bundle = new Bundle();
         //bundle.pu
-        returnIntent.putExtra("result",guestList);
+        returnIntent.putExtra("result", Parcels.wrap(guestList));
         setResult(Activity.RESULT_OK,returnIntent);
         finish();
     }
