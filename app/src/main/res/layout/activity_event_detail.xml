@@ -67,7 +67,7 @@
                             android:layout_alignTop="@id/ivEDProfile"
                             android:layout_marginStart="@dimen/margin8"
                             android:layout_toEndOf="@id/ivEDProfile"
-                            android:textSize="@dimen/event_heading"
+                            android:textSize="20sp"
                             android:textStyle="bold"
                             tools:text="Netfix Demo Day"
 
