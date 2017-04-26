@@ -6,13 +6,14 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        tools:context="com.codepath.insync.activities.EventCreationActivity">
 
         <RelativeLayout
             android:id="@+id/contactsContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context="com.codepath.insync.activities.EventCreationActivity">
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp">
 
             <android.support.design.widget.AppBarLayout
                 android:id="@+id/appbar"
@@ -23,212 +24,263 @@
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbarCreate"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:theme="@style/AppTheme.AppBarOverlay"
+                    app:popupTheme="@style/AppTheme.PopupOverlay">
+
                 </android.support.v7.widget.Toolbar>
+
             </android.support.design.widget.AppBarLayout>
 
-            <ImageView
-                android:id="@+id/profilePic"
+            <android.support.v7.widget.CardView
+                android:id="@+id/eventNameCard"
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:adjustViewBounds="true"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/appbar"
+                android:layout_margin="12dp"
+                android:elevation="8dp"
+                app:cardCornerRadius="12dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/profilePic"
+                        android:layout_width="match_parent"
+                        android:layout_height="220dp"
+                        android:layout_alignParentTop="true"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/ivCamera"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignBottom="@id/etEventName"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/profilePic"
+                        android:layout_marginRight="8dp"
+                        android:src="@drawable/ic_attach_file_white_48px" />
+
+                    <EditText
+                        android:id="@+id/etEventName"
+                        style="@style/EventCreation"
+                        android:layout_below="@id/profilePic"
+                        android:layout_toLeftOf="@id/ivCamera"
+                        android:animateLayoutChanges="true"
+                        android:hint="@string/event_name" />
+
+                    <EditText
+                        android:id="@+id/etDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignRight="@id/etEventName"
+                        android:layout_below="@+id/etEventName"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginTop="8dp"
+                        android:hint="Event Details"
+                        android:minLines="2" />
+
+                    <Button
+                        android:id="@+id/stepOneNext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/etDescription"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="28dp"
+                        android:textStyle="bold"
+                        android:textColor="#ffffff"
+                        android:background="@color/accent"
+                        android:text="@string/next" />
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/eventTimeDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/appbar"
+                android:layout_margin="12dp"
+                android:elevation="8dp"
                 android:visibility="gone"
-                android:scaleType="centerCrop"/>
+                app:cardCornerRadius="12dp">
 
-            <ImageView
-                android:id="@+id/ivCamera"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/profilePic"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_camera_alt_white_48px"
-                android:visibility="gone"/>
-            <!--                android:layout_toLeftOf="@+id/ivAttach"
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginLeft="12dp">
 
-            <ImageView-->
-            <!--android:id="@+id/ivAttach"-->
-            <!--android:layout_width="45dp"-->
-            <!--android:layout_height="45dp"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_below="@id/profilePic"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:src="@drawable/ic_attach_file_white_48px" />-->
+                    <LinearLayout
+                        android:id="@+id/startDateTimeContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
 
+                        <ImageView
+                            android:id="@+id/ivClock"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_watch_later_white_48px"
+                            android:visibility="gone" />
 
-            <EditText
-                android:id="@+id/etEventName"
-                android:hint="@string/event_name"
-                style="@style/EventCreation"
-                android:animateLayoutChanges="true"
-                />
+                        <EditText
+                            android:id="@+id/etStartDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="8dp"
+                            android:layout_weight="1"
+                            android:hint="@string/start_date" />
 
+                        <EditText
+                            android:id="@+id/etStartTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:layout_weight="1"
+                            android:hint="@string/start_time" />
+                    </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/startDateTimeContainer"
+                    <LinearLayout
+                        android:id="@+id/endDateTimeContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/startDateTimeContainer"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/etEndDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="8dp"
+                            android:layout_weight="1"
+                            android:hint="@string/end_date" />
+
+                        <EditText
+                            android:id="@+id/etEndTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:layout_weight="1"
+                            android:hint="@string/end_time" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/locationContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/endDateTimeContainer"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/ivLocationPin"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_location_on_white_48px" />
+
+                        <EditText
+                            android:id="@+id/etLocation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="8dp"
+                            android:hint="@string/location" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/stepTwoNext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/locationContainer"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="28dp"
+                        android:textStyle="bold"
+                        android:textColor="#ffffff"
+                        android:background="@color/accent"
+                        android:text="@string/next" />
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/eventAddFriends"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/etEventName"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_below="@id/appbar"
+                android:layout_margin="12dp"
+                android:elevation="8dp"
                 android:visibility="gone"
-                android:orientation="horizontal">
-                <ImageView
-                    android:id="@+id/ivClock"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_below="@id/etEventName"
-                    android:layout_marginTop="8dp"
-                    android:src="@drawable/ic_watch_later_white_48px"
-                    android:visibility="gone"/>
+                app:cardCornerRadius="12dp">
 
-                <EditText
-                    android:id="@+id/etStartDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:layout_weight="1"
-                    android:hint="@string/start_date" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <EditText
-                    android:id="@+id/etStartTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_weight="1"
-                    android:hint="@string/start_time" />
-            </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/inviteeContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical">
 
+                        <TextView
+                            android:id="@+id/inviteeHeader"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginBottom="4dp"
+                            android:layout_marginTop="8dp"
+                            android:text="Invitees"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
-            <LinearLayout
-                android:id="@+id/endDateTimeContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/startDateTimeContainer"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:visibility="gone"
-                android:orientation="horizontal">
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/inviteeList"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="8dp" />
 
-                <EditText
-                    android:id="@+id/etEndDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:layout_weight="1"
-                    android:hint="@string/end_date" />
+                        <!--<Button-->
+                        <!--android:id="@+id/btnAddUser"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:drawableLeft="@drawable/ic_person_add_white_48px"-->
+                        <!--android:layout_gravity="center_horizontal"-->
+                        <!--android:text="Add User" />-->
 
-                <EditText
-                    android:id="@+id/etEndTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_weight="1"
-                    android:hint="@string/end_time" />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/locationContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/endDateTimeContainer"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:visibility="gone"
-                android:orientation="horizontal">
+                    </LinearLayout>
 
-            <ImageView
-                android:id="@+id/ivLocationPin"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_below="@id/endDateTimeContainer"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_location_on_white_48px" />
+                    <Button
+                        android:id="@+id/btnAddUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/inviteeContainer"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="28dp"
+                        android:textStyle="bold"
+                        android:textColor="#ffffff"
+                        android:drawableLeft="@drawable/ic_person_add_white_48px"
+                        android:paddingLeft="12dp"
+                        android:background="@color/accent"
+                        android:text="@string/save_next" />
 
-            <EditText
-                android:id="@+id/etLocation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/endDateTimeContainer"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_toRightOf="@id/ivLocationPin"
-                android:hint="@string/location" />
-
-
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/detailsContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/locationContainer"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:visibility="gone"
-                android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/ivDetails"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_below="@id/locationContainer"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_mode_edit_white_48px" />
-            <EditText
-                android:id="@+id/etDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/locationContainer"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_toRightOf="@+id/ivDetails"
-                android:hint="Details"
-                android:minLines="2" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/inviteeContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/detailsContainer"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:visibility="gone"
-                android:orientation="vertical">
-            <TextView
-                android:id="@+id/inviteeHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/etDescription"
-                android:layout_marginBottom="4dp"
-                android:layout_marginTop="8dp"
-                android:text="Invitees"
-                android:textSize="20sp" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/inviteeList"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/inviteeHeader"
-                android:layout_margin="8dp" />
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Delete"
-                android:id="@+id/btnDelete"
-                android:layout_below="@id/inviteeList"
-                android:visibility="gone"/>
-
-            </LinearLayout>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/next"
-                android:layout_below="@id/inviteeContainer"
-                android:layout_alignParentRight="true"
-                android:background="@color/accent"
-                android:layout_margin="26dp"
-                android:id="@+id/next"/>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
 
         </RelativeLayout>
     </ScrollView>

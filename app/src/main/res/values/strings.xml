@@ -50,6 +50,7 @@
     <string name="x_xxx_xxx_xxxx">1-XXX-XXX-XXXX</string>
     <string name="phone_contacts">Phone Contacts</string>
     <string name="next">Next >></string>
+    <string name="save_next">Add User</string>
     <string name="attendees_whereabouts">Attendees Whereabouts</string>
     <string name="gallery">Gallery</string>
     <string name="add_a_caption">Add a caption…</string>

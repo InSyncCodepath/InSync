@@ -441,10 +441,10 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
             saveEventDetails();
             return true;
         }
-        if (id == R.id.action_invite) {
-            showContacts();
-            return true;
-        }
+//        if (id == R.id.action_invite) {
+//            showContacts();
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
