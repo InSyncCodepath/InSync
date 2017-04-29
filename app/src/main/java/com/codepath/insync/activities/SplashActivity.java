@@ -42,8 +42,6 @@ public class SplashActivity extends AwesomeSplash {
         configSplash.setAnimTitleDuration(500);
         configSplash.setAnimTitleTechnique(Techniques.FlipInX);
         //configSplash.setTitleFont("fonts/myfont.ttf"); //TODO: ADD FONT
-        //CommonUtil.sendInviteLink("+1-952-688-6255", "zV1YKPVe6F");
-
     }
 
     @Override
