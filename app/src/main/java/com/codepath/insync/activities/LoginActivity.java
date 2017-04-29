@@ -55,10 +55,10 @@ public class LoginActivity extends AppCompatActivity implements OnLoginListener 
         String referrerStr = sharedPreferences.getString("referrer", null);
 
         if (referrerStr == null || referrerStr.split("&").length < 2) {
-            //LoginFragment loginFragment = new LoginFragment();
-            //ft.replace(R.id.flLogin, loginFragment);
-            PhoneLoginFragment phoneLoginFragment = PhoneLoginFragment.newInstance("+1-952-688-6255", "zV1YKPVe6F");
-            ft.replace(R.id.flLogin, phoneLoginFragment);
+            LoginFragment loginFragment = new LoginFragment();
+            ft.replace(R.id.flLogin, loginFragment);
+            //PhoneLoginFragment phoneLoginFragment = PhoneLoginFragment.newInstance("+1-952-688-6255", "zV1YKPVe6F");
+            //ft.replace(R.id.flLogin, phoneLoginFragment);
         } else {
             String[] userData = referrerStr.split("&");
             PhoneLoginFragment phoneLoginFragment = PhoneLoginFragment.newInstance(userData[0], userData[1]);
