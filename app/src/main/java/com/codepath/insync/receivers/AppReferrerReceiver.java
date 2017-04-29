@@ -26,14 +26,14 @@ public  class AppReferrerReceiver extends BroadcastReceiver {
     private void processPush(Context context, Intent intent) {
         String action = intent.getAction();
         if (action.equals(installAction)) {
-            Object referrer = intent.getExtras().get("referrer");
+            String referrer = intent.getStringExtra("referrer");
             if (referrer == null) {
                 return;
             }
-
+            Log.i(TAG, "Got referrer: "+referrer);
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("referrer", referrer.toString());
+            editor.putString("referrer", referrer);
 
             editor.commit();
         }

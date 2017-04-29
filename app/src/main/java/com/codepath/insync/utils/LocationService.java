@@ -90,13 +90,19 @@ public class LocationService extends Service implements
         if (location != null) {
             Log.e(TAG, "position: " + location.getLatitude() + ", " + location.getLongitude() + " accuracy: " + location.getAccuracy());
             ParseGeoPoint geoPoint = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
-            User user = User.getCurrentUser();
+            final User user = User.getCurrentUser();
             user.setLocation(geoPoint);
             user.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
                     if (e == null) {
-                        Log.d(TAG, "User location saved successfully");
+                        Log.d(TAG, "User location saved successfully. Sending broadcast.");
+                        Intent intent = new Intent("com.codepath.insync.Users");
+                        intent.putExtra("userId", user.getObjectId());
+                        ParseGeoPoint location = user.getLocation();
+                        intent.putExtra("userLatitude", location.getLatitude());
+                        intent.putExtra("userLongitude", location.getLongitude());
+                        sendBroadcast(intent);
                     } else {
                         Log.e(TAG, "User location could not be saved. Failed with error: "+e.getLocalizedMessage());
                     }

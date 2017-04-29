@@ -366,7 +366,7 @@ public class LocationTrackerActivity extends AppCompatActivity {
         final IconGenerator iconGenerator = new IconGenerator(LocationTrackerActivity.this);
 
         if (glideDrawable == null) {
-            markerImageView.setImageResource(R.drawable.ic_profile);
+            markerImageView.setImageResource(R.drawable.ic_profile_map);
         } else {
             markerImageView.setImageDrawable(glideDrawable);
         }

@@ -57,25 +57,6 @@ public class ParseApplication extends Application {
         ParseQuery<ParseUser> userParseQuery = ParseUser.getQuery();
         // This query can even be more granular (i.e. only refresh if the entry was added by some other user)
         // parseQuery.whereNotEqualTo(USER_ID_KEY, ParseUser.getCurrentUser().getObjectId());
-
-        // Connect to Parse server
-        SubscriptionHandling<ParseUser> locationSubscriptionHandling = parseLiveQueryClient.subscribe(userParseQuery);
-
-        // Listen for UPDATE events
-        locationSubscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new
-                SubscriptionHandling.HandleEventCallback<ParseUser>() {
-                    @Override
-                    public void onEvent(ParseQuery<ParseUser> query, ParseUser object) {
-                        Log.d(TAG, "User update received. Broadcasting.");
-                        ParseGeoPoint location = object.getParseGeoPoint("location");
-                        Intent intent = new Intent("com.codepath.insync.Users");
-                        intent.putExtra("userId", object.getObjectId());
-                        intent.putExtra("userLatitude", location.getLatitude());
-                        intent.putExtra("userLongitude", location.getLongitude());
-                        sendBroadcast(intent);
-                    }
-                });
-
         ParseQuery<Event> currentEventQuery = CommonUtil.getCurrentEventQuery();
         SubscriptionHandling<Event> cEventSubscriptionHandling = parseLiveQueryClient.subscribe(currentEventQuery);
         cEventSubscriptionHandling.handleEvents(new SubscriptionHandling.HandleEventsCallback<Event>() {
