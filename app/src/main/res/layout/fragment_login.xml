@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto">
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -79,6 +80,14 @@
                     android:text="@string/get_started" />
             </LinearLayout>
 
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/btn_fblogin"
+                facebook:com_facebook_login_text="Connect with Facebook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin24"
+                android:layout_marginBottom="@dimen/margin24" />
             <TextView
                 android:id="@+id/tvLoginSignup"
                 android:layout_width="fill_parent"

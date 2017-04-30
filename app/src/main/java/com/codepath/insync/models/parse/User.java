@@ -133,7 +133,11 @@ public class User extends ParseUser {
         if (parseUser.getEmail() != null) {
             setEmail(parseUser.getEmail());
         }
-        setName(parseUser.getString(NAME_KEY));
+
+        if (parseUser.getString(NAME_KEY) != null) {
+            setName(parseUser.getString(NAME_KEY));
+        }
+
         if (parseUser.getParseFile(PROFILE_IMAGE_KEY) != null) {
             setProfileImage(parseUser.getParseFile(PROFILE_IMAGE_KEY));
         }
