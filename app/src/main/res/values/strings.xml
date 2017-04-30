@@ -55,4 +55,6 @@
     <string name="gallery">Gallery</string>
     <string name="add_a_caption">Add a caption…</string>
     <string name="create_event">Create Event</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>

@@ -3,9 +3,12 @@ package com.codepath.insync.activities;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -14,6 +17,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -22,14 +27,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.codepath.insync.Manifest;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityEventListBinding;
 import com.codepath.insync.fragments.PastEventsFragment;
 import com.codepath.insync.fragments.UpcomingEventsFragment;
 import com.codepath.insync.listeners.OnEventClickListener;
+import com.codepath.insync.models.parse.User;
 import com.codepath.insync.utils.LocationService;
 import com.eftimoff.viewpagertransformers.ForegroundToBackgroundTransformer;
+
+import static com.codepath.insync.R.id.fab;
 
 
 public class EventListActivity extends AppCompatActivity implements OnEventClickListener {
@@ -41,13 +50,17 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
     public UpcomingEventsFragment upcomingFragment;
     public PastEventsFragment pastFragment;
     private static final int LOCATION_ACCESS_PERMISSION = 20;
-
+    private DrawerLayout drawer;
+    private NavigationView nvDrawer;
+    private ActionBarDrawerToggle drawerToggle;
+    ImageView profilePicDrawer;
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_event_list);
 
-        Toolbar toolbar = binding.toolbar;
+        toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -59,8 +72,16 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
         viewPager.setPageTransformer(true, new ForegroundToBackgroundTransformer());
         TabLayout tabLayout = binding.slidingTabs;
         tabLayout.setupWithViewPager(viewPager);
+        drawer = (DrawerLayout) findViewById(R.id.drawerLayout);
+        nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        setUpDrawerContent(nvDrawer);
+        drawerToggle = setUpDrawerToggle();
+        drawer.addDrawerListener(drawerToggle);
 
+        final NavigationView mNavigationView = (NavigationView) findViewById(R.id.nvView);
+        final View headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header);
 
+        profilePicDrawer = (ImageView) headerLayout.findViewById(R.id.ivHeader);
         FloatingActionButton fab = binding.fab;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,7 +91,47 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
             }
         });
         startLocationService();
+        User user = User.getCurrentUser();
+        Glide.with(this).load(user.getProfileImage().getUrl()).into(profilePicDrawer);
 
+    }
+
+    private void setUpDrawerContent(NavigationView nvDrawer) {
+        nvDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                selectDrawerItem(item);
+                return true;
+            }
+        });
+    }
+    private void selectDrawerItem(MenuItem item) {
+        switch (item.getItemId()){
+
+        }
+
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        fragmentManager.beginTransaction().replace(R.id.viewpager, fragment).commit();
+        item.setChecked(true);
+        setTitle(item.getTitle());
+        drawer.closeDrawers();
+
+    }
+    private ActionBarDrawerToggle setUpDrawerToggle() {
+        return new ActionBarDrawerToggle(this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+    }
+
+    @Override
+    public void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+        drawer.closeDrawers();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 
     private void startLocationService() {
@@ -132,6 +193,9 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+        if(drawerToggle.onOptionsItemSelected(item)){
             return true;
         }
 
