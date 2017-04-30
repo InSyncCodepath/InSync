@@ -11,7 +11,9 @@ import com.codepath.insync.models.parse.Music;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
 import com.codepath.insync.utils.CommonUtil;
+import com.facebook.FacebookSdk;
 import com.parse.Parse;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseLiveQueryClient;
 import com.parse.ParseObject;
@@ -51,6 +53,8 @@ public class ParseApplication extends Application {
                 //.enableLocalDataStore()
                 .server(getString(R.string.parse_app_url)).build());
 
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        ParseFacebookUtils.initialize(this);
         // Add support for live queries
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
 

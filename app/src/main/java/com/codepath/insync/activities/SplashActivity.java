@@ -1,6 +1,10 @@
 package com.codepath.insync.activities;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.util.Base64;
+import android.util.Log;
 
 
 import com.codepath.insync.R;
@@ -13,6 +17,10 @@ import com.parse.ParseUser;
 import com.viksaa.sssplash.lib.activity.AwesomeSplash;
 import com.viksaa.sssplash.lib.cnst.Flags;
 import com.viksaa.sssplash.lib.model.ConfigSplash;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.Signature;
 
 import static com.codepath.insync.utils.CommonUtil.sendInviteLink;
 import static com.parse.ParseUser.logOut;
