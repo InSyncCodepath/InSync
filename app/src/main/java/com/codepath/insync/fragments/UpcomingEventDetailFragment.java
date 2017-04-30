@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +20,7 @@ import android.widget.EditText;
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.MessageAdapter;
 import com.codepath.insync.databinding.FragmentUpcomingEventDetailBinding;
+import com.codepath.insync.listeners.OnImageClickListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
 import com.parse.FindCallback;
@@ -40,6 +40,7 @@ public class UpcomingEventDetailFragment extends Fragment {
     boolean mFirstLoad = true;
     BroadcastReceiver messageReceiver;
     OnViewTouchListener viewTouchListener;
+    OnImageClickListener onImageClickListener;
     Event event;
 
     public static UpcomingEventDetailFragment newInstance(String eventId) {
@@ -60,6 +61,7 @@ public class UpcomingEventDetailFragment extends Fragment {
         messageAdapter = new MessageAdapter(getActivity(), messages);
         event = new Event();
         event.setObjectId(getArguments().getString("eventId"));
+        onImageClickListener = (OnImageClickListener) getActivity();
     }
 
     @Override
@@ -124,6 +126,36 @@ public class UpcomingEventDetailFragment extends Fragment {
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
         binding.rvChat.setLayoutManager(linearLayoutManager);
+
+        messageAdapter.setOnItemClickListener(new MessageAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                Message message = messages.get(position);
+                if (message.getMedia() != null) {
+                    findGalleryImages(position);
+                }
+            }
+        });
+
+    }
+
+    private void findGalleryImages(int position) {
+        ArrayList<String> chatImages = new ArrayList<>();
+        int reversePosition = messages.size() - position - 1;
+        int newPosition = reversePosition;
+        for (int i=messages.size()-1; i >= 0; i--) {
+            String imageUrl = null;
+            if (messages.get(i).getMedia() != null) {
+                imageUrl = messages.get(i).getMedia().getUrl();
+                chatImages.add(imageUrl);
+            } else {
+                if (i > position) {
+                    newPosition--;
+                }
+            }
+        }
+        onImageClickListener.onItemClick(chatImages, newPosition);
+
 
     }
 

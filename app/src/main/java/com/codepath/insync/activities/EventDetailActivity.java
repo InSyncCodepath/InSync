@@ -15,6 +15,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.SharedElementCallback;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.ActionBar;
@@ -540,20 +541,32 @@ public class EventDetailActivity extends AppCompatActivity implements
     public void onItemClick(ArrayList<String> images, int position) {
         Transition changeTransform = TransitionInflater.from(this).
                 inflateTransition(R.transition.change_image_transform);
-        binding.flMessageSend.setVisibility(View.GONE);
         Transition explodeTransform = TransitionInflater.from(this).inflateTransition(android.R.transition.explode);
-        Transition slideBottom = TransitionInflater.from(this).inflateTransition(android.R.transition.slide_bottom);
+        Transition fadeTransition = TransitionInflater.from(this).inflateTransition(android.R.transition.fade);
+        // Find the shared element (in Fragment A)
+        ImageView ivGalleryImage;
         pastEventWaitFragment = PastEventWaitFragment.newInstance(false, images, position);
         // Setup exit transition on first fragment
-        pastEventDetailFragment.setSharedElementReturnTransition(changeTransform);
-        pastEventDetailFragment.setExitTransition(explodeTransform);
+        if (pastEventDetailFragment != null) {
+            pastEventDetailFragment.setSharedElementReturnTransition(changeTransform);
+            pastEventDetailFragment.setExitTransition(explodeTransform);
+            ivGalleryImage = (ImageView) findViewById(R.id.ivEDImage);
+        } else {
+            binding.flMessageSend.setVisibility(View.GONE);
+            binding.famEDMedia.setVisibility(View.GONE);
+            upcomingEventDetailFragment.setSharedElementReturnTransition(changeTransform);
+            upcomingEventDetailFragment.setExitTransition(explodeTransform);
+            ivGalleryImage = (ImageView) findViewById(R.id.ivMessageRight);
+
+        }
+
         binding.abEventDetail.setExpanded(false, true);
         // Setup enter transition on second fragment
         pastEventWaitFragment.setSharedElementEnterTransition(changeTransform);
-        pastEventWaitFragment.setEnterTransition(slideBottom);
+        pastEventWaitFragment.setEnterTransition(changeTransform);
+        pastEventWaitFragment.setReturnTransition(fadeTransition);
 
-        // Find the shared element (in Fragment A)
-        ImageView ivGalleryImage = (ImageView) findViewById(R.id.ivEDImage);
+
 
         // Add second fragment by replacing first
         FragmentTransaction ft;
@@ -570,6 +583,36 @@ public class EventDetailActivity extends AppCompatActivity implements
                 .show(pastEventWaitFragment);
         // Apply the transaction
         ft.commit();
+
+        fadeTransition.addListener(new Transition.TransitionListener() {
+            @Override
+            public void onTransitionStart(Transition transition) {
+
+            }
+
+            @Override
+            public void onTransitionEnd(Transition transition) {
+                if (isCurrent) {
+                    binding.flMessageSend.setVisibility(View.VISIBLE);
+                    binding.famEDMedia.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onTransitionCancel(Transition transition) {
+
+            }
+
+            @Override
+            public void onTransitionPause(Transition transition) {
+
+            }
+
+            @Override
+            public void onTransitionResume(Transition transition) {
+
+            }
+        });
     }
 
     @Override
