@@ -2,9 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="192dp"
-    android:padding="16dp"
+    android:paddingLeft="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    android:gravity="bottom"
     android:id="@+id/headerLayout"
     >
     <ImageView
@@ -17,7 +16,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/headerUserName"
         android:textSize="18sp"
-        android:textColor="@android:color/white"
+        android:textColor="@color/light_black_text"
         android:elevation="1000dp"
         android:layout_below="@id/ivHeader"
 
@@ -27,7 +26,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/headerScreenName"
         android:textSize="18sp"
-        android:textColor="@android:color/white"
+        android:textColor="@color/light_black_text"
         android:layout_below="@id/headerUserName"
         android:elevation="1000dp"
         />

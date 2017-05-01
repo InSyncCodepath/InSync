@@ -25,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -93,7 +94,8 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
         startLocationService();
         User user = User.getCurrentUser();
         Glide.with(this).load(user.getProfileImage().getUrl()).into(profilePicDrawer);
-
+        TextView name = (TextView) headerLayout.findViewById(R.id.headerUserName);
+        name.setText(user.getName());
     }
 
     private void setUpDrawerContent(NavigationView nvDrawer) {
