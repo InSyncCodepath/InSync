@@ -73,6 +73,7 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
         viewPager.setPageTransformer(true, new ForegroundToBackgroundTransformer());
         TabLayout tabLayout = binding.slidingTabs;
         tabLayout.setupWithViewPager(viewPager);
+        //Drawer changes
 //        drawer = (DrawerLayout) findViewById(R.id.drawerLayout);
 //        nvDrawer = (NavigationView) findViewById(R.id.nvView);
 //        setUpDrawerContent(nvDrawer);

@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.PastEventItemBinding;
+import com.codepath.insync.databinding.UpcomingEventItemBinding;
 import com.codepath.insync.listeners.OnVideoUpdateListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
@@ -32,6 +33,7 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,7 +53,7 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
     public PastEventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.
                 from(context).
-                inflate(R.layout.past_event_item, parent, false);
+                inflate(R.layout.upcoming_event_item, parent, false);
 
         return new PastEventViewHolder(itemView);
     }
@@ -70,17 +72,31 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onEventItemClick(event.getObjectId(), false, false, holder.binding.ivHighlights);
+                listener.onEventItemClick(event.getObjectId(), false, false, holder.binding.ivEventImage);
             }
         });
         holder.eventName.setText(event.getName());
+
+        holder.binding.tvAddress.setText(event.getAddress());
+        Date eventDate = event.getStartDate();
+
+        int month = eventDate.getMonth() + 1;
+        int date = eventDate.getDate();
+        int hours = eventDate.getHours();
+        int min = eventDate.getMinutes();
+        String startTime = new SimpleDateFormat("hh:mm aa").format(eventDate);
+        String startDate = new SimpleDateFormat("MMM-dd").format(eventDate);
+        //month+"/"+date;
+        holder.eventDate.setText(startDate);
+        holder.eventTime.setText(startTime);
+
         ParseFile profileImage = event.getProfileImage();
         if (profileImage != null) {
             Glide.with(context)
                     .load(profileImage.getUrl())
                     .placeholder(R.drawable.ic_attach_file_white_48px)
                     .crossFade()
-                    .into(holder.binding.ivHighlights);
+                    .into(holder.binding.ivEventImage);
         }
         ViewCompat.setTransitionName(holder.itemView, event.getObjectId());
 //        Glide.with(context).load(event.getProfileImage()).into(holder.binding.ivHighlights);
@@ -144,15 +160,17 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
     }
 
     public static class PastEventViewHolder extends RecyclerView.ViewHolder {
-        PastEventItemBinding binding;
-        ImageView highlights;
-        TextView eventName;
+        UpcomingEventItemBinding binding;
+        ImageView ivEventImage;
+        TextView eventName, eventDate, eventTime;
 
         public PastEventViewHolder(View itemView) {
             super(itemView);
-            binding = PastEventItemBinding.bind(itemView);
-            highlights = binding.ivHighlights;
+            binding = UpcomingEventItemBinding.bind(itemView);
+            ivEventImage = binding.ivEventImage;
             eventName = binding.tvEventName;
+            eventDate = binding.tvDate;
+            eventTime = binding.tvTime;
         }
     }
 
