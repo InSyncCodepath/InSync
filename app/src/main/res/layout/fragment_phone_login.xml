@@ -9,7 +9,7 @@
         android:background="@color/lighter_green"
         android:fitsSystemWindows="true"
         android:scrollbars="none"
-        android:id="@+id/svLogin">
+        android:id="@+id/rlLogin">
 
         <LinearLayout
             android:layout_width="match_parent"

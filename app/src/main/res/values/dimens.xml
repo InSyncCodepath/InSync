@@ -33,4 +33,5 @@
     <dimen name="margin4">4dp</dimen>
     <dimen name="padding8">8dp</dimen>
     <dimen name="padding16">16dp</dimen>
+    <dimen name="padding24">24dp</dimen>
 </resources>

@@ -47,7 +47,7 @@
         <activity
             android:name=".activities.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.EventListActivity"
