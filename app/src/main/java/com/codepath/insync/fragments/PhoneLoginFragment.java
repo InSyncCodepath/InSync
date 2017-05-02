@@ -73,7 +73,7 @@ public class PhoneLoginFragment extends Fragment {
         phoneNum = getArguments().getString("phoneNum");
         eventId = getArguments().getString("eventId");
         parseFile = null;
-        setupUI(binding.svLogin);
+        setupUI(binding.rlLogin);
         setupClickListeners();
         return binding.getRoot();
     }
@@ -97,7 +97,7 @@ public class PhoneLoginFragment extends Fragment {
                     @Override
                     public void done(ParseException e) {
                         if (e != null) {
-                            CommonUtil.createSnackbar(binding.svLogin, getContext(), "Your profile picture could not be added! Please try again later.", R.color.primary);
+                            CommonUtil.createSnackbar(binding.rlLogin, getContext(), "Your profile picture could not be added! Please try again later.", R.color.primary);
                         }
                     }
                 });

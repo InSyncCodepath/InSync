@@ -47,8 +47,6 @@ public class LoginActivity extends AppCompatActivity implements OnLoginListener 
             Crashlytics.setUserName("Test User");
         }*/
 
-        setUpToolbar();
-
 
         FragmentTransaction ft = fragmentManager.beginTransaction();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -68,16 +66,9 @@ public class LoginActivity extends AppCompatActivity implements OnLoginListener 
         ft.commit();
     }
 
-    private void setUpToolbar() {
-        setSupportActionBar(binding.tbLogin);
-        binding.tbLogin.setTitle("Login");
-        binding.tbLogin.setTitleTextColor(ContextCompat.getColor(this, R.color.primary_text));
-    }
-
 
     @Override
     public void onSignup() {
-        binding.tbLogin.setTitle("Signup");
         FragmentTransaction ft = fragmentManager.beginTransaction();
         SignupFragment signupFragment = new SignupFragment();
         ft.replace(R.id.flLogin, signupFragment);
@@ -93,7 +84,6 @@ public class LoginActivity extends AppCompatActivity implements OnLoginListener 
 
     @Override
     public void onLogin() {
-        binding.tbLogin.setTitle("Login");
         FragmentTransaction ft = fragmentManager.beginTransaction();
         LoginFragment loginFragment = new LoginFragment();
         ft.replace(R.id.flLogin, loginFragment);

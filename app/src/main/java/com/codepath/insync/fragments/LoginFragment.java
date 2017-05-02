@@ -9,6 +9,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,6 +26,7 @@ import com.codepath.insync.databinding.FragmentLoginBinding;
 import com.codepath.insync.listeners.OnLoginListener;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.utils.CommonUtil;
+import com.codepath.insync.utils.FormatUtil;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -61,9 +65,56 @@ public class LoginFragment extends Fragment {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false);
         loginListener = (OnLoginListener) getActivity();
-        setupUI(binding.svLogin);
+
+        String formatStr = getResources().getString(R.string.not_registered_create_account);
+        binding.tvLoginSignup.setText(FormatUtil.buildSpan(formatStr, 0, 19, 20, formatStr.length()));
+        setupUI(binding.rlLogin);
+        setupTextChangedListeners();
         setupClickListeners();
         return binding.getRoot();
+    }
+
+    private void setupTextChangedListeners() {
+        binding.etLogin.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                binding.tvLoginBtn.setEnabled(s.length() > 0 && binding.etLoginPassword.getText().length() > 0);
+                int color = binding.tvLoginBtn.isEnabled() ? R.color.primary : R.color.very_light_white;
+                binding.tvLoginBtn.setTextColor(ContextCompat.getColor(getContext(), color));
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.etLoginPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                binding.tvLoginBtn.setEnabled(s.length() > 0 && binding.etLogin.getText().length() > 0);
+                int color = binding.tvLoginBtn.isEnabled() ? R.color.primary : R.color.very_light_white;
+                binding.tvLoginBtn.setTextColor(ContextCompat.getColor(getContext(), color));
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -94,11 +145,11 @@ public class LoginFragment extends Fragment {
                                     ParseInstallation installation = ParseInstallation.getCurrentInstallation();
                                     installation.put("userId", user.getObjectId());
                                     installation.saveInBackground();
-                                    CommonUtil.createSnackbar(binding.svLogin, getContext(),
+                                    CommonUtil.createSnackbar(binding.rlLogin, getContext(),
                                             "Login successful!", R.color.primary);
                                     loginListener.onLoginSuccess();
                                 } else {
-                                    CommonUtil.createSnackbar(binding.svLogin, getContext(),
+                                    CommonUtil.createSnackbar(binding.rlLogin, getContext(),
                                             "Error logging in. Please try again later!", R.color.primary);
                                 }
                             }
