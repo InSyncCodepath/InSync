@@ -6,24 +6,31 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="12dp"
+    app:cardCornerRadius="4dp"
     android:elevation="8dp"
-    android:layout_margin="4dp"
+    android:layout_margin="@dimen/margin4"
+    android:layout_marginRight="@dimen/margin8"
+    android:layout_marginLeft="@dimen/margin8"
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground"
+    
     >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="4dp">
+        android:layout_marginTop="@dimen/margin24"
+        android:layout_marginBottom="@dimen/margin24"
+        android:layout_marginLeft="@dimen/margin16"
+        android:layout_marginRight="@dimen/margin4">
 
         <ImageView
             android:id="@+id/ivEventImage"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:scaleType="centerCrop"
             tools:src="@mipmap/ic_launcher"
+
             />
 
         <TextView
@@ -31,13 +38,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/ivEventImage"
-            android:textSize="20sp"
+            android:textSize="16sp"
             tools:text="Event Name"
             style="@style/eventListTextView"
             android:transitionName="eventName"
             android:ellipsize="end"
             android:maxLines="1"
-            android:paddingTop="8dp"/>
+            android:fontFamily="Roboto-Medium"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/tvDate"
@@ -47,8 +55,7 @@
             android:layout_toRightOf="@id/ivEventImage"
             tools:text="6th April"
             style="@style/eventListTextView"
-            android:textSize="16sp"
-            android:paddingTop="12dp"/>
+            android:paddingTop="2dp"/>
 
         <TextView
             android:id="@+id/tvTime"
@@ -59,8 +66,7 @@
             tools:text="9:00 pm"
             android:layout_marginLeft="4dp"
             style="@style/eventListTextView"
-            android:textSize="16sp"
-            android:paddingTop="12dp"/>
+            android:paddingTop="2dp"/>
         <!--<TextView-->
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content"-->
@@ -77,7 +83,6 @@
             android:layout_toRightOf="@id/ivEventImage"
             tools:text="Address"
             style="@style/eventListTextView"
-            android:textSize="16sp"
             />
     </RelativeLayout>
 

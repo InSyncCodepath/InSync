@@ -93,7 +93,7 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
         });
         startLocationService();
         User user = User.getCurrentUser();
-        Glide.with(this).load(user.getProfileImage().getUrl()).into(profilePicDrawer);
+        //Glide.with(this).load(user.getProfileImage().getUrl()).into(profilePicDrawer);
         TextView name = (TextView) headerLayout.findViewById(R.id.headerUserName);
         name.setText(user.getName());
     }
