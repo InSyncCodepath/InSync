@@ -46,6 +46,7 @@
                         android:textColor="@android:color/white"
                         android:textColorHint="@android:color/white"
                         android:backgroundTint="@android:color/transparent"
+                        android:paddingStart="@dimen/padding16"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/username"
@@ -68,6 +69,7 @@
 
                     <EditText
                         android:backgroundTint="@android:color/transparent"
+                        android:paddingStart="@dimen/padding16"
                         android:textColor="@android:color/white"
                         android:textColorHint="@android:color/white"
                         android:id="@+id/etLoginPassword"
