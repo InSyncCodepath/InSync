@@ -2,11 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
+<!--
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawerLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent">-->
 
         <android.support.design.widget.CoordinatorLayout
             android:id="@+id/main_content"
@@ -61,7 +61,7 @@
 
         </android.support.design.widget.CoordinatorLayout>
 
-        <android.support.design.widget.NavigationView
+       <!-- <android.support.design.widget.NavigationView
             android:id="@+id/nvView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -70,5 +70,5 @@
             app:headerLayout="@layout/nav_header"
             app:menu="@menu/drawer_view" />
 
-    </android.support.v4.widget.DrawerLayout>
+    </android.support.v4.widget.DrawerLayout>-->
 </layout>

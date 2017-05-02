@@ -73,16 +73,16 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
         viewPager.setPageTransformer(true, new ForegroundToBackgroundTransformer());
         TabLayout tabLayout = binding.slidingTabs;
         tabLayout.setupWithViewPager(viewPager);
-        drawer = (DrawerLayout) findViewById(R.id.drawerLayout);
-        nvDrawer = (NavigationView) findViewById(R.id.nvView);
-        setUpDrawerContent(nvDrawer);
-        drawerToggle = setUpDrawerToggle();
-        drawer.addDrawerListener(drawerToggle);
+//        drawer = (DrawerLayout) findViewById(R.id.drawerLayout);
+//        nvDrawer = (NavigationView) findViewById(R.id.nvView);
+//        setUpDrawerContent(nvDrawer);
+//        drawerToggle = setUpDrawerToggle();
+//        drawer.addDrawerListener(drawerToggle);
 
-        final NavigationView mNavigationView = (NavigationView) findViewById(R.id.nvView);
-        final View headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header);
+//        final NavigationView mNavigationView = (NavigationView) findViewById(R.id.nvView);
+//        final View headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header);
 
-        profilePicDrawer = (ImageView) headerLayout.findViewById(R.id.ivHeader);
+        //profilePicDrawer = (ImageView) headerLayout.findViewById(R.id.ivHeader);
         FloatingActionButton fab = binding.fab;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,8 +94,8 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
         startLocationService();
         User user = User.getCurrentUser();
         //Glide.with(this).load(user.getProfileImage().getUrl()).into(profilePicDrawer);
-        TextView name = (TextView) headerLayout.findViewById(R.id.headerUserName);
-        name.setText(user.getName());
+        //TextView name = (TextView) headerLayout.findViewById(R.id.headerUserName);
+        //name.setText(user.getName());
     }
 
     private void setUpDrawerContent(NavigationView nvDrawer) {
@@ -123,17 +123,17 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
         return new ActionBarDrawerToggle(this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
     }
 
-    @Override
-    public void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        drawerToggle.syncState();
-        drawer.closeDrawers();
-    }
+//    @Override
+//    public void onPostCreate(Bundle savedInstanceState) {
+//        super.onPostCreate(savedInstanceState);
+//        drawerToggle.syncState();
+//        drawer.closeDrawers();
+//    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
+        //drawerToggle.onConfigurationChanged(newConfig);
     }
 
     private void startLocationService() {
