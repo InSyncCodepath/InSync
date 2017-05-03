@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:text="@string/whereabouts"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            style="@style/MaterialDarkTitle"
             android:layout_margin="@dimen/margin8"
             />
         <android.support.v7.widget.RecyclerView

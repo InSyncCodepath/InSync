@@ -23,5 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/ivLTImage"
         android:layout_centerHorizontal="true"
+        style="@style/MaterialDarkBody1"
         tools:text="test" />
 </RelativeLayout>
