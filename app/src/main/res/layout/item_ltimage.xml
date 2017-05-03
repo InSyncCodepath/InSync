@@ -7,14 +7,15 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivLTImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:contentDescription="@string/event_image"
         android:scaleType="centerCrop"
-        app:srcCompat="@drawable/ic_camera_alt_white_48px"
-        tools:targetApi="lollipop" />
+        app:civ_border_color="@color/insync_white"
+        app:civ_border_width="2dp"
+        app:srcCompat="@drawable/ic_profile"
+        />
 
     <TextView
         android:id="@+id/tvLTName"

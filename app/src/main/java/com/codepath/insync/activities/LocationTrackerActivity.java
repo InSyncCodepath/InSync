@@ -7,10 +7,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -204,11 +211,25 @@ public class LocationTrackerActivity extends AppCompatActivity {
                             if (imageUrl != null) {
                                 Glide.with(getApplicationContext())
                                         .load(imageUrl)
+                                        .asBitmap()
                                         .placeholder(R.drawable.ic_profile)
-                                        .crossFade()
-                                        .bitmapTransform(new RoundedCornersTransformation(getApplicationContext(), 4, 0))
-                                        .into(new SimpleTarget<GlideDrawable>() {
+                                        .into(new SimpleTarget<Bitmap>() {
+
                                             @Override
+                                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                                Marker userMarker = map.addMarker(new MarkerOptions()
+                                                        .title(user.getName())
+                                                        //.snippet("Snippet")
+                                                        //.icon(customMarker)
+                                                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmap(resource)))
+                                                        .position(currLocation)
+                                                        .anchor(0.5f, 1));
+                                                userMap.put(user.getObjectId(), userMarker);
+                                                animateMarker(userMarker, currLocation, false);
+                                            }
+                                        });
+
+                                            /*@Override
                                             public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
 
                                                 Marker userMarker = map.addMarker(new MarkerOptions()
@@ -221,7 +242,7 @@ public class LocationTrackerActivity extends AppCompatActivity {
                                                 userMap.put(user.getObjectId(), userMarker);
                                                 animateMarker(userMarker, currLocation, false);
                                             }
-                                        });
+                                        });*/
                             } else {
                                 Marker userMarker = map.addMarker(new MarkerOptions()
                                         .title(user.getName())
@@ -360,7 +381,7 @@ public class LocationTrackerActivity extends AppCompatActivity {
         });
     }
 
-    private Bitmap getMarkerBitmap(GlideDrawable glideDrawable) {
+    private Bitmap getMarkerBitmapDrawable(GlideDrawable glideDrawable) {
         final View customMarkerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.layout_custom_map_marker, null);
         final ImageView markerImageView = (ImageView) customMarkerView.findViewById(R.id.iv_custom_marker);
         final IconGenerator iconGenerator = new IconGenerator(LocationTrackerActivity.this);
@@ -375,6 +396,30 @@ public class LocationTrackerActivity extends AppCompatActivity {
         iconGenerator.setColor(R.color.accent);
         iconGenerator.setStyle(IconGenerator.STYLE_BLUE);
         return iconGenerator.makeIcon();
+    }
+
+    private Bitmap getMarkerBitmap(Bitmap bitmap) {
+        View customMarkerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.layout_custom_map_marker, null);
+        ImageView markerImageView = (ImageView) customMarkerView.findViewById(R.id.iv_custom_marker);
+        if (bitmap == null) {
+            markerImageView.setImageResource(R.drawable.ic_profile);
+        } else {
+            markerImageView.setImageBitmap(bitmap);
+        }
+
+        customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
+        customMarkerView.buildDrawingCache();
+        Bitmap returnedBitmap = Bitmap.createBitmap(customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
+        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
+        Drawable drawable = customMarkerView.getBackground();
+        if (drawable != null)
+            drawable.draw(canvas);
+        customMarkerView.draw(canvas);
+
+        return returnedBitmap;
     }
 
     public void onHomeClick(View view) {
