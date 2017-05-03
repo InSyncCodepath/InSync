@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/custom_map_marker"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/primary_light">
-    <ImageView
+    android:background="@android:color/transparent">
+    <RelativeLayout
+        android:id="@+id/rlv2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/iv_custom_marker"
+        android:layout_marginTop="-10dp"
+        android:background="@drawable/shape_triangle"
+        android:rotation="180" />
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_custom_marker"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:scaleType="centerCrop"
+        app:civ_border_width="2dp"
+        app:civ_border_color="@color/primary"
         app:srcCompat="@drawable/ic_profile" />
-</FrameLayout>
+</RelativeLayout>

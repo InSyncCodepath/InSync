@@ -51,7 +51,7 @@
     <string name="phone_contacts">Phone Contacts</string>
     <string name="next">Next >></string>
     <string name="save_next">Add User</string>
-    <string name="attendees_whereabouts">Attendees Whereabouts</string>
+    <string name="whereabouts">Whereabouts</string>
     <string name="gallery">Gallery</string>
     <string name="add_a_caption">Add a caption…</string>
     <string name="create_event">Create Event</string>
