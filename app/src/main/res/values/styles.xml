@@ -114,7 +114,7 @@
         <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">normal</item>
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:textColor">@color/primary_text</item>
         <item name="android:lineSpacingExtra">8sp</item>
     </style>
 
@@ -138,13 +138,13 @@
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textStyle">normal</item>
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:textColor">@color/primary_text</item>
         <item name="android:lineSpacingExtra">6sp</item>
     </style>
 
     <style name="SpacingText">
         <item name="android:textSize">12sp</item>
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:textColor">@color/primary_text</item>
         <item name="android:gravity">center_horizontal</item>
     </style>
 
