@@ -29,6 +29,7 @@ public class SplashActivity extends AwesomeSplash {
 
     @Override
     public void initSplash(ConfigSplash configSplash) {
+        //User.logOut();
 
 //Customize Circular Reveal
         configSplash.setBackgroundColor(R.color.lighter_green); //any color you want form colors.xml

@@ -45,7 +45,8 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:fontFamily="Roboto-Medium"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="@color/body"/>
 
         <TextView
             android:id="@+id/tvDate"

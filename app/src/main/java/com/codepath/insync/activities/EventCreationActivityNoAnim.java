@@ -43,6 +43,7 @@ import com.codepath.insync.R;
 import com.codepath.insync.adapters.InviteeAdapter;
 import com.codepath.insync.adapters.SimpleCursorRecyclerAdapterContacts;
 import com.codepath.insync.databinding.ActivityCreateEventBinding;
+import com.codepath.insync.databinding.ActivityCreateNewBinding;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
@@ -81,7 +82,7 @@ import java.util.Locale;
 import static android.R.attr.bitmap;
 
 public class EventCreationActivityNoAnim extends AppCompatActivity implements SimpleCursorRecyclerAdapterContacts.SimpleCursorAdapterInterface {
-    ActivityCreateEventBinding binding;
+    ActivityCreateNewBinding binding;
     public final String TAG = EventCreationActivityNoAnim.class.getName();
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     Calendar eventStartDate = Calendar.getInstance();
@@ -107,13 +108,13 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_create_event);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_create_new);
         startDate = binding.etStartDate;
         startTime = binding.etStartTime;
         endDate = binding.etEndDate;
         endTime = binding.etEndTime;
         location = binding.etLocation;
-        setProfileImage = binding.ivCamera;
+        //setProfileImage = binding.ivCamera;
         profileImage = binding.profilePic;
         contactsContainer = binding.contactsContainer;
         Toolbar toolbar = binding.toolbarCreate;
@@ -232,15 +233,15 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
         });
 
         //inviteeList = binding.inviteeList;
-        setProfileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(EventCreationActivityNoAnim.this, "Click me", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(EventCreationActivityNoAnim.this, CameraActivity.class);
-                intent.putExtra("is_profile_pic", true);
-                startActivityForResult(intent, 1023);
-            }
-        });
+//        setProfileImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(EventCreationActivityNoAnim.this, "Click me", Toast.LENGTH_LONG).show();
+//                Intent intent = new Intent(EventCreationActivityNoAnim.this, CameraActivity.class);
+//                intent.putExtra("is_profile_pic", true);
+//                startActivityForResult(intent, 1023);
+//            }
+//        });
 
     }
 
@@ -451,8 +452,8 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
     }
 
     private void saveEventDetails() {
-        eventName = binding.etEventName.getText().toString();
-        eventDescription = binding.etDescription.getText().toString();
+        //eventName = binding.etEventName.getText().toString();
+        eventDescription = binding.etDetails.getText().toString();
         if (eventName.equals("")) {
             Toast.makeText(EventCreationActivityNoAnim.this, "Event Name can not be blank", Toast.LENGTH_LONG).show();
         } else if (eventDescription.equals("")) {

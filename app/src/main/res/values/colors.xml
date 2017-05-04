@@ -17,6 +17,10 @@
     <color name="dark_blue_green">#007D90</color>
     <color name="light_black_text">#2f332f</color>
     <color name="insync_white">#fbfbfb</color>
+    <color name="subheader">#8a000000</color>
+    <color name="body">#8b000000</color>
+    <color name="hint">#9b9b9b</color>
+
 
     <color name="primary">@color/tealish</color>
     <color name="primary_dark">@color/iris_blue</color>

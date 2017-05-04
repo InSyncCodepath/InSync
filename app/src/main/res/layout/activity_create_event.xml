@@ -167,7 +167,7 @@
                 />
 
             <EditText
-                android:id="@+id/etDescription"
+                android:id="@+id/etAllDay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/etLocation"
@@ -182,7 +182,7 @@
                 android:id="@+id/inviteeHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/etDescription"
+                android:layout_below="@id/etAllDay"
                 android:layout_marginBottom="4dp"
                 android:layout_marginTop="8dp"
                 android:text="Invitees"
