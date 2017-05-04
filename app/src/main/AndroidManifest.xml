@@ -88,6 +88,8 @@
                 <action android:name="com.parse.push.intent.RECEIVE" />
                 <action android:name="com.parse.push.intent.DELETE" />
                 <action android:name="com.parse.push.intent.OPEN" />
+                <action android:name="RSVP_YES" />
+                <action android:name="RSVP_NO" />
             </intent-filter>
         </receiver>
         <receiver

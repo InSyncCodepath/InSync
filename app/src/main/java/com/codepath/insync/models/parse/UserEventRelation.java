@@ -103,6 +103,15 @@ public class UserEventRelation extends ParseObject {
         query.findInBackground(findCallback);
     }
 
+    public static void findUserEvent(Event event, FindCallback<UserEventRelation> findCallback) {
+        ParseQuery<UserEventRelation> query = ParseQuery.getQuery(UserEventRelation.class);
+        query.whereEqualTo(EVENT_KEY, event);
+        query.whereEqualTo("userId", User.getCurrentUser().getObjectId());
+        // First try to find from the cache and only then go to network
+        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
+        query.findInBackground(findCallback);
+    }
+
     public UserEventRelation(){
 
     }

@@ -52,6 +52,7 @@ import com.codepath.insync.models.Contact;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
+import com.codepath.insync.utils.CommonUtil;
 import com.codepath.insync.utils.Constants;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -533,8 +534,8 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     public void sendInviteNotifcations(Event event, List<String> userIds) {
         HashMap<String, Object> payload = new HashMap<>();
         HashMap<String, Object> notiInfo = new HashMap<>();
-        notiInfo.put("title", "You've been invited!");
-        notiInfo.put("text", event.getName());
+        notiInfo.put("title", "You've been invited to: "+event.getName());
+        notiInfo.put("text", CommonUtil.getTimeInFormat(event.getStartDate()));
         notiInfo.put("eventId", event.getObjectId());
         notiInfo.put("notificationType", Constants.NEW_EVENT);
         payload.put("customData", notiInfo);
