@@ -34,26 +34,11 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class PastEventWaitFragment extends Fragment {
     FragmentPastEventWaitBinding binding;
-    boolean doWait;
-
-    public static PastEventWaitFragment newInstance(boolean wait, ArrayList<String> images, int position) {
-        Bundle args = new Bundle();
-
-        PastEventWaitFragment pastEventWaitFragment = new PastEventWaitFragment();
-        args.putBoolean("do_wait", wait);
-        if (images != null) {
-            args.putStringArrayList("images", images);
-            args.putInt("position", position);
-        }
-        pastEventWaitFragment.setArguments(args);
-        return pastEventWaitFragment;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        doWait = getArguments().getBoolean("do_wait", true);
     }
 
     @Override
@@ -62,29 +47,10 @@ public class PastEventWaitFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_past_event_wait, container, false);
-        if (doWait) {
-            binding.rvGallery.setVisibility(View.GONE);
-        } else {
-            binding.pbMediaUpdate.setVisibility(View.GONE);
-            ArrayList<String> images = getArguments().getStringArrayList("images");
-            int position = getArguments().getInt("position");
 
-            setupRecyclerView(images, position);
-        }
         return binding.getRoot();
     }
 
-    private void setupRecyclerView(ArrayList<String> images, int position) {
-        EDImageAdapter galleryImageAdapter = new EDImageAdapter(getActivity(), images, R.layout.item_galleryimage, 0);
-        AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(galleryImageAdapter);
-        ScaleInAnimationAdapter scaleInAdapter = new ScaleInAnimationAdapter(alphaAdapter);
-        scaleInAdapter.setDuration(500);
-        binding.rvGallery.setAdapter(scaleInAdapter);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        binding.rvGallery.setLayoutManager(linearLayoutManager);
-        linearLayoutManager.scrollToPosition(position);
-        SnapHelper snapHelper = new LinearSnapHelper();
-        snapHelper.attachToRecyclerView(binding.rvGallery);
-    }
+
 
 }

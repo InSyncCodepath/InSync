@@ -1,5 +1,6 @@
 package com.codepath.insync.activities;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.SharedElementCallback;
@@ -518,7 +520,7 @@ public class EventDetailActivity extends AppCompatActivity implements
             ft.remove(messageSendFragment);
             binding.flMessageSend.setVisibility(View.GONE);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-            pastEventWaitFragment = PastEventWaitFragment.newInstance(true, null, -1);
+            pastEventWaitFragment = new PastEventWaitFragment();
             ft.replace(R.id.flMessages, pastEventWaitFragment);
             ft.commit();
             CommonUtil.createSnackbar(rlEventDetail, this, "Your event has ended. The highlights are being created!");
@@ -545,7 +547,6 @@ public class EventDetailActivity extends AppCompatActivity implements
         Transition fadeTransition = TransitionInflater.from(this).inflateTransition(android.R.transition.fade);
         // Find the shared element (in Fragment A)
         ImageView ivGalleryImage;
-        pastEventWaitFragment = PastEventWaitFragment.newInstance(false, images, position);
         // Setup exit transition on first fragment
         if (pastEventDetailFragment != null) {
             pastEventDetailFragment.setSharedElementReturnTransition(changeTransform);
@@ -560,59 +561,18 @@ public class EventDetailActivity extends AppCompatActivity implements
 
         }
 
-        binding.abEventDetail.setExpanded(false, true);
-        // Setup enter transition on second fragment
-        pastEventWaitFragment.setSharedElementEnterTransition(changeTransform);
-        pastEventWaitFragment.setEnterTransition(changeTransform);
-        pastEventWaitFragment.setReturnTransition(fadeTransition);
+        Bundle animationBundle =
+                ActivityOptions.makeCustomAnimation(this, R.anim.do_not_move, R.anim.do_not_move).toBundle();
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(this, ivGalleryImage, eventId);
 
+        Intent fullScreenImageIntent = new Intent(this, FullScreenImageActivity.class);
+        fullScreenImageIntent.putExtra("images", images);
+        fullScreenImageIntent.putExtra("position", position);
+        fullScreenImageIntent.putExtra("eventName", event.getName());
 
+        startActivity(fullScreenImageIntent,animationBundle);
 
-        // Add second fragment by replacing first
-        FragmentTransaction ft;
-        ft = fragmentManager.beginTransaction()
-                .add(R.id.flMessages, pastEventWaitFragment)
-                .hide(pastEventWaitFragment);
-
-        ft.commit();
-        fragmentManager.executePendingTransactions();
-        ft = fragmentManager.beginTransaction()
-                .addToBackStack("transaction")
-                .addSharedElement(ivGalleryImage, "galleryImage")
-                //.remove(pastEventDetailFragment)
-                .show(pastEventWaitFragment);
-        // Apply the transaction
-        ft.commit();
-
-        fadeTransition.addListener(new Transition.TransitionListener() {
-            @Override
-            public void onTransitionStart(Transition transition) {
-
-            }
-
-            @Override
-            public void onTransitionEnd(Transition transition) {
-                if (isCurrent) {
-                    binding.flMessageSend.setVisibility(View.VISIBLE);
-                    binding.famEDMedia.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onTransitionCancel(Transition transition) {
-
-            }
-
-            @Override
-            public void onTransitionPause(Transition transition) {
-
-            }
-
-            @Override
-            public void onTransitionResume(Transition transition) {
-
-            }
-        });
     }
 
     @Override

@@ -33,6 +33,14 @@
 
     </style>
 
+    <!-- ToolBar -->
+    <style name="ToolBarStyle" parent="Theme.AppCompat">
+        <item name="android:textColorPrimary">@color/insync_white</item>
+        <item name="android:textColorSecondary">@color/insync_white</item>
+        <item name="actionMenuTextColor">@color/insync_white</item>
+
+    </style>
+
     <!--Custom styles-->
 
     <style name="page_background">
