@@ -222,7 +222,7 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
                 .setSmallIcon(R.mipmap.ic_lock_screen_noti)
                 //.setCustomContentView(contentView)
                 .setStyle(new NotificationCompat.InboxStyle())
-                .setColor(ContextCompat.getColor(context, R.color.tealish))
+                .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setContentTitle(notiObj.optString("title"))
                 .setContentText(notiObj.optString("text"))
                 .setSubText(User.getCurrentUser().getName())
