@@ -48,7 +48,8 @@ public class FullScreenImageActivity extends AppCompatActivity {
         setSupportActionBar(binding.tbFullScreenImage);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle(getIntent().getStringExtra("eventName"));
+            actionBar.setTitle("");
+            binding.tvFullScreenImage.setText(getIntent().getStringExtra("eventName"));
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         tbHandler.removeCallbacks(tbRunnable);
