@@ -4,7 +4,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/theme_gradient">
+        android:background="@color/primary">
 
         <ProgressBar
             android:id="@+id/pbMediaUpdate"
@@ -13,10 +13,6 @@
             android:layout_centerInParent="true"
 
             />
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvGallery"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+
     </RelativeLayout>
 </layout>
