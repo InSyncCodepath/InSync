@@ -454,10 +454,10 @@ public class EventCreationActivity extends AppCompatActivity implements SimpleCu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_create) {
-            saveEventDetails();
-            return true;
-        }
+//        if (id == R.id.action_create) {
+//            saveEventDetails();
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }

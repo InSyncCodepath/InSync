@@ -90,7 +90,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
     Calendar eventStartDate = Calendar.getInstance();
     Calendar eventEndDate = Calendar.getInstance();
     String eventName, eventDescription, address = "";
-    EditText location, startTime, startDate, endDate, endTime;
+    EditText location, startTime, startDate, endDate, endTime, eventTitle;
     TextView addUser, setProfileImage;
     ImageView profileImage, toggleOn, toggleOff;
     ParseGeoPoint geoPoint;
@@ -126,7 +126,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
         addUser = binding.tvInvite;
         toggleOff = binding.toggleOff;
         toggleOn = binding.toggleOn;
-
+        eventTitle = binding.eventName;
         inviteeList = binding.inviteeList;
 
         ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(this)
@@ -272,6 +272,14 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
                 toggleOff.setVisibility(View.VISIBLE);
             }
         });
+        binding.done.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                saveEventDetails();
+            }
+        });
+
+
         //inviteeList = binding.inviteeList;
 //        setProfileImage.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -479,20 +487,20 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_create) {
+        if (id == R.id.done) {
             saveEventDetails();
             return true;
         }
-//        if (id == R.id.action_invite) {
-//            showContacts();
-//            return true;
-//        }
+        if (id == R.id.cancel) {
+            //showContacts();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
 
     private void saveEventDetails() {
-        //eventName = binding.etEventName.getText().toString();
+        eventName = eventTitle.getText().toString();
         eventDescription = binding.etDetails.getText().toString();
         if (eventName.equals("")) {
             Toast.makeText(EventCreationActivityNoAnim.this, "Event Name can not be blank", Toast.LENGTH_LONG).show();
