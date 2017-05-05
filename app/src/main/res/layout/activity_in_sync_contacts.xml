@@ -28,7 +28,10 @@
             android:layout_alignParentTop="true"
             android:layout_below="@id/appbarLayout"
             android:layout_marginTop="80dp"
-            android:ems="10" />
+            android:ems="10"
+            android:textColor="@color/subheader"
+            android:textColorHint="@color/body"
+            android:hint="Enter contact name"/>
 
     </RelativeLayout>
 

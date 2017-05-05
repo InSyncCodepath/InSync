@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -89,7 +91,8 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
     Calendar eventEndDate = Calendar.getInstance();
     String eventName, eventDescription, address = "";
     EditText location, startTime, startDate, endDate, endTime;
-    ImageView setProfileImage, profileImage;
+    TextView addUser, setProfileImage;
+    ImageView profileImage, toggleOn, toggleOff;
     ParseGeoPoint geoPoint;
     RelativeLayout contactsContainer;
     //Next buttons
@@ -104,7 +107,8 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
     ParseFile parseFile;
     private static final int SELECT_PICTURE = 1025;
     private String selectedImagePath;
-
+    public static final int PHONE_CONTACTS_REQUEST_CODE = 1026;
+    boolean allDay = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,46 +118,37 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
         endDate = binding.etEndDate;
         endTime = binding.etEndTime;
         location = binding.etLocation;
-        //setProfileImage = binding.ivCamera;
+        setProfileImage = binding.tvAttach;
         profileImage = binding.profilePic;
         contactsContainer = binding.contactsContainer;
         Toolbar toolbar = binding.toolbarCreate;
         setSupportActionBar(toolbar);
+        addUser = binding.tvInvite;
+        toggleOff = binding.toggleOff;
+        toggleOn = binding.toggleOn;
 
         inviteeList = binding.inviteeList;
 
         ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(this)
-                //set vertical gravity for all items in a row. Default = Gravity.CENTER_VERTICAL
                 .setChildGravity(Gravity.TOP)
-                //whether RecyclerView can scroll. TRUE by default
                 .setScrollingEnabled(true)
-                //set maximum views count in a particular row
                 .setMaxViewsInRow(4)
-                //set gravity resolver where you can determine gravity for item in position.
-                //This method have priority over previous one
                 .setGravityResolver(new IChildGravityResolver() {
                     @Override
                     public int getItemGravity(int position) {
                         return Gravity.CENTER;
                     }
                 })
-                //you are able to break row due to your conditions. Row breaker should return true for that views
                 .setRowBreaker(new IRowBreaker() {
                     @Override
                     public boolean isItemBreakRow(@IntRange(from = 0) int position) {
                         return position == 8 || position == 12 || position == 4;
                     }
                 })
-                //a layoutOrientation of layout manager, could be VERTICAL OR HORIZONTAL. HORIZONTAL by default
                 .setOrientation(ChipsLayoutManager.HORIZONTAL)
-                // row strategy for views in completed row, could be STRATEGY_DEFAULT, STRATEGY_FILL_VIEW,
-                //STRATEGY_FILL_SPACE or STRATEGY_CENTER
                 .setRowStrategy(ChipsLayoutManager.STRATEGY_DEFAULT)
-                // whether strategy is applied to last row. FALSE by default
                 .withLastRow(true)
                 .build();
-        //inviteeList.setLayoutManager(chipsLayoutManager);
-
 
 //        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.HORIZONTAL);
 //        inviteeList.setLayoutManager(staggeredGridLayoutManager);
@@ -202,15 +197,19 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
 
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(EventCreationActivityNoAnim.this, R.style.EventDateTimePickerStyle, startDateListener, eventStartDate
+                DatePickerDialog datePickerDialog = new DatePickerDialog(EventCreationActivityNoAnim.this, R.style.EventDateTimePickerStyle, startDateListener, eventStartDate
                         .get(Calendar.YEAR), eventStartDate.get(Calendar.MONTH),
-                        eventStartDate.get(Calendar.DAY_OF_MONTH)).show();
+                        eventStartDate.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.getDatePicker().setMinDate(eventStartDate.getTime().getTime());
+
+                datePickerDialog.show();
             }
         });
 
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 new TimePickerDialog(EventCreationActivityNoAnim.this, R.style.EventDateTimePickerStyle, startTimeListener, eventStartDate.get(Calendar.HOUR), eventStartDate.get(Calendar.MINUTE), false).show();
             }
         });
@@ -219,9 +218,12 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
 
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(EventCreationActivityNoAnim.this, R.style.EventDateTimePickerStyle, endDateListener, eventEndDate
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(EventCreationActivityNoAnim.this, R.style.EventDateTimePickerStyle, endDateListener, eventEndDate
                         .get(Calendar.YEAR), eventEndDate.get(Calendar.MONTH),
-                        eventEndDate.get(Calendar.DAY_OF_MONTH)).show();
+                        eventEndDate.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.getDatePicker().setMinDate(eventEndDate.getTime().getTime());
+                datePickerDialog.show();
             }
         });
 
@@ -232,6 +234,44 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
             }
         });
 
+        addUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openContactDialog();
+            }
+        });
+        setProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Toast.makeText(EventCreationActivity.this, "Click me", Toast.LENGTH_LONG).show();
+//                setProfileImage.setVisibility(View.GONE);
+//                Intent intent = new Intent(EventCreationActivity.this, CameraActivity.class);
+//                intent.putExtra("setProfileImage", true);
+//                startActivityForResult(intent, 1023);
+                openDialog();
+            }
+        });
+
+
+        toggleOff.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                toggleOff.setVisibility(View.GONE);
+                allDay = true;
+                toggleOn.setVisibility(View.VISIBLE);
+            }
+        });
+
+        toggleOn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                toggleOn.setVisibility(View.GONE);
+                allDay = false;
+                toggleOff.setVisibility(View.VISIBLE);
+            }
+        });
         //inviteeList = binding.inviteeList;
 //        setProfileImage.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -650,5 +690,58 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
     @Override
     public void showInvitees() {
 
+    }
+
+    private void openDialog() {
+        View view = getLayoutInflater().inflate(R.layout.sheet_main, null);
+        final BottomSheetDialog dialog = new BottomSheetDialog(this);
+        dialog.setContentView(view);
+        TextView camera_sel = (TextView) view.findViewById(R.id.bttmCamera);
+        TextView gallery_sel = (TextView) view.findViewById(R.id.bttmGallery);
+        camera_sel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventCreationActivityNoAnim.this, CameraActivity.class);
+                intent.putExtra("is_profile_pic", true);
+                startActivityForResult(intent, 1023);
+                dialog.dismiss();
+            }
+        });
+        gallery_sel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(Intent.createChooser(intent,
+                        "Select Picture"), SELECT_PICTURE);
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    private void openContactDialog() {
+        View view = getLayoutInflater().inflate(R.layout.sheet_contact, null);
+        final BottomSheetDialog dialog = new BottomSheetDialog(this);
+        dialog.setContentView(view);
+        TextView insyncContact = (TextView) view.findViewById(R.id.bttmInsynContact);
+        TextView phoneContact = (TextView) view.findViewById(R.id.bttmPhoneContacts);
+        insyncContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventCreationActivityNoAnim.this, InSyncContactsActivity.class);
+                startActivityForResult(intent, REQUEST_CODE);
+                dialog.dismiss();
+            }
+        });
+        phoneContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventCreationActivityNoAnim.this, ContactActivity.class);
+                startActivityForResult(intent, PHONE_CONTACTS_REQUEST_CODE);
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }
