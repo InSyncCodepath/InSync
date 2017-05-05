@@ -6,5 +6,5 @@
     android:height="24dp">
     <path
         android:pathData="M23.954 21.03L14.77 11.935 23.862 2.761 21.03 -0.046 11.94 9.133 2.764 0.045l-2.81 2.81 9.186 9.105 -9.095 9.184 2.81 2.81 9.112 -9.192 9.18 9.1z"
-        android:fillColor="@color/decline_red_selected" />
+        android:fillColor="@color/primary" />
 </vector>

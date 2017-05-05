@@ -6,21 +6,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
-import android.provider.MediaStore;
-import android.support.annotation.IdRes;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.SharedElementCallback;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,10 +26,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.codepath.insync.Manifest;
 import com.codepath.insync.R;
@@ -52,12 +40,7 @@ import com.codepath.insync.listeners.OnImageClickListener;
 import com.codepath.insync.listeners.OnMessageChangeListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
-import com.codepath.insync.models.parse.User;
-import com.codepath.insync.models.parse.UserEventRelation;
-import com.codepath.insync.utils.Camera;
-import com.codepath.insync.utils.Constants;
 import com.codepath.insync.utils.CommonUtil;
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 
@@ -66,21 +49,18 @@ import com.parse.SaveCallback;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 
-public class EventDetailActivity extends AppCompatActivity implements
+public class EventDetailChatActivity extends AppCompatActivity implements
         UpcomingEventDetailFragment.OnViewTouchListener,
         ConfirmationFragment.UpdateDraftDialogListener,
         OnImageClickListener,
         OnMessageChangeListener{
 
-    private static final String TAG = "EventDetailActivity";
+    private static final String TAG = "EventDetailChatActivity";
 
 
     ActivityEventDetailBinding binding;
@@ -89,15 +69,9 @@ public class EventDetailActivity extends AppCompatActivity implements
     String eventId;
     boolean isCurrent;
     boolean canTrack;
-    int numAttending;
-    int numDecline;
-    int numPending;
-    int currentRbnId;
     MessageSendFragment messageSendFragment;
     PastEventWaitFragment pastEventWaitFragment;
     PastEventDetailFragment pastEventDetailFragment;
-    UserEventRelation currentUserEvent;
-    private boolean firstLoad;
     FragmentManager fragmentManager;
     RelativeLayout rlEventDetail;
     UpcomingEventDetailFragment upcomingEventDetailFragment;
@@ -117,7 +91,6 @@ public class EventDetailActivity extends AppCompatActivity implements
         binding = DataBindingUtil.setContentView(this, R.layout.activity_event_detail);
 
         fragmentManager = getSupportFragmentManager();
-        firstLoad = true;
         rlEventDetail = binding.rlEventDetail;
 
         postponeEnterTransition();
@@ -139,7 +112,7 @@ public class EventDetailActivity extends AppCompatActivity implements
             return super.onCreateOptionsMenu(menu);
         }
         if (canTrack) {
-            getMenuInflater().inflate(R.menu.menu_event_detail, menu);
+            getMenuInflater().inflate(R.menu.menu_event_chat, menu);
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -155,7 +128,6 @@ public class EventDetailActivity extends AppCompatActivity implements
             public void done(Event eventObj, ParseException e) {
                 if (e == null) {
                     event = eventObj;
-                    //findAttendance();
                     loadViews();
                     loadFragments();
                 } else {
@@ -168,36 +140,6 @@ public class EventDetailActivity extends AppCompatActivity implements
 
     }
 
-    /*private void setupChatClickListeners() {
-        binding.fabEDSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                messageSendFragment.setupMessagePosting();
-            }
-        });
-        binding.fabEDCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(EventDetailActivity.this, CameraActivity.class);
-                startActivityForResult(intent, REQUEST_CAMERA_ACTIVITY);
-                binding.famEDMedia.toggle(true);
-            }
-        });
-
-        binding.fabEDGallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(Intent.createChooser(intent,
-                        "Select Picture"), SELECT_PICTURE);
-                binding.famEDMedia.toggle(true);
-            }
-        });
-    }*/
-
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -205,26 +147,17 @@ public class EventDetailActivity extends AppCompatActivity implements
                 supportFinishAfterTransition();
 
                 return true;
-            case R.id.action_track:
-                Intent intent = new Intent(EventDetailActivity.this, LocationTrackerActivity.class);
+            case R.id.action_track_chat:
+                Intent intent = new Intent(EventDetailChatActivity.this, LocationTrackerActivity.class);
                 intent.putExtra("eventId", event.getObjectId());
                 intent.putExtra("eventLatitude", event.getLocation().getLatitude());
                 intent.putExtra("eventLongitude", event.getLocation().getLongitude());
                 startActivity(intent);
                 break;
-            case R.id.action_highlights:
-                handleHighlightsAction();
-                break;
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void handleHighlightsAction() {
-        String message = "Your event will end and you will not be able to post. Do you want to continue creating highlights?";
-        ConfirmationFragment confirmationFragment = ConfirmationFragment.newInstance(message, "Continue", "Cancel");
-        confirmationFragment.show(fragmentManager, "fragment_confirmation");
     }
 
     public void setupUI(View view) {
@@ -318,7 +251,16 @@ public class EventDetailActivity extends AppCompatActivity implements
         binding.tbEventDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Go to event details
+                Bundle animationBundle =
+                        ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.slide_from_left, R.anim.slide_to_left).toBundle();
+
+
+                Intent eventDetailMoreIntent = new Intent(EventDetailChatActivity.this, EventDetailMoreActivity.class);
+                eventDetailMoreIntent.putExtra("eventId", eventId);
+                eventDetailMoreIntent.putExtra("isCurrent", isCurrent);
+                eventDetailMoreIntent.putExtra("canTrack", canTrack);
+                startActivity(eventDetailMoreIntent, animationBundle);
+
             }
         });
 
@@ -406,25 +348,19 @@ public class EventDetailActivity extends AppCompatActivity implements
         Transition changeTransform = TransitionInflater.from(this).
                 inflateTransition(R.transition.change_image_transform);
         Transition explodeTransform = TransitionInflater.from(this).inflateTransition(android.R.transition.explode);
-        Transition fadeTransition = TransitionInflater.from(this).inflateTransition(android.R.transition.fade);
         // Find the shared element (in Fragment A)
-        ImageView ivGalleryImage;
         // Setup exit transition on first fragment
         if (pastEventDetailFragment != null) {
             pastEventDetailFragment.setSharedElementReturnTransition(changeTransform);
             pastEventDetailFragment.setExitTransition(explodeTransform);
-            ivGalleryImage = (ImageView) findViewById(R.id.ivEDImage);
         } else {
             upcomingEventDetailFragment.setSharedElementReturnTransition(changeTransform);
             upcomingEventDetailFragment.setExitTransition(explodeTransform);
-            ivGalleryImage = (ImageView) findViewById(R.id.ivMessageRight);
 
         }
 
         Bundle animationBundle =
                 ActivityOptions.makeCustomAnimation(this, R.anim.do_not_move, R.anim.do_not_move).toBundle();
-        ActivityOptionsCompat options = ActivityOptionsCompat.
-                makeSceneTransitionAnimation(this, ivGalleryImage, eventId);
 
         Intent fullScreenImageIntent = new Intent(this, FullScreenImageActivity.class);
         fullScreenImageIntent.putExtra("images", images);

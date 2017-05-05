@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/clED"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/insync_white"
+        android:fitsSystemWindows="true"
+        tools:context="com.codepath.insync.activities.EventDetailMoreActivity">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/abEventDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/ctlEventDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="16dp"
+                android:fitsSystemWindows="true"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/tbEventDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_collapseMode="pin" />
+
+                <ImageView
+                    android:id="@+id/ivEDProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/event_profile_image"
+                    android:fitsSystemWindows="true"
+                    app:layout_collapseMode="parallax"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed" />
+
+                <TextView
+                    android:id="@+id/tvEDName"
+                    style="@style/MaterialDarkTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    app:layout_collapseMode="pin"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed" />
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/svEventDetailMore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/insync_white"
+                android:clipToPadding="false"
+                android:paddingEnd="@dimen/padding16"
+                android:paddingStart="@dimen/padding16"
+               >
+
+                <TextView
+                    android:id="@+id/tvDetails"
+                    style="@style/MaterialLightSubheadSecondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin8"
+                    android:text="@string/details"
+                    android:textColor="@color/insync_black" />
+
+                <TextView
+                    android:id="@+id/tvEDDescription"
+                    style="@style/MaterialLightBody1Secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvDetails"
+                    android:textColor="@color/secondary_text"
+                    tools:text="App demos will be presented to each other on April 26th. We will be voting and selecting the top teams to present at our public Demo Day following the bootcamp." />
+
+                <View
+                    android:id="@+id/dv1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/tvEDDescription"
+                    android:layout_marginBottom="@dimen/margin8"
+                    android:layout_marginTop="@dimen/margin8"
+                    android:background="@color/divider" />
+
+                <TextView
+                    android:id="@+id/tvStartDateTime"
+                    style="@style/MaterialLightSubheadSecondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/dv1"
+                    android:text="@string/start_date_and_time"
+                    android:textColor="@color/insync_black" />
+
+                <TextView
+                    android:id="@+id/tvEDStartDate"
+                    style="@style/MaterialLightBody1Secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvStartDateTime"
+                    android:textColor="@color/secondary_text"
+                    tools:text="Wednesday, April 26th at 7pm" />
+
+                <View
+                    android:id="@+id/dv2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/tvEDStartDate"
+                    android:layout_marginBottom="@dimen/margin8"
+                    android:layout_marginTop="@dimen/margin8"
+                    android:background="@color/divider" />
+
+                <TextView
+                    android:id="@+id/tvEndDateTime"
+                    style="@style/MaterialLightSubheadSecondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/dv2"
+                    android:text="@string/end_date_and_time"
+                    android:textColor="@color/insync_black" />
+
+                <TextView
+                    android:id="@+id/tvEDEndDate"
+                    style="@style/MaterialLightBody1Secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvEndDateTime"
+                    android:textColor="@color/secondary_text"
+                    tools:text="Wednesday, April 26th at 7pm" />
+
+                <View
+                    android:id="@+id/dv3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/tvEDEndDate"
+                    android:layout_marginBottom="@dimen/margin8"
+                    android:layout_marginTop="@dimen/margin8"
+                    android:background="@color/divider" />
+
+                <TextView
+                    android:id="@+id/tvWhere"
+                    style="@style/MaterialLightSubheadSecondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/dv3"
+                    android:text="@string/event_location"
+                    android:textColor="@color/insync_black" />
+
+                <TextView
+                    android:id="@+id/tvEDLocation"
+                    style="@style/MaterialLightBody1Secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvWhere"
+                    android:textColor="@color/secondary_text"
+                    tools:text="121 Albright Way, Los Gatos, CA 95032" />
+
+                <TextView
+                    android:id="@+id/tvEDLink"
+                    style="@style/MaterialLightBody1Secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvEDLocation"
+                    android:autoLink="map"
+                    android:text="@string/open_in_maps"
+                    android:textColor="@color/blue_link" />
+
+                <View
+                    android:id="@+id/dv4"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_below="@id/tvEDLink"
+                    android:layout_marginBottom="@dimen/margin8"
+                    android:layout_marginEnd="-16dp"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginTop="@dimen/margin8"
+                    android:background="@color/divider" />
+
+                <TextView
+                    android:id="@+id/tvEDGuests"
+                    style="@style/MaterialLightSubheadSecondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/dv4"
+                    android:text="@string/guests"
+                    android:textColor="@color/primary" />
+
+                <RadioGroup
+                    android:id="@+id/rgEDRsvp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvEDGuests"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rbnAttending"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:drawableTop="@drawable/rbn_attending_selector"
+                        android:fontFamily="sans-serif"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:textColor="@color/insync_black"
+                        android:textSize="14sp"
+                        android:textStyle="normal"
+                        tools:text="10 Attending" />
+
+                    <RadioButton
+                        android:id="@+id/rbnPending"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:drawableTop="@drawable/rbn_pending_selector"
+                        android:fontFamily="sans-serif"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:textColor="@color/insync_black"
+                        android:textSize="14sp"
+                        android:textStyle="normal"
+                        tools:text="10 Waiting" />
+
+                    <RadioButton
+                        android:id="@+id/rbnDecline"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:drawableTop="@drawable/rbn_decline_selector"
+                        android:fontFamily="sans-serif"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:textColor="@color/insync_black"
+                        android:textSize="14sp"
+                        android:textStyle="normal"
+                        tools:text="10 Regrets" />
+                </RadioGroup>
+
+                <View
+                    android:id="@+id/dv5"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/rgEDRsvp"
+                    android:layout_marginBottom="@dimen/margin8"
+                    android:layout_marginTop="@dimen/margin8"
+                    android:background="@color/divider" />
+
+                <TextView
+                    android:id="@+id/tvEDAll"
+                    style="@style/MaterialLightSubheadSecondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/dv5"
+                    android:text="@string/all"
+                    android:textColor="@color/primary" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rvEDGuests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvEDAll"
+                    android:layout_marginTop="@dimen/margin8" />
+            </RelativeLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.design.widget.CoordinatorLayout>
+
+
+</layout>

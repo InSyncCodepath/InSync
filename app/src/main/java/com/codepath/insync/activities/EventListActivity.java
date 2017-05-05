@@ -25,10 +25,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.codepath.insync.Manifest;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityEventListBinding;
@@ -38,8 +36,6 @@ import com.codepath.insync.listeners.OnEventClickListener;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.utils.LocationService;
 import com.eftimoff.viewpagertransformers.ForegroundToBackgroundTransformer;
-
-import static com.codepath.insync.R.id.fab;
 
 
 public class EventListActivity extends AppCompatActivity implements OnEventClickListener {
@@ -213,7 +209,7 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
                 makeSceneTransitionAnimation(this, sharedImageView, eventId);
 //        Pair<View, String> p1 = Pair.create((View) findViewById(R.id.ivEventImage), "profile");
 
-        Intent eventDetailIntent = new Intent(EventListActivity.this, EventDetailActivity.class);
+        Intent eventDetailIntent = new Intent(EventListActivity.this, EventDetailChatActivity.class);
         eventDetailIntent.putExtra("eventId", eventId);
         eventDetailIntent.putExtra("isCurrent", isCurrent);
         eventDetailIntent.putExtra("canTrack", canTrack);

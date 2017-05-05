@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/wild_sand"
-        tools:context="com.codepath.insync.activities.EventDetailActivity">
+        tools:context="com.codepath.insync.activities.EventDetailChatActivity">
 
 
         <android.support.v7.widget.Toolbar

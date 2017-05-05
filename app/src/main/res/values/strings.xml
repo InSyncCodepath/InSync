@@ -61,4 +61,12 @@
     <string name="add_attachment">Add attachment</string>
     <string name="invite_guests">Invite guests</string>
     <string name="tap_here_for_event_details">Tap here for event details</string>
+    <string name="details">Event Details</string>
+    <string name="start_date_and_time"><![CDATA[Event Start Date & Time]]></string>
+    <string name="end_date_and_time"><![CDATA[Event End Date & Time]]></string>
+    <string name="event_location">Event Location</string>
+    <string name="open_in_maps">Open in Maps</string>
+    <string name="guests">Guests</string>
+    <string name="all">All</string>
+    <string name="end_event">End Event</string>
 </resources>

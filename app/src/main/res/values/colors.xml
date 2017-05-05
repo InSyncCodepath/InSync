@@ -21,6 +21,7 @@
     <color name="subheader">#8a000000</color>
     <color name="body">#8b000000</color>
     <color name="hint">#9b9b9b</color>
+    <color name="dark_grey">#787a7d</color>
 
 
     <color name="primary">@color/tealish</color>
@@ -30,9 +31,11 @@
     <color name="accent">@color/tealish</color>
     <color name="primary_text">@color/insync_white</color>
     <color name="signup_login_text">@color/insync_white</color>
-    <color name="secondary_text">@color/light_black_text</color>
+    <color name="secondary_text">@color/dark_grey</color>
     <color name="icons">@color/seashell</color>
-    <color name="divider">@color/regent_grey</color>
+    <color name="divider">#e0e0e0</color>
+    <color name="insync_black">#373739</color>
+    <color name="blue_link">#0645AD</color>
 
 
     <color name="rbn_background">#ffffff</color>
