@@ -276,6 +276,7 @@ public class EventDetailMoreActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_right);
                 return true;
             case R.id.action_track:
                 Intent intent = new Intent(EventDetailMoreActivity.this, LocationTrackerActivity.class);
@@ -512,6 +513,10 @@ public class EventDetailMoreActivity extends AppCompatActivity implements
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_right);
+    }
 
 }
