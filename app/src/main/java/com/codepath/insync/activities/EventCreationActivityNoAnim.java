@@ -201,6 +201,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
                         .get(Calendar.YEAR), eventStartDate.get(Calendar.MONTH),
                         eventStartDate.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.getDatePicker().setMinDate(eventStartDate.getTime().getTime());
+
                 datePickerDialog.show();
             }
         });

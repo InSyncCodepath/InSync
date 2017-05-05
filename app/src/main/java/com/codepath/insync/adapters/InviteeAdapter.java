@@ -39,6 +39,7 @@ public class InviteeAdapter extends RecyclerView.Adapter<InviteeAdapter.InviteeV
             @Override
             public void onClick(View view) {
                 invitees.remove(position);
+                notifyDataSetChanged();
             }
         });
     }

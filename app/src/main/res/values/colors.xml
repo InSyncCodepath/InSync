@@ -32,7 +32,7 @@
     <color name="signup_login_text">@color/insync_white</color>
     <color name="secondary_text">@color/light_black_text</color>
     <color name="icons">@color/seashell</color>
-    <color name="divider">@color/regent_grey</color>
+    <!--<color name="divider">@color/regent_grey</color>-->
 
 
     <color name="rbn_background">#ffffff</color>
