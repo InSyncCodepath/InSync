@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/tvBodyRight"
-        android:textColor="@color/light_black_text"
+        style="@style/MaterialLightBody1Secondary"
         tools:text="Anam"/>
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivProfileLeft"
@@ -51,6 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin4"
                 android:layout_below="@id/ivMessageRight"
+                style="@style/MaterialLightBody1Secondary"
                 android:textColor="@color/light_black_text"
                 tools:text="Caption"/>
         </RelativeLayout>
@@ -64,11 +65,11 @@
         android:paddingEnd="@dimen/padding16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
         android:layout_toEndOf="@id/ivProfileLeft"
         android:layout_marginStart="@dimen/margin16"
         android:layout_marginEnd="@dimen/margin16"
         android:layout_alignTop="@id/ivProfileLeft"
+        style="@style/MaterialLightBody1Secondary"
         android:textColor="@color/light_black_text"
         android:background="@drawable/rounded_text_view_seashell"
         tools:text="What is the name of the place you went hiking last weekend?"

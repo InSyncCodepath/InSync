@@ -165,7 +165,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         styledResultText.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_OPPOSITE), resultText.length()-messageTime.length(), resultText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        styledResultText.setSpan(new RelativeSizeSpan(.5f), resultText.length()-messageTime.length(), resultText.length(), 0); // set size
+        styledResultText.setSpan(new RelativeSizeSpan(.65f), resultText.length()-messageTime.length(), resultText.length(), 0); // set size
         styledResultText.setSpan(new ForegroundColorSpan(Color.GRAY), resultText.length()-messageTime.length(), resultText.length(), 0);// set color
 
         // Set item views based on your views and data model

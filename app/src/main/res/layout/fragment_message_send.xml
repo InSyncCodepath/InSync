@@ -3,37 +3,70 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     >
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/wild_sand">
-        <android.support.design.widget.BottomNavigationView
-            android:id="@+id/bnvEDMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-            <EditText
-                android:id="@+id/etEDMessage"
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/tvHeight"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="54dp"
-                android:layout_marginStart="@dimen/margin8"
-                android:layout_marginBottom="@dimen/margin8"
-                android:layout_marginTop="@dimen/margin8"
-                android:layout_gravity="bottom"
-                android:paddingStart="@dimen/padding4"
-                android:paddingEnd="@dimen/padding4"
-                android:background="@drawable/rounded_edit_text"
-                android:elevation="8dp"
-                android:hint="@string/message_hint"
-                android:imeOptions="actionSend"
-                android:inputType="textShortMessage"
-                app:layout_behavior=".BottomNavigationBehavior"
-                tools:targetApi="lollipop" />
+                android:layout_height="wrap_content">
 
-        </android.support.design.widget.BottomNavigationView>
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fabMessageSend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:visibility="gone"
+                    android:layout_marginTop="@dimen/margin8"
+                    android:layout_marginEnd="@dimen/margin8"
+                    app:srcCompat="@drawable/ic_send"
+                    app:fabSize="mini"
+                    />
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fabEDCamera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="@dimen/margin4"
+                    android:layout_marginTop="@dimen/margin8"
+                    android:backgroundTint="@color/insync_white"
+                    app:srcCompat="@drawable/ic_camera_primary"
+                    app:fabSize="mini"
+                    />
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fabEDGallery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin4"
+                    android:layout_marginTop="@dimen/margin8"
+                    app:srcCompat="@drawable/ic_attach_file_white_48px"
+                    android:backgroundTint="@color/insync_white"
+                    android:layout_toEndOf="@id/fabEDCamera"
+                    app:fabSize="mini"
+                    />
+                <EditText
+                    android:id="@+id/etEDMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="@dimen/margin4"
+                    android:layout_marginTop="@dimen/margin8"
+                    android:layout_marginBottom="@dimen/margin16"
+                    android:layout_marginEnd="@dimen/margin8"
+                    android:layout_toStartOf="@id/fabMessageSend"
+                    android:layout_toEndOf="@id/fabEDGallery"
+                    android:paddingStart="@dimen/padding16"
+                    android:paddingEnd="@dimen/padding4"
+                    android:background="@drawable/rounded_edit_text"
+                    android:elevation="4dp"
+                    android:hint="@string/message_hint"
+                    android:textColorHint="@color/insync_grey"
+                    android:imeOptions="actionSend"
+                    android:inputType="textShortMessage"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="normal"
+                    app:layout_behavior=".BottomNavigationBehavior"
+                    android:textCursorDrawable="@drawable/cursor_color"
+                    tools:targetApi="lollipop" />
 
-    </RelativeLayout>
+
+            </RelativeLayout>
+
 </layout>
