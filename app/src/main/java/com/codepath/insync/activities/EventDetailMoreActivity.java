@@ -295,8 +295,8 @@ public class EventDetailMoreActivity extends AppCompatActivity implements
     }
 
     private void handleHighlightsAction() {
-        String message = "Your event will end and you will not be able to post. Do you want to continue creating highlights?";
-        ConfirmationFragment confirmationFragment = ConfirmationFragment.newInstance(message, "Continue", "Cancel");
+        String message = "Are you sure you want to end this event? This will prevent you from posting any information or media to this event.";
+        ConfirmationFragment confirmationFragment = ConfirmationFragment.newInstance(message, "End Event Now", "Cancel");
         confirmationFragment.show(fragmentManager, "fragment_confirmation");
     }
 
