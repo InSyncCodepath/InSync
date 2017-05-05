@@ -7,8 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -20,7 +18,7 @@ import android.widget.RemoteViews;
 
 import com.codepath.insync.BuildConfig;
 import com.codepath.insync.R;
-import com.codepath.insync.activities.EventDetailActivity;
+import com.codepath.insync.activities.EventDetailChatActivity;
 import com.codepath.insync.activities.EventListActivity;
 import com.codepath.insync.activities.LoginActivity;
 import com.codepath.insync.models.parse.Event;
@@ -37,9 +35,6 @@ import org.json.JSONObject;
 import java.util.Iterator;
 import java.util.List;
 
-import static android.R.attr.id;
-import static android.R.attr.value;
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 
@@ -174,12 +169,12 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
         PendingIntent eventListIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
         // Define the intent to trigger when notification is selected
-        Intent detailIntent = new Intent(context.getApplicationContext(), EventDetailActivity.class);
+        Intent detailIntent = new Intent(context.getApplicationContext(), EventDetailChatActivity.class);
         detailIntent.putExtra("eventId", eventId);
         detailIntent.putExtra("isCurrent", true);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context.getApplicationContext());
         // Adds the back stack
-        stackBuilder.addParentStack(EventDetailActivity.class);
+        stackBuilder.addParentStack(EventDetailChatActivity.class);
         // Adds the Intent to the top of the stack
         stackBuilder.addNextIntent(detailIntent);
         // Gets a PendingIntent containing the entire back stack

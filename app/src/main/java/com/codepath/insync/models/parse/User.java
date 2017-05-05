@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
@@ -142,6 +143,11 @@ public class User extends ParseUser {
 
     public void login(String username, String password, LogInCallback callback) {
         super.logInInBackground(username, password, callback);
+    }
+
+    public static void findUser(String objectId, GetCallback<ParseUser> getCallback) {
+        ParseQuery<ParseUser> userParseQuery = ParseUser.getQuery();
+        userParseQuery.getInBackground(objectId, getCallback);
     }
 
 }
