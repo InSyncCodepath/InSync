@@ -9,6 +9,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
@@ -80,8 +81,7 @@ public class EventDetailActivity extends AppCompatActivity implements
         OnMessageChangeListener{
 
     private static final String TAG = "EventDetailActivity";
-    private static final int REQUEST_CAMERA_ACTIVITY = 1027;
-    private static final int SELECT_PICTURE = 1028;
+
 
     ActivityEventDetailBinding binding;
     CollapsingToolbarLayout collapsingToolbar;
@@ -101,7 +101,15 @@ public class EventDetailActivity extends AppCompatActivity implements
     FragmentManager fragmentManager;
     RelativeLayout rlEventDetail;
     UpcomingEventDetailFragment upcomingEventDetailFragment;
-    private Uri imageUri;
+    Handler tbHintHandler = new Handler();
+
+    Runnable tbHintRunnable =new Runnable() {
+
+        @Override
+        public void run() {
+            binding.tvTapHint.setVisibility(View.INVISIBLE);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,11 +119,13 @@ public class EventDetailActivity extends AppCompatActivity implements
         fragmentManager = getSupportFragmentManager();
         firstLoad = true;
         rlEventDetail = binding.rlEventDetail;
-        binding.fabEDSend.setVisibility(View.GONE);
 
         postponeEnterTransition();
         processIntent();
         setupToolbar();
+
+        //tbHintHandler.removeCallbacks(tbHintRunnable);
+        //tbHintHandler.postDelayed(tbHintRunnable, 3000);
     }
 
     @Override
@@ -145,7 +155,7 @@ public class EventDetailActivity extends AppCompatActivity implements
             public void done(Event eventObj, ParseException e) {
                 if (e == null) {
                     event = eventObj;
-                    findAttendance();
+                    //findAttendance();
                     loadViews();
                     loadFragments();
                 } else {
@@ -158,7 +168,7 @@ public class EventDetailActivity extends AppCompatActivity implements
 
     }
 
-    private void setupChatClickListeners() {
+    /*private void setupChatClickListeners() {
         binding.fabEDSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -184,98 +194,16 @@ public class EventDetailActivity extends AppCompatActivity implements
                 binding.famEDMedia.toggle(true);
             }
         });
-    }
+    }*/
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CAMERA_ACTIVITY && resultCode == RESULT_OK) {
-            String message = data.getStringExtra("message");
-            String filePath = data.getStringExtra("filePath");
-            ParseFile parseFile = null;
-            if (filePath != null) {
-                File file = new File(filePath);
-                parseFile = new ParseFile(file);
-            } else {
-                try {
-                    parseFile = new ParseFile(Camera.readBytes(getApplicationContext(), imageUri));
-                    imageUri = null;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (parseFile != null) {
-                messageSendFragment.setupImagePosting(message, parseFile);
-            }
 
-        } else if (requestCode == SELECT_PICTURE && resultCode == RESULT_OK) {
-            Intent intent = new Intent(EventDetailActivity.this, CameraActivity.class);
-            imageUri = data.getData();
-            intent.putExtra("image_uri", imageUri.toString());
-            startActivityForResult(intent, REQUEST_CAMERA_ACTIVITY);
-        }
-    }
-
-    private void findAttendance() {
-        numAttending = 0;
-        numDecline = 0;
-        numPending = 0;
-        UserEventRelation.findAttendees(event, new FindCallback<UserEventRelation>() {
-            @Override
-            public void done(List<UserEventRelation> userEventRelations, ParseException e) {
-                if (e == null) {
-                    for (UserEventRelation userEventRelation : userEventRelations) {
-                        int rsvpStatus = userEventRelation.getRsvpStatus();
-                        switch (rsvpStatus) {
-                            case Constants.ATTENDING:
-                                numAttending++;
-                                break;
-                            case Constants.DECLINE:
-                                numDecline++;
-                                break;
-                            default:
-                                numPending++;
-                                break;
-                        }
-                        if (userEventRelation.getUserId().equals(User.getCurrentUser().getObjectId())) {
-                            currentRbnId = binding.rgEDRsvp.getCheckedRadioButtonId();
-                            currentUserEvent = userEventRelation;
-
-                            if (firstLoad) {
-                                firstLoad = false;
-                                if (rsvpStatus == Constants.ATTENDING) {
-                                    binding.rbnAttending.setChecked(true);
-                                } else if (rsvpStatus == Constants.DECLINE) {
-                                    binding.rbnDecline.setChecked(true);
-                                } else {
-                                    binding.rbnPending.setChecked(true);
-                                }
-                                // Disable the radio button selection if the user is hosting
-                                if (currentUserEvent.isHosting()) {
-                                    binding.rbnAttending.setEnabled(false);
-                                    binding.rbnDecline.setEnabled(false);
-                                    binding.rbnPending.setEnabled(false);
-                                } else {
-                                    setupRadioButtonGroup();
-                                }
-
-                            }
-                        }
-                    }
-                } else {
-                    Log.e(TAG, "Error loading RSVP status: "+e.getLocalizedMessage());
-                }
-                binding.rbnAttending.setText(numAttending+" "+Constants.ATTENDING_STR);
-                binding.rbnDecline.setText(numDecline+" "+Constants.DECLINE_STR);
-                binding.rbnPending.setText(numPending+" "+Constants.PENDING_STR);
-            }
-        });
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                supportFinishAfterTransition();
+
                 return true;
             case R.id.action_track:
                 Intent intent = new Intent(EventDetailActivity.this, LocationTrackerActivity.class);
@@ -358,13 +286,9 @@ public class EventDetailActivity extends AppCompatActivity implements
                     });
 
         }
-        if (!isCurrent) {
-            binding.rgEDRsvp.setVisibility(View.GONE);
-        }
+
         binding.tvEDName.setText(event.getName());
-        binding.tvEDDescription.setText(event.getDescription());
-        binding.tvEDDate.setText(CommonUtil.getDateTimeInFormat(event.getStartDate()));
-        binding.tvEDLocation.setText(event.getAddress());
+
     }
 
     private void scheduleStartPostponedTransition(final View sharedElement) {
@@ -382,13 +306,22 @@ public class EventDetailActivity extends AppCompatActivity implements
 
     private void setupToolbar() {
 
-        collapsingToolbar = binding.ctlEventDetail;
+        //collapsingToolbar = binding.ctlEventDetail;
 
         setSupportActionBar(binding.tbEventDetail);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle("");
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        binding.tbEventDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Go to event details
+            }
+        });
+
 
 
         /*Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
@@ -402,84 +335,13 @@ public class EventDetailActivity extends AppCompatActivity implements
                 collapsingToolbar.setStatusBarScrimColor(R.color.accent);
             }
         });*/
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            collapsingToolbar.setContentScrimColor(getColor(R.color.light_green));
-            collapsingToolbar.setStatusBarScrimColor(getColor(R.color.accent));
-        }
 
 
-        binding.abEventDetail.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
-                Log.d(TAG, "Appbar offset changed to: "+verticalOffset);
-                // Calculate ActionBar height
-                int vOffSetThreshold = isCurrent ? 520 : 350;
-                if (Math.abs(verticalOffset) > vOffSetThreshold) {
-                    TextView tvEventName = (TextView) collapsingToolbar.findViewById(R.id.tvEDName);
-                    collapsingToolbar.setTitle(tvEventName.getText().toString());
-                    collapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_text));
-                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                    binding.rlToolbar.setVisibility(View.INVISIBLE);
-                    Drawable toolbarDrawable = ResourcesCompat.getDrawable(getResources(),
-                            R.drawable.theme_gradient, null);
-                    collapsingToolbar.setBackground(toolbarDrawable);
-                } else {
-                    collapsingToolbar.setTitle(Constants.EMPTY_STR);
-                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                    binding.rlToolbar.setVisibility(View.VISIBLE);
-                }
-            }
-        });
     }
 
 
-    private void setupRadioButtonGroup() {
-        binding.rgEDRsvp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                // Get current selected radio button and increment count locally
-                if (checkedId == binding.rbnAttending.getId()) {
-                    currentUserEvent.setRsvpStatusKey(Constants.ATTENDING);
-                    numAttending++;
-                } else if (checkedId == binding.rbnDecline.getId()) {
-                    currentUserEvent.setRsvpStatusKey(Constants.DECLINE);
-                    numDecline++;
-                } else {
-                    currentUserEvent.setRsvpStatusKey(Constants.PENDING);
-                    numPending++;
-                }
 
-                // Get previously checked radio button and decrement count locally
-                if (currentRbnId == binding.rbnAttending.getId()) {
-                    numAttending--;
-                } else if (currentRbnId == binding.rbnDecline.getId()) {
-                    numDecline--;
-                } else {
-                    numPending--;
-                }
-
-                // Update attendance
-                binding.rbnAttending.setText(numAttending+" "+Constants.ATTENDING_STR);
-                binding.rbnDecline.setText(numDecline+" "+Constants.DECLINE_STR);
-                binding.rbnPending.setText(numPending+" "+Constants.PENDING_STR);
-
-                // Update remote store and refresh
-                currentUserEvent.updateRsvpStatus(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e == null) {
-                            Log.d(TAG, "Rsvp status updated successfully.");
-                            findAttendance();
-                        } else {
-                            Log.e(TAG, "Error updating RSVP status: "+e.getLocalizedMessage());
-                        }
-                    }
-                });
-
-            }
-        });
-    }
 
     private void loadFragments() {
         FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -489,11 +351,11 @@ public class EventDetailActivity extends AppCompatActivity implements
             ft.replace(R.id.flMessages, upcomingEventDetailFragment);
             messageSendFragment = MessageSendFragment.newInstance(eventId);
             ft.replace(R.id.flMessageSend, messageSendFragment);
-            setupUI(binding.clED);
-            setupChatClickListeners();
+            setupUI(binding.rlEventDetail);
+            //setupChatClickListeners();
         } else {
             binding.flMessageSend.setVisibility(View.GONE);
-            binding.famEDMedia.setVisibility(View.GONE);
+            //binding.famEDMedia.setVisibility(View.GONE);
             pastEventDetailFragment =
                     PastEventDetailFragment.newInstance(event.getObjectId(), event.getName(), event.getTheme());
             ft.replace(R.id.flMessages, pastEventDetailFragment);
@@ -553,8 +415,6 @@ public class EventDetailActivity extends AppCompatActivity implements
             pastEventDetailFragment.setExitTransition(explodeTransform);
             ivGalleryImage = (ImageView) findViewById(R.id.ivEDImage);
         } else {
-            binding.flMessageSend.setVisibility(View.GONE);
-            binding.famEDMedia.setVisibility(View.GONE);
             upcomingEventDetailFragment.setSharedElementReturnTransition(changeTransform);
             upcomingEventDetailFragment.setExitTransition(explodeTransform);
             ivGalleryImage = (ImageView) findViewById(R.id.ivMessageRight);
@@ -575,17 +435,7 @@ public class EventDetailActivity extends AppCompatActivity implements
 
     }
 
-    @Override
-    public void onTextChange(int count) {
-        Log.d(TAG, "Count: "+count);
-        if (count == 0) {
-            binding.famEDMedia.setVisibility(View.VISIBLE);
-            binding.fabEDSend.setVisibility(View.GONE);
-        } else {
-            binding.famEDMedia.setVisibility(View.GONE);
-            binding.fabEDSend.setVisibility(View.VISIBLE);
-        }
-    }
+
 
     @Override
     public void onMessageCreated(Message message) {

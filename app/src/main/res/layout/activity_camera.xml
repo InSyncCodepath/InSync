@@ -6,7 +6,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/wild_sand"
+        android:background="@android:color/white"
         tools:context="com.codepath.insync.activities.CameraActivity">
 
         <com.flurgle.camerakit.CameraView
@@ -15,51 +15,52 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true" />
 
-        <ImageView
+        <com.codepath.insync.widgets.AspectRatioImageView
             android:id="@+id/ivSelectedImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
             android:adjustViewBounds="true"
-            android:layout_margin="@dimen/margin8"
-            android:visibility="gone" />
-
-        <android.support.design.widget.CoordinatorLayout
+            android:visibility="gone"
+            />
+        <RelativeLayout
             android:id="@+id/clSendSelected"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/margin8"
             android:visibility="gone">
 
             <EditText
                 android:id="@+id/etSelectedMessage"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/tvHeight"
+                android:layout_height="40dp"
                 android:paddingStart="@dimen/padding4"
                 android:paddingEnd="@dimen/padding4"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginBottom="@dimen/margin8"
-                android:layout_marginEnd="@dimen/margin48"
-                android:layout_marginStart="@dimen/margin8"
                 android:layout_marginTop="@dimen/margin8"
-                android:elevation="8dp"
-                android:background="@drawable/rounded_edit_text"
+                android:background="@android:color/black"
                 android:hint="@string/add_a_caption"
+                android:textColorHint="@color/insync_white"
+                android:textColor="@color/insync_white"
                 android:imeOptions="actionSend"
                 android:inputType="textShortMessage"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
                 tools:targetApi="lollipop" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fabEDSendSelected"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:layout_margin="@dimen/margin4"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="@dimen/margin8"
+                android:layout_marginEnd="@dimen/margin8"
                 app:fabSize="mini"
                 app:srcCompat="@drawable/ic_send" />
-        </android.support.design.widget.CoordinatorLayout>
+        </RelativeLayout>
 
 
     </RelativeLayout>

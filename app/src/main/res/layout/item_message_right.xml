@@ -39,9 +39,9 @@
                 android:id="@+id/tvCaptionLeft"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
                 android:layout_below="@id/ivMessageLeft"
                 android:layout_marginStart="@dimen/margin4"
+                style="@style/MaterialLightBody1Secondary"
                 android:textColor="@color/light_black_text"
                 tools:text="Caption"/>
         </RelativeLayout>
@@ -55,12 +55,12 @@
         android:id="@+id/tvBodyLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
         android:layout_toStartOf="@id/ivProfileRight"
         android:layout_marginStart="@dimen/margin16"
         android:layout_marginEnd="@dimen/margin16"
         android:layout_below="@id/cvMessageLeft"
         android:background="@drawable/rounded_text_view_light_green"
+        style="@style/MaterialLightBody1Secondary"
         android:textColor="@color/light_black_text"
         tools:text="What is the name of the place you went hiking last weekend?" />
 </RelativeLayout>
