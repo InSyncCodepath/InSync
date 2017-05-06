@@ -166,24 +166,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvWhere"
-                    android:textColor="@color/secondary_text"
-                    tools:text="121 Albright Way, Los Gatos, CA 95032" />
-
-                <TextView
-                    android:id="@+id/tvEDLink"
-                    style="@style/MaterialLightBody1Secondary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tvEDLocation"
+                    tools:text="121 Albright Way, Los Gatos, CA 95032"
                     android:autoLink="map"
                     android:text="@string/open_in_maps"
-                    android:textColor="@color/blue_link" />
+                    android:textColor="@color/blue_link"/>
 
                 <View
                     android:id="@+id/dv4"
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
-                    android:layout_below="@id/tvEDLink"
+                    android:layout_below="@id/tvEDLocation"
                     android:layout_marginBottom="@dimen/margin8"
                     android:layout_marginEnd="-16dp"
                     android:layout_marginStart="-16dp"

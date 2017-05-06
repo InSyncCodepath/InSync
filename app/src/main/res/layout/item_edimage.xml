@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/..."
-    android:layout_marginTop="@dimen/margin8"
+    android:layout_marginBottom="@dimen/margin8"
     android:layout_marginEnd="@dimen/margin8"
     card_view:cardcornerradius="4dp"
     android:layout_width="wrap_content"
