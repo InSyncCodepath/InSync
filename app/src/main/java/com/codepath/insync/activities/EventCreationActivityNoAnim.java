@@ -109,6 +109,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
     private String selectedImagePath;
     public static final int PHONE_CONTACTS_REQUEST_CODE = 1026;
     boolean allDay = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -253,7 +254,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
         });
 
 
-        toggleOff.setOnClickListener(new View.OnClickListener(){
+        toggleOff.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -263,7 +264,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
             }
         });
 
-        toggleOn.setOnClickListener(new View.OnClickListener(){
+        toggleOn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -272,12 +273,21 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
                 toggleOff.setVisibility(View.VISIBLE);
             }
         });
-        binding.done.setOnClickListener(new View.OnClickListener(){
+        binding.done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 saveEventDetails();
             }
         });
+
+        binding.cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCancelDailog();
+            }
+        }
+
+        );
 
 
         //inviteeList = binding.inviteeList;
@@ -290,6 +300,10 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
 //                startActivityForResult(intent, 1023);
 //            }
 //        });
+
+    }
+
+    private void showCancelDailog() {
 
     }
 
@@ -313,7 +327,6 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
         }
         adapter.notifyDataSetChanged();
     }
-
 
 
     DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
@@ -410,7 +423,6 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
 //                cursor.close();
 //                File file = new File(String.valueOf(selectedImageUri));
 //                parseFile = new ParseFile(file);
-
 
 
 //                File file = Environment.getExternalStorageDirectory();
@@ -510,13 +522,13 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
             Toast.makeText(EventCreationActivityNoAnim.this, "Event Date can not be blank", Toast.LENGTH_LONG).show();
         } else if (startTime.getText().equals("")) {
             Toast.makeText(EventCreationActivityNoAnim.this, "Event Time can not be blank", Toast.LENGTH_LONG).show();
-        } else if (invitees.size()==0) {
+        } else if (invitees.size() == 0) {
             Toast.makeText(EventCreationActivityNoAnim.this, "Oops! Looks like you forgot to add guests", Toast.LENGTH_LONG).show();
-        } else  {
+        } else {
             parseFile.saveInBackground(new SaveCallback() {
                 public void done(ParseException e) {
                     // If successful add file to user and signUpInBackground
-                    if(null == e)
+                    if (null == e)
                         savetoParse();
                 }
             });
@@ -577,8 +589,6 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
 
                     }
                 });
-
-
 
 
             }
@@ -673,17 +683,18 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
+
     public String getPath(Uri uri) {
         // just some safety built in
-        if( uri == null ) {
+        if (uri == null) {
             // TODO perform some logging or show user feedback
             return null;
         }
         // try to retrieve the image from the media store first
         // this will only work for images selected from gallery
-        String[] projection = { MediaStore.Images.Media.DATA };
+        String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
-        if( cursor != null ){
+        if (cursor != null) {
             int column_index = cursor
                     .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();

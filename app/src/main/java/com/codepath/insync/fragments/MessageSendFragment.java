@@ -2,6 +2,7 @@ package com.codepath.insync.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,12 +25,18 @@ import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.utils.Camera;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -41,7 +48,7 @@ public class MessageSendFragment extends Fragment {
     Event event;
     Context context;
     private Uri imageUri;
-
+    Event event1;
     OnMessageChangeListener messageChangeListener;
     private static final int REQUEST_CAMERA_ACTIVITY = 1027;
     private static final int SELECT_PICTURE = 1028;
@@ -64,12 +71,26 @@ public class MessageSendFragment extends Fragment {
         messageChangeListener = (OnMessageChangeListener) getActivity();
         event = new Event();
         event.setObjectId(getArguments().getString("eventId"));
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
+        query.whereEqualTo("objectId",getArguments().getString("eventId"));
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                     event1 = (Event) objects.get(0);
+                } else {
+                    // error
+                }
+            }
+        });
+
+        //getEventImages();
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         context = getContext();
+
     }
 
     @Override
@@ -138,6 +159,7 @@ public class MessageSendFragment extends Fragment {
         binding.fabEDGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                getEventImages();
                 Intent intent = new Intent(Intent.ACTION_PICK,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(Intent.createChooser(intent,
@@ -171,6 +193,7 @@ public class MessageSendFragment extends Fragment {
             Intent intent = new Intent(getActivity(), CameraActivity.class);
             imageUri = data.getData();
             intent.putExtra("image_uri", imageUri.toString());
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             startActivityForResult(intent, REQUEST_CAMERA_ACTIVITY);
         }
     }
@@ -188,8 +211,8 @@ public class MessageSendFragment extends Fragment {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    Toast.makeText(getActivity(), "Your Photo was successfully sent!",
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "Your Photo was successfully sent!",
+//                            Toast.LENGTH_SHORT).show();
                     event.getMessageRelation().add(message);
                     event.updateEvent(new SaveCallback() {
                         @Override
@@ -223,8 +246,8 @@ public class MessageSendFragment extends Fragment {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    Toast.makeText(getActivity(), "Your message was successfully sent!",
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "Your message was successfully sent!",
+//                            Toast.LENGTH_SHORT).show();
 
                     event.getMessageRelation().add(message);
                     event.updateEvent(new SaveCallback() {
@@ -244,6 +267,30 @@ public class MessageSendFragment extends Fragment {
         });
         binding.etEDMessage.setText(null);
 
+    }
+
+    public void getEventImages(){
+        Calendar startCal = Calendar.getInstance();
+        Date start = event1.getStartDate();
+        //startCal.getTime(start);
+        String[] projection = { MediaStore.Images.Media.DATA };
+        String selection = MediaStore.Images.Media.DATE_TAKEN + " > ? AND " + MediaStore.Images.Media.DATE_TAKEN + " < ? " ;
+        String[] selectionArgs = { String.valueOf(event1.getStartDate().getTime()), String.valueOf(event1.getEndDate().getTime()) };
+        Cursor cursor = context.getContentResolver()
+                .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null);
+        Toast.makeText(getActivity(), "Your Photo was successfully sent!",
+                            Toast.LENGTH_SHORT).show();
+        if (cursor != null && cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                String imagePath = cursor.getString(0);
+            }
+        }
+
+        cursor.close();
     }
 
     public void clearViewFocus() {
