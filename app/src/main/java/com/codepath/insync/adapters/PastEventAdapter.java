@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,7 +41,9 @@ import java.util.Date;
 import java.util.List;
 
 import static android.R.attr.animation;
+import static android.R.attr.bitmap;
 import static com.codepath.insync.R.id.ivEventImage;
+import static com.codepath.insync.R.id.tvEventName;
 
 
 public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.PastEventViewHolder> implements TextureView.SurfaceTextureListener {
@@ -49,12 +52,12 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
     EventDetailClickHandling listener;
     ArrayList<String> edImages;
     List<ParseFile> parseFiles;
-
+    int numberOfColors = 16;
     @Override
     public PastEventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.
                 from(context).
-                inflate(R.layout.upcoming_event_item, parent, false);
+                inflate(R.layout.past_event_item, parent, false);
 
         return new PastEventViewHolder(itemView);
     }
@@ -72,7 +75,7 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onEventItemClick(event.getObjectId(), false, false, holder.binding.ivEventImage);
+                listener.onEventItemClick(event.getObjectId(), false, false, holder.binding.ivHighlights);
             }
         });
         holder.eventName.setText(event.getName());
@@ -83,6 +86,13 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
         holder.eventDate.setText(CommonUtil.getDateTimeInFormat(event.getStartDate()));
 
         ParseFile profileImage = event.getProfileImage();
+        byte[] bitmapdata = new byte[0];
+        try {
+            bitmapdata = profileImage.getData();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata , 0, bitmapdata.length);
         String imgUrl = null;
         if (profileImage != null) {
             imgUrl = profileImage.getUrl();
@@ -90,12 +100,31 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
             imgUrl = event.getString("imageUrl");
         }
 
+        //Palette
+        Palette.from(bitmap).maximumColorCount(numberOfColors).generate(new Palette.PaletteAsyncListener() {
+            @Override
+            public void onGenerated(Palette palette) {
+                // Get the "vibrant" color swatch based on the bitmap
+                Palette.Swatch vibrant = palette.getLightVibrantSwatch();
+                if (vibrant != null) {
+                    // Set the background color of a layout based on the vibrant color
+                    //containerView.setBackgroundColor(vibrant.getRgb());
+                    // Update the title TextView with the proper text color
+                    holder.eventName.setTextColor(vibrant.getBodyTextColor());
+
+
+                }
+            }
+        });
+
+
+
         if (imgUrl != null) {
             Glide.with(context)
                     .load(imgUrl)
                     .placeholder(R.drawable.ic_camera_alt_white_48px)
                     .crossFade()
-                    .into(holder.binding.ivEventImage);
+                    .into(holder.binding.ivHighlights);
         }
         ViewCompat.setTransitionName(holder.itemView, event.getObjectId());
 //        Glide.with(context).load(event.getProfileImage()).into(holder.binding.ivHighlights);
@@ -159,16 +188,18 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
     }
 
     public static class PastEventViewHolder extends RecyclerView.ViewHolder {
-        UpcomingEventItemBinding binding;
+        //UpcomingEventItemBinding binding;
+        PastEventItemBinding binding;
         ImageView ivEventImage;
-        TextView eventName, eventDate;
+        TextView eventName, eventDate, eventAddress;
 
         public PastEventViewHolder(View itemView) {
             super(itemView);
-            binding = UpcomingEventItemBinding.bind(itemView);
-            ivEventImage = binding.ivEventImage;
+            binding = PastEventItemBinding.bind(itemView);
+            ivEventImage = binding.ivHighlights;
             eventName = binding.tvEventName;
             eventDate = binding.tvDate;
+            eventAddress = binding.tvAddress;
         }
     }
 

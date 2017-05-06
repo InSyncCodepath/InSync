@@ -152,6 +152,7 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
                 return;
             }
             viewPager.setCurrentItem(1);
+
             Event event = new Event();
             event.setObjectId(data.getStringExtra("eventId"));
             event.setName(data.getStringExtra("eventName"));
@@ -251,9 +252,9 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Upcoming Events";
+                    return "Upcoming";
                 case 1:
-                    return "Past Events";
+                    return "Past";
             }
             return null;
         }
