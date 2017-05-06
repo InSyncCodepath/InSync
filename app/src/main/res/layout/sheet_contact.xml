@@ -12,14 +12,13 @@
         android:layout_weight="1"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        android:drawableTop="@drawable/ic_sync_white_48px"
+        android:drawableTop="@drawable/insync_contacts"
         android:drawablePadding="8dp"
         android:gravity="center_horizontal|center_vertical"
         android:padding="16dp"
         android:text="InSync Contacts"
-        android:textColor="@android:color/darker_gray"
-        android:textStyle="bold"
-        android:textSize="18sp" />
+        android:textColor="#9b9b9b"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/bttmPhoneContacts"
@@ -29,12 +28,11 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:drawablePadding="8dp"
-        android:drawableTop="@drawable/ic_contact_phone_white_48px"
+        android:drawableTop="@drawable/phone_contacts"
         android:gravity="center_horizontal|center_vertical"
         android:padding="16dp"
         android:text="Phone Contacts"
-        android:textColor="@android:color/darker_gray"
-        android:textStyle="bold"
-        android:textSize="18sp" />
+        android:textColor="#9b9b9b"
+        android:textSize="14sp" />
 
 </LinearLayout>

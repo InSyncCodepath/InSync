@@ -12,14 +12,13 @@
         android:layout_weight="1"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        android:drawableTop="@android:drawable/ic_menu_camera"
+        android:drawableTop="@drawable/use_camera"
         android:drawablePadding="8dp"
         android:gravity="center_horizontal|center_vertical"
         android:padding="16dp"
         android:text="Camera"
-        android:textColor="@android:color/darker_gray"
-        android:textStyle="bold"
-        android:textSize="18sp" />
+        android:textColor="#9b9b9b"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/bttmGallery"
@@ -29,12 +28,11 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:drawablePadding="8dp"
-        android:drawableTop="@android:drawable/ic_menu_gallery"
+        android:drawableTop="@drawable/usegallery"
         android:gravity="center_horizontal|center_vertical"
         android:padding="16dp"
         android:text="Gallery"
-        android:textColor="@android:color/darker_gray"
-        android:textStyle="bold"
-        android:textSize="18sp" />
+        android:textColor="#9b9b9b"
+        android:textSize="14sp" />
 
 </LinearLayout>
