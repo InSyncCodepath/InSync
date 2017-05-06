@@ -1,8 +1,10 @@
 package com.codepath.insync.activities;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 
@@ -29,6 +31,7 @@ public class SplashActivity extends AwesomeSplash {
 
     @Override
     public void initSplash(ConfigSplash configSplash) {
+        overridePendingTransition(R.anim.zoom_enter, R.anim.zoom_exit);
         //User.logOut();
 
 //Customize Circular Reveal
@@ -41,14 +44,14 @@ public class SplashActivity extends AwesomeSplash {
 
         //Customize Logo
         configSplash.setLogoSplash(R.drawable.group_15); //or any other drawable
-        configSplash.setAnimLogoSplashDuration(150); //int ms
+        configSplash.setAnimLogoSplashDuration(500); //int ms
         configSplash.setAnimLogoSplashTechnique(Techniques.FadeIn); //choose one form Techniques (ref: https://github.com/daimajia/AndroidViewAnimations)
 
         //Customize Title
         configSplash.setTitleSplash(Constants.INSYNC_LOGO);
         configSplash.setTitleTextColor(R.color.primary_text);
         configSplash.setTitleTextSize(36f); //float value
-        configSplash.setAnimTitleDuration(400);
+        configSplash.setAnimTitleDuration(500);
         configSplash.setAnimTitleTechnique(Techniques.FlipInX);
         //configSplash.setTitleFont("fonts/myfont.ttf"); //TODO: ADD FONT
     }
@@ -59,13 +62,15 @@ public class SplashActivity extends AwesomeSplash {
         User currentUser = User.getCurrentUser();
         Intent intent;
 
+        Bundle animationBundle =
+                ActivityOptions.makeCustomAnimation(this, android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
         if (currentUser != null) {
             intent = new Intent(SplashActivity.this, EventListActivity.class);
         } else {
             intent = new Intent(SplashActivity.this, LoginActivity.class);
         }
 
-        startActivity(intent);
+        startActivity(intent, animationBundle);
         finish();
 
     }
