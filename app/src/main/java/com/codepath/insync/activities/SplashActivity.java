@@ -32,7 +32,7 @@ public class SplashActivity extends AwesomeSplash {
         //User.logOut();
 
 //Customize Circular Reveal
-        configSplash.setBackgroundColor(R.color.lighter_green); //any color you want form colors.xml
+        configSplash.setBackgroundColor(R.color.primary); //any color you want form colors.xml
         configSplash.setAnimCircularRevealDuration(500); //int ms
         configSplash.setRevealFlagX(Flags.REVEAL_LEFT);  //or Flags.REVEAL_LEFT
         configSplash.setRevealFlagY(Flags.REVEAL_LEFT); //or Flags.REVEAL_TOP
@@ -40,15 +40,15 @@ public class SplashActivity extends AwesomeSplash {
         //Choose LOGO OR PATH; if you don't provide String value for path it's logo by default
 
         //Customize Logo
-        configSplash.setLogoSplash(R.drawable.ic_launch); //or any other drawable
-        configSplash.setAnimLogoSplashDuration(500); //int ms
+        configSplash.setLogoSplash(R.drawable.group_15); //or any other drawable
+        configSplash.setAnimLogoSplashDuration(150); //int ms
         configSplash.setAnimLogoSplashTechnique(Techniques.FadeIn); //choose one form Techniques (ref: https://github.com/daimajia/AndroidViewAnimations)
 
         //Customize Title
         configSplash.setTitleSplash(Constants.INSYNC_LOGO);
-        configSplash.setTitleTextColor(R.color.primary_dark);
+        configSplash.setTitleTextColor(R.color.primary_text);
         configSplash.setTitleTextSize(36f); //float value
-        configSplash.setAnimTitleDuration(500);
+        configSplash.setAnimTitleDuration(400);
         configSplash.setAnimTitleTechnique(Techniques.FlipInX);
         //configSplash.setTitleFont("fonts/myfont.ttf"); //TODO: ADD FONT
     }
