@@ -175,7 +175,7 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
         detailIntent.putExtra("isCurrent", true);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context.getApplicationContext());
         // Adds the back stack
-        stackBuilder.addParentStack(EventDetailChatActivity.class);
+        stackBuilder.addParentStack(EventListActivity.class);
         // Adds the Intent to the top of the stack
         stackBuilder.addNextIntent(detailIntent);
         // Gets a PendingIntent containing the entire back stack

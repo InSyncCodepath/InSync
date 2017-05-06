@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -49,6 +50,7 @@ public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public @BindView(R.id.ivEDImage) ImageView ivEDImage;
+        public @BindView(R.id.tvShare) TextView tvShare;
 
         public ViewHolder(final View itemView) {
                 // Stores the itemView in a public final member variable that can be used
@@ -74,6 +76,20 @@ public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHold
                         }
                     }
                 });
+
+            tvShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(tvShare, position);
+                        }
+                    }
+                }
+            });
+
+
         }
     }
 
