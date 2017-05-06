@@ -2,9 +2,11 @@ package com.codepath.insync.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -52,6 +54,7 @@ public class MessageSendFragment extends Fragment {
     OnMessageChangeListener messageChangeListener;
     private static final int REQUEST_CAMERA_ACTIVITY = 1027;
     private static final int SELECT_PICTURE = 1028;
+    private static final int REQUEST_WRITE_PERMISSION = 1029;
 
     public static MessageSendFragment newInstance(String eventId) {
 
@@ -82,6 +85,7 @@ public class MessageSendFragment extends Fragment {
                 }
             }
         });
+        requestPermission();
 
         //getEventImages();
     }
@@ -274,8 +278,11 @@ public class MessageSendFragment extends Fragment {
         Date start = event1.getStartDate();
         //startCal.getTime(start);
         String[] projection = { MediaStore.Images.Media.DATA };
-        String selection = MediaStore.Images.Media.DATE_TAKEN + " > ? AND " + MediaStore.Images.Media.DATE_TAKEN + " < ? " ;
-        String[] selectionArgs = { String.valueOf(event1.getStartDate().getTime()), String.valueOf(event1.getEndDate().getTime()) };
+        String selection = MediaStore.Images.Media.DATE_TAKEN + " > ? AND " + MediaStore.Images.Media.DATE_TAKEN + " < ? AND "
+                +  MediaStore.Images.Media.LATITUDE + " = ? AND " + MediaStore.Images.Media.LONGITUDE + "= ?";
+        String[] selectionArgs = { String.valueOf(event1.getStartDate().getTime()), String.valueOf(event1.getEndDate().getTime()),
+                String.valueOf(event1.getLocation().getLatitude()), String.valueOf(event1.getLocation().getLongitude())
+        };
         Cursor cursor = context.getContentResolver()
                 .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         projection,
@@ -295,5 +302,25 @@ public class MessageSendFragment extends Fragment {
 
     public void clearViewFocus() {
         binding.etEDMessage.clearFocus();
+    }
+
+
+    private void requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
+        } else {
+            openFilePicker();
+        }
+    }
+
+    private void openFilePicker() {
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == REQUEST_WRITE_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            openFilePicker();
+        }
     }
 }

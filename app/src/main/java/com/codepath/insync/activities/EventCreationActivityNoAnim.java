@@ -756,6 +756,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
         phoneContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showContacts();
                 Intent intent = new Intent(EventCreationActivityNoAnim.this, ContactActivity.class);
                 startActivityForResult(intent, PHONE_CONTACTS_REQUEST_CODE);
                 dialog.dismiss();
