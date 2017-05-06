@@ -26,34 +26,38 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                 <Button
-                    android:layout_width="180dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/cancel"
                     android:text="Cancel"
-                    android:background="@color/accent"
+                    android:background="#00000000"
+                    android:drawableLeft="@drawable/ic_clear_white_24px"
                     android:layout_alignParentLeft="true"
                     android:layout_margin="@dimen/margin8"
+                    android:textSize="14sp"
                     />
                 <Button
-                    android:layout_width="180dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/done"
                     android:text="Done"
-                    android:layout_toRightOf="@id/cancel"
-                    android:background="@color/accent"
-                    android:layout_margin="@dimen/margin8"
-                    android:layout_marginRight="@dimen/margin16"/>
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/eventName"
-                    android:layout_below="@id/cancel"
-                    android:layout_margin="@dimen/margin8"
-                    android:hint="Enter Title for the Event"
+                    android:drawableLeft="@drawable/ic_check_white_24px"
+                    android:layout_alignParentRight="true"
+                    android:background="#00000000"
                     android:textSize="14sp"
-                    android:layout_marginLeft="@dimen/margin16"
+                    android:layout_margin="@dimen/margin8"/>
 
-                    />
+                    <EditText
+                        android:id="@+id/eventName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/cancel"
+                        android:layout_margin="@dimen/margin8"
+                        android:layout_marginLeft="@dimen/margin16"
+                        android:hint="Enter Title for the Event"
+                        android:background="#00000000"
+                        android:textColor="#ffffffff"
+                        android:textSize="14sp" />
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
@@ -62,7 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:cardCornerRadius="2dp"
-            android:layout_margin="@dimen/margin8"
+            android:layout_margin="@dimen/margin16"
             android:layout_below="@id/appbar">
 
             <RelativeLayout
@@ -118,6 +122,7 @@
                     android:layout_marginLeft="@dimen/margin16"
                     android:layout_marginRight="4dp"
                     android:layout_weight="1"
+                    android:textSize="14sp"
                     android:hint="@string/start_date"
                     android:layout_marginTop="32dp"
                     android:textColorHint="@color/body"/>
@@ -132,6 +137,7 @@
                     android:layout_marginRight="@dimen/margin24"
                     android:layout_weight="1"
                     android:hint="@string/start_time"
+                    android:textSize="14sp"
                     android:layout_marginTop="32dp"
                     android:textColorHint="@color/body"/>
 
@@ -146,6 +152,7 @@
                     android:layout_marginRight="4dp"
                     android:layout_weight="1"
                     android:hint="@string/end_date"
+                    android:textSize="14sp"
                     android:layout_marginTop="32dp"
                     android:textColorHint="@color/body"/>
 
@@ -158,8 +165,8 @@
                     android:layout_below="@id/etStartDate"
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="@dimen/margin24"
-                    android:layout_weight="1"
                     android:hint="@string/end_time"
+                    android:textSize="14sp"
                     android:layout_marginTop="32dp"
                     android:textColorHint="@color/body"/>
 
@@ -171,18 +178,20 @@
                     android:layout_below="@id/etEndDate"
                     android:layout_marginLeft="24dp"
                     android:layout_marginTop="28dp"
+                    android:paddingTop="4dp"
                     android:src="@drawable/ic_location_on_white_48px" />
 
                 <EditText
                     android:id="@+id/etLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/etEndDate"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_marginTop="24dp"
+                    android:textColorHint="@color/body"
+                    android:textSize="14sp"
                     android:layout_toRightOf="@id/ivLocationPin"
-                    android:hint="@string/location" />
+                    android:hint="Add location"
+                    android:layout_alignTop="@+id/ivLocationPin" />
 
                 <ImageView
                     android:id="@+id/ivDetails"
@@ -190,7 +199,8 @@
                     android:layout_height="@dimen/image_24"
                     android:layout_below="@id/etLocation"
                     android:layout_marginLeft="24dp"
-                    android:layout_marginTop="8dp"
+                    android:paddingTop="4dp"
+                    android:layout_marginTop="28dp"
                     android:src="@drawable/ic_details_white_48px" />
 
                 <EditText
@@ -200,16 +210,21 @@
                     android:layout_below="@id/etLocation"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_marginTop="12dp"
+                    android:textColorHint="@color/body"
+                    android:textSize="14sp"
                     android:layout_toRightOf="@id/ivDetails"
-                    android:hint="Add event details" />
+                    android:hint="Add event details"
+                    android:layout_alignTop="@+id/ivDetails"
+                    />
+
+
                 <ImageView
                     android:id="@+id/ivAttach"
                     android:layout_width="@dimen/image_24"
                     android:layout_height="@dimen/image_24"
                     android:layout_below="@id/etDetails"
                     android:layout_marginRight="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="28dp"
                     android:layout_marginLeft="24dp"
                     android:src="@drawable/ic_attach_file_white_48px" />
 
@@ -223,7 +238,8 @@
                     android:textColor="@color/primary"
                     android:id="@+id/tvAttach"
                     android:textSize="14sp"
-                    android:layout_marginTop="8dp"
+                    android:paddingTop="6dp"
+                    android:layout_marginTop="28dp"
                     android:fontFamily="Roboto-Medium"/>
 
                 <ImageView
@@ -232,7 +248,7 @@
                     android:layout_height="@dimen/image_24"
                     android:layout_below="@id/ivAttach"
                     android:layout_marginRight="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="28dp"
                     android:layout_marginLeft="24dp"
                     android:src="@drawable/ic_people_white_48px" />
 
@@ -246,7 +262,8 @@
                     android:textColor="@color/primary"
                     android:textSize="14sp"
                     android:id="@+id/tvInvite"
-                    android:layout_marginTop="8dp"
+                    android:paddingTop="6dp"
+                    android:layout_marginTop="28dp"
                     android:fontFamily="Roboto-Medium"/>
 
                 <android.support.v7.widget.RecyclerView
