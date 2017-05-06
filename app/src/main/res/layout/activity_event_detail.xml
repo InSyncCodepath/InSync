@@ -53,7 +53,7 @@
                 android:layout_below="@id/tvEDName"
                 android:text="@string/tap_here_for_event_details"
                 style="@style/MaterialDarkBody1"
-                android:textColor="@color/insync_grey"/>
+                android:textColor="@color/insync_white"/>
 
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
