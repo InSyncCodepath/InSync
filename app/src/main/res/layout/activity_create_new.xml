@@ -95,7 +95,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/all_day_toggle_no_hdpi"
+                    android:src="@drawable/all_day_toggle_no"
                     android:layout_marginRight="@dimen/margin24"
                     android:id="@+id/toggleOff"
                     android:layout_alignParentRight="true"
@@ -105,7 +105,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/all_day_toggle_on_hdpi"
+                    android:src="@drawable/all_day_toggle_on"
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="@dimen/margin24"
                     android:id="@+id/toggleOn"
