@@ -23,12 +23,16 @@ import com.codepath.insync.databinding.FragmentUpcomingEventDetailBinding;
 import com.codepath.insync.listeners.OnImageClickListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
+import com.codepath.insync.utils.CommonUtil;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import static com.codepath.insync.utils.CommonUtil.compareDates;
 
 
 public class UpcomingEventDetailFragment extends Fragment {
@@ -182,8 +186,25 @@ public class UpcomingEventDetailFragment extends Fragment {
             public void done(List<Message> newMessages, ParseException e) {
                 if (e == null) {
                     messages.clear();
-                    messages.addAll(newMessages);
-                    messageAdapter.notifyDataSetChanged();
+                    Date currDate = newMessages.get(newMessages.size()-1).getCreatedAt();
+                    Message dateMsg = new Message();
+                    dateMsg.setBody(CommonUtil.getRelativeTimeAgo(currDate));
+                    messages.add(dateMsg);
+                    for (int i=newMessages.size()-1; i >= 0; i--) {
+                        boolean isEqual = CommonUtil.compareDates(currDate, newMessages.get(i).getCreatedAt());
+                        if (!isEqual) {
+                            currDate = newMessages.get(i).getCreatedAt();
+                            Message newDateMsg = new Message();
+                            newDateMsg.setBody(CommonUtil.getRelativeTimeAgo(currDate));
+                            messages.add(0, newDateMsg);
+                            messageAdapter.notifyItemInserted(0);
+                        }
+                        messages.add(0, newMessages.get(i));
+                        messageAdapter.notifyItemInserted(0);
+                    }
+
+                    //messages.addAll(newMessages);
+                    //messageAdapter.notifyDataSetChanged();
         /*
         TODO: ADD THIS INSTEAD
         int curSize = tweetsArrayAdapter.getItemCount();

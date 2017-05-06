@@ -18,7 +18,7 @@ android {
         //setting to 21 to try out shared view animation
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 25
+        versionCode 26
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true

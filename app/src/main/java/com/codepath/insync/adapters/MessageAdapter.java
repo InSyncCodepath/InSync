@@ -34,10 +34,12 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
+import static android.R.id.message;
+
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // view types
-    private final int LEFT = 0, RIGHT = 1;
+    private final int LEFT = 0, RIGHT = 1, DATE = 2;
 
     // Define listener member variable
     private OnItemClickListener listener;
@@ -108,6 +110,30 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    public class ViewHolderDate extends RecyclerView.ViewHolder {
+        public @BindView(R.id.tvChatDate) TextView tvChatDate;
+        public ViewHolderDate(final View itemView) {
+            // Stores the itemView in a public final member variable that can be used
+            // to access the context from any ViewHolder instance.
+            super(itemView);
+
+            ButterKnife.bind(this, itemView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                // Triggers click upwards to the adapter on click
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(itemView, position);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
     // Store a member variable for the messages
     private List<Message> mMessages;
     // Store the context for easy access
@@ -135,9 +161,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 View viewLeft = inflater.inflate(R.layout.item_message_left, parent, false);
                 viewHolder = new ViewHolderLeft(viewLeft);
                 break;
-            default:
+            case RIGHT:
                 View viewRight = inflater.inflate(R.layout.item_message_right, parent, false);
                 viewHolder = new ViewHolderRight(viewRight);
+                break;
+            default:
+                View viewDate = inflater.inflate(R.layout.item_date, parent, false);
+                viewHolder = new ViewHolderDate(viewDate);
                 break;
         }
         return viewHolder;
@@ -145,6 +175,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+        if (holder.getItemViewType() == DATE) {
+            ViewHolderDate viewDate = (ViewHolderDate) holder;
+            viewDate.tvChatDate.setText(mMessages.get(position).getBody());
+            return;
+        }
 
         // Get the data model based on position
         Message message = mMessages.get(position);
@@ -208,7 +244,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
 
                 break;
-            default:
+            case RIGHT:
                 ViewHolderRight viewRight = (ViewHolderRight) holder;
                 // set the text view
                 if (messageBody.length() == 0 || mediaImage != null) {
@@ -244,6 +280,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     viewRight.cvMessageLeft.setVisibility(View.GONE);
                 }
                 break;
+            default:
+                break;
         }
 
     }
@@ -274,6 +312,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
+        if (mMessages.get(position).getCreatedAt() == null) {
+            return DATE;
+        }
         User sender = mMessages.get(position).getSender();
         if (sender.getObjectId().equals(User.getCurrentUser().getObjectId())) {
             return RIGHT;
