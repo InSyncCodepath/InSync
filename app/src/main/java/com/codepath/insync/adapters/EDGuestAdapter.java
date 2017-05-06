@@ -69,11 +69,16 @@ public class EDGuestAdapter extends RecyclerView.Adapter<EDGuestAdapter.ViewHold
     private List<User> mEDImages;
     // Store the context for easy access
     private Context mContext;
+    private int mLayoutResource;
+    private boolean isCurrent;
 
     // Pass in the message array into the constructor
-    public EDGuestAdapter(Context context, List<User> edImages) {
+    public EDGuestAdapter(Context context, List<User> edImages, int layoutResource, boolean isPresent) {
         mEDImages = edImages;
         mContext = context;
+        mLayoutResource = layoutResource;
+        isCurrent = isPresent;
+
     }
 
     // Easy access to the context object in the recyclerview
@@ -87,7 +92,7 @@ public class EDGuestAdapter extends RecyclerView.Adapter<EDGuestAdapter.ViewHold
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
         // Inflate the custom image view layout
-        View edImageView = inflater.inflate(R.layout.item_edguest, parent, false);
+        View edImageView = inflater.inflate(mLayoutResource, parent, false);
 
         // Return a new holder instance
         ViewHolder viewHolder = new ViewHolder(edImageView);
@@ -105,7 +110,12 @@ public class EDGuestAdapter extends RecyclerView.Adapter<EDGuestAdapter.ViewHold
             imageUrl = imgFile.getUrl();
         }
 
-        holder.tvEDGuestName.setText(user.getName());
+        if (isCurrent) {
+            holder.tvEDGuestName.setText(user.getName());
+        } else {
+            holder.tvEDGuestName.setText(user.getName().split(" ")[0]);
+        }
+
 
         holder.ivEDGuestImage.setImageResource(R.drawable.ic_profile);
 

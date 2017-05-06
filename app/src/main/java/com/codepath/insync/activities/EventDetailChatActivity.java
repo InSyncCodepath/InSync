@@ -34,14 +34,11 @@ import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityEventDetailBinding;
 import com.codepath.insync.fragments.ConfirmationFragment;
 import com.codepath.insync.fragments.MessageSendFragment;
-import com.codepath.insync.fragments.PastEventDetailFragment;
-import com.codepath.insync.fragments.PastEventWaitFragment;
 import com.codepath.insync.fragments.UpcomingEventDetailFragment;
 import com.codepath.insync.listeners.OnImageClickListener;
 import com.codepath.insync.listeners.OnMessageChangeListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
-import com.codepath.insync.utils.CommonUtil;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 
@@ -65,18 +62,13 @@ public class EventDetailChatActivity extends AppCompatActivity implements
 
 
     ActivityEventDetailBinding binding;
-    CollapsingToolbarLayout collapsingToolbar;
     Event event;
     String eventId;
-    boolean isCurrent;
     boolean canTrack;
     MessageSendFragment messageSendFragment;
-    PastEventWaitFragment pastEventWaitFragment;
-    PastEventDetailFragment pastEventDetailFragment;
     FragmentManager fragmentManager;
     RelativeLayout rlEventDetail;
     UpcomingEventDetailFragment upcomingEventDetailFragment;
-    final int EVENT_DETAIL_RQ = 1002;
     Handler tbHintHandler = new Handler();
 
     Runnable tbHintRunnable =new Runnable() {
@@ -122,7 +114,6 @@ public class EventDetailChatActivity extends AppCompatActivity implements
     private void processIntent() {
         Intent intent = getIntent();
         eventId = intent.getStringExtra("eventId");
-        isCurrent = intent.getBooleanExtra("isCurrent", false);
         canTrack = intent.getBooleanExtra("canTrack", false);
         binding.ivEDProfile.setTransitionName(intent.getStringExtra("transition_name"));
         Event.findEvent(eventId, new GetCallback<Event>() {
@@ -180,8 +171,6 @@ public class EventDetailChatActivity extends AppCompatActivity implements
                 public void done(ParseException e) {
                     if (e == null) {
                         Log.d(TAG, "Past event status updated successfully!");
-                        loadViews();
-                        //loadFragments();
                     } else {
                         Log.e(TAG, "Could not update past event flag");
                     }
@@ -298,7 +287,6 @@ public class EventDetailChatActivity extends AppCompatActivity implements
 
                 Intent eventDetailMoreIntent = new Intent(EventDetailChatActivity.this, EventDetailMoreActivity.class);
                 eventDetailMoreIntent.putExtra("eventId", eventId);
-                eventDetailMoreIntent.putExtra("isCurrent", isCurrent);
                 eventDetailMoreIntent.putExtra("canTrack", canTrack);
                 startActivity(eventDetailMoreIntent, animationBundle);
 
@@ -324,28 +312,16 @@ public class EventDetailChatActivity extends AppCompatActivity implements
     }
 
 
-
-
     private void loadFragments() {
         FragmentTransaction ft = fragmentManager.beginTransaction();
-        if (isCurrent) {
-            // Load current and upcoming event detail
-            upcomingEventDetailFragment = UpcomingEventDetailFragment.newInstance(eventId);
-            ft.replace(R.id.flMessages, upcomingEventDetailFragment);
-            messageSendFragment = MessageSendFragment.newInstance(eventId);
-            ft.replace(R.id.flMessageSend, messageSendFragment);
-            setupUI(binding.rlEventDetail);
-            //setupChatClickListeners();
-        } else {
-            binding.flMessageSend.setVisibility(View.GONE);
-            //binding.famEDMedia.setVisibility(View.GONE);
-            pastEventDetailFragment =
-                    PastEventDetailFragment.newInstance(event.getObjectId(), event.getName(), event.getTheme());
-            ft.replace(R.id.flMessages, pastEventDetailFragment);
-        }
+        // Load current and upcoming event detail
+        upcomingEventDetailFragment = UpcomingEventDetailFragment.newInstance(eventId);
+        ft.replace(R.id.flMessages, upcomingEventDetailFragment);
+        messageSendFragment = MessageSendFragment.newInstance(eventId);
+        ft.replace(R.id.flMessageSend, messageSendFragment);
+        setupUI(binding.rlEventDetail);
 
         ft.commit();
-
     }
 
     @Override
@@ -360,14 +336,9 @@ public class EventDetailChatActivity extends AppCompatActivity implements
         Transition explodeTransform = TransitionInflater.from(this).inflateTransition(android.R.transition.explode);
         // Find the shared element (in Fragment A)
         // Setup exit transition on first fragment
-        if (pastEventDetailFragment != null) {
-            pastEventDetailFragment.setSharedElementReturnTransition(changeTransform);
-            pastEventDetailFragment.setExitTransition(explodeTransform);
-        } else {
-            upcomingEventDetailFragment.setSharedElementReturnTransition(changeTransform);
-            upcomingEventDetailFragment.setExitTransition(explodeTransform);
 
-        }
+        upcomingEventDetailFragment.setSharedElementReturnTransition(changeTransform);
+        upcomingEventDetailFragment.setExitTransition(explodeTransform);
 
         Bundle animationBundle =
                 ActivityOptions.makeCustomAnimation(this, R.anim.do_not_move, R.anim.do_not_move).toBundle();
@@ -380,8 +351,6 @@ public class EventDetailChatActivity extends AppCompatActivity implements
         startActivity(fullScreenImageIntent,animationBundle);
 
     }
-
-
 
     @Override
     public void onMessageCreated(Message message) {

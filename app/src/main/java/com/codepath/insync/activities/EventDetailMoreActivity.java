@@ -1,59 +1,30 @@
 package com.codepath.insync.activities;
 
-import android.app.ActivityOptions;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
-import android.provider.MediaStore;
 import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.SharedElementCallback;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSnapHelper;
-import android.support.v7.widget.SnapHelper;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.codepath.insync.Manifest;
+
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.EDGuestAdapter;
-import com.codepath.insync.adapters.EDImageAdapter;
-import com.codepath.insync.databinding.ActivityEventDetailBinding;
 import com.codepath.insync.databinding.ActivityEventDetailMoreBinding;
-import com.codepath.insync.fragments.ConfirmationFragment;
-import com.codepath.insync.fragments.MessageSendFragment;
-import com.codepath.insync.fragments.PastEventDetailFragment;
-import com.codepath.insync.fragments.PastEventWaitFragment;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
@@ -66,22 +37,16 @@ import com.parse.ParseException;
 
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
-import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
-import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
-
-import static com.codepath.insync.R.id.tvEventName;
 
 
 public class EventDetailMoreActivity extends AppCompatActivity
@@ -94,13 +59,11 @@ public class EventDetailMoreActivity extends AppCompatActivity
     CollapsingToolbarLayout collapsingToolbar;
     Event event;
     String eventId;
-    boolean isCurrent;
     boolean canTrack;
     int numAttending;
     int numDecline;
     int numPending;
     int currentRbnId;
-    PastEventWaitFragment pastEventWaitFragment;
     UserEventRelation currentUserEvent;
     private boolean firstLoad;
     private boolean firstGuestLoad;
@@ -125,7 +88,7 @@ public class EventDetailMoreActivity extends AppCompatActivity
     }
 
     private void setupRecyclerView() {
-        guestAdapter = new EDGuestAdapter(this, guests);
+        guestAdapter = new EDGuestAdapter(this, guests, R.layout.item_edguest, true);
         binding.rvEDGuests.setAdapter(guestAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         binding.rvEDGuests.setLayoutManager(linearLayoutManager);
@@ -157,7 +120,6 @@ public class EventDetailMoreActivity extends AppCompatActivity
     private void processIntent() {
         Intent intent = getIntent();
         eventId = intent.getStringExtra("eventId");
-        isCurrent = intent.getBooleanExtra("isCurrent", false);
         canTrack = intent.getBooleanExtra("canTrack", false);
         binding.ivEDProfile.setTransitionName(intent.getStringExtra("transition_name"));
         Event.findEvent(eventId, new GetCallback<Event>() {
@@ -307,9 +269,6 @@ public class EventDetailMoreActivity extends AppCompatActivity
                         }
                     });
 
-        }
-        if (!isCurrent) {
-            binding.rgEDRsvp.setVisibility(View.GONE);
         }
         binding.tvEDName.setText(event.getName());
         binding.tvEDDescription.setText(event.getDescription());

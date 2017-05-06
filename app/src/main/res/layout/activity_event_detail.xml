@@ -56,8 +56,6 @@
                 android:textColor="@color/insync_grey"/>
 
         </RelativeLayout>
-
-
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout
@@ -75,4 +73,5 @@
         android:layout_marginTop="@dimen/margin8"/>
 
 
-</RelativeLayout></layout>
+   </RelativeLayout>
+</layout>

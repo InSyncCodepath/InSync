@@ -204,12 +204,19 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
                 makeSceneTransitionAnimation(this, sharedImageView, eventId);
 //        Pair<View, String> p1 = Pair.create((View) findViewById(R.id.ivEventImage), "profile");
 
-        Intent eventDetailIntent = new Intent(EventListActivity.this, EventDetailChatActivity.class);
-        eventDetailIntent.putExtra("eventId", eventId);
-        eventDetailIntent.putExtra("isCurrent", isCurrent);
-        eventDetailIntent.putExtra("canTrack", canTrack);
-        eventDetailIntent.putExtra("transition_name", eventId);
-        startActivityForResult(eventDetailIntent, EVENT_DETAIL_RQ, options.toBundle());
+        if (isCurrent) {
+            Intent eventDetailIntent = new Intent(EventListActivity.this, EventDetailChatActivity.class);
+            eventDetailIntent.putExtra("eventId", eventId);
+            eventDetailIntent.putExtra("canTrack", canTrack);
+            eventDetailIntent.putExtra("transition_name", eventId);
+            startActivityForResult(eventDetailIntent, EVENT_DETAIL_RQ, options.toBundle());
+        } else {
+            Intent eventDetailIntent = new Intent(EventListActivity.this, EventDetailPastActivity.class);
+            eventDetailIntent.putExtra("eventId", eventId);
+            eventDetailIntent.putExtra("transition_name", eventId);
+            startActivity(eventDetailIntent, options.toBundle());
+        }
+
 
     }
 

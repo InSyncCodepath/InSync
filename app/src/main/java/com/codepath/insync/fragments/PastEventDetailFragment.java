@@ -1,9 +1,11 @@
 package com.codepath.insync.fragments;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.SurfaceTexture;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -21,6 +23,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.codepath.insync.R;
+import com.codepath.insync.adapters.EDGuestAdapter;
 import com.codepath.insync.adapters.EDImageAdapter;
 import com.codepath.insync.databinding.FragmentPastEventDetailBinding;
 import com.codepath.insync.listeners.OnImageClickListener;
@@ -28,15 +31,25 @@ import com.codepath.insync.listeners.OnVideoUpdateListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
 import com.codepath.insync.models.parse.Music;
+import com.codepath.insync.models.parse.User;
+import com.codepath.insync.models.parse.UserEventRelation;
+import com.codepath.insync.utils.CommonUtil;
 import com.codepath.insync.utils.VideoPlayer;
+import com.codepath.insync.widgets.CustomLineItemDecoration;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 public class PastEventDetailFragment extends Fragment implements TextureView.SurfaceTextureListener,
@@ -49,6 +62,8 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     List<ParseFile> parseFiles;
     EDImageAdapter edImageAdapter;
     GridLayoutManager gridLayoutManager;
+    List<User> guests;
+    EDGuestAdapter guestAdapter;
     VideoPlayer videoPlayer;
     ImageView slide_0;
     ImageView slide_1;
@@ -63,7 +78,8 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
 
 
 
-    public static PastEventDetailFragment newInstance(String eventId, String eventName, String theme) {
+    public static PastEventDetailFragment newInstance(String eventId, String eventName, String theme,
+                                                      String eventDesc, Long eventDate, String eventAddress) {
 
         Bundle args = new Bundle();
 
@@ -71,6 +87,9 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         args.putString("eventId", eventId);
         args.putString("eventName", eventName);
         args.putString("theme", theme);
+        args.putString("eventDesc", eventDesc);
+        args.putLong("eventDate", eventDate);
+        args.putString("eventAddress", eventAddress);
 
         pastEventDetailFragment.setArguments(args);
         return pastEventDetailFragment;
@@ -84,6 +103,9 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         event = new Event();
         event.setObjectId(getArguments().getString("eventId"));
         event.setName(getArguments().getString("eventName"));
+        event.setStartDate(new Date(getArguments().getLong("eventDate")));
+        event.setDescription(getArguments().getString("eventDesc"));
+        event.setAddress(getArguments().getString("eventAddress"));
         String theme = getArguments().getString("theme");
         if (theme != null) {
             event.setTheme(theme);
@@ -91,6 +113,8 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
 
         parseFiles = new ArrayList<>();
         edImages = new ArrayList<>();
+        guests = new ArrayList<>();
+
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
@@ -105,6 +129,9 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         super.onCreateView(inflater, container, savedInstanceState);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_past_event_detail, container, false);
 
+        binding.tvEDDescription.setText(event.getDescription());
+        binding.tvEDStartDate.setText(CommonUtil.getDateTimeInFormat(event.getStartDate()));
+        binding.tvEDLocation.setText(event.getAddress());
         binding.tvHighlights.setSurfaceTextureListener(this);
         videoPlayer = new VideoPlayer(getContext(), this, binding.tvHighlights);
         slide_0 = binding.slide1;
@@ -113,6 +140,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
 
         setupRecyclerView();
         setupClickListener();
+        findAttendance();
         return binding.getRoot();
     }
 
@@ -129,6 +157,23 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
                 binding.fabEDPlay.setVisibility(View.GONE);
             }
         });
+
+        binding.tvEDLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseGeoPoint eventLoc = event.getLocation();
+                String navString = "geo:"+eventLoc.getLatitude()+","+eventLoc.getLongitude()+"?z=10&q="+event.getAddress();
+                Log.d(TAG, navString);
+                Uri gmmIntentUri = Uri.parse(navString);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                } else {
+                    CommonUtil.createSnackbar(binding.svEventDetailPast, getApplicationContext(), "Cannot open maps at this time. Please try later");
+                }
+            }
+        });
     }
 
     private void setupTouchListener() {
@@ -139,6 +184,41 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
                     videoPlayer.showController();
                 }
                 return true;
+            }
+        });
+    }
+
+    private void findAttendance() {
+
+        UserEventRelation.findAttendees(event, new FindCallback<UserEventRelation>() {
+            @Override
+            public void done(List<UserEventRelation> userEventRelations, ParseException e) {
+                if (e == null) {
+                    for (UserEventRelation userEventRelation : userEventRelations) {
+                        final int rsvpStatus = userEventRelation.getRsvpStatus();
+
+                        User.findUser(userEventRelation.getUserId(), new GetCallback<ParseUser>() {
+                            @Override
+                            public void done(ParseUser parseUser, ParseException e) {
+                                User user = new User(parseUser);
+                                user.put("rsvpStatus", rsvpStatus);
+
+                                if (user.getObjectId().equals(User.getCurrentUser().getObjectId())) {
+                                    guests.add(0, user);
+                                    guestAdapter.notifyItemInserted(0);
+                                } else {
+                                    guests.add(user);
+                                    guestAdapter.notifyItemInserted(guests.size() - 1);
+                                }
+                            }
+
+                        });
+                    }
+
+                } else {
+                    Log.e(TAG, "Error loading RSVP status: " + e.getLocalizedMessage());
+                }
+
             }
         });
     }
@@ -190,6 +270,14 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
                 onImageClickListener.onItemClick(edImages, position);
             }
         });
+
+        guestAdapter = new EDGuestAdapter(getActivity(), guests, R.layout.item_edguest_past, false);
+        binding.rvEDGuests.setAdapter(guestAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        binding.rvEDGuests.setLayoutManager(linearLayoutManager);
+        binding.rvEDGuests.setNestedScrollingEnabled(false);
+
+
     }
 
     @Override
