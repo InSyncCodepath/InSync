@@ -42,7 +42,6 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
 
     @Override
     public void onBindViewHolder(final UpcomingEventViewHolder holder, int position) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM - dd");
 
         final Event event = events.get(position);
         final boolean canTrack = CommonUtil.canTrackGuests(event.getStartDate(), event.getEndDate());
@@ -60,22 +59,14 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
         //holder.binding.tvDate.setText(event.getStartDate().toString());
         holder.eventName.setText(event.getName());
         holder.binding.tvAddress.setText(event.getAddress());
-        Date eventDate = event.getStartDate();
 
-        int month = eventDate.getMonth() + 1;
-        int date = eventDate.getDate();
-        int hours = eventDate.getHours();
-        int min = eventDate.getMinutes();
-        String startTime = new SimpleDateFormat("hh:mm aa").format(eventDate);
-        String startDate = new SimpleDateFormat("MMM-dd").format(eventDate);
-                //month+"/"+date;
-        holder.eventDate.setText(startDate);
-        holder.eventTime.setText(startTime);
+
+        holder.eventDate.setText(CommonUtil.getDateTimeInFormat(event.getStartDate()));
         ParseFile profileImage = event.getProfileImage();
         if (profileImage != null) {
             Glide.with(context)
                     .load(profileImage.getUrl())
-                    .placeholder(R.drawable.ic_attach_file_white_48px)
+                    .placeholder(R.drawable.ic_camera_alt_white_48px)
                     .crossFade()
                     .into(holder.binding.ivEventImage);
         }
@@ -96,7 +87,7 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
 
     public static class UpcomingEventViewHolder extends RecyclerView.ViewHolder {
         UpcomingEventItemBinding binding;
-        TextView eventName, eventDate, eventTime, eventLocation;
+        TextView eventName, eventDate, eventLocation;
         ImageView eventImage;
 
         public UpcomingEventViewHolder(View itemView) {
@@ -104,7 +95,6 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
             binding = UpcomingEventItemBinding.bind(itemView);
             eventName = (TextView) itemView.findViewById(R.id.tvEventName);
             eventDate = binding.tvDate;
-            eventTime = binding.tvTime;
         }
     }
 

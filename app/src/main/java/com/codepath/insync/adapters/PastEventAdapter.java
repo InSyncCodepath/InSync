@@ -26,6 +26,7 @@ import com.codepath.insync.databinding.UpcomingEventItemBinding;
 import com.codepath.insync.listeners.OnVideoUpdateListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
+import com.codepath.insync.utils.CommonUtil;
 import com.codepath.insync.utils.VideoPlayer;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -68,7 +69,6 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
         }
         final Event event = events.get(position);
         Date now = new Date();
-        final boolean isCurrent = event.getEndDate().compareTo(now) >= 0;
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,23 +78,22 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
         holder.eventName.setText(event.getName());
 
         holder.binding.tvAddress.setText(event.getAddress());
-        Date eventDate = event.getStartDate();
 
-        int month = eventDate.getMonth() + 1;
-        int date = eventDate.getDate();
-        int hours = eventDate.getHours();
-        int min = eventDate.getMinutes();
-        String startTime = new SimpleDateFormat("hh:mm aa").format(eventDate);
-        String startDate = new SimpleDateFormat("MMM-dd").format(eventDate);
-        //month+"/"+date;
-        holder.eventDate.setText(startDate);
-        holder.eventTime.setText(startTime);
+
+        holder.eventDate.setText(CommonUtil.getDateTimeInFormat(event.getStartDate()));
 
         ParseFile profileImage = event.getProfileImage();
+        String imgUrl = null;
         if (profileImage != null) {
+            imgUrl = profileImage.getUrl();
+        } else {
+            imgUrl = event.getString("imageUrl");
+        }
+
+        if (imgUrl != null) {
             Glide.with(context)
-                    .load(profileImage.getUrl())
-                    .placeholder(R.drawable.ic_attach_file_white_48px)
+                    .load(imgUrl)
+                    .placeholder(R.drawable.ic_camera_alt_white_48px)
                     .crossFade()
                     .into(holder.binding.ivEventImage);
         }
@@ -162,7 +161,7 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
     public static class PastEventViewHolder extends RecyclerView.ViewHolder {
         UpcomingEventItemBinding binding;
         ImageView ivEventImage;
-        TextView eventName, eventDate, eventTime;
+        TextView eventName, eventDate;
 
         public PastEventViewHolder(View itemView) {
             super(itemView);
@@ -170,7 +169,6 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
             ivEventImage = binding.ivEventImage;
             eventName = binding.tvEventName;
             eventDate = binding.tvDate;
-            eventTime = binding.tvTime;
         }
     }
 

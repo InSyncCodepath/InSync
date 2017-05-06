@@ -1,5 +1,6 @@
 package com.codepath.insync.activities;
 
+import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -75,6 +76,7 @@ public class EventDetailChatActivity extends AppCompatActivity implements
     FragmentManager fragmentManager;
     RelativeLayout rlEventDetail;
     UpcomingEventDetailFragment upcomingEventDetailFragment;
+    final int EVENT_DETAIL_RQ = 1002;
     Handler tbHintHandler = new Handler();
 
     Runnable tbHintRunnable =new Runnable() {
@@ -112,7 +114,7 @@ public class EventDetailChatActivity extends AppCompatActivity implements
             return super.onCreateOptionsMenu(menu);
         }
         if (canTrack) {
-            getMenuInflater().inflate(R.menu.menu_event_chat, menu);
+            getMenuInflater().inflate(R.menu.menu_event_detail, menu);
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -133,7 +135,7 @@ public class EventDetailChatActivity extends AppCompatActivity implements
                 } else {
                     event = null;
                     Log.e(TAG, "Error finding event.");
-                    finish();
+                    supportFinishAfterTransition();
                 }
             }
         });
@@ -145,19 +147,58 @@ public class EventDetailChatActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case android.R.id.home:
                 supportFinishAfterTransition();
-
                 return true;
-            case R.id.action_track_chat:
+            case R.id.action_track:
                 Intent intent = new Intent(EventDetailChatActivity.this, LocationTrackerActivity.class);
                 intent.putExtra("eventId", event.getObjectId());
                 intent.putExtra("eventLatitude", event.getLocation().getLatitude());
                 intent.putExtra("eventLongitude", event.getLocation().getLongitude());
                 startActivity(intent);
                 break;
+            case R.id.action_highlights:
+                handleHighlightsAction();
+                break;
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void handleHighlightsAction() {
+        String message = "Are you sure you want to end this event? This will prevent you from posting any information or media to this event.";
+        ConfirmationFragment confirmationFragment = ConfirmationFragment.newInstance(message, "End Event Now", "Cancel");
+        confirmationFragment.show(fragmentManager, "fragment_confirmation");
+    }
+    @Override
+    public void onConfirmUpdateDialog(int position) {
+        if (position == DialogInterface.BUTTON_POSITIVE) {
+
+
+            event.setHasEnded(true);
+            event.updateEvent(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        Log.d(TAG, "Past event status updated successfully!");
+                        loadViews();
+                        //loadFragments();
+                    } else {
+                        Log.e(TAG, "Could not update past event flag");
+                    }
+                }
+            });
+
+            Intent intent = new Intent();
+            intent.putExtra("hasEnded", true);
+            intent.putExtra("eventName", event.getName());
+            intent.putExtra("eventId", event.getObjectId());
+            intent.putExtra("eventDate", event.getStartDate().getTime());
+            intent.putExtra("eventAddress", event.getAddress());
+            intent.putExtra("eventImage", event.getProfileImage().getUrl());
+            setResult(RESULT_OK, intent);
+            finish();
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        }
     }
 
     public void setupUI(View view) {
@@ -310,37 +351,6 @@ public class EventDetailChatActivity extends AppCompatActivity implements
     @Override
     public void onViewTouch(View v) {
         hideAndClearFocus(v);
-    }
-
-    @Override
-    public void onConfirmUpdateDialog(int position) {
-        if (position == DialogInterface.BUTTON_POSITIVE) {
-
-            event.setHasEnded(true);
-            isCurrent = false;
-            canTrack = false;
-            invalidateOptionsMenu();
-            FragmentTransaction ft = fragmentManager.beginTransaction();
-            ft.remove(messageSendFragment);
-            binding.flMessageSend.setVisibility(View.GONE);
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-            pastEventWaitFragment = new PastEventWaitFragment();
-            ft.replace(R.id.flMessages, pastEventWaitFragment);
-            ft.commit();
-            CommonUtil.createSnackbar(rlEventDetail, this, "Your event has ended. The highlights are being created!");
-            event.updateEvent(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e == null) {
-                        Log.d(TAG, "Past event status updated successfully!");
-                        loadViews();
-                        loadFragments();
-                    } else {
-                        Log.e(TAG, "Could not update past event flag");
-                    }
-                }
-            });
-        }
     }
 
     @Override
