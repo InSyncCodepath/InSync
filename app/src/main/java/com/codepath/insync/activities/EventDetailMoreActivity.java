@@ -84,8 +84,7 @@ import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import static com.codepath.insync.R.id.tvEventName;
 
 
-public class EventDetailMoreActivity extends AppCompatActivity implements
-        ConfirmationFragment.UpdateDraftDialogListener
+public class EventDetailMoreActivity extends AppCompatActivity
 {
 
     private static final String TAG = "EventDetailMoreActivity";
@@ -153,21 +152,7 @@ public class EventDetailMoreActivity extends AppCompatActivity implements
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu for the current event
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            return super.onCreateOptionsMenu(menu);
-        }
-        if (canTrack) {
-            getMenuInflater().inflate(R.menu.menu_event_detail, menu);
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
+
 
     private void processIntent() {
         Intent intent = getIntent();
@@ -187,13 +172,25 @@ public class EventDetailMoreActivity extends AppCompatActivity implements
                     event = null;
                     Log.e(TAG, "Error finding event.");
                     finish();
+                    overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_right);
                 }
             }
         });
 
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_right);
+                return true;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private void findAttendance() {
         numAttending = 0;
@@ -269,35 +266,6 @@ public class EventDetailMoreActivity extends AppCompatActivity implements
                 binding.rbnPending.setText(numPending+" "+Constants.PENDING_STR);
             }
         });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_right);
-                return true;
-            case R.id.action_track:
-                Intent intent = new Intent(EventDetailMoreActivity.this, LocationTrackerActivity.class);
-                intent.putExtra("eventId", event.getObjectId());
-                intent.putExtra("eventLatitude", event.getLocation().getLatitude());
-                intent.putExtra("eventLongitude", event.getLocation().getLongitude());
-                startActivity(intent);
-                break;
-            case R.id.action_highlights:
-                handleHighlightsAction();
-                break;
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void handleHighlightsAction() {
-        String message = "Are you sure you want to end this event? This will prevent you from posting any information or media to this event.";
-        ConfirmationFragment confirmationFragment = ConfirmationFragment.newInstance(message, "End Event Now", "Cancel");
-        confirmationFragment.show(fragmentManager, "fragment_confirmation");
     }
 
     private void loadViews() {
@@ -484,34 +452,7 @@ public class EventDetailMoreActivity extends AppCompatActivity implements
     }*/
 
 
-    @Override
-    public void onConfirmUpdateDialog(int position) {
-        if (position == DialogInterface.BUTTON_POSITIVE) {
 
-            event.setHasEnded(true);
-            isCurrent = false;
-            canTrack = false;
-            invalidateOptionsMenu();
-            FragmentTransaction ft = fragmentManager.beginTransaction();
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-            pastEventWaitFragment = new PastEventWaitFragment();
-            ft.replace(R.id.flMessages, pastEventWaitFragment);
-            ft.commit();
-            CommonUtil.createSnackbar(binding.clED, this, "Your event has ended. The highlights are being created!");
-            event.updateEvent(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e == null) {
-                        Log.d(TAG, "Past event status updated successfully!");
-                        loadViews();
-                        //loadFragments();
-                    } else {
-                        Log.e(TAG, "Could not update past event flag");
-                    }
-                }
-            });
-        }
-    }
 
     @Override
     public void onBackPressed() {

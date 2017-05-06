@@ -33,6 +33,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import jp.wasabeef.recyclerview.animators.FadeInAnimator;
+
 
 public class PastEventsFragment extends Fragment implements PastEventAdapter.EventDetailClickHandling {
     FragmentPastEventListBinding binding;
@@ -69,6 +71,9 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
         pastList.setLayoutManager(linearLayoutManager);
         pastEventAdapter = new PastEventAdapter(this, getContext(), events);
         pastList.setAdapter(pastEventAdapter);
+        FadeInAnimator fadeInAnimator = new FadeInAnimator();
+        fadeInAnimator.setAddDuration(500);
+        pastList.setItemAnimator(fadeInAnimator);
         eventClickListener = (OnEventClickListener) getActivity();
         emptyListCard = binding.emptyListCard;
         swipeContainer = binding.swipeContainer;
@@ -92,7 +97,6 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
         events.clear();
         User currentUser = User.getCurrentUser();
         ParseQuery<UserEventRelation> query = ParseQuery.getQuery(UserEventRelation.class);
-        query.selectKeys(Arrays.asList("event"));
         query.include("event");
         query.whereEqualTo("userId", currentUser.getObjectId());
         query.findInBackground(new FindCallback<UserEventRelation>() {
@@ -107,7 +111,7 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
                 Collections.sort(events, new Comparator<Event>() {
                     @Override
                     public int compare(Event event1, Event event2) {
-                        return event1.getStartDate().compareTo(event2.getStartDate());
+                        return event2.getStartDate().compareTo(event1.getStartDate());
 
                     }
                 });
@@ -120,6 +124,21 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
             }
         });
         swipeContainer.setRefreshing(false);
+    }
+
+    public void addEvent(Event event) {
+        events.add(0, event);
+        pastEventAdapter.notifyItemInserted(0);
+    }
+
+    public void removeEvent(Event event) {
+        for (int i=0; i < events.size(); i++) {
+            if (event.getObjectId().equals(events.get(i).getObjectId())) {
+                events.remove(i);
+                pastEventAdapter.notifyItemRemoved(i);
+                return;
+            }
+        }
     }
 
     @Override

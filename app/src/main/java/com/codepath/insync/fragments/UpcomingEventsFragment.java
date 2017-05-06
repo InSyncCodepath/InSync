@@ -95,7 +95,6 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
         events.clear();
         User currentUser = User.getCurrentUser();
         ParseQuery<UserEventRelation> query = ParseQuery.getQuery(UserEventRelation.class);
-        query.selectKeys(Arrays.asList("event"));
         query.include("event");
         query.whereEqualTo("userId", currentUser.getObjectId());
         query.findInBackground(new FindCallback<UserEventRelation>() {
@@ -128,6 +127,21 @@ public class UpcomingEventsFragment extends Fragment implements UpcomingEventAda
     public void reloadList() {
 //        upcomingEventAdapter.notifyDataSetChanged();
         showEvents();
+    }
+
+    public void addEvent(Event event) {
+        events.add(0, event);
+        upcomingEventAdapter.notifyItemInserted(0);
+    }
+
+    public void removeEvent(Event event) {
+        for (int i=0; i < events.size(); i++) {
+            if (event.getObjectId().equals(events.get(i).getObjectId())) {
+                events.remove(i);
+                upcomingEventAdapter.notifyItemRemoved(i);
+                return;
+            }
+        }
     }
 }
 

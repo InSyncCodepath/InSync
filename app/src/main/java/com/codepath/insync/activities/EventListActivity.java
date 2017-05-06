@@ -21,6 +21,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,9 +34,16 @@ import com.codepath.insync.databinding.ActivityEventListBinding;
 import com.codepath.insync.fragments.PastEventsFragment;
 import com.codepath.insync.fragments.UpcomingEventsFragment;
 import com.codepath.insync.listeners.OnEventClickListener;
+import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
+import com.codepath.insync.utils.CommonUtil;
 import com.codepath.insync.utils.LocationService;
 import com.eftimoff.viewpagertransformers.ForegroundToBackgroundTransformer;
+
+import java.util.Date;
+
+import static android.R.attr.process;
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 
 
 public class EventListActivity extends AppCompatActivity implements OnEventClickListener {
@@ -44,9 +52,9 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
     private FragmentPagerAdapter viewPagerAdapter;
     private ViewPager viewPager;
     final int REQUEST_CODE = 1001;
+    final int EVENT_DETAIL_RQ = 1002;
     public UpcomingEventsFragment upcomingFragment;
     public PastEventsFragment pastFragment;
-    private static final int LOCATION_ACCESS_PERMISSION = 20;
     private DrawerLayout drawer;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
@@ -88,11 +96,11 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
                 EventListActivity.this.startActivityForResult(startEventCreationIntent, REQUEST_CODE);
             }
         });
-        startLocationService();
         User user = User.getCurrentUser();
         //Glide.with(this).load(user.getProfileImage().getUrl()).into(profilePicDrawer);
         //TextView name = (TextView) headerLayout.findViewById(R.id.headerUserName);
         //name.setText(user.getName());
+
     }
 
     private void setUpDrawerContent(NavigationView nvDrawer) {
@@ -133,46 +141,33 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
         //drawerToggle.onConfigurationChanged(newConfig);
     }
 
-    private void startLocationService() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
-                            Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_ACCESS_PERMISSION
-            );
-        } else {
-            Intent lsIntent = new Intent(this, LocationService.class);
-            // Start the service
-            startService(lsIntent);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case LOCATION_ACCESS_PERMISSION:
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    Intent lsIntent = new Intent(this, LocationService.class);
-                    // Start the service
-                    startService(lsIntent);
-                }
-                break;
-            default:
-                break;
-
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
             upcomingFragment.reloadList();
             Toast.makeText(this, "New Event Added", Toast.LENGTH_SHORT).show();
+        } else if (resultCode == RESULT_OK && requestCode == EVENT_DETAIL_RQ) {
+            if (!data.getBooleanExtra("hasEnded", false)) {
+                return;
+            }
+            viewPager.setCurrentItem(1);
+            Event event = new Event();
+            event.setObjectId(data.getStringExtra("eventId"));
+            event.setName(data.getStringExtra("eventName"));
+            event.setAddress(data.getStringExtra("eventAddress"));
+            event.setStartDate(new Date(data.getLongExtra("eventDate", -1)));
+
+            event.put("imageUrl", data.getStringExtra("eventImage"));
+            upcomingFragment.removeEvent(event);
+            pastFragment.addEvent(event);
+            CommonUtil.createSnackbar(
+                    binding.mainContent,
+                    this,
+                    "Your event \""+data.getStringExtra("eventName")+"\" has successfully ended.");
+
+
+
         }
     }
 
@@ -214,10 +209,8 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
         eventDetailIntent.putExtra("isCurrent", isCurrent);
         eventDetailIntent.putExtra("canTrack", canTrack);
         eventDetailIntent.putExtra("transition_name", eventId);
-        //startActivity(eventDetailIntent);
-        startActivity(eventDetailIntent, options.toBundle());
+        startActivityForResult(eventDetailIntent, EVENT_DETAIL_RQ, options.toBundle());
 
-        //startActivity(eventDetailIntent, animationBundle);
     }
 
 

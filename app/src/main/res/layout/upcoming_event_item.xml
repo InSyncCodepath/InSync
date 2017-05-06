@@ -57,7 +57,7 @@
             tools:text="6th April"
             style="@style/eventListTextView"
             android:paddingTop="2dp"/>
-
+<!--
         <TextView
             android:id="@+id/tvTime"
             android:layout_width="wrap_content"
@@ -67,7 +67,7 @@
             tools:text="9:00 pm"
             android:layout_marginLeft="4dp"
             style="@style/eventListTextView"
-            android:paddingTop="2dp"/>
+            android:paddingTop="2dp"/>-->
         <!--<TextView-->
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content"-->
