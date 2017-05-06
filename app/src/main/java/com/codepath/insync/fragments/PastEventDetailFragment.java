@@ -129,9 +129,9 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         super.onCreateView(inflater, container, savedInstanceState);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_past_event_detail, container, false);
 
-        binding.tvEDDescription.setText(event.getDescription());
-        binding.tvEDStartDate.setText(CommonUtil.getDateTimeInFormat(event.getStartDate()));
-        binding.tvEDLocation.setText(event.getAddress());
+        //binding.tvEDDescription.setText(event.getDescription());
+        //binding.tvEDStartDate.setText(CommonUtil.getDateTimeInFormat(event.getStartDate()));
+        //binding.tvEDLocation.setText(event.getAddress());
         binding.tvHighlights.setSurfaceTextureListener(this);
         videoPlayer = new VideoPlayer(getContext(), this, binding.tvHighlights);
         slide_0 = binding.slide1;
@@ -158,7 +158,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
             }
         });
 
-        binding.tvEDLink.setOnClickListener(new View.OnClickListener() {
+  /*      binding.tvEDLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ParseGeoPoint eventLoc = event.getLocation();
@@ -173,7 +173,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
                     CommonUtil.createSnackbar(binding.svEventDetailPast, getApplicationContext(), "Cannot open maps at this time. Please try later");
                 }
             }
-        });
+        });*/
     }
 
     private void setupTouchListener() {

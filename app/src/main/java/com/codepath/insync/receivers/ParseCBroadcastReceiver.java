@@ -19,6 +19,7 @@ import android.widget.RemoteViews;
 import com.codepath.insync.BuildConfig;
 import com.codepath.insync.R;
 import com.codepath.insync.activities.EventDetailChatActivity;
+import com.codepath.insync.activities.EventDetailMoreActivity;
 import com.codepath.insync.activities.EventListActivity;
 import com.codepath.insync.activities.LoginActivity;
 import com.codepath.insync.models.parse.Event;
@@ -169,7 +170,7 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
         PendingIntent eventListIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
         // Define the intent to trigger when notification is selected
-        Intent detailIntent = new Intent(context.getApplicationContext(), EventDetailChatActivity.class);
+        Intent detailIntent = new Intent(context.getApplicationContext(), EventDetailMoreActivity.class);
         detailIntent.putExtra("eventId", eventId);
         detailIntent.putExtra("isCurrent", true);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context.getApplicationContext());

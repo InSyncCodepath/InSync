@@ -16,7 +16,7 @@
             android:paddingEnd="@dimen/padding16"
             android:paddingStart="@dimen/padding16">
 
-            <TextView
+ <!--           <TextView
                 android:id="@+id/tvDetails"
                 style="@style/MaterialLightSubheadSecondary"
                 android:layout_width="wrap_content"
@@ -104,7 +104,7 @@
                 android:layout_marginEnd="-16dp"
                 android:layout_marginStart="-16dp"
                 android:layout_marginTop="@dimen/margin8"
-                android:background="@color/divider" />
+                android:background="@color/divider" />-->
 
             <TextView
                 android:id="@+id/tvEDGuests"
