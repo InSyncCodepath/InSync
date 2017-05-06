@@ -69,4 +69,6 @@
     <string name="guests">Guests</string>
     <string name="all">All</string>
     <string name="end_event">End Event</string>
+    <string name="event_date_time"><![CDATA[Event Date & Time]]></string>
+    <string name="highlights">Highlights</string>
 </resources>

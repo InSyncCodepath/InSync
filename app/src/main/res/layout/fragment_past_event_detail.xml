@@ -1,84 +1,221 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <RelativeLayout
+
+    <ScrollView
+        android:id="@+id/svEventDetailPast"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/wild_sand">
-        <FrameLayout
-            android:id="@+id/ivHighlights"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/rlEventPast"
             android:layout_width="match_parent"
-            android:layout_margin="@dimen/margin8"
-            android:layout_height="200dp"
-            android:background="@color/primary_light"
-            android:elevation="8dp">
-            <ImageView
-                android:id="@+id/slide_1"
-                android:layout_gravity="center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:scaleType="centerCrop" />
-            <ImageView
-                android:id="@+id/slide_2"
-                android:layout_gravity="center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:scaleType="centerCrop" />
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fabEDPlay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                app:srcCompat="@drawable/ic_play"
-                />
+            android:layout_height="match_parent"
+            android:background="@color/insync_white"
+            android:clipToPadding="false"
+            android:paddingEnd="@dimen/padding16"
+            android:paddingStart="@dimen/padding16">
+
             <TextView
-                android:id="@+id/tvEDWarning"
+                android:id="@+id/tvDetails"
+                style="@style/MaterialLightSubheadSecondary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                android:text="Hightlights are not available for this event!"
-                android:textColor="@color/wild_sand"/>
-            <ProgressBar
-                android:id="@+id/pbMediaUpdate"
+                android:layout_marginTop="@dimen/margin8"
+                android:text="@string/details"
+                android:textColor="@color/insync_black" />
+
+            <TextView
+                android:id="@+id/tvEDDescription"
+                style="@style/MaterialLightBody1Secondary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone"
+                android:layout_below="@id/tvDetails"
+                android:textColor="@color/secondary_text" />
 
-                />
-        </FrameLayout>
+            <View
+                android:id="@+id/dv1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/tvEDDescription"
+                android:layout_marginBottom="@dimen/margin8"
+                android:layout_marginTop="@dimen/margin8"
+                android:background="@color/divider" />
+
+            <TextView
+                android:id="@+id/tvDateTime"
+                style="@style/MaterialLightSubheadSecondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/dv1"
+                android:text="@string/event_date_time"
+                android:textColor="@color/insync_black" />
+
+            <TextView
+                android:id="@+id/tvEDStartDate"
+                style="@style/MaterialLightBody1Secondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvDateTime"
+                android:textColor="@color/secondary_text" />
+
+            <View
+                android:id="@+id/dv2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/tvEDStartDate"
+                android:layout_marginBottom="@dimen/margin8"
+                android:layout_marginTop="@dimen/margin8"
+                android:background="@color/divider" />
+
+            <TextView
+                android:id="@+id/tvWhere"
+                style="@style/MaterialLightSubheadSecondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/dv2"
+                android:text="@string/event_location"
+                android:textColor="@color/insync_black" />
+
+            <TextView
+                android:id="@+id/tvEDLocation"
+                style="@style/MaterialLightBody1Secondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvWhere"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/tvEDLink"
+                style="@style/MaterialLightBody1Secondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvEDLocation"
+                android:autoLink="map"
+                android:text="@string/open_in_maps"
+                android:textColor="@color/blue_link" />
+
+            <View
+                android:id="@+id/dv4"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_below="@id/tvEDLink"
+                android:layout_marginBottom="@dimen/margin8"
+                android:layout_marginEnd="-16dp"
+                android:layout_marginStart="-16dp"
+                android:layout_marginTop="@dimen/margin8"
+                android:background="@color/divider" />
+
+            <TextView
+                android:id="@+id/tvEDGuests"
+                style="@style/MaterialLightSubheadSecondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/dv4"
+                android:text="@string/guests"
+                android:textColor="@color/primary" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvEDGuests"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvEDGuests"
+                android:layout_marginTop="@dimen/margin8" />
+
+            <View
+                android:id="@+id/dv5"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_below="@id/rvEDGuests"
+                android:layout_marginBottom="@dimen/margin8"
+                android:layout_marginEnd="-16dp"
+                android:layout_marginStart="-16dp"
+                android:layout_marginTop="@dimen/margin8"
+                android:background="@color/divider" />
+
+            <TextView
+                android:id="@+id/tvEDHighlights"
+                style="@style/MaterialLightSubheadSecondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/dv5"
+                android:text="@string/highlights"
+                android:textColor="@color/primary" />
+
+            <FrameLayout
+                android:id="@+id/ivHighlights"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_below="@id/tvEDHighlights"
+                android:layout_marginTop="@dimen/margin8"
+                android:background="@color/primary"
+                android:elevation="4dp">
+
+                <ImageView
+                    android:id="@+id/slide_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="centerCrop" />
+
+                <ImageView
+                    android:id="@+id/slide_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="centerCrop" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fabEDPlay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_play" />
+
+                <TextView
+                    android:id="@+id/tvEDWarning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Hightlights are not available for this event!"
+                    android:textColor="@color/insync_white"
+                    android:visibility="gone" />
+
+                <ProgressBar
+                    android:id="@+id/pbMediaUpdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+
+                    />
+            </FrameLayout>
 
 
-        <TextureView
-            android:id="@+id/tvHighlights"
-            android:layout_width="match_parent"
-            android:layout_margin="@dimen/margin8"
-            android:layout_height="200dp"
-            />
+            <TextureView
+                android:id="@+id/tvHighlights"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_below="@id/tvEDHighlights"
+                android:layout_marginTop="@dimen/margin8" />
 
-        <TextView
-            android:id="@+id/tvTitleGallery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/gallery"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/tvHighlights"
-            android:layout_marginTop="@dimen/margin16"
-            android:textColor="@color/primary_dark"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textStyle="bold"
-            android:shadowRadius="8"
-            android:shadowColor="@android:color/darker_gray"
-            android:elevation="8dp"
-            android:visibility="gone"
-            android:textAllCaps="true"/>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvEDImages"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvTitleGallery"
-            />
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/tvTitleGallery"
+                android:text="@string/gallery"
+                style="@style/MaterialLightSubheadSecondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvHighlights"
+                android:textColor="@color/primary"
+                android:layout_marginTop="@dimen/margin16"
+                android:visibility="gone" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvEDImages"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvTitleGallery" />
+        </RelativeLayout>
+    </ScrollView>
 </layout>
