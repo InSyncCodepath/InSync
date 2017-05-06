@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black">
+    android:background="@android:color/black"
+    >
     <com.codepath.insync.widgets.AspectRatioImageView
         android:id="@+id/ivEDImage"
-        android:layout_weight="1"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
+        android:layout_centerVertical="true"
         android:adjustViewBounds="true"
         />
-</LinearLayout>
+    <TextView
+        android:id="@+id/tvShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/ic_share"
+        android:textAllCaps="true"
+        style="@style/MaterialDarkBody1"
+        android:text="@string/share"
+        android:visibility="invisible"
+        android:layout_marginBottom="@dimen/margin16"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
+</RelativeLayout>

@@ -12,6 +12,9 @@ import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.EDImageAdapter;
@@ -27,6 +30,7 @@ public class FullScreenImageActivity extends AppCompatActivity {
     ActivityFullScreenImageBinding binding;
     ArrayList<String> images;
     int position;
+    TextView tvShare;
 
     Handler tbHandler = new Handler();
 
@@ -35,6 +39,10 @@ public class FullScreenImageActivity extends AppCompatActivity {
         @Override
         public void run() {
             binding.tbFullScreenImage.setVisibility(View.INVISIBLE);
+            if (tvShare != null) {
+                tvShare.setVisibility(View.INVISIBLE);
+            }
+
         }
     };
 
@@ -45,6 +53,7 @@ public class FullScreenImageActivity extends AppCompatActivity {
         images = getIntent().getStringArrayListExtra("images");
         position = getIntent().getIntExtra("position", 0);
         setupRecyclerView(images, position);
+        tvShare = (TextView) findViewById(R.id.tvShare);
         setSupportActionBar(binding.tbFullScreenImage);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -58,7 +67,7 @@ public class FullScreenImageActivity extends AppCompatActivity {
 
     }
 
-    private void setupRecyclerView(ArrayList<String> images, int position) {
+    private void setupRecyclerView(final ArrayList<String> images, int position) {
         EDImageAdapter galleryImageAdapter = new EDImageAdapter(this, images, R.layout.item_galleryimage, 0);
         AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(galleryImageAdapter);
         ScaleInAnimationAdapter scaleInAdapter = new ScaleInAnimationAdapter(alphaAdapter);
@@ -72,7 +81,16 @@ public class FullScreenImageActivity extends AppCompatActivity {
         galleryImageAdapter.setOnItemClickListener(new EDImageAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
-                Log.d("FullScreenImage", "Clicked image");
+                if (itemView.getId() == R.id.tvShare) {
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, images.get(position));
+                    startActivity(Intent.createChooser(shareIntent, "Share using"));
+                }
+
+                tvShare = (TextView) findViewById(R.id.tvShare);
+                tvShare.setVisibility(View.VISIBLE);
+
                 binding.tbFullScreenImage.setVisibility(View.VISIBLE);
                 tbHandler.removeCallbacks(tbRunnable);
                 tbHandler.postDelayed(tbRunnable, 3000);
@@ -98,4 +116,6 @@ public class FullScreenImageActivity extends AppCompatActivity {
         super.onBackPressed();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
+
+
 }

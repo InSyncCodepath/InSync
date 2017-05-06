@@ -97,7 +97,7 @@ public class EventDetailMoreActivity extends AppCompatActivity
 
     }
     private void setupClickListeners() {
-        binding.tvEDLink.setOnClickListener(new View.OnClickListener() {
+        binding.tvEDLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ParseGeoPoint eventLoc = event.getLocation();
