@@ -3,6 +3,7 @@ package com.codepath.insync.utils;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 
@@ -75,6 +76,32 @@ public class CommonUtil {
         queryList.add(queryEnded);
 
         return ParseQuery.or(queryList);
+    }
+
+    public static String getRelativeTimeAgo(Date inputDate) {
+
+
+        String relativeDate = "";
+
+        long dateMillis = inputDate.getTime();
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0); //anything 0 - 23
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        long currentMidnightMillis = c.getTimeInMillis();
+        if (dateMillis > currentMidnightMillis) {
+            return "Today";
+        }
+        relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+
+        return relativeDate;
+    }
+
+    public static boolean compareDates(Date date1, Date date2) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        return sdf.format(date1).equals(sdf.format(date2));
+
     }
 
     public static void sendInviteLink(String phoneNum, String eventId) {
