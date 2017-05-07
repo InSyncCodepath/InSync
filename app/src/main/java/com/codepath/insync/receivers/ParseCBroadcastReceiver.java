@@ -195,6 +195,10 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
         noReceive.setAction(noRsvp);
         PendingIntent pendingIntentNo = PendingIntent.getBroadcast(context, 20, noReceive, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        if (User.getCurrentUser() == null) {
+            return;
+        }
+
         // Now we can attach the pendingIntent to a new notification using setContentIntent
         Notification groupNotification = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.mipmap.ic_lock_screen_noti)
