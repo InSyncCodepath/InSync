@@ -30,25 +30,25 @@
                 android:id="@+id/tvEventName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:layout_marginBottom="4dp"
+                android:textSize="16sp"
                 android:textColor="@color/subheader"
-                android:layout_margin="@dimen/margin16"
-                style="@style/eventListTextView"
-                android:layout_alignBottom="@id/ivHighlights"
+                android:layout_marginTop="@dimen/margin4"
+                android:layout_marginLeft="@dimen/margin16"
+                style="@style/MaterialLightSubheadSecondary"
                 android:fontFamily="Roboto-Medium"
-                />
+                android:layout_below="@+id/ivHighlights"
+                tools:text="Name"
+                android:textStyle="bold"/>
             <TextView
                 android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ivHighlights"
+                android:layout_below="@+id/tvEventName"
                 tools:text="6th April"
                 style="@style/eventListTextView"
-                android:paddingTop="2dp"
                 android:fontFamily="Roboto-Regular"
                 android:textSize="14sp"
-                android:layout_marginLeft="@dimen/margin16"
+                android:layout_marginLeft="@dimen/margin8"
                 android:textColor="@color/body"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
                 style="@style/eventListTextView"
                 android:fontFamily="Roboto-Regular"
                 android:textSize="14sp"
-                android:layout_marginLeft="@dimen/margin16"
+                android:layout_marginLeft="@dimen/margin8"
                 android:textColor="@color/body"/>
 
 

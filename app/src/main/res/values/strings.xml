@@ -73,4 +73,12 @@
     <string name="highlights">Highlights</string>
     <string name="share">Share</string>
     <string name="don_t_have_the_code_sign_up">Don\'t have the code? Sign up.</string>
+
+
+    <string-array name="theme">
+        <item>Birthday</item>
+        <item>Farewell</item>
+        <item>Get-together</item>
+        <item>Party</item>
+    </string-array>
 </resources>

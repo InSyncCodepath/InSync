@@ -10,6 +10,7 @@
         android:id="@+id/contactsContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:descendantFocusability="beforeDescendants"
         tools:context="com.codepath.insync.activities.EventCreationActivity">
 
         <android.support.design.widget.AppBarLayout
@@ -24,7 +25,9 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay">
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:descendantFocusability="beforeDescendants"
+                    android:focusableInTouchMode="true">
                 <Button
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
@@ -310,12 +313,22 @@
                     android:paddingTop="6dp"
                     android:layout_marginTop="28dp"
                     android:fontFamily="Roboto-Medium"/>
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/theme"
+                    android:layout_below="@id/tvInvite"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginTop="8dp"
+                    android:entries="@array/theme">
+
+                </Spinner>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/inviteeList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/ivInvite"
+                    android:layout_below="@id/theme"
                     android:layout_margin="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
@@ -380,9 +393,7 @@
                 android:text="Delete"
                 android:visibility="gone" />
 
-            <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"></Spinner>
+
 -->
         </android.support.v7.widget.CardView>
     </RelativeLayout>
