@@ -151,17 +151,17 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            String eventName = data.getStringExtra("event");
-            final Snackbar snackBar = Snackbar.make(binding.mainContent, "Event "+ data.getStringExtra("event")+ " is successfully created!", Snackbar.LENGTH_LONG);
-
-            snackBar.setAction("Dismiss", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    snackBar.dismiss();
-                    upcomingFragment.reloadList();
-                }
-            });
-            snackBar.show();
+            //String eventName = data.getStringExtra("event");
+//            final Snackbar snackBar = Snackbar.make(binding.mainContent, "Event "+ data.getStringExtra("event")+ " is successfully created!", Snackbar.LENGTH_LONG);
+//
+//            snackBar.setAction("Dismiss", new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    snackBar.dismiss();
+//                    upcomingFragment.reloadList();
+//                }
+//            });
+            //snackBar.show();
         } else if (resultCode == RESULT_OK && requestCode == EVENT_DETAIL_RQ) {
             if (!data.getBooleanExtra("hasEnded", false)) {
                 return;

@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,6 +39,7 @@ import com.parse.SaveCallback;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -163,7 +167,7 @@ public class MessageSendFragment extends Fragment {
         binding.fabEDGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //getEventImages();
+                getEventImages();
                 Intent intent = new Intent(Intent.ACTION_PICK,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(Intent.createChooser(intent,
@@ -273,32 +277,7 @@ public class MessageSendFragment extends Fragment {
 
     }
 
-    public void getEventImages(){
-        Calendar startCal = Calendar.getInstance();
-        Date start = event1.getStartDate();
-        //startCal.getTime(start);
-        String[] projection = { MediaStore.Images.Media.DATA };
-        String selection = MediaStore.Images.Media.DATE_TAKEN + " > ? AND " + MediaStore.Images.Media.DATE_TAKEN + " < ? AND "
-                +  MediaStore.Images.Media.LATITUDE + " = ? AND " + MediaStore.Images.Media.LONGITUDE + "= ?";
-        String[] selectionArgs = { String.valueOf(event1.getStartDate().getTime()), String.valueOf(event1.getEndDate().getTime()),
-                String.valueOf(event1.getLocation().getLatitude()), String.valueOf(event1.getLocation().getLongitude())
-        };
-        Cursor cursor = context.getContentResolver()
-                .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null);
-        Toast.makeText(getActivity(), "Your Photo was successfully sent!",
-                            Toast.LENGTH_SHORT).show();
-        if (cursor != null && cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
-                String imagePath = cursor.getString(0);
-            }
-        }
 
-        cursor.close();
-    }
 
     public void clearViewFocus() {
         binding.etEDMessage.clearFocus();
@@ -323,4 +302,64 @@ public class MessageSendFragment extends Fragment {
             openFilePicker();
         }
     }
+
+
+    public void getLocation(String photoFilePath) {
+        // Create and configure BitmapFactory
+        BitmapFactory.Options bounds = new BitmapFactory.Options();
+        bounds.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(photoFilePath, bounds);
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        Bitmap bm = BitmapFactory.decodeFile(photoFilePath, opts);
+        // Read EXIF Data
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(photoFilePath);
+            String LATITUDE = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
+            String LATITUDE_REF = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF);
+            String LONGITUDE = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
+            String LONGITUDE_REF = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF);
+            String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void getEventImages(){
+        Calendar startCal = Calendar.getInstance();
+        Date start = event1.getStartDate();
+        //startCal.getTime(start);
+        String[] projection = { MediaStore.Images.Media.DATA };
+        String selection = MediaStore.Images.Media.DATE_TAKEN + " > ? AND " + MediaStore.Images.Media.DATE_TAKEN + " < ? "
+                //+"AND "
+                //+  MediaStore.Images.Media.LATITUDE + " = ? AND " + MediaStore.Images.Media.LONGITUDE + "= ?"
+                ;
+        String[] selectionArgs = { String.valueOf(event1.getStartDate().getTime()), String.valueOf(event1.getEndDate().getTime())
+                //, String.valueOf(event1.getLocation().getLatitude()), String.valueOf(event1.getLocation().getLongitude())
+        };
+        Cursor cursor = context.getContentResolver()
+                .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null);
+        Toast.makeText(getActivity(), "Your Photo was successfully sent!",
+                Toast.LENGTH_SHORT).show();
+
+
+        //exif
+
+        if (cursor != null && cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                String imagePath = cursor.getString(0);
+                if(imagePath.contains("amera")){
+                    getLocation(imagePath);
+                }
+
+            }
+        }
+
+        cursor.close();
+    }
+
 }
