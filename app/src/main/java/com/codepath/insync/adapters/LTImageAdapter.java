@@ -109,13 +109,13 @@ public class LTImageAdapter extends RecyclerView.Adapter<LTImageAdapter.ViewHold
         /*if (position == 0) {
             holder.ivLTImage.setImageResource(R.drawable.ic_camera_alt_white_48px);
         } else {*/
-            holder.ivLTImage.setImageResource(R.drawable.ic_profile);
+            holder.ivLTImage.setImageResource(R.mipmap.ic_profile_placeholder);
         //}
 
         if (imageUrl != null) {
             Glide.with(mContext)
                     .load(imageUrl)
-                    .placeholder(R.drawable.ic_profile)
+                    .placeholder(R.mipmap.ic_profile_placeholder)
                     .dontAnimate()
                     .bitmapTransform(new RoundedCornersTransformation(mContext, 10, 0))
                     .into(holder.ivLTImage);

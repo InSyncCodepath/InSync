@@ -5,6 +5,15 @@
     android:layout_height="match_parent"
     android:background="@android:color/black"
     >
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/ivEDImagePL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:src="@drawable/image_loader_black"
+        android:background="@drawable/image_loader_black"
+        />
     <com.codepath.insync.widgets.AspectRatioImageView
         android:id="@+id/ivEDImage"
         android:layout_width="match_parent"
@@ -12,6 +21,7 @@
         android:layout_centerVertical="true"
         android:adjustViewBounds="true"
         />
+
     <TextView
         android:id="@+id/tvShare"
         android:layout_width="wrap_content"

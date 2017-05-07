@@ -32,7 +32,7 @@
                     android:layout_marginBottom="@dimen/margin8"
                     android:layout_marginTop="@dimen/margin8"
                     android:contentDescription="@string/event_profile_image"
-                    android:scaleType="fitXY"
+                    android:scaleType="centerCrop"
                     app:srcCompat="@drawable/ic_camera_alt_white_48px" />
 
 

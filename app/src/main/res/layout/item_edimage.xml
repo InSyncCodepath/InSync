@@ -9,6 +9,14 @@
     card_view:cardcornerradius="4dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/ivEDImagePL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:src="@drawable/ic_camera_alt_white_48px"
+        />
     <ImageView
         android:id="@+id/ivEDImage"
         android:contentDescription="@string/event_image"
