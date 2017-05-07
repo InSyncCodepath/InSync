@@ -50,6 +50,7 @@ public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public @BindView(R.id.ivEDImage) ImageView ivEDImage;
+        public @BindView(R.id.ivEDImagePL) ImageView ivEDImagePL;
         public @BindView(R.id.tvShare) TextView tvShare;
 
         public ViewHolder(final View itemView) {
@@ -136,6 +137,8 @@ public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHold
 
         // Get the data model based on position
         String imageUrl = mEDImages.get(position);
+        holder.ivEDImage.setVisibility(View.INVISIBLE);
+        holder.ivEDImagePL.setVisibility(View.VISIBLE);
         holder.ivEDImage.setImageResource(R.drawable.ic_camera_alt_white_48px);
         if (imageUrl != null) {
             Glide.with(mContext)
@@ -143,7 +146,14 @@ public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHold
                     .placeholder(R.drawable.ic_camera_alt_white_48px)
                     .crossFade()
                     .bitmapTransform(new RoundedCornersTransformation(getApplicationContext(), 4, 0))
-                    .into(holder.ivEDImage);
+                    .into(new SimpleTarget<GlideDrawable>() {
+                        @Override
+                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            holder.ivEDImagePL.setVisibility(View.GONE);
+                            holder.ivEDImage.setVisibility(View.VISIBLE);
+                            holder.ivEDImage.setImageDrawable(resource);
+                        }
+                    });
         }
 
 

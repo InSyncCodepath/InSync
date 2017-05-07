@@ -186,6 +186,9 @@ public class UpcomingEventDetailFragment extends Fragment {
             public void done(List<Message> newMessages, ParseException e) {
                 if (e == null) {
                     messages.clear();
+                    if (newMessages.size() == 0) {
+                        return;
+                    }
                     Date currDate = newMessages.get(newMessages.size()-1).getCreatedAt();
                     Message dateMsg = new Message();
                     dateMsg.setBody(CommonUtil.getRelativeTimeAgo(currDate));

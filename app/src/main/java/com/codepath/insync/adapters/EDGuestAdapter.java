@@ -9,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.codepath.insync.R;
 import com.codepath.insync.models.parse.User;
 import com.parse.ParseFile;
@@ -40,6 +43,7 @@ public class EDGuestAdapter extends RecyclerView.Adapter<EDGuestAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public @BindView(R.id.ivEDGuestImage) CircleImageView ivEDGuestImage;
+        public @BindView(R.id.ivEDGuestImagePL) ImageView ivEDGuestImagePL;
         public @BindView(R.id.tvEDGuestName) TextView tvEDGuestName;
         public @BindView(R.id.ivEDRSVPImage) ImageView ivEDRSVPImage;
 
@@ -116,16 +120,25 @@ public class EDGuestAdapter extends RecyclerView.Adapter<EDGuestAdapter.ViewHold
             holder.tvEDGuestName.setText(user.getName().split(" ")[0]);
         }
 
-
-        holder.ivEDGuestImage.setImageResource(R.drawable.ic_profile);
-
+        holder.ivEDGuestImage.setVisibility(View.VISIBLE);
+        holder.ivEDGuestImage.setImageResource(R.mipmap.ic_profile_placeholder);
 
         if (imageUrl != null) {
+            holder.ivEDGuestImagePL.setVisibility(View.VISIBLE);
+            holder.ivEDGuestImage.setVisibility(View.INVISIBLE);
+
             Glide.with(mContext)
                     .load(imageUrl)
-                    .placeholder(R.drawable.ic_profile)
+                    .placeholder(R.mipmap.ic_profile_placeholder)
                     .bitmapTransform(new RoundedCornersTransformation(mContext, 10, 0))
-                    .into(holder.ivEDGuestImage);
+                    .into(new SimpleTarget<GlideDrawable>() {
+                        @Override
+                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            holder.ivEDGuestImage.setImageDrawable(resource);
+                            holder.ivEDGuestImagePL.setVisibility(View.INVISIBLE);
+                            holder.ivEDGuestImage.setVisibility(View.VISIBLE);
+                        }
+                    });
         }
 
         if (user.getInt("rsvpStatus") == 0) {
