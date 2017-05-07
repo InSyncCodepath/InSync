@@ -49,6 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center"
                     app:layout_collapseMode="pin"
+                    android:paddingBottom="@dimen/padding8"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed" />
             </android.support.design.widget.CollapsingToolbarLayout>
 
