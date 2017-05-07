@@ -46,6 +46,7 @@ import com.codepath.insync.adapters.InviteeAdapter;
 import com.codepath.insync.adapters.SimpleCursorRecyclerAdapterContacts;
 import com.codepath.insync.databinding.ActivityCreateEventBinding;
 import com.codepath.insync.databinding.ActivityCreateNewBinding;
+import com.codepath.insync.models.Contact;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
@@ -64,6 +65,8 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.SaveCallback;
+
+import org.parceler.Parcels;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -380,9 +383,16 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
                 profileImage.setVisibility(View.VISIBLE);
             }
         }
-        if (resultCode == RESULT_OK) {
-            if (requestCode == SELECT_PICTURE) {
+        if(requestCode == PHONE_CONTACTS_REQUEST_CODE){
+            if (resultCode == RESULT_OK) {
+                ArrayList<Contact> contacts = Parcels.unwrap(data.getParcelableExtra("result"));
+                contacts.size();
+            }
+        }
 
+
+            if (requestCode == SELECT_PICTURE) {
+                if (resultCode == RESULT_OK) {
                 Glide.with(EventCreationActivityNoAnim.this).load(data.getData()).into(profileImage);
                 profileImage.setVisibility(View.VISIBLE);
 //                String filePath = data.getStringExtra("filePath");
@@ -634,7 +644,6 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
             // Contacts permissions have not been granted.
             Log.i(TAG, "Contact permissions has NOT been granted. Requesting permissions.");
             requestContactsPermissions();
-
         } else {
 
             // Contact permissions have been granted. Show the contacts fragment.
@@ -646,9 +655,10 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
 
     private void showContactDetails() {
         //Intent contactActivityIntent = ContactActivity.newIntent(this);
-        Intent contactActivityIntent = InSyncContactsActivity.newIntent(this);
-
-        this.startActivityForResult(contactActivityIntent, REQUEST_CODE);
+//        Intent contactActivityIntent = InSyncContactsActivity.newIntent(this);
+//        this.startActivityForResult(contactActivityIntent, REQUEST_CODE);
+        Intent intent = new Intent(EventCreationActivityNoAnim.this, ContactActivity.class);
+        startActivityForResult(intent, PHONE_CONTACTS_REQUEST_CODE);
     }
 
     private void requestContactsPermissions() {
@@ -764,8 +774,6 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
             @Override
             public void onClick(View v) {
                 showContacts();
-                Intent intent = new Intent(EventCreationActivityNoAnim.this, ContactActivity.class);
-                startActivityForResult(intent, PHONE_CONTACTS_REQUEST_CODE);
                 dialog.dismiss();
             }
         });
