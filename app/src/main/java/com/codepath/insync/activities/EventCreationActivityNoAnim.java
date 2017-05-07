@@ -3,15 +3,11 @@ package com.codepath.insync.activities;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
@@ -44,7 +40,6 @@ import com.codepath.insync.Manifest;
 import com.codepath.insync.R;
 import com.codepath.insync.adapters.InviteeAdapter;
 import com.codepath.insync.adapters.SimpleCursorRecyclerAdapterContacts;
-import com.codepath.insync.databinding.ActivityCreateEventBinding;
 import com.codepath.insync.databinding.ActivityCreateNewBinding;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
@@ -56,7 +51,6 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
@@ -65,15 +59,10 @@ import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.SaveCallback;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
+import org.w3c.dom.Text;
+
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -82,9 +71,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import static android.R.attr.bitmap;
-import static android.R.id.list;
-
 public class EventCreationActivityNoAnim extends AppCompatActivity implements SimpleCursorRecyclerAdapterContacts.SimpleCursorAdapterInterface {
     ActivityCreateNewBinding binding;
     public final String TAG = EventCreationActivityNoAnim.class.getName();
@@ -92,8 +78,8 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
     Calendar eventStartDate = Calendar.getInstance();
     Calendar eventEndDate = Calendar.getInstance();
     String eventName, eventDescription, address = "";
-    EditText location, startTime, startDate, endDate, endTime, eventTitle;
-    TextView addUser, setProfileImage;
+    EditText location, eventTitle;
+    TextView startTime, startDate, endDate, endTime, addUser, setProfileImage;
     ImageView profileImage, toggleOn, toggleOff;
     ParseGeoPoint geoPoint;
     RelativeLayout contactsContainer;
@@ -309,7 +295,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
 
     }
 
-    private void updateDate(EditText etDate, Date date) {
+    private void updateDate(TextView etDate, Date date) {
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         etDate.setText(sdf.format(date));
@@ -479,7 +465,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
         }
     };
 
-    private void updateTime(EditText etTime, Date date) {
+    private void updateTime(TextView etTime, Date date) {
         String myFormat = "hh:mm a"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         etTime.setText(sdf.format(date));

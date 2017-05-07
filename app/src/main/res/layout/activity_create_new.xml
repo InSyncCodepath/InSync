@@ -90,7 +90,9 @@
                     android:layout_alignParentLeft="true"
                     android:textColor="@color/subheader"
                     android:textSize="14sp"
-                    android:layout_marginTop="16dp"/>
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="32dp"
+                    />
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -100,6 +102,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="16dp"
                     android:layout_below="@id/profilePic"
+                    android:layout_marginBottom="32dp"
                     />
 
                 <ImageView
@@ -117,8 +120,11 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/etAllDay"
                     android:id="@+id/tvStartDate"
-                    />
-                <EditText
+                    android:layout_alignLeft="@+id/etStartDate"
+                    android:text="@string/start_date"
+                    android:textSize="10sp"
+                    android:textColor="@color/dateTimeHeader"/>
+                <TextView
                     android:id="@+id/etStartDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -129,58 +135,85 @@
                     android:layout_weight="1"
                     android:textSize="14sp"
                     android:hint="@string/start_date"
-                    android:layout_marginTop="32dp"
-                    android:textColorHint="@color/body"/>
+                    android:textColorHint="@color/body"
+                    android:text="Enter start date"
+                    android:textColor="@color/dateTimeHeader"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/etAllDay"
                     android:id="@+id/tvStarTime"
                     android:layout_alignParentRight="true"
-
-                    />
-                <EditText
+                    android:layout_alignLeft="@+id/etStartTime"
+                    android:text="@string/start_time"
+                    android:textSize="10sp"
+                    android:textColor="@color/dateTimeHeader"/>
+                <TextView
                     android:id="@+id/etStartTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_below="@id/etAllDay"
+                    android:layout_below="@id/tvStarTime"
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="@dimen/margin24"
                     android:layout_weight="1"
                     android:hint="@string/start_time"
                     android:textSize="14sp"
+                    android:textColorHint="@color/body"
+                    android:text="Enter start time"
+                    android:textColor="@color/dateTimeHeader"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/etStartDate"
+                    android:id="@+id/tvEndDate"
+                    android:layout_alignLeft="@+id/etEndDate"
+                    android:text="@string/end_date"
+                    android:textSize="10sp"
                     android:layout_marginTop="32dp"
-                    android:textColorHint="@color/body"/>
-
-
-                <EditText
+                    android:textColor="@color/dateTimeHeader"/>
+                <TextView
                     android:id="@+id/etEndDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_below="@id/etStartDate"
+                    android:layout_below="@id/tvEndDate"
                     android:layout_marginLeft="@dimen/margin16"
                     android:layout_marginRight="4dp"
                     android:layout_weight="1"
                     android:hint="@string/end_date"
                     android:textSize="14sp"
+                    android:textColorHint="@color/body"
+                    android:text="Enter end date"
+                    android:textColor="@color/dateTimeHeader"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/etStartTime"
+                    android:id="@+id/tvEndTime"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignLeft="@+id/etEndTime"
+                    android:text="@string/end_time"
+                    android:textSize="10sp"
                     android:layout_marginTop="32dp"
-                    android:textColorHint="@color/body"/>
+                    android:textColor="@color/dateTimeHeader"/>
 
-
-                <EditText
+                <TextView
                     android:id="@+id/etEndTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@id/etStartDate"
+                    android:layout_below="@id/tvEndTime"
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="@dimen/margin24"
                     android:hint="@string/end_time"
                     android:textSize="14sp"
-                    android:layout_marginTop="32dp"
-                    android:textColorHint="@color/body"/>
+                    android:textColorHint="@color/body"
+                    android:text="Enter end time"
+                    android:textColor="@color/dateTimeHeader"
+                    android:layout_alignLeft="@id/etStartTime"/>
+
 
 
                 <ImageView

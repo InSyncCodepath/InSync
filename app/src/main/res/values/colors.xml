@@ -22,7 +22,7 @@
     <color name="body">#8b000000</color>
     <color name="hint">#9b9b9b</color>
     <color name="dark_grey">#787a7d</color>
-
+    <color name="dateTimeHeader">#4a4a4a</color>
 
     <color name="primary">@color/tealish</color>
     <color name="primary_dark">@color/iris_blue</color>
