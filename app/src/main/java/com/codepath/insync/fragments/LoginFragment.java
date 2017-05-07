@@ -145,6 +145,7 @@ public class LoginFragment extends Fragment {
                                     ParseInstallation installation = ParseInstallation.getCurrentInstallation();
                                     installation.put("userId", user.getObjectId());
                                     installation.saveInBackground();
+                                    binding.tvLoginSignup.setVisibility(View.INVISIBLE);
                                     CommonUtil.createSnackbar(binding.rlLogin, getContext(),
                                             "Login successful!", R.color.primary);
                                     loginListener.onLoginSuccess();

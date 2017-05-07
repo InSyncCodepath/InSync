@@ -7,6 +7,9 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,6 +23,7 @@ import com.codepath.insync.databinding.FragmentSignupBinding;
 import com.codepath.insync.listeners.OnLoginListener;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.utils.CommonUtil;
+import com.codepath.insync.utils.FormatUtil;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -48,8 +52,11 @@ public class SignupFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_signup, container, false);
         loginListener = (OnLoginListener) getActivity();
         parseFile = null;
-        setupUI(binding.svSignup);
+        String formatStr = getResources().getString(R.string.already_a_member_login);
+        binding.tvSignupLogin.setText(FormatUtil.buildSpan(formatStr, 0, 17, 18, formatStr.length()));
+        setupUI(binding.rlSignup);
         setupClickListeners();
+        setupTextChangedListeners();
         return binding.getRoot();
     }
 
@@ -72,12 +79,95 @@ public class SignupFragment extends Fragment {
                     @Override
                     public void done(ParseException e) {
                         if (e != null) {
-                            CommonUtil.createSnackbar(binding.svSignup, getContext(), "Your profile picture could not be added! Please try again later.", R.color.primary);
+                            CommonUtil.createSnackbar(binding.rlSignup, getContext(), "Your profile picture could not be added! Please try again later.", R.color.primary);
                         }
                     }
                 });
             }
         }
+    }
+
+    private void setupTextChangedListeners() {
+        binding.etSignupName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                binding.tvSignupBtn.setEnabled(s.length() > 0 && binding.etSignupUsername.getText().length() > 0 && binding.etSignupPassword.getText().length() > 0 && binding.etSignupPhone.getText().length() > 0);
+                int color = binding.tvSignupBtn.isEnabled() ? R.color.primary : R.color.very_light_white;
+                binding.tvSignupBtn.setTextColor(ContextCompat.getColor(getContext(), color));
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.etSignupUsername.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                binding.tvSignupBtn.setEnabled(s.length() > 0 && binding.etSignupName.getText().length() > 0 && binding.etSignupPassword.getText().length() > 0 && binding.etSignupPhone.getText().length() > 0);
+                int color = binding.tvSignupBtn.isEnabled() ? R.color.primary : R.color.very_light_white;
+                binding.tvSignupBtn.setTextColor(ContextCompat.getColor(getContext(), color));
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.etSignupPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                binding.tvSignupBtn.setEnabled(s.length() > 0 && binding.etSignupName.getText().length() > 0 && binding.etSignupUsername.getText().length() > 0 && binding.etSignupPhone.getText().length() > 0);
+                int color = binding.tvSignupBtn.isEnabled() ? R.color.primary : R.color.very_light_white;
+                binding.tvSignupBtn.setTextColor(ContextCompat.getColor(getContext(), color));
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.etSignupPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                binding.tvSignupBtn.setEnabled(s.length() > 0 && binding.etSignupName.getText().length() > 0 && binding.etSignupUsername.getText().length() > 0 && binding.etSignupPassword.getText().length() > 0);
+                int color = binding.tvSignupBtn.isEnabled() ? R.color.primary : R.color.very_light_white;
+                binding.tvSignupBtn.setTextColor(ContextCompat.getColor(getContext(), color));
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     private void setupClickListeners() {
@@ -106,7 +196,8 @@ public class SignupFragment extends Fragment {
                 user.signup(new SignUpCallback() {
                     public void done(ParseException e) {
                         if (e == null) {
-                            CommonUtil.createSnackbar(binding.svSignup, getContext(), "Sign up successful!", R.color.primary);
+                            binding.tvSignupLogin.setVisibility(View.INVISIBLE);
+                            CommonUtil.createSnackbar(binding.rlSignup, getContext(), "Sign up successful!", R.color.primary);
                             user.login(
                                     binding.etSignupUsername.getText().toString(),
                                     binding.etSignupPassword.getText().toString(),
@@ -119,13 +210,13 @@ public class SignupFragment extends Fragment {
                                                 installation.saveInBackground();
                                                 loginListener.onLoginSuccess();
                                             } else {
-                                                CommonUtil.createSnackbar(binding.svSignup, getContext(),
+                                                CommonUtil.createSnackbar(binding.rlSignup, getContext(),
                                                         "Error logging in. Please try again later!", R.color.primary);
                                             }
                                         }
                                     });
                         } else {
-                            CommonUtil.createSnackbar(binding.svSignup, getContext(), "Error signing up. Please try again later!", R.color.primary);
+                            CommonUtil.createSnackbar(binding.rlSignup, getContext(), "Error signing up. Please try again later!", R.color.primary);
                         }
                     }
                 });

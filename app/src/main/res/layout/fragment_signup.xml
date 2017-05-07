@@ -3,146 +3,179 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <ScrollView
-        android:id="@+id/svSignup"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@color/lighter_green"
-        android:scrollbars="none"
-        android:fitsSystemWindows="true">
 
-        <LinearLayout
-            android:id="@+id/llSignup"
+        <RelativeLayout
+            android:id="@+id/rlSignup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
-            android:paddingTop="56dp">
-
+            android:background="@color/primary"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true"
+            android:fitsSystemWindows="true"
+            >
+            <TextView
+                android:id="@+id/tvAppName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin24"
+                android:layout_marginStart="@dimen/margin24"
+                android:text="InSync"
+                android:textStyle="bold"
+                android:textColor="@color/insync_white"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:contentDescription="@string/app_logo"
+                app:srcCompat="@drawable/ic_launch" />
             <android.support.design.widget.CoordinatorLayout
                 android:id="@+id/clSignupUpload"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/margin24"
                 android:layout_marginTop="@dimen/margin24"
-                android:layout_marginBottom="@dimen/margin24">
+                android:layout_below="@id/tvAppName">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/civProfilePic"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:src="@drawable/ic_profile"
+                    app:civ_border_color="@color/signup_login_text"
                     app:civ_border_width="2dp"
-                    app:civ_fill_color="@color/signup_login_text"
-                    app:civ_border_color="@color/signup_login_text"/>
+                    app:civ_fill_color="@color/signup_login_text" />
+
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/fabSignUpAdd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|bottom"
-                    app:fabSize="mini"
                     android:layout_marginBottom="@dimen/margin4"
                     android:layout_marginEnd="@dimen/margin4"
+                    app:fabSize="mini"
                     app:srcCompat="@drawable/ic_camera_alt_white_48px" />
             </android.support.design.widget.CoordinatorLayout>
 
-
-            <LinearLayout
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilSignupName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/icons"
-                android:descendantFocusability="beforeDescendants"
-                android:elevation="24dp"
-                android:focusableInTouchMode="true"
-                android:orientation="vertical"
-                tools:targetApi="lollipop">
+                android:layout_below="@id/clSignupUpload"
+                android:layout_marginBottom="4dp"
+                android:layout_marginEnd="@dimen/margin24"
+                android:layout_marginStart="@dimen/margin24"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/et_login_background"
+                android:textColorHint="@color/insync_white">
 
-                <!--  Name Label -->
-                <android.support.design.widget.TextInputLayout
+                <EditText
+                    android:id="@+id/etSignupName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="8dp">
+                    android:backgroundTint="@android:color/transparent"
+                    android:hint="@string/name"
+                    android:inputType="textPersonName"
+                    android:paddingStart="@dimen/padding16"
+                    android:textColor="@color/insync_white"
+                    android:textColorHint="@color/insync_white" />
+            </android.support.design.widget.TextInputLayout>
+            <!-- Username Label -->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tilSignupName"
+                android:layout_marginBottom="4dp"
+                android:layout_marginEnd="@dimen/margin24"
+                android:layout_marginStart="@dimen/margin24"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/et_login_background"
+                android:textColorHint="@color/insync_white">
 
-                    <EditText
-                        android:id="@+id/etSignupName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/name"
-                        android:inputType="textCapWords" />
-                </android.support.design.widget.TextInputLayout>
-
-                <!-- Username Label -->
-                <android.support.design.widget.TextInputLayout
+                <EditText
+                    android:id="@+id/etSignupUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="8dp">
+                    android:backgroundTint="@android:color/transparent"
+                    android:hint="@string/username"
+                    android:inputType="textPersonName"
+                    android:paddingStart="@dimen/padding16"
+                    android:textColor="@color/insync_white"
+                    android:textColorHint="@color/insync_white" />
+            </android.support.design.widget.TextInputLayout>
 
-                    <EditText
-                        android:id="@+id/etSignupUsername"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/username"
-                        android:inputType="textPersonName" />
-                </android.support.design.widget.TextInputLayout>
+            <!-- Password Label -->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilSignupPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tilLogin"
+                android:layout_marginBottom="4dp"
+                android:layout_marginEnd="@dimen/margin24"
+                android:layout_marginStart="@dimen/margin24"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/et_login_background"
+                android:textColorHint="@color/insync_white">
 
-                <!-- Password Label -->
-                <android.support.design.widget.TextInputLayout
+                <EditText
+                    android:id="@+id/etSignupPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="8dp">
+                    android:backgroundTint="@android:color/transparent"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:paddingStart="@dimen/padding16"
+                    android:textColor="@color/insync_white"
+                    android:textColorHint="@color/insync_white" />
+            </android.support.design.widget.TextInputLayout>
 
-                    <EditText
-                        android:id="@+id/etSignupPassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/password"
-                        android:inputType="textPassword" />
-                </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilSignupPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tilSignupPassword"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="@dimen/margin24"
+                android:layout_marginStart="@dimen/margin24"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/et_login_background"
+                android:textColorHint="@color/insync_white">
 
-                <!-- Phone Label -->
-                <android.support.design.widget.TextInputLayout
+                <EditText
+                    android:id="@+id/etSignupPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp">
+                    android:backgroundTint="@android:color/transparent"
+                    android:hint="@string/phone"
+                    android:inputType="phone"
+                    android:paddingStart="@dimen/padding16"
+                    android:textColor="@color/insync_white"
+                    android:textColorHint="@color/insync_white" />
+            </android.support.design.widget.TextInputLayout>
 
-                    <EditText
-                        android:id="@+id/etSignupPhone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/phone"
-                        android:inputType="phone" />
-                </android.support.design.widget.TextInputLayout>
-
-
-                <!-- Signup text view -->
-                <TextView
-                    android:id="@+id/tvSignupBtn"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin8"
-                    android:background="@color/primary_light"
-                    android:gravity="center"
-                    android:padding="12dp"
-                    android:text="@string/create_account" />
-            </LinearLayout>
+            <Button
+                android:id="@+id/tvSignupBtn"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tilSignupPhone"
+                android:layout_marginEnd="@dimen/margin24"
+                android:layout_marginStart="@dimen/margin24"
+                android:layout_marginTop="@dimen/margin8"
+                android:background="@drawable/btn_login_selector"
+                android:enabled="false"
+                android:padding="12dp"
+                android:text="@string/create_account"
+                android:textColor="@color/very_light_white" />
 
             <TextView
                 android:id="@+id/tvSignupLogin"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin16"
-                android:layout_marginTop="@dimen/margin24"
-                android:gravity="center"
+                android:layout_alignParentBottom="true"
+                android:background="@color/very_light_white"
+                android:elevation="8dp"
+                android:padding="@dimen/padding16"
                 android:text="@string/already_a_member_login"
-                android:textStyle="bold"
-                android:textColor="@color/primary_dark"
+                android:textAlignment="center"
+                android:textColor="@color/insync_white"
                 android:textSize="16sp" />
-
-        </LinearLayout>
-    </ScrollView>
+        </RelativeLayout>
 </layout>

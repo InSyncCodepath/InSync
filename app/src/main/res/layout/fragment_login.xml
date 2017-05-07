@@ -13,21 +13,30 @@
             android:orientation="vertical"
             android:descendantFocusability="beforeDescendants"
             android:focusableInTouchMode="true"
-            android:paddingTop="56dp">
+            >
 
             <TextView
                 android:id="@+id/tvAppName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/margin24"
                 android:layout_marginBottom="24dp"
+                android:layout_marginStart="@dimen/margin24"
                 android:text="InSync"
                 android:textStyle="bold"
                 android:textColor="@color/insync_white"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:contentDescription="@string/app_logo"
                 app:srcCompat="@drawable/ic_launch" />
+            <ImageView
+                android:id="@+id/ivAppLogo"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                app:srcCompat="@drawable/group_15"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/tvAppName"
+                android:layout_marginBottom="@dimen/margin24"
+                />
             <!-- Username Label -->
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/tilLogin"
@@ -38,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:textColorHint="@color/insync_white"
                     android:layout_marginBottom="4dp"
-                    android:layout_below="@id/tvAppName"
+                    android:layout_below="@id/ivAppLogo"
                     android:layout_marginTop="8dp">
 
                     <EditText
@@ -149,10 +158,7 @@
                 android:textAlignment="center"
                 android:background="@color/very_light_white"
                 android:text="@string/not_registered_create_account"
-                android:textColor="@android:color/white"
+                android:textColor="@color/insync_white"
                 android:textSize="16sp" />
             </RelativeLayout>
-
-
-
 </layout>
