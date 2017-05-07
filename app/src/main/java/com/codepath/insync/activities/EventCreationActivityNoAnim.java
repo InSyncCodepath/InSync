@@ -104,7 +104,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
     private String selectedImagePath;
     public static final int PHONE_CONTACTS_REQUEST_CODE = 1026;
     boolean allDay = false;
-
+    boolean eventPicSelected = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -368,6 +368,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
 
                 Glide.with(EventCreationActivityNoAnim.this).load(file).into(profileImage);
                 profileImage.setVisibility(View.VISIBLE);
+                eventPicSelected = true;
             }
         }
         if (resultCode == RESULT_OK) {
@@ -375,11 +376,13 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
 
                 Glide.with(EventCreationActivityNoAnim.this).load(data.getData()).into(profileImage);
                 profileImage.setVisibility(View.VISIBLE);
+
 //                String filePath = data.getStringExtra("filePath");
 //                File file = new File(filePath);
                 Uri selectedImageUri = data.getData();
                 try {
                     parseFile = new ParseFile(Camera.readBytes(this, selectedImageUri));
+                    eventPicSelected = true;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -531,6 +534,9 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
     private void saveEventDetails() {
         eventName = eventTitle.getText().toString();
         eventDescription = binding.etDetails.getText().toString();
+        if (!eventPicSelected) {
+
+        }
         if (eventName.equals("")) {
             Toast.makeText(EventCreationActivityNoAnim.this, "Event Name can not be blank", Toast.LENGTH_LONG).show();
         } else if (eventDescription.equals("")) {
