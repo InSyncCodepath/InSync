@@ -75,8 +75,8 @@ public class SimpleCursorRecyclerAdapterContacts extends CursorRecyclerAdapter<S
                 if(isChecked){
                     isSelectedContact[position] = true;
 
-                    if(!(invitees.contains(cursor.getString(cursor.getColumnIndex("display_name"))))){
-                        invitees.add(cursor.getString(cursor.getColumnIndex("display_name")));
+                    if(!(invitees.contains(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))))){
+                        invitees.add(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
                         contact.setSelected(true);
                         contactInvitees.add(contact);
 

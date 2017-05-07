@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        app:cardCornerRadius="8dp">
+        android:elevation="4dp"
+        app:cardCornerRadius="4dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -22,8 +24,10 @@
                 style="@style/eventListTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="16dp"
                 android:layout_toRightOf="@id/contactImage"
-                android:textSize="24sp"
+                android:textSize="16sp"
+                tools:text="ABCDEFG"
                 android:layout_marginTop="4dp"/>
 
             <TextView
@@ -33,12 +37,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/contactName"
                 android:layout_toRightOf="@id/contactImage"
-                android:textSize="16sp"/>
+                tools:text="ABCDEFG"
+                android:textSize="14sp"/>
 
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/isSelected"
+                android:layout_marginRight="8dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"/>
         </RelativeLayout>

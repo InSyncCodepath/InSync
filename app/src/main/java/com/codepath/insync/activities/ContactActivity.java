@@ -116,7 +116,7 @@ public class ContactActivity extends AppCompatActivity {
         Intent returnIntent = new Intent();
         Bundle bundle = new Bundle();
         //bundle.pu
-        returnIntent.putExtra("result", Parcels.wrap(contact));
+        returnIntent.putExtra("result", Parcels.wrap(guestList));
         setResult(Activity.RESULT_OK,returnIntent);
         finish();
     }
