@@ -319,8 +319,8 @@ public class EventDetailMoreActivity extends AppCompatActivity
 
                 if (Math.abs(verticalOffset) + binding.tbEventDetail.getHeight() + 94 >= appBarLayout.getMeasuredHeight()) {
                     collapsingToolbar.setTitle(binding.tvEDName.getText());
-                    collapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_text));
-                    collapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_text));
+                    collapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_text_white));
+                    collapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_text_white));
                     binding.ivEDProfile.setVisibility(View.INVISIBLE);
                     binding.tvEDName.setVisibility(View.INVISIBLE);
                     Drawable toolbarDrawable = ResourcesCompat.getDrawable(getResources(),

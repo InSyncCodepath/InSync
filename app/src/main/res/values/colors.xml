@@ -29,7 +29,8 @@
     <color name="primary_light">@color/light_green</color>
     <color name="insync_grey">#cfcfcf</color>
     <color name="accent">@color/tealish</color>
-    <color name="primary_text">@color/insync_white</color>
+    <color name="primary_text_white">@color/insync_white</color>
+    <color name="primary_text">@color/subheader</color>
     <color name="signup_login_text">@color/insync_white</color>
     <color name="secondary_text">@color/dark_grey</color>
     <color name="icons">@color/seashell</color>

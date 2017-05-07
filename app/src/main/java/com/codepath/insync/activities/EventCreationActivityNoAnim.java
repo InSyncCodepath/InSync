@@ -1,9 +1,11 @@
 package com.codepath.insync.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -120,7 +122,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
         toggleOn = binding.toggleOn;
         eventTitle = binding.eventName;
         inviteeList = binding.inviteeList;
-
+        setupUI(binding.contactsContainer);
         ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(this)
                 .setChildGravity(Gravity.TOP)
                 .setScrollingEnabled(true)
@@ -774,5 +776,31 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
                 }
             });
         }
+    }
+
+    public void cancel(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(EventCreationActivityNoAnim.this);
+        builder.setTitle("Confirm Delete");
+        builder
+                .setMessage("Are you sure you want to discard this event ")
+                .setCancelable(false)
+                .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .setNegativeButton("Keep Editing", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = builder.create();
+
+        // show it
+        alertDialog.show();
     }
 }

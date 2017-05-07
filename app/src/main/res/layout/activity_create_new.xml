@@ -38,7 +38,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_margin="@dimen/margin8"
                     android:textSize="14sp"
-                    />
+                    android:textColor="@color/insync_white"/>
                 <Button
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
@@ -48,7 +48,8 @@
                     android:layout_alignParentRight="true"
                     android:background="#00000000"
                     android:textSize="14sp"
-                    android:layout_margin="@dimen/margin8"/>
+                    android:layout_margin="@dimen/margin8"
+                    android:textColor="@color/insync_white"/>
 
                     <EditText
                         android:id="@+id/eventName"
@@ -318,9 +319,10 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/theme"
                     android:layout_below="@id/tvInvite"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginTop="8dp"
-                    android:entries="@array/theme">
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginTop="16dp"
+                    android:entries="@array/theme"
+                    >
 
                 </Spinner>
 
