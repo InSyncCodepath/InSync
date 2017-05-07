@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.insync.R;
+import com.codepath.insync.databinding.PastEventItemBinding;
 import com.codepath.insync.databinding.UpcomingEventItemBinding;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.utils.CommonUtil;
@@ -36,7 +37,7 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
     public UpcomingEventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.
                 from(context).
-                inflate(R.layout.upcoming_event_item, parent, false);
+                inflate(R.layout.past_event_item, parent, false);
         return new UpcomingEventViewHolder(itemView);
     }
 
@@ -53,7 +54,7 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onEventItemClick(event.getObjectId(), true, canTrack, holder.binding.ivEventImage);
+                listener.onEventItemClick(event.getObjectId(), true, canTrack, holder.binding.ivHighlights);
             }
         });
         //holder.binding.tvDate.setText(event.getStartDate().toString());
@@ -68,9 +69,9 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
                     .load(profileImage.getUrl())
                     .placeholder(R.drawable.ic_camera_alt_white_48px)
                     .crossFade()
-                    .into(holder.binding.ivEventImage);
+                    .into(holder.binding.ivHighlights);
         }
-        ViewCompat.setTransitionName(holder.binding.ivEventImage, event.getObjectId());
+        ViewCompat.setTransitionName(holder.binding.ivHighlights, event.getObjectId());
         //holder.binding.tvTime.setText();
     }
 
@@ -86,13 +87,13 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
     }
 
     public static class UpcomingEventViewHolder extends RecyclerView.ViewHolder {
-        UpcomingEventItemBinding binding;
+        PastEventItemBinding binding;
         TextView eventName, eventDate, eventLocation;
         ImageView eventImage;
 
         public UpcomingEventViewHolder(View itemView) {
             super(itemView);
-            binding = UpcomingEventItemBinding.bind(itemView);
+            binding = PastEventItemBinding.bind(itemView);
             eventName = (TextView) itemView.findViewById(R.id.tvEventName);
             eventDate = binding.tvDate;
         }

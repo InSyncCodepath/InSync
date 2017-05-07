@@ -73,6 +73,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -82,6 +83,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static android.R.attr.bitmap;
+import static android.R.id.list;
 
 public class EventCreationActivityNoAnim extends AppCompatActivity implements SimpleCursorRecyclerAdapterContacts.SimpleCursorAdapterInterface {
     ActivityCreateNewBinding binding;
@@ -593,7 +595,12 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
 
             }
         });
-    }
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("event", event.getName());
+        setResult(Activity.RESULT_OK,returnIntent);
+        finish();
+
+           }
 
 
     public void sendInviteNotifcations(Event event, List<String> userIds) {

@@ -101,21 +101,19 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
         }
 
         //Palette
-        Palette.from(bitmap).maximumColorCount(numberOfColors).generate(new Palette.PaletteAsyncListener() {
-            @Override
-            public void onGenerated(Palette palette) {
-                // Get the "vibrant" color swatch based on the bitmap
-                Palette.Swatch vibrant = palette.getLightVibrantSwatch();
-                if (vibrant != null) {
-                    // Set the background color of a layout based on the vibrant color
-                    //containerView.setBackgroundColor(vibrant.getRgb());
-                    // Update the title TextView with the proper text color
-                    holder.eventName.setTextColor(vibrant.getBodyTextColor());
-
-
-                }
-            }
-        });
+//        Palette.from(bitmap).maximumColorCount(numberOfColors).generate(new Palette.PaletteAsyncListener() {
+//            @Override
+//            public void onGenerated(Palette palette) {
+//                // Get the "vibrant" color swatch based on the bitmap
+//                Palette.Swatch vibrant = palette.getLightVibrantSwatch();
+//                if (vibrant != null) {
+//                    // Set the background color of a layout based on the vibrant color
+//                    //containerView.setBackgroundColor(vibrant.getRgb());
+//                    // Update the title TextView with the proper text color
+//                    holder.eventName.setTextColor(vibrant.getBodyTextColor());
+//                }
+//            }
+//        });
 
 
 

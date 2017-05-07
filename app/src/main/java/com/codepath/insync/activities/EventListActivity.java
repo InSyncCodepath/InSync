@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -43,7 +44,10 @@ import com.eftimoff.viewpagertransformers.ForegroundToBackgroundTransformer;
 import java.util.Date;
 
 import static android.R.attr.process;
+import static android.R.id.message;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
+import static com.codepath.insync.R.id.contactsContainer;
+import static com.codepath.insync.utils.CommonUtil.createSnackbar;
 
 
 public class EventListActivity extends AppCompatActivity implements OnEventClickListener {
@@ -145,8 +149,17 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            upcomingFragment.reloadList();
-            Toast.makeText(this, "New Event Added", Toast.LENGTH_SHORT).show();
+            String eventName = data.getStringExtra("event");
+            final Snackbar snackBar = Snackbar.make(binding.mainContent, "Event "+ data.getStringExtra("event")+ " is successfully created!", Snackbar.LENGTH_LONG);
+
+            snackBar.setAction("Dismiss", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    snackBar.dismiss();
+                    upcomingFragment.reloadList();
+                }
+            });
+            snackBar.show();
         } else if (resultCode == RESULT_OK && requestCode == EVENT_DETAIL_RQ) {
             if (!data.getBooleanExtra("hasEnded", false)) {
                 return;
@@ -162,7 +175,7 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
             event.put("imageUrl", data.getStringExtra("eventImage"));
             upcomingFragment.removeEvent(event);
             pastFragment.addEvent(event);
-            CommonUtil.createSnackbar(
+            createSnackbar(
                     binding.mainContent,
                     this,
                     "Your event \""+data.getStringExtra("eventName")+"\" has successfully ended.");

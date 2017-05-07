@@ -35,7 +35,6 @@
                 android:layout_below="@id/appbar"
                 android:visibility="gone"
                 android:scaleType="centerCrop"
-                android:layout_marginLeft="8dp"
                 />
 
             <ImageView
