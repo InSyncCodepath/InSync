@@ -17,6 +17,9 @@
         android:background="@drawable/rounded_text_view_date"
         android:elevation="4dp"
         android:padding="@dimen/padding4"
+        android:textSize="10sp"
+        android:textColor="#9B9B9B"
+        android:textAllCaps="true"
         tools:text="Anam"/>
         />
 </RelativeLayout>
