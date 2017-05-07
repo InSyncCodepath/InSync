@@ -130,7 +130,7 @@
                     android:textColor="@color/dateTimeHeader"/>
                 <TextView
                     android:id="@+id/etStartDate"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/tvStartDate"
@@ -154,7 +154,7 @@
                     android:textColor="@color/dateTimeHeader"/>
                 <TextView
                     android:id="@+id/etStartTime"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_below="@id/tvStarTime"
@@ -165,6 +165,7 @@
                     android:textSize="14sp"
                     android:textColorHint="@color/body"
                     android:text="Enter start time"
+                    tools:text="Enter start time"
                     android:textColor="@color/dateTimeHeader"/>
 
                 <TextView

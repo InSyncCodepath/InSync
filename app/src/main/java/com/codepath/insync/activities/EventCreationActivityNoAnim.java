@@ -446,8 +446,31 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
             eventEndDate.set(Calendar.MONTH, monthOfYear);
             eventEndDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             updateDate(endDate, eventEndDate.getTime());
-        }
+            verifyEndDateTime();
+    }
     };
+
+    private void verifyEndDateTime() {
+        if(eventEndDate.getTime().getTime() < eventStartDate.getTime().getTime()){
+            AlertDialog.Builder builder = new AlertDialog.Builder(new android.view.ContextThemeWrapper(EventCreationActivityNoAnim.this, R.style.CustomAlertDialog));
+            builder
+                    .setMessage("Event cannot end before it begins")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            endDate.setText("Enter end date");
+                            endTime.setText("Enter end time");
+                        }
+                    });
+
+            // create alert dialog
+            AlertDialog alertDialog = builder.create();
+
+            // show it
+            alertDialog.show();
+        }
+    }
 
     TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
 
@@ -466,7 +489,9 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
             eventEndDate.set(Calendar.HOUR, hour);
             eventEndDate.set(Calendar.MINUTE, minute);
             updateTime(endTime, eventEndDate.getTime());
+            verifyEndDateTime();
         }
+
     };
 
     private void updateTime(TextView etTime, Date date) {
