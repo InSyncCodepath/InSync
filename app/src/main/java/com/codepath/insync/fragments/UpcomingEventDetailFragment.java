@@ -197,14 +197,14 @@ public class UpcomingEventDetailFragment extends Fragment {
                             Message newDateMsg = new Message();
                             newDateMsg.setBody(CommonUtil.getRelativeTimeAgo(currDate));
                             messages.add(0, newDateMsg);
-                            messageAdapter.notifyItemInserted(0);
+                            //messageAdapter.notifyItemInserted(0);
                         }
                         messages.add(0, newMessages.get(i));
-                        messageAdapter.notifyItemInserted(0);
+                        //messageAdapter.notifyItemInserted(0);
                     }
 
                     //messages.addAll(newMessages);
-                    //messageAdapter.notifyDataSetChanged();
+                    messageAdapter.notifyDataSetChanged();
         /*
         TODO: ADD THIS INSTEAD
         int curSize = tweetsArrayAdapter.getItemCount();
