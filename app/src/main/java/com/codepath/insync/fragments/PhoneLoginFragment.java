@@ -7,6 +7,9 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -25,6 +28,7 @@ import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
 import com.codepath.insync.utils.CommonUtil;
 import com.codepath.insync.utils.Constants;
+import com.codepath.insync.utils.FormatUtil;
 import com.parse.FunctionCallback;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
@@ -73,8 +77,11 @@ public class PhoneLoginFragment extends Fragment {
         phoneNum = getArguments().getString("phoneNum");
         eventId = getArguments().getString("eventId");
         parseFile = null;
+        String formatStr = getResources().getString(R.string.don_t_have_the_code_sign_up);
+        binding.tvLoginResend.setText(FormatUtil.buildSpan(formatStr, 0, 20, 21, formatStr.length()));
         setupUI(binding.rlLogin);
         setupClickListeners();
+        setupTextChangedListeners();
         return binding.getRoot();
     }
 
@@ -84,6 +91,48 @@ public class PhoneLoginFragment extends Fragment {
 
     }
 
+    private void setupTextChangedListeners() {
+        binding.etLoginPNum.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                binding.tvPhoneLoginBtn.setEnabled(s.length() > 0 && (binding.etLoginCode.getText().length() > 0 || binding.etLoginCode.getVisibility() == View.GONE));
+                int color = binding.tvPhoneLoginBtn.isEnabled() ? R.color.primary : R.color.very_light_white;
+                binding.tvPhoneLoginBtn.setTextColor(ContextCompat.getColor(getContext(), color));
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.etLoginCode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                binding.tvPhoneLoginBtn.setEnabled(s.length() > 0 && binding.etLoginPNum.getText().length() > 0);
+                int color = binding.tvPhoneLoginBtn.isEnabled() ? R.color.primary : R.color.very_light_white;
+                binding.tvPhoneLoginBtn.setTextColor(ContextCompat.getColor(getContext(), color));
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1024) {
@@ -131,6 +180,8 @@ public class PhoneLoginFragment extends Fragment {
                     binding.tilLoginCode.setVisibility(View.VISIBLE);
                     binding.tvLoginResend.setVisibility(View.VISIBLE);
                     binding.tvPhoneLoginBtn.setText(R.string.login);
+                    binding.tvPhoneLoginBtn.setEnabled(false);
+                    binding.tvPhoneLoginBtn.setTextColor(ContextCompat.getColor(getContext(), R.color.very_light_white));
                     sendVerificationCode(binding.etLoginPNum.getText().toString());
                     return;
                 }
@@ -162,7 +213,11 @@ public class PhoneLoginFragment extends Fragment {
                                             userEventRelation.saveInBackground(new SaveCallback() {
                                                 @Override
                                                 public void done(ParseException e) {
+                                                    binding.tvPhoneLoginBtn.setVisibility(View.INVISIBLE);
+                                                    CommonUtil.createSnackbar(binding.rlLogin, getContext(),
+                                                            "Login successful!", R.color.primary);
                                                     loginListener.onLoginSuccess();
+
                                                 }
                                             });
                                         }
