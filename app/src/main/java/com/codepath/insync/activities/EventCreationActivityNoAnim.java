@@ -19,11 +19,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -276,7 +278,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
         binding.cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showCancelDailog();
+                cancel();
             }
         }
 
@@ -296,9 +298,6 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
 
     }
 
-    private void showCancelDailog() {
-
-    }
 
     private void updateDate(TextView etDate, Date date) {
         String myFormat = "MM/dd/yy"; //In which you need put here
@@ -779,15 +778,17 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
     }
 
     public void cancel(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(EventCreationActivityNoAnim.this);
+        //AlertDialog.Builder builder = new AlertDialog.Builder(EventCreationActivityNoAnim.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(new android.view.ContextThemeWrapper(EventCreationActivityNoAnim.this, R.style.CustomAlertDialog));
+
         builder.setTitle("Confirm Delete");
         builder
-                .setMessage("Are you sure you want to discard this event ")
+                .setMessage("Are you sure you want to discard this event?")
                 .setCancelable(false)
                 .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        finish();
                     }
                 })
                 .setNegativeButton("Keep Editing", new DialogInterface.OnClickListener() {
@@ -802,5 +803,13 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
 
         // show it
         alertDialog.show();
+    }
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            cancel();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

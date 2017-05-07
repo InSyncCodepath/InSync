@@ -32,7 +32,11 @@ public class CameraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_camera);
         setupClickListener();
-        camera = new MaterialCamera(this);
+        camera = new MaterialCamera(this)
+//                .iconFrontCamera(R.drawable.mcam_camera_front)
+//                .iconRearCamera(R.drawable.mcam_camera_rear)
+                .primaryColorAttr(R.attr.colorPrimary)
+        ;
         filePath = null;
 
         String imageUri = getIntent().getStringExtra("image_uri");
