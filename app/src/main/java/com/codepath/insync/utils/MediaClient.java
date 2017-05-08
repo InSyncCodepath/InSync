@@ -334,7 +334,7 @@ public class MediaClient {
                     RenderResponse renderResponse = response.body();
                     if (renderResponse.getStatus() == RENDER_SUCCESS) {
                         try {
-                            Thread.sleep(5000);
+                            Thread.sleep(6000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -365,7 +365,7 @@ public class MediaClient {
 
     private void getVideo() {
         Call<VideoStatus> videoStatusCall = service.getVideo(
-                "nNCaH",
+                "nNFWA",
                 loginCredential.getAccessKey(),
                 loginCredential.getAccessToken()
         );

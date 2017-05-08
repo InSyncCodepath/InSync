@@ -141,6 +141,18 @@
                 android:layout_below="@id/dv5"
                 android:text="@string/highlights"
                 android:textColor="@color/primary" />
+            <TextView
+                android:id="@+id/tvEDShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_share_teal"
+                android:textAllCaps="true"
+                style="@style/MaterialDarkBody1"
+                android:text=""
+                android:visibility="invisible"
+                android:layout_alignTop="@id/tvEDHighlights"
+                android:layout_alignParentEnd="true"
+                />
 
             <FrameLayout
                 android:id="@+id/ivHighlights"
