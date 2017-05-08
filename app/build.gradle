@@ -17,7 +17,7 @@ android {
         //minSdkVersion 19
         //setting to 21 to try out shared view animation
         //setting to 24 to test for Exif
-        minSdkVersion 24
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 28
         versionName "1.0"
