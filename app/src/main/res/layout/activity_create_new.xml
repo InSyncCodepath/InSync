@@ -61,7 +61,7 @@
                         android:hint="Enter Title for the Event"
                         android:background="#00000000"
                         android:textColor="#ffffffff"
-                        android:textSize="14sp" />
+                        android:textSize="16sp" />
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>

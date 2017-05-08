@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<android.support.design.widget.TextInputLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:id="@+id/tilLoginPNum"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
+    android:layout_marginLeft="@dimen/margin8"
+    android:layout_marginRight="@dimen/margin8"
+    android:layout_marginTop="8dp"
+    android:background="@drawable/et_login_background"
+    android:textColorHint="@color/body">
+
 <TextView android:id="@+id/textview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:ellipsize="end"
-    android:textColor="@color/light_black_text"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:textColor="@color/subheader"
     android:textSize="16sp"
     android:textStyle="bold"
-    android:padding="8dp"/>
+    />
+</android.support.design.widget.TextInputLayout>

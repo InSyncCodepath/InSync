@@ -53,6 +53,7 @@ import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
 import com.codepath.insync.utils.Camera;
+import com.codepath.insync.utils.CommonUtil;
 import com.codepath.insync.utils.Constants;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -545,7 +546,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
         eventName = eventTitle.getText().toString();
         eventDescription = binding.etDetails.getText().toString();
         if (!eventPicSelected) {
-
+            CommonUtil.createSnackbar(contactsContainer, EventCreationActivityNoAnim.this, "Please Enter an image for the Event");
         }
         if (eventName.equals("")) {
             Toast.makeText(EventCreationActivityNoAnim.this, "Event Name can not be blank", Toast.LENGTH_LONG).show();

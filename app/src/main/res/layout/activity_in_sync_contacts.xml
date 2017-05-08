@@ -21,17 +21,31 @@
                 android:titleTextColor="#ffffff"></android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
 
+        <android.support.design.widget.TextInputLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+
+            android:id="@+id/tilLoginPNum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="@dimen/margin8"
+            android:layout_marginRight="@dimen/margin8"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/et_login_background"
+            android:textColorHint="@color/body"
+            android:layout_below="@id/appbarLayout"
+            >
         <MultiAutoCompleteTextView
             android:id="@+id/searchContact"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_below="@id/appbarLayout"
             android:layout_marginTop="80dp"
             android:ems="10"
             android:textColor="@color/subheader"
             android:textColorHint="@color/body"
             android:hint="Enter contact name"/>
+        </android.support.design.widget.TextInputLayout>
 
     </RelativeLayout>
 

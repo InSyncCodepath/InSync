@@ -25,9 +25,11 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.SaveCallback;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,6 +40,8 @@ import permissions.dispatcher.NeedsPermission;
 public class SendImagesService extends Service {
     String LATITUDE, LATITUDE_REF, LONGITUDE, LONGITUDE_REF;
     Float Latitude, Longitude;
+    boolean isEventImage = false;
+    ParseFile parseFile;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -59,7 +63,7 @@ public class SendImagesService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
-    public float[] getLocation(String photoFilePath) {
+    public boolean getLocation(String photoFilePath, double lat, double lng) {
         // Create and configure BitmapFactory
         float [] latLong = new float[2];
         BitmapFactory.Options bounds = new BitmapFactory.Options();
@@ -97,10 +101,17 @@ public class SendImagesService extends Service {
             latLong[0] = Latitude;
             latLong[1] = Longitude;
 
+            if(Latitude == lat && Longitude == lng){
+                return true;
+            } else {
+                return false;
+            }
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return latLong;
+        return false;
     }
 
     public void getEventImages(Event event){
@@ -125,8 +136,13 @@ public class SendImagesService extends Service {
         if (cursor != null && cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 String imagePath = cursor.getString(0);
+
                 if(imagePath.contains("amera")){
-                    getLocation(imagePath);
+                    isEventImage = getLocation(imagePath, event.getLocation().getLatitude(), event.getLocation().getLongitude());
+                    if(isEventImage) {
+                        File file = new File(imagePath);
+                        parseFile = new ParseFile(file);
+                    }
                 }
             }
         }

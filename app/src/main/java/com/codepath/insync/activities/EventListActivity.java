@@ -206,6 +206,10 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
         if (id == R.id.action_logout) {
             User.logOut();
 
+            Intent login = new Intent(EventListActivity.this, LoginActivity.class);
+
+
+
             return true;
         }
         if(drawerToggle.onOptionsItemSelected(item)){
