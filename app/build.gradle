@@ -19,7 +19,7 @@ android {
         //setting to 24 to test for Exif
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 29
+        versionCode 30
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true

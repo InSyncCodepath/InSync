@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.PastEventItemBinding;
 import com.codepath.insync.databinding.UpcomingEventItemBinding;
@@ -64,12 +67,23 @@ public class UpcomingEventAdapter extends RecyclerView.Adapter<UpcomingEventAdap
 
         holder.eventDate.setText(CommonUtil.getDateTimeInFormat(event.getStartDate()));
         ParseFile profileImage = event.getProfileImage();
+
+        holder.binding.ivHighlights.setImageResource(R.drawable.ic_camera_alt_white_48px);
+        holder.binding.ivHighlights.setVisibility(View.INVISIBLE);
+        holder.binding.ivHighlightsPL.setVisibility(View.VISIBLE);
         if (profileImage != null) {
             Glide.with(context)
                     .load(profileImage.getUrl())
                     .placeholder(R.drawable.ic_camera_alt_white_48px)
                     .crossFade()
-                    .into(holder.binding.ivHighlights);
+                    .into(new SimpleTarget<GlideDrawable>() {
+                        @Override
+                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            holder.binding.ivHighlightsPL.setVisibility(View.GONE);
+                            holder.binding.ivHighlights.setVisibility(View.VISIBLE);
+                            holder.binding.ivHighlights.setImageDrawable(resource);
+                        }
+                    });
         }
         ViewCompat.setTransitionName(holder.binding.ivHighlights, event.getObjectId());
         //holder.binding.tvTime.setText();
