@@ -31,6 +31,7 @@ import com.codepath.insync.models.parse.User;
 import com.codepath.insync.utils.BitmapScaler;
 import com.codepath.insync.utils.Camera;
 import com.codepath.insync.utils.Constants;
+import com.codepath.insync.utils.SendImagesService;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -61,6 +62,7 @@ public class MessageSendFragment extends Fragment {
     private static final int REQUEST_CAMERA_ACTIVITY = 1027;
     private static final int SELECT_PICTURE = 1028;
     private static final int REQUEST_WRITE_PERMISSION = 1029;
+    SendImagesService sendImagesService = new SendImagesService();
 
     public static MessageSendFragment newInstance(String eventId) {
 
@@ -169,6 +171,8 @@ public class MessageSendFragment extends Fragment {
         binding.fabEDGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Context context = getContext();
+                //sendImagesService.getEventImages(context, event1);
                 //getEventImages();
                 Intent intent = new Intent(Intent.ACTION_PICK,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

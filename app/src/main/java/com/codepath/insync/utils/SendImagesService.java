@@ -36,6 +36,8 @@ import java.util.Date;
 
 import permissions.dispatcher.NeedsPermission;
 
+import static java.security.AccessController.getContext;
+
 
 public class SendImagesService extends Service {
     String LATITUDE, LATITUDE_REF, LONGITUDE, LONGITUDE_REF;
@@ -114,7 +116,7 @@ public class SendImagesService extends Service {
         return false;
     }
 
-    public void getEventImages(Event event){
+    public void getEventImages(Context context, Event event){
         Calendar startCal = Calendar.getInstance();
         Date start = event.getStartDate();
         //startCal.getTime(start);
@@ -126,7 +128,7 @@ public class SendImagesService extends Service {
         String[] selectionArgs = { String.valueOf(event.getStartDate().getTime()), String.valueOf(event.getEndDate().getTime())
                 //, String.valueOf(event1.getLocation().getLatitude()), String.valueOf(event1.getLocation().getLongitude())
         };
-        Cursor cursor = getApplicationContext().getContentResolver()
+        Cursor cursor = context.getContentResolver()
                 .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         projection,
                         selection,

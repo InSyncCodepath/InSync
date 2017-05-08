@@ -20,10 +20,13 @@ import com.codepath.insync.R;
 import com.codepath.insync.adapters.SimpleCursorRecyclerAdapterContacts;
 import com.codepath.insync.databinding.ActivityContactBinding;
 import com.codepath.insync.models.Contact;
+import com.codepath.insync.utils.CommonUtil;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+
+import static android.media.CamcorderProfile.get;
 
 public class ContactActivity extends AppCompatActivity {
     SimpleCursorRecyclerAdapterContacts adapter;
@@ -112,6 +115,7 @@ public class ContactActivity extends AppCompatActivity {
     private void getInviteeList() {
         //guestList = adapter.showInvitees();
         guestList = adapter.showContactInvitees();
+        //sendMessage(guestList);
         Contact contact = guestList.get(0);
         Intent returnIntent = new Intent();
         Bundle bundle = new Bundle();
@@ -120,6 +124,8 @@ public class ContactActivity extends AppCompatActivity {
         setResult(Activity.RESULT_OK,returnIntent);
         finish();
     }
+
+
 
     public static Intent newIntent(Activity callingActivity) {
         Intent intent = new Intent(callingActivity, ContactActivity.class);

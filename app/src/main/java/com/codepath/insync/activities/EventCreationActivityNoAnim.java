@@ -379,6 +379,7 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
             if (resultCode == RESULT_OK) {
                 ArrayList<Contact> contacts = Parcels.unwrap(data.getParcelableExtra("result"));
                 contacts.size();
+                //sendMessage(contacts);
             }
         }
 
@@ -449,6 +450,13 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
 
 
             }
+        }
+    }
+
+    private void sendMessage(ArrayList<Contact> guestList) {
+        for(int i = 0; i <guestList.size(); i++) {
+            String phoneNumber = guestList.get(i).getPhoneNumber();
+            CommonUtil.sendInviteLink(phoneNumber, "zV1YKPVe6F");
         }
     }
 
@@ -549,15 +557,23 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
             CommonUtil.createSnackbar(contactsContainer, EventCreationActivityNoAnim.this, "Please Enter an image for the Event");
         }
         if (eventName.equals("")) {
-            Toast.makeText(EventCreationActivityNoAnim.this, "Event Name can not be blank", Toast.LENGTH_LONG).show();
+            CommonUtil.createSnackbar(contactsContainer, EventCreationActivityNoAnim.this, "Please Enter Event Name");
+            //Toast.makeText(EventCreationActivityNoAnim.this, "Event Name can not be blank", Toast.LENGTH_LONG).show();
+        } else if (startDate.getText().equals("Enter start date")) {
+            CommonUtil.createSnackbar(contactsContainer, EventCreationActivityNoAnim.this, "Please Enter Event Start Date");
+//            Toast.makeText(EventCreationActivityNoAnim.this, "Event Date can not be blank", Toast.LENGTH_LONG).show();
+        } else if (startTime.getText().equals("Enter start time")) {
+            CommonUtil.createSnackbar(contactsContainer, EventCreationActivityNoAnim.this, "Please Enter Event Start Time");
+//            Toast.makeText(EventCreationActivityNoAnim.this, "Event Time can not be blank", Toast.LENGTH_LONG).show();
+        } else if (location.getText().equals("")) {
+            CommonUtil.createSnackbar(contactsContainer, EventCreationActivityNoAnim.this, "Please Enter Event Location");
+//            Toast.makeText(EventCreationActivityNoAnim.this, "Event Time can not be blank", Toast.LENGTH_LONG).show();
         } else if (eventDescription.equals("")) {
-            Toast.makeText(EventCreationActivityNoAnim.this, "Event Description can not be blank", Toast.LENGTH_LONG).show();
-        } else if (startDate.getText().equals("")) {
-            Toast.makeText(EventCreationActivityNoAnim.this, "Event Date can not be blank", Toast.LENGTH_LONG).show();
-        } else if (startTime.getText().equals("")) {
-            Toast.makeText(EventCreationActivityNoAnim.this, "Event Time can not be blank", Toast.LENGTH_LONG).show();
+            CommonUtil.createSnackbar(contactsContainer, EventCreationActivityNoAnim.this, "Please Enter Event Description");
+//            Toast.makeText(EventCreationActivityNoAnim.this, "Event Description can not be blank", Toast.LENGTH_LONG).show();
         } else if (invitees.size() == 0) {
-            Toast.makeText(EventCreationActivityNoAnim.this, "Oops! Looks like you forgot to add guests", Toast.LENGTH_LONG).show();
+            CommonUtil.createSnackbar(contactsContainer, EventCreationActivityNoAnim.this, "Please add Invitees");
+            //Toast.makeText(EventCreationActivityNoAnim.this, "Oops! Looks like you forgot to add guests", Toast.LENGTH_LONG).show();
         } else {
             parseFile.saveInBackground(new SaveCallback() {
                 public void done(ParseException e) {
