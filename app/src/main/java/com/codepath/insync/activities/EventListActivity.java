@@ -207,8 +207,8 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
             User.logOut();
 
             Intent login = new Intent(EventListActivity.this, LoginActivity.class);
-
-
+            startActivity(login);
+            finish();
 
             return true;
         }
