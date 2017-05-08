@@ -16,6 +16,7 @@ android {
         applicationId "com.codepath.insync"
         //minSdkVersion 19
         //setting to 21 to try out shared view animation
+        //setting to 24 to test for Exif
         minSdkVersion 21
         targetSdkVersion 25
         versionCode 28
@@ -109,6 +110,7 @@ dependencies {
     compile 'com.android.support:palette-v7:25.2.0'
     compile 'com.android.support:support-v4:25.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile "com.android.support:exifinterface:25.1.0"
     compile 'com.beloo.widget:ChipsLayoutManager:0.3.7@aar'
     testCompile 'junit:junit:4.12'
 
