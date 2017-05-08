@@ -2,5 +2,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.codepath.insync.activities.EventListActivity">
+    <item
+        android:id="@+id/action_logout"
+        android:icon="@drawable/ic_power_settings_new_white_48px"
+        app:showAsAction="ifRoom"
+        android:title="Logout">
+    </item>
 
 </menu>

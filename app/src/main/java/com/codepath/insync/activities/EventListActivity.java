@@ -203,7 +203,9 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
+            User.logOut();
+
             return true;
         }
         if(drawerToggle.onOptionsItemSelected(item)){
