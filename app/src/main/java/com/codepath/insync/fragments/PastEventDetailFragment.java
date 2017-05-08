@@ -27,6 +27,7 @@ import com.codepath.insync.adapters.EDGuestAdapter;
 import com.codepath.insync.adapters.EDImageAdapter;
 import com.codepath.insync.databinding.FragmentPastEventDetailBinding;
 import com.codepath.insync.listeners.OnImageClickListener;
+import com.codepath.insync.listeners.OnVideoCreateListener;
 import com.codepath.insync.listeners.OnVideoUpdateListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
@@ -34,6 +35,7 @@ import com.codepath.insync.models.parse.Music;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
 import com.codepath.insync.utils.CommonUtil;
+import com.codepath.insync.utils.MediaClient;
 import com.codepath.insync.utils.VideoPlayer;
 import com.codepath.insync.widgets.CustomLineItemDecoration;
 import com.parse.FindCallback;
@@ -44,11 +46,13 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.codepath.insync.R.id.light;
 import static com.codepath.insync.R.id.tvShare;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -73,7 +77,9 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     int lastDownAnim;
     int lastUpAnim;
     OnImageClickListener onImageClickListener;
+    OnVideoCreateListener onVideoCreateListener;
     boolean isPlayerEnabled;
+    boolean isHighlightsAvailable;
 
     private Handler timerHandler = new Handler();
     Handler tvHandler = new Handler();
@@ -109,6 +115,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         super.onCreate(savedInstanceState);
 
         isPlayerEnabled = false;
+        isHighlightsAvailable = false;
         event = new Event();
         event.setObjectId(getArguments().getString("eventId"));
         event.setName(getArguments().getString("eventName"));
@@ -130,6 +137,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         int width = displayMetrics.widthPixels;
         edImageAdapter = new EDImageAdapter(getActivity(), edImages, R.layout.item_edimage, width);
         onImageClickListener = (OnImageClickListener) getActivity();
+        onVideoCreateListener = (OnVideoCreateListener) getActivity();
     }
 
     @Override
@@ -180,6 +188,17 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
                 binding.fabEDPlay.setVisibility(View.GONE);
             }
         });
+
+        binding.tvEDShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, event.getHighlightsVideo());
+                startActivity(Intent.createChooser(shareIntent, "Share using"));
+            }
+        });
+
 
   /*      binding.tvEDLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,6 +292,8 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
                     edImageAdapter.notifyDataSetChanged();
                     if (parseFiles.size() > 0) {
                         binding.tvTitleGallery.setVisibility(View.VISIBLE);
+                        MediaClient mediaClient = new MediaClient((OnVideoCreateListener) getContext(), getApplicationContext(), event, parseFiles, event.getTheme());
+                        mediaClient.createHighlights();
                     }
                 } else {
                     Log.e(TAG, "Error fetching event album");
@@ -461,5 +482,14 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
             slide_1.clearAnimation();
         }
 
+    }
+
+
+    public void setHighlights(boolean b, String videoUrl) {
+        isHighlightsAvailable = b;
+        if (videoUrl != null && isHighlightsAvailable) {
+            event.setHighlightsVideo(videoUrl);
+            binding.tvEDShare.setVisibility(View.VISIBLE);
+        }
     }
 }

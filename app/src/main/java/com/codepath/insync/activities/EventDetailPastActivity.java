@@ -18,11 +18,13 @@ import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityEventDetailPastBinding;
 import com.codepath.insync.fragments.PastEventDetailFragment;
 import com.codepath.insync.listeners.OnImageClickListener;
+import com.codepath.insync.listeners.OnVideoCreateListener;
 import com.codepath.insync.models.parse.Event;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 
 import com.parse.ParseFile;
+import com.parse.SaveCallback;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -31,7 +33,7 @@ import java.util.ArrayList;
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 
-public class EventDetailPastActivity extends AppCompatActivity implements OnImageClickListener {
+public class EventDetailPastActivity extends AppCompatActivity implements OnImageClickListener, OnVideoCreateListener {
 
     private static final String TAG = "EventDetailPastActivity";
 
@@ -189,4 +191,26 @@ public class EventDetailPastActivity extends AppCompatActivity implements OnImag
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_right);
     }
 
+    @Override
+    public void onCreateSuccess(Event event, final String videoUrl) {
+        event.setHighlightsVideo(videoUrl);
+        this.event.setHighlightsVideo(videoUrl);
+        event.updateEvent(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d(TAG, "Event highlights have been successfully created and updated");
+                    pastEventDetailFragment.setHighlights(true, videoUrl);
+                } else {
+                    Log.d(TAG, "Event highlights creation failed with error: "+e.getLocalizedMessage());
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onCreateFailure(int status, String message) {
+        Log.e(TAG, "Video could not be created. status: "+status+", message: "+message);
+        pastEventDetailFragment.setHighlights(false, null);
+    }
 }

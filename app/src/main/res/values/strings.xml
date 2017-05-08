@@ -6,8 +6,8 @@
     <string name="parse_app_url">https://insync-codepath.herokuapp.com/parse/</string>
     <string name="gcm_sender_id">id:1042520388761</string>
     <string name="google_maps_api_key">AIzaSyDbTEtKd_w0Ue1hk0J7iaRoMVIaFobX50A</string>
-    <string name="picovico_app_id">8bc5977adccfeb107807d289488a375c93c55fcc70c194647c9f5162f7769f0d</string>
-    <string name="picovico_app_secret">9fa8a93e92da02f7ba54878b1ee13de3e15f1049e4262decbd20ac17b73fa767</string>
+    <string name="picovico_app_id">e8c8d24aafc64c1df9c0b6ad4f0d3570b7820e04600b92f9cecee449ae5440d8</string>
+    <string name="picovico_app_secret">eece09fe894ed9f19742c15c09cc9a017ccd22d5a9a9a1865d2180560e1df6cb</string>
     <string name="start_date">Start Date</string>
     <string name="event_name">Event Name</string>
     <string name="start_time">Start Time</string>
