@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.codepath.insync.R.id.tvShare;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 
@@ -75,7 +76,15 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     boolean isPlayerEnabled;
 
     private Handler timerHandler = new Handler();
+    Handler tvHandler = new Handler();
 
+    Runnable tvRunnable =new Runnable() {
+
+        @Override
+        public void run() {
+           setupTextureView();
+        }
+    };
 
 
     public static PastEventDetailFragment newInstance(String eventId, String eventName, String theme,
@@ -132,16 +141,30 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
         //binding.tvEDDescription.setText(event.getDescription());
         //binding.tvEDStartDate.setText(CommonUtil.getDateTimeInFormat(event.getStartDate()));
         //binding.tvEDLocation.setText(event.getAddress());
-        binding.tvHighlights.setSurfaceTextureListener(this);
+
+        setupRecyclerView();
+        findAttendance();
+        setupClickListener();
+
         videoPlayer = new VideoPlayer(getContext(), this, binding.tvHighlights);
         slide_0 = binding.slide1;
         slide_1 = binding.slide2;
+        tvHandler.removeCallbacks(tvRunnable);
+        //tvHandler.post(tvRunnable);
+        //tvHandler.removeCallbacks(tvRunnable);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        binding.tvHighlights.setSurfaceTextureListener(this);
 
-
-        setupRecyclerView();
-        setupClickListener();
-        findAttendance();
         return binding.getRoot();
+    }
+
+    private void setupTextureView() {
+        binding.tvHighlights.setSurfaceTextureListener(this);
+
     }
 
     private void setupClickListener() {
@@ -189,7 +212,8 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
     }
 
     private void findAttendance() {
-
+        guests.add(0, User.getCurrentUser());
+        guestAdapter.notifyItemInserted(0);
         UserEventRelation.findAttendees(event, new FindCallback<UserEventRelation>() {
             @Override
             public void done(List<UserEventRelation> userEventRelations, ParseException e) {
@@ -203,10 +227,7 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
                                 User user = new User(parseUser);
                                 user.put("rsvpStatus", rsvpStatus);
 
-                                if (user.getObjectId().equals(User.getCurrentUser().getObjectId())) {
-                                    guests.add(0, user);
-                                    guestAdapter.notifyItemInserted(0);
-                                } else {
+                                if (!user.getObjectId().equals(User.getCurrentUser().getObjectId())) {
                                     guests.add(user);
                                     guestAdapter.notifyItemInserted(guests.size() - 1);
                                 }
@@ -363,21 +384,29 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
 
     @Override
     public void onPause() {
-        videoPlayer.stopVideo();
+        if (videoPlayer != null) {
+            videoPlayer.stopVideo();
+        }
+
         stopAnimation();
         super.onPause();
     }
 
     @Override
     public void onStop() {
-        videoPlayer.stopVideo();
+        if (videoPlayer != null) {
+            videoPlayer.stopVideo();
+        }
+
         stopAnimation();
         super.onStop();
     }
 
     @Override
     public void onDestroy() {
-        videoPlayer.stopVideo();
+        if (videoPlayer != null) {
+            videoPlayer.stopVideo();
+        }
         stopAnimation();
         super.onDestroy();
     }
@@ -425,7 +454,12 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
 
     public void stopAnimation() {
         timerHandler.removeCallbacks(timer);
-        slide_0.clearAnimation();
-        slide_1.clearAnimation();
+        if (slide_0 != null) {
+            slide_0.clearAnimation();
+        }
+        if (slide_1 != null) {
+            slide_1.clearAnimation();
+        }
+
     }
 }

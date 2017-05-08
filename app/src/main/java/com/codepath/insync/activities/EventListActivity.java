@@ -216,8 +216,8 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
     public void onItemClick(String eventId, boolean isCurrent, boolean canTrack, ImageView sharedImageView) {
         Bundle animationBundle =
                 ActivityOptions.makeCustomAnimation(this, R.anim.slide_from_left, R.anim.slide_to_left).toBundle();
-//        ActivityOptionsCompat options = ActivityOptionsCompat.
-//                makeSceneTransitionAnimation(this, sharedImageView, eventId);
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(this, sharedImageView, eventId);
 //        Pair<View, String> p1 = Pair.create((View) findViewById(R.id.ivEventImage), "profile");
 
         if (isCurrent) {
@@ -225,14 +225,12 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
             eventDetailIntent.putExtra("eventId", eventId);
             eventDetailIntent.putExtra("canTrack", canTrack);
             eventDetailIntent.putExtra("transition_name", eventId);
-            startActivityForResult(eventDetailIntent, EVENT_DETAIL_RQ);
-                    //options.toBundle());
+            startActivityForResult(eventDetailIntent, EVENT_DETAIL_RQ, options.toBundle());
         } else {
             Intent eventDetailIntent = new Intent(EventListActivity.this, EventDetailPastActivity.class);
             eventDetailIntent.putExtra("eventId", eventId);
             eventDetailIntent.putExtra("transition_name", eventId);
-            startActivity(eventDetailIntent);
-                    //, options.toBundle());
+            startActivity(eventDetailIntent, options.toBundle());
         }
 
 
