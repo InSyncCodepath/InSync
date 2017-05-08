@@ -57,13 +57,31 @@ public class LoginActivity extends AppCompatActivity implements OnLoginListener 
         FragmentTransaction ft = fragmentManager.beginTransaction();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String referrerStr = sharedPreferences.getString("referrer", null);
+        String[] refSplits = new String[2];
+        String phoneNum = null;
+        String eventId = null;
+        boolean isInvite = false;
+        if (referrerStr != null) {
+            String[] split = referrerStr.split("&");
+            if (split.length == 2) {
+                String[] phoneSplit = split[0].split("=");
+                if (phoneSplit[0].equals("phone_num") && phoneSplit.length > 1) {
+                    isInvite = true;
+                    String[] eventSplit = split[1].split("=");
+                    eventId = eventSplit[1];
+                    if (!eventSplit[0].equals("event_id")) {
+                        isInvite = false;
+                    }
+                }
+            }
+        }
 
-        if (referrerStr == null || referrerStr.split("&").length < 2) {
+
+        if (!isInvite) {
             LoginFragment loginFragment = new LoginFragment();
             ft.replace(R.id.flLogin, loginFragment);
         } else {
-            String[] userData = referrerStr.split("&");
-            PhoneLoginFragment phoneLoginFragment = PhoneLoginFragment.newInstance(userData[0], userData[1]);
+            PhoneLoginFragment phoneLoginFragment = PhoneLoginFragment.newInstance(phoneNum, eventId);
             ft.replace(R.id.flLogin, phoneLoginFragment);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.remove("referrer");
