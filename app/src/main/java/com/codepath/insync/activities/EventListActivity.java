@@ -40,6 +40,7 @@ import com.codepath.insync.models.parse.User;
 import com.codepath.insync.utils.CommonUtil;
 import com.codepath.insync.utils.LocationService;
 import com.eftimoff.viewpagertransformers.CubeOutTransformer;
+import com.eftimoff.viewpagertransformers.DefaultTransformer;
 import com.eftimoff.viewpagertransformers.ForegroundToBackgroundTransformer;
 
 
@@ -80,7 +81,7 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
         // Set up the ViewPager with the sections adapter.
         viewPager = binding.viewpager;
         viewPager.setAdapter(viewPagerAdapter);
-        viewPager.setPageTransformer(true, new CubeOutTransformer());
+        viewPager.setPageTransformer(true, new DefaultTransformer());
         TabLayout tabLayout = binding.slidingTabs;
         tabLayout.setupWithViewPager(viewPager);
         //Drawer changes
