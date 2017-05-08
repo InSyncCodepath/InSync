@@ -1,7 +1,9 @@
 package com.codepath.insync.activities;
 
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -59,6 +61,9 @@ public class SplashActivity extends AwesomeSplash {
     @Override
     public void animationsFinished() {
 
+        SharedPreferences sharedPreferences = getSharedPreferences("pref",Context.MODE_PRIVATE);
+
+
         User currentUser = User.getCurrentUser();
         Intent intent;
 
@@ -67,7 +72,18 @@ public class SplashActivity extends AwesomeSplash {
         if (currentUser != null) {
             intent = new Intent(SplashActivity.this, EventListActivity.class);
         } else {
-            intent = new Intent(SplashActivity.this, LoginActivity.class);
+            if(sharedPreferences.getBoolean("hasOnboarded", false)){
+                intent = new Intent(SplashActivity.this, LoginActivity.class);
+            }
+            else {
+                //check shared Pref if walkthrough done
+
+                intent = new Intent(SplashActivity.this, IntroActivity.class);
+                SharedPreferences sharedPref = getSharedPreferences("pref", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putBoolean("hasOnboarded", true);
+                editor.apply();
+            }
         }
 
         startActivity(intent, animationBundle);

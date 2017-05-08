@@ -166,14 +166,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.IntroActivity"
-            android:theme="@style/Theme.Intro">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".activities.ContactActivity"
             android:label="Phone Contacts"
@@ -201,6 +194,10 @@
             android:name=".activities.EventDetailPastActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.IntroActivity"
+            android:theme="@style/Theme.Intro"
+            android:screenOrientation="portrait"
+            />
 
     </application>
 
