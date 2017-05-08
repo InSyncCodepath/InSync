@@ -11,8 +11,8 @@
     <permission
         android:name="android.permission.READ_CONTACTS"
         android:protectionLevel="dangerous" />
-    <permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -152,11 +152,22 @@
             android:name="com.afollestad.materialcamera.CaptureActivity2"
             android:screenOrientation="portrait"
             android:theme="@style/MaterialCamera.CaptureActivity" />
+
+
         <activity
             android:name=".activities.SplashActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".activities.IntroActivity"
+            android:theme="@style/Theme.Intro">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -185,11 +196,12 @@
         <activity
             android:name=".activities.EventDetailMoreActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.EventDetailPastActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+
     </application>
 
 </manifest>

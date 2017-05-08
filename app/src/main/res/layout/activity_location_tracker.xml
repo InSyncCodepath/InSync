@@ -22,10 +22,13 @@
             android:id="@+id/tvLTTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:text="@string/whereabouts"
             style="@style/MaterialDarkTitle"
-            android:layout_margin="@dimen/margin8"
+            android:layout_marginLeft="36dp"
+            android:layout_marginTop="@dimen/margin8"
+            android:layout_marginBottom="@dimen/margin8"
+            android:layout_marginRight="@dimen/margin8"
+
             />
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvLTImages"

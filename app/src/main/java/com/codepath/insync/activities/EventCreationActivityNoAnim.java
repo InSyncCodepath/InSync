@@ -120,8 +120,8 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
         Toolbar toolbar = binding.toolbarCreate;
         setSupportActionBar(toolbar);
         addUser = binding.tvInvite;
-        toggleOff = binding.toggleOff;
-        toggleOn = binding.toggleOn;
+//        toggleOff = binding.toggleOff;
+//        toggleOn = binding.toggleOn;
         eventTitle = binding.eventName;
         inviteeList = binding.inviteeList;
         setupUI(binding.contactsContainer);
@@ -249,25 +249,25 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
         });
 
 
-        toggleOff.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                toggleOff.setVisibility(View.GONE);
-                allDay = true;
-                toggleOn.setVisibility(View.VISIBLE);
-            }
-        });
-
-        toggleOn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                toggleOn.setVisibility(View.GONE);
-                allDay = false;
-                toggleOff.setVisibility(View.VISIBLE);
-            }
-        });
+//        toggleOff.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View view) {
+//                toggleOff.setVisibility(View.GONE);
+//                allDay = true;
+//                toggleOn.setVisibility(View.VISIBLE);
+//            }
+//        });
+//
+//        toggleOn.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View view) {
+//                toggleOn.setVisibility(View.GONE);
+//                allDay = false;
+//                toggleOff.setVisibility(View.VISIBLE);
+//            }
+//        });
         binding.done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

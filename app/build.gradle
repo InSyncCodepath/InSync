@@ -145,4 +145,8 @@ dependencies {
     // Gif drawable
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'
 
+    //Onboarding
+    compile 'com.codemybrainsout.onboarding:onboarder:1.0.3'
+    compile 'agency.tango.android:material-intro-screen:0.0.5'
+
 }

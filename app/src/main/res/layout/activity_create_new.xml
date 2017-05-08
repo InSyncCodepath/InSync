@@ -83,7 +83,7 @@
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
                     android:visibility="gone" />
-                <TextView
+                <!--<TextView
                     android:id="@+id/etAllDay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -118,16 +118,18 @@
                     android:id="@+id/toggleOn"
                     android:visibility="gone"
                     android:layout_alignParentRight="true"
-                    />
+                    />-->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/etAllDay"
+                    android:layout_below="@id/profilePic"
                     android:id="@+id/tvStartDate"
                     android:layout_alignLeft="@+id/etStartDate"
                     android:text="@string/start_date"
                     android:textSize="10sp"
-                    android:textColor="@color/dateTimeHeader"/>
+                    android:textColor="@color/dateTimeHeader"
+                    android:layout_marginTop="16dp"
+                    />
                 <TextView
                     android:id="@+id/etStartDate"
                     android:layout_width="100dp"
@@ -151,7 +153,9 @@
                     android:layout_alignLeft="@+id/etStartTime"
                     android:text="@string/start_time"
                     android:textSize="10sp"
-                    android:textColor="@color/dateTimeHeader"/>
+                    android:textColor="@color/dateTimeHeader"
+                    android:layout_marginTop="16dp"
+                    />
                 <TextView
                     android:id="@+id/etStartTime"
                     android:layout_width="100dp"
@@ -315,7 +319,7 @@
                     android:paddingTop="6dp"
                     android:layout_marginTop="28dp"
                     android:fontFamily="Roboto-Medium"/>
-                <Spinner
+                <!--<Spinner
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/theme"
@@ -325,16 +329,17 @@
                     android:entries="@array/theme"
                     >
 
-                </Spinner>
+                </Spinner>-->
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/inviteeList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/theme"
-                    android:layout_margin="8dp"
-                    android:layout_marginLeft="8dp"
+                    android:layout_below="@id/tvInvite"
+                    android:layout_marginLeft="20dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     />
 
             </RelativeLayout>

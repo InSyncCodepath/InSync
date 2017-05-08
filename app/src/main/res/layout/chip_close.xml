@@ -30,8 +30,10 @@
                 android:id="@+id/closeButton"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:layout_marginLeft="4dp"
-                android:src="@drawable/chip_close"/>
+                android:layout_marginLeft="6dp"
+                android:src="@drawable/ic_clear_white_24px"
+                android:gravity="center"
+                />
         </LinearLayout>
     </FrameLayout>
 </FrameLayout>
