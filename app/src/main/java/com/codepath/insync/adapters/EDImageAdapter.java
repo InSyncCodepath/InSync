@@ -140,12 +140,13 @@ public class EDImageAdapter extends RecyclerView.Adapter<EDImageAdapter.ViewHold
         holder.ivEDImage.setVisibility(View.INVISIBLE);
         holder.ivEDImagePL.setVisibility(View.VISIBLE);
         holder.ivEDImage.setImageResource(R.drawable.ic_camera_alt_white_48px);
+        int corner_radius = resource == R.layout.item_edimage? 4 : 0;
         if (imageUrl != null) {
             Glide.with(mContext)
                     .load(imageUrl)
                     .placeholder(R.drawable.ic_camera_alt_white_48px)
                     .crossFade()
-                    .bitmapTransform(new RoundedCornersTransformation(getApplicationContext(), 4, 0))
+                    .bitmapTransform(new RoundedCornersTransformation(getApplicationContext(), corner_radius, 0))
                     .into(new SimpleTarget<GlideDrawable>() {
                         @Override
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {

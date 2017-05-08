@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,7 +28,9 @@ import com.codepath.insync.listeners.OnMessageChangeListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
 import com.codepath.insync.models.parse.User;
+import com.codepath.insync.utils.BitmapScaler;
 import com.codepath.insync.utils.Camera;
+import com.codepath.insync.utils.Constants;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -37,6 +38,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -183,15 +185,21 @@ public class MessageSendFragment extends Fragment {
             String filePath = data.getStringExtra("filePath");
             ParseFile parseFile = null;
             if (filePath != null) {
-                File file = new File(filePath);
-                parseFile = new ParseFile(file);
+                Uri resultUri = Uri.parse(filePath);
+                Bitmap rawTakenImage = BitmapFactory.decodeFile(resultUri.getPath());
+
+                parseFile = new ParseFile(""+System.currentTimeMillis()+".png", resizeImageUri(rawTakenImage));
             } else {
                 try {
-                    parseFile = new ParseFile(Camera.readBytes(getApplicationContext(), imageUri));
-                    imageUri = null;
+                    Bitmap selectedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
+                    parseFile = new ParseFile(""+System.currentTimeMillis()+".png", resizeImageUri(selectedImage));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
+
+                imageUri = null;
+
             }
             if (parseFile != null) {
                 setupImagePosting(message, parseFile);
@@ -206,6 +214,12 @@ public class MessageSendFragment extends Fragment {
         }
     }
 
+    public byte[] resizeImageUri(Bitmap rawTakenImage) {
+        Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(rawTakenImage, Constants.RESIZE_WIDTH);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
+    }
     public void setupImagePosting(String messageBody, ParseFile parseFile) {
         final Message message = new Message();
         message.setMedia(parseFile);
