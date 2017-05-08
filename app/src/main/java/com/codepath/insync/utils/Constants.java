@@ -37,4 +37,6 @@ public class Constants {
     public static final int RSVP_REMINDER = 1;
     public static final int NUDGE = 2;
     public static final String INSYNC_LOGO = "InSync";
+    // BITMAP RESIZING INFO
+    public static final int RESIZE_WIDTH = 350;
 }

@@ -86,13 +86,7 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
         holder.eventDate.setText(CommonUtil.getDateTimeInFormat(event.getStartDate()));
 
         ParseFile profileImage = event.getProfileImage();
-        byte[] bitmapdata = new byte[0];
-        try {
-            bitmapdata = profileImage.getData();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata , 0, bitmapdata.length);
+
         String imgUrl = null;
         if (profileImage != null) {
             imgUrl = profileImage.getUrl();

@@ -48,6 +48,7 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
     PastEventAdapter pastEventAdapter;
     CardView emptyListCard;
     SwipeRefreshLayout swipeContainer;
+    LinearLayoutManager linearLayoutManager;
     public PastEventsFragment() {
 
     }
@@ -67,7 +68,7 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_past_event_list, container, false);
         View view = binding.getRoot();
         pastList = binding.pastList;
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager = new LinearLayoutManager(getContext());
         pastList.setLayoutManager(linearLayoutManager);
         pastEventAdapter = new PastEventAdapter(this, getContext(), events);
         pastList.setAdapter(pastEventAdapter);
@@ -129,6 +130,7 @@ public class PastEventsFragment extends Fragment implements PastEventAdapter.Eve
     public void addEvent(Event event) {
         events.add(0, event);
         pastEventAdapter.notifyItemInserted(0);
+        linearLayoutManager.scrollToPosition(0);
     }
 
     public void removeEvent(Event event) {
