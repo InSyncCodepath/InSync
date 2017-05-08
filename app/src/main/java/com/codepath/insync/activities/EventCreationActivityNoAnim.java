@@ -48,6 +48,7 @@ import com.codepath.insync.R;
 import com.codepath.insync.adapters.InviteeAdapter;
 import com.codepath.insync.adapters.SimpleCursorRecyclerAdapterContacts;
 import com.codepath.insync.databinding.ActivityCreateNewBinding;
+import com.codepath.insync.models.Contact;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
@@ -66,6 +67,7 @@ import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.SaveCallback;
 
+import org.parceler.Parcels;
 import org.w3c.dom.Text;
 
 import java.io.File;
@@ -371,6 +373,14 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
                 eventPicSelected = true;
             }
         }
+
+        if(requestCode == PHONE_CONTACTS_REQUEST_CODE){
+            if (resultCode == RESULT_OK) {
+                ArrayList<Contact> contacts = Parcels.unwrap(data.getParcelableExtra("result"));
+                contacts.size();
+            }
+        }
+
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
 
@@ -657,7 +667,6 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
             requestContactsPermissions();
 
         } else {
-
             // Contact permissions have been granted. Show the contacts fragment.
             Log.i(TAG, "Contact permissions have already been granted. Displaying contact details.");
             showContactDetails();
@@ -667,9 +676,10 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
 
     private void showContactDetails() {
         //Intent contactActivityIntent = ContactActivity.newIntent(this);
-        Intent contactActivityIntent = InSyncContactsActivity.newIntent(this);
-
-        this.startActivityForResult(contactActivityIntent, REQUEST_CODE);
+//        Intent contactActivityIntent = InSyncContactsActivity.newIntent(this);
+//        this.startActivityForResult(contactActivityIntent, REQUEST_CODE);
+        Intent intent = new Intent(EventCreationActivityNoAnim.this, ContactActivity.class);
+        startActivityForResult(intent, PHONE_CONTACTS_REQUEST_CODE);
     }
 
     private void requestContactsPermissions() {
@@ -785,8 +795,6 @@ public class EventCreationActivityNoAnim extends AppCompatActivity implements Si
             @Override
             public void onClick(View v) {
                 showContacts();
-                Intent intent = new Intent(EventCreationActivityNoAnim.this, ContactActivity.class);
-                startActivityForResult(intent, PHONE_CONTACTS_REQUEST_CODE);
                 dialog.dismiss();
             }
         });
