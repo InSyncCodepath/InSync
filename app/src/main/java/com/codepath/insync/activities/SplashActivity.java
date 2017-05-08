@@ -32,7 +32,7 @@ public class SplashActivity extends AwesomeSplash {
     @Override
     public void initSplash(ConfigSplash configSplash) {
         overridePendingTransition(R.anim.zoom_enter, R.anim.zoom_exit);
-        User.logOut();
+        //User.logOut();
 
 //Customize Circular Reveal
         configSplash.setBackgroundColor(R.color.primary); //any color you want form colors.xml

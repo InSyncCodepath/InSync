@@ -64,7 +64,6 @@ public class EventDetailPastActivity extends AppCompatActivity implements OnImag
                 if (e == null) {
                     event = eventObj;
                     loadViews();
-                    loadFragments();
                 } else {
                     event = null;
                     Log.e(TAG, "Error finding event.");
@@ -112,6 +111,7 @@ public class EventDetailPastActivity extends AppCompatActivity implements OnImag
                             // below when you know for certain that the shared element is
                             // ready for the transition to begin.
                             scheduleStartPostponedTransition(binding.ivEDProfile);
+                            loadFragments();
                         }
 
                         @Override

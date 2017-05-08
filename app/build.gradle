@@ -19,7 +19,7 @@ android {
         //setting to 24 to test for Exif
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 28
+        versionCode 29
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -110,7 +110,7 @@ dependencies {
     compile 'com.android.support:palette-v7:25.2.0'
     compile 'com.android.support:support-v4:25.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile "com.android.support:exifinterface:25.1.0"
+    compile "com.android.support:exifinterface:25.2.0"
     compile 'com.beloo.widget:ChipsLayoutManager:0.3.7@aar'
     testCompile 'junit:junit:4.12'
 

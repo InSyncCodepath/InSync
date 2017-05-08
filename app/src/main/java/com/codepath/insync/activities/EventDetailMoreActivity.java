@@ -158,6 +158,8 @@ public class EventDetailMoreActivity extends AppCompatActivity
         numAttending = 0;
         numDecline = 0;
         numPending = 0;
+        guests.add(0, User.getCurrentUser());
+        guestAdapter.notifyItemInserted(0);
         UserEventRelation.findAttendees(event, new FindCallback<UserEventRelation>() {
             @Override
             public void done(List<UserEventRelation> userEventRelations, ParseException e) {
@@ -182,10 +184,7 @@ public class EventDetailMoreActivity extends AppCompatActivity
                                     User user = new User(parseUser);
                                     user.put("rsvpStatus", rsvpStatus);
 
-                                    if (user.getObjectId().equals(User.getCurrentUser().getObjectId())) {
-                                        guests.add(0, user);
-                                        guestAdapter.notifyItemInserted(0);
-                                    } else {
+                                    if (!user.getObjectId().equals(User.getCurrentUser().getObjectId())) {
                                         guests.add(user);
                                         guestAdapter.notifyItemInserted(guests.size()-1);
                                     }

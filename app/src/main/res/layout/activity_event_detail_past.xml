@@ -41,7 +41,7 @@
                     style="@style/MaterialDarkTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/ivEDProfile"
+                    android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/margin16"
                     android:layout_toEndOf="@id/ivEDProfile" />
 
