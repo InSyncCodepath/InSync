@@ -105,7 +105,7 @@ public class CommonUtil {
     }
 
     public static void sendInviteLink(String phoneNum, String eventId) {
-        String inviteLink =  "https://play.google.com/store/apps/details?id=com.codepath.insync&referrer="+phoneNum+"&"+eventId;
+        String inviteLink =  "https://play.google.com/store/apps/details?id=com.codepath.insync&referrer=phone_num%3D"+phoneNum+"%26event_id%3D"+eventId;
         HashMap<String, Object> payload = new HashMap<>();
         payload.put("phoneNumber", phoneNum);
         payload.put("message", inviteLink);
