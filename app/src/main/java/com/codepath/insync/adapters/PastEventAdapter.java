@@ -21,6 +21,9 @@ import android.widget.TextView;
 
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.PastEventItemBinding;
 import com.codepath.insync.databinding.UpcomingEventItemBinding;
@@ -40,10 +43,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static android.R.attr.animation;
-import static android.R.attr.bitmap;
 import static com.codepath.insync.R.id.ivEventImage;
-import static com.codepath.insync.R.id.tvEventName;
 
 
 public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.PastEventViewHolder> implements TextureView.SurfaceTextureListener {
@@ -110,13 +110,22 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
 //        });
 
 
-
+        holder.binding.ivHighlights.setImageResource(R.drawable.ic_camera_alt_white_48px);
+        holder.binding.ivHighlights.setVisibility(View.INVISIBLE);
+        holder.binding.ivHighlightsPL.setVisibility(View.VISIBLE);
         if (imgUrl != null) {
             Glide.with(context)
                     .load(imgUrl)
                     .placeholder(R.drawable.ic_camera_alt_white_48px)
                     .crossFade()
-                    .into(holder.binding.ivHighlights);
+                    .into(new SimpleTarget<GlideDrawable>() {
+                        @Override
+                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            holder.binding.ivHighlightsPL.setVisibility(View.GONE);
+                            holder.binding.ivHighlights.setVisibility(View.VISIBLE);
+                            holder.binding.ivHighlights.setImageDrawable(resource);
+                        }
+                    });
         }
         ViewCompat.setTransitionName(holder.itemView, event.getObjectId());
 //        Glide.with(context).load(event.getProfileImage()).into(holder.binding.ivHighlights);
@@ -183,12 +192,14 @@ public class PastEventAdapter extends RecyclerView.Adapter<PastEventAdapter.Past
         //UpcomingEventItemBinding binding;
         PastEventItemBinding binding;
         ImageView ivEventImage;
+        ImageView ivEventImagePL;
         TextView eventName, eventDate, eventAddress;
 
         public PastEventViewHolder(View itemView) {
             super(itemView);
             binding = PastEventItemBinding.bind(itemView);
             ivEventImage = binding.ivHighlights;
+            ivEventImagePL = binding.ivHighlightsPL;
             eventName = binding.tvEventName;
             eventDate = binding.tvDate;
             eventAddress = binding.tvAddress;

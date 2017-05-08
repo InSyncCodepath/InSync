@@ -26,6 +26,13 @@
                 android:layout_height="150dp"
                 android:scaleType="centerCrop"
                 />
+            <ImageView
+                android:id="@+id/ivHighlightsPL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:src="@drawable/ic_camera_alt_white_48px"
+                android:layout_centerInParent="true"/>
             <TextView
                 android:id="@+id/tvEventName"
                 android:layout_width="wrap_content"

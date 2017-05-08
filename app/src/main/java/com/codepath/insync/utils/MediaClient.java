@@ -286,7 +286,7 @@ public class MediaClient {
                 loginCredential.getAccessKey(),
                 loginCredential.getAccessToken(),
                 event.getName(),
-                theme,
+                "vanilla_frameless",
                 //credits,
                 assets
         );
