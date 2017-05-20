@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/svEventCreation">
+
+        <RelativeLayout
+            android:id="@+id/contactsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:descendantFocusability="beforeDescendants"
+            tools:context="com.codepath.insync.activities.EventCreationActivity">
+
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/appbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbarCreate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:popupTheme="@style/AppTheme.PopupOverlay">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:descendantFocusability="beforeDescendants"
+                        android:focusableInTouchMode="true">
+
+                        <Button
+                            android:id="@+id/cancel"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_margin="@dimen/margin8"
+                            android:background="#00000000"
+                            android:drawableStart="@drawable/ic_clear_white_24px"
+                            android:text="@string/cancel"
+                            android:textColor="@color/insync_white"
+                            android:textSize="14sp" />
+
+                        <Button
+                            android:id="@+id/done"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_margin="@dimen/margin8"
+                            android:background="#00000000"
+                            android:drawableStart="@drawable/ic_check_white_24px"
+                            android:text="@string/done"
+                            android:textColor="@color/insync_white"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/eventName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/cancel"
+                            android:layout_margin="@dimen/margin8"
+                            android:layout_marginStart="@dimen/margin16"
+                            android:background="#00000000"
+                            android:hint="@string/enter_title_for_the_event"
+                            android:textColor="#ffffffff"
+                            android:textSize="18sp" />
+                    </RelativeLayout>
+                </android.support.v7.widget.Toolbar>
+            </android.support.design.widget.AppBarLayout>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/appbar"
+                android:layout_margin="@dimen/margin16"
+                app:cardCornerRadius="2dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/profilePic"
+                        android:layout_width="match_parent"
+                        android:layout_height="220dp"
+                        android:adjustViewBounds="true"
+                        android:contentDescription="@string/event_pic"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tvStartDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignStart="@+id/etStartDate"
+                        android:layout_below="@id/profilePic"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/start_date"
+                        android:textColor="@color/dateTimeHeader"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/etStartDate"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@id/tvStartDate"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginStart="@dimen/margin16"
+                        android:hint="@string/start_date"
+                        android:text="@string/enter_start_date"
+                        android:textColor="@color/dateTimeHeader"
+                        android:textColorHint="@color/body"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvStarTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignStart="@+id/etStartTime"
+                        android:layout_below="@id/profilePic"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/start_time"
+                        android:textColor="@color/dateTimeHeader"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/etStartTime"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_below="@id/tvStarTime"
+                        android:layout_marginEnd="@dimen/margin24"
+                        android:layout_marginStart="@dimen/margin4"
+                        android:hint="@string/start_time"
+                        android:text="@string/enter_start_time"
+                        android:textColor="@color/dateTimeHeader"
+                        android:textColorHint="@color/body"
+                        android:textSize="14sp"
+                        tools:text="@string/enter_start_time" />
+
+                    <TextView
+                        android:id="@+id/tvEndDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignStart="@+id/etEndDate"
+                        android:layout_below="@id/etStartDate"
+                        android:layout_marginTop="32dp"
+                        android:text="@string/end_date"
+                        android:textColor="@color/dateTimeHeader"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/etEndDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@id/tvEndDate"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginStart="@dimen/margin16"
+                        android:hint="@string/end_date"
+                        android:text="@string/enter_end_date"
+                        android:textColor="@color/dateTimeHeader"
+                        android:textColorHint="@color/body"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvEndTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignStart="@+id/etEndTime"
+                        android:layout_below="@id/etStartTime"
+                        android:layout_marginTop="@dimen/margin32"
+                        android:text="@string/end_time"
+                        android:textColor="@color/dateTimeHeader"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/etEndTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignStart="@id/etStartTime"
+                        android:layout_below="@id/tvEndTime"
+                        android:hint="@string/end_time"
+                        android:text="@string/enter_end_time"
+                        android:textColor="@color/dateTimeHeader"
+                        android:textColorHint="@color/body"
+                        android:textSize="14sp" />
+
+
+                    <TextView
+                        android:id="@+id/tvLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/etEndDate"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="28dp"
+                        android:drawablePadding="@dimen/margin16"
+                        android:drawableStart="@drawable/ic_location_on_white_48px"
+                        android:text="@string/add_location"
+                        android:textColor="@color/body"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/etDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvLocation"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="28dp"
+                        android:drawablePadding="@dimen/margin8"
+                        android:drawableStart="@drawable/ic_details_white_48px"
+                        android:hint="@string/add_event_details"
+                        android:textColorHint="@color/body"
+                        android:textSize="14sp" />
+
+
+                    <TextView
+                        android:id="@+id/tvAttach"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/etDetails"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="28dp"
+                        android:drawablePadding="@dimen/margin16"
+                        android:drawableStart="@drawable/ic_attach_file_white_48px"
+                        android:fontFamily="Roboto-Medium"
+                        android:text="@string/add_attachment"
+                        android:textAllCaps="true"
+                        android:textColor="@color/primary"
+                        android:textSize="14sp" />
+
+
+                    <TextView
+                        android:id="@+id/tvInvite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvAttach"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="28dp"
+                        android:drawablePadding="@dimen/margin16"
+                        android:drawableStart="@drawable/ic_people_white_48px"
+                        android:fontFamily="Roboto-Medium"
+                        android:text="@string/invite_guests"
+                        android:textAllCaps="true"
+                        android:textColor="@color/primary"
+                        android:textSize="14sp" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/inviteeList"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/tvInvite"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="8dp" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+        </RelativeLayout>
+    </ScrollView>
+</layout>

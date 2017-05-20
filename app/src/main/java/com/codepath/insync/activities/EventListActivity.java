@@ -2,34 +2,27 @@ package com.codepath.insync.activities;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.codepath.insync.Manifest;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.ActivityEventListBinding;
 import com.codepath.insync.fragments.PastEventsFragment;
@@ -37,19 +30,11 @@ import com.codepath.insync.fragments.UpcomingEventsFragment;
 import com.codepath.insync.listeners.OnEventClickListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
-import com.codepath.insync.utils.CommonUtil;
-import com.codepath.insync.utils.LocationService;
-import com.eftimoff.viewpagertransformers.CubeOutTransformer;
 import com.eftimoff.viewpagertransformers.DefaultTransformer;
-import com.eftimoff.viewpagertransformers.ForegroundToBackgroundTransformer;
 
 
 import java.util.Date;
 
-import static android.R.attr.process;
-import static android.R.id.message;
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
-import static com.codepath.insync.R.id.contactsContainer;
 import static com.codepath.insync.utils.CommonUtil.createSnackbar;
 
 
@@ -99,7 +84,7 @@ public class EventListActivity extends AppCompatActivity implements OnEventClick
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent startEventCreationIntent = EventCreationActivityNoAnim.newIntent(EventListActivity.this);
+                Intent startEventCreationIntent = EventCreationActivity.newIntent(EventListActivity.this);
                 EventListActivity.this.startActivityForResult(startEventCreationIntent, REQUEST_CODE);
             }
         });

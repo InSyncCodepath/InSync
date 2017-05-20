@@ -73,6 +73,16 @@
     <string name="highlights">Highlights</string>
     <string name="share">Share</string>
     <string name="don_t_have_the_code_sign_up">Don\'t have the code? Sign up.</string>
+    <string name="add_event_details">Add event details</string>
+    <string name="add_location">Add location</string>
+    <string name="cancel">Cancel</string>
+    <string name="enter_title_for_the_event">Enter Title for the Event</string>
+    <string name="done">Done</string>
+    <string name="enter_start_date">Enter start date</string>
+    <string name="event_pic">Event Pic</string>
+    <string name="enter_start_time">Enter start time</string>
+    <string name="enter_end_date">Enter end date</string>
+    <string name="enter_end_time">Enter end time</string>
 
 
     <string-array name="theme">

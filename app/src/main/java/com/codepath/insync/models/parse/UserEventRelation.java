@@ -38,7 +38,7 @@ public class UserEventRelation extends ParseObject {
     public static String getEventPointerKey() {
         return EVENT_KEY;
     }
-    public static String getUserIdKey() {
+    public String getUserIdKey() {
         return USER_ID_KEY;
     }
 
