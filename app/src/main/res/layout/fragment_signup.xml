@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
         <RelativeLayout
@@ -19,7 +18,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin24"
                 android:layout_marginStart="@dimen/margin24"
-                android:text="InSync"
+                android:text="@string/app_name"
                 android:textStyle="bold"
                 android:textColor="@color/insync_white"
                 android:textAppearance="?android:attr/textAppearanceLarge"
@@ -74,6 +73,7 @@
                     android:hint="@string/name"
                     android:inputType="textPersonName"
                     android:paddingStart="@dimen/padding16"
+                    android:paddingEnd="@dimen/padding16"
                     android:textColor="@color/insync_white"
                     android:textColorHint="@color/insync_white" />
             </android.support.design.widget.TextInputLayout>
@@ -98,6 +98,7 @@
                     android:hint="@string/username"
                     android:inputType="textPersonName"
                     android:paddingStart="@dimen/padding16"
+                    android:paddingEnd="@dimen/padding16"
                     android:textColor="@color/insync_white"
                     android:textColorHint="@color/insync_white" />
             </android.support.design.widget.TextInputLayout>
@@ -123,6 +124,7 @@
                     android:hint="@string/password"
                     android:inputType="textPassword"
                     android:paddingStart="@dimen/padding16"
+                    android:paddingEnd="@dimen/padding16"
                     android:textColor="@color/insync_white"
                     android:textColorHint="@color/insync_white" />
             </android.support.design.widget.TextInputLayout>
@@ -147,6 +149,7 @@
                     android:hint="@string/phone"
                     android:inputType="phone"
                     android:paddingStart="@dimen/padding16"
+                    android:paddingEnd="@dimen/padding16"
                     android:textColor="@color/insync_white"
                     android:textColorHint="@color/insync_white" />
             </android.support.design.widget.TextInputLayout>

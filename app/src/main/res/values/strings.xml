@@ -83,6 +83,7 @@
     <string name="enter_start_time">Enter start time</string>
     <string name="enter_end_date">Enter end date</string>
     <string name="enter_end_time">Enter end time</string>
+    <string name="or">OR</string>
 
 
     <string-array name="theme">
