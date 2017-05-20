@@ -1,5 +1,7 @@
 package com.codepath.insync.activities;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
@@ -121,6 +123,10 @@ public class EventDetailMoreActivity extends AppCompatActivity
         Intent intent = getIntent();
         eventId = intent.getStringExtra("eventId");
         canTrack = intent.getBooleanExtra("canTrack", false);
+        // Cancel notification if any
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(intent.getIntExtra("noti_id", -1));
+
         binding.ivEDProfile.setTransitionName(intent.getStringExtra("transition_name"));
         Event.findEvent(eventId, new GetCallback<Event>() {
             @Override

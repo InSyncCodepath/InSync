@@ -18,7 +18,6 @@ import android.widget.RemoteViews;
 
 import com.codepath.insync.BuildConfig;
 import com.codepath.insync.R;
-import com.codepath.insync.activities.EventDetailChatActivity;
 import com.codepath.insync.activities.EventDetailMoreActivity;
 import com.codepath.insync.activities.EventListActivity;
 import com.codepath.insync.activities.LoginActivity;
@@ -62,49 +61,57 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
         String eventId = intent.getStringExtra("eventId");
 
         Log.d(TAG, "got action " + action);
-        if (action.equals(intentAction)) {
-            String channel = intent.getExtras().getString("com.parse.Channel");
-            try {
-                JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
-                Log.d(TAG, "got action " + action + " on channel " + channel + " with:" + json.toString());
-                // Iterate the parse keys if needed
-                Iterator<String> itr = json.keys();
-                while (itr.hasNext()) {
-                    String key = itr.next();
-                    //String value = json.getString(key);
-                    //Log.d(TAG, "..." + key + " => " + value);
-                    // Extract custom push data
-                    switch (key) {
-                        case "customdata":
-                            // create a local notification
-                            createNotification(context, json.getJSONObject(key));
-                            break;
-                        case "launch":
-                            // Handle push notification by invoking activity directly
-                            launchSomeActivity(context, json.getString(key));
-                            break;
-                        case "broadcast":
-                            // OR trigger a broadcast to activity
-                            triggerBroadcastToActivity(context, json.getString(key));
-                            break;
+        switch (action) {
+            case intentAction:
+                String channel = intent.getExtras().getString("com.parse.Channel");
+                try {
+                    JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
+                    Log.d(TAG, "got action " + action + " on channel " + channel + " with:" + json.toString());
+                    // Iterate the parse keys if needed
+                    Iterator<String> itr = json.keys();
+                    while (itr.hasNext()) {
+                        String key = itr.next();
+                        // Extract custom push data
+                        switch (key) {
+                            case "customdata":
+                                // create a local notification
+                                createNotification(context, json.getJSONObject(key));
+                                break;
+                            case "launch":
+                                // Handle push notification by invoking activity directly
+                                launchSomeActivity(context, json.getString(key));
+                                break;
+                            case "broadcast":
+                                // OR trigger a broadcast to activity
+                                triggerBroadcastToActivity(context, json.getString(key));
+                                break;
+                            default:
+                                break;
+                        }
                     }
+                } catch (JSONException ex) {
+                    Log.d(TAG, "JSON failed!");
                 }
-            } catch (JSONException ex) {
-                Log.d(TAG, "JSON failed!");
-            }
-        } else if (action.equals(yesRsvp)) {
-            Log.d(TAG, "GOT RSVP YES");
-            updateRsvp(eventId, Constants.ATTENDING);
-            // Get the notification manager system service
-            NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.cancel(intent.getIntExtra("noti_id", -1));
+                break;
+            case yesRsvp: {
+                Log.d(TAG, "GOT RSVP YES");
+                updateRsvp(eventId, Constants.ATTENDING);
+                // Get the notification manager system service
+                NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.cancel(intent.getIntExtra("noti_id", -1));
 
-        } else if (action.equals(noRsvp)) {
-            Log.d(TAG, "GOT RSVP NO");
-            updateRsvp(eventId, Constants.DECLINE);
-            // Get the notification manager system service
-            NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.cancel(intent.getIntExtra("noti_id", -1));
+                break;
+            }
+            case noRsvp: {
+                Log.d(TAG, "GOT RSVP NO");
+                updateRsvp(eventId, Constants.DECLINE);
+                // Get the notification manager system service
+                NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.cancel(intent.getIntExtra("noti_id", -1));
+                break;
+            }
+            default:
+                break;
         }
     }
 
@@ -134,20 +141,19 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
 
         switch (notiType) {
             case Constants.NEW_EVENT:
-                createNewEventNoti(context, notiObj, Constants.NEW_EVENT);
+                createNewEventNoti(context, notiObj);
                 break;
             case Constants.RSVP_REMINDER:
-                createNewEventNoti(context, notiObj, Constants.RSVP_REMINDER);
+                createNewEventNoti(context, notiObj);
                 break;
             default:
                 break;
         }
     }
 
-    // Handle push notification by invoking activity directly
-    // TODO: add activity to launch
+    // Create push notification
     // See: http://guides.codepath.com/android/Using-Intents-to-Create-Flows
-    private void createNewEventNoti(Context context, JSONObject notiObj, int notiType) {
+    private void createNewEventNoti(Context context, JSONObject notiObj) {
         String eventId = notiObj.optString("eventId");
         // Create request ID
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -166,16 +172,17 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
         contentView.setTextViewText(R.id.tvInviteText, notiObj.optString("text"));
 
         // Define event list activity to trigger when group notification is selected
-        Intent intent = new Intent(getApplicationContext(), EventListActivity.class);
-        PendingIntent eventListIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        Intent eventListIntent = new Intent(getApplicationContext(), EventListActivity.class);
+        PendingIntent eventListPendingIntent = PendingIntent.getActivity(context, 0, eventListIntent, 0);
 
         // Define the intent to trigger when notification is selected
         Intent detailIntent = new Intent(context.getApplicationContext(), EventDetailMoreActivity.class);
         detailIntent.putExtra("eventId", eventId);
         detailIntent.putExtra("isCurrent", true);
+        detailIntent.putExtra("noti_id", requestID);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context.getApplicationContext());
         // Adds the back stack
-        stackBuilder.addParentStack(EventListActivity.class);
+        stackBuilder.addNextIntentWithParentStack(eventListIntent);
         // Adds the Intent to the top of the stack
         stackBuilder.addNextIntent(detailIntent);
         // Gets a PendingIntent containing the entire back stack
@@ -210,7 +217,7 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
                 .setAutoCancel(true) // Hides the notification after its been selected
                 //.setDefaults(Notification.DEFAULT_ALL)
                 //.setPriority(Notification.PRIORITY_HIGH)
-                .setContentIntent(eventListIntent)
+                .setContentIntent(eventListPendingIntent)
                 //.setFullScreenIntent(detailPendingIntent, false) // Sets the notification for heads up display
                 .setGroupSummary(true)
                 .setGroup(KEY_NOTIFICATION_GROUP)
@@ -240,10 +247,10 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
 
                 .build();
             // Get the notification manager system service
-            //NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationManagerCompat manager = NotificationManagerCompat.from(context);
             manager.notify(GROUP_ID, groupNotification);
             manager.notify(requestID, notification);
+
     }
     private void launchSomeActivity(Context context, String datavalue) {
         Intent pupInt = new Intent(context, LoginActivity.class);

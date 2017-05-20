@@ -132,6 +132,7 @@
 
         <activity
             android:name=".activities.EventDetailChatActivity"
+            android:parentActivityName=".activities.EventListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden">
