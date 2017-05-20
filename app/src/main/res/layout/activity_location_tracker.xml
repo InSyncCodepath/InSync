@@ -24,10 +24,10 @@
             android:layout_height="wrap_content"
             android:text="@string/whereabouts"
             style="@style/MaterialDarkTitle"
-            android:layout_marginLeft="36dp"
+            android:layout_marginStart="36dp"
             android:layout_marginTop="@dimen/margin8"
             android:layout_marginBottom="@dimen/margin8"
-            android:layout_marginRight="@dimen/margin8"
+            android:layout_marginEnd="@dimen/margin8"
 
             />
         <android.support.v7.widget.RecyclerView

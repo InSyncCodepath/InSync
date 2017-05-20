@@ -7,17 +7,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -31,7 +28,6 @@ import android.widget.ImageView;
 
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.codepath.insync.R;
@@ -52,7 +48,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.maps.android.ui.IconGenerator;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -64,15 +59,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-
-
 
 public class LocationTrackerActivity extends AppCompatActivity {
 
     private static final String TAG = "LocationTrackerActivity";
     private static final int ZOOM_FACTOR = 10;
-    private SupportMapFragment mapFragment;
     private GoogleMap map;
     LatLng eventLocation;
     String eventId;
@@ -104,7 +95,7 @@ public class LocationTrackerActivity extends AppCompatActivity {
             throw new IllegalStateException("You forgot to supply a Google Maps API key");
         }
 
-        mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
+        SupportMapFragment mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
         if (mapFragment != null) {
             mapFragment.getMapAsync(new OnMapReadyCallback() {
                 @Override
@@ -219,8 +210,6 @@ public class LocationTrackerActivity extends AppCompatActivity {
                                             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                                                 Marker userMarker = map.addMarker(new MarkerOptions()
                                                         .title(user.getName())
-                                                        //.snippet("Snippet")
-                                                        //.icon(customMarker)
                                                         .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmap(resource)))
                                                         .position(currLocation)
                                                         .anchor(0.5f, 1));
@@ -228,26 +217,9 @@ public class LocationTrackerActivity extends AppCompatActivity {
                                                 animateMarker(userMarker, currLocation, false);
                                             }
                                         });
-
-                                            /*@Override
-                                            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-
-                                                Marker userMarker = map.addMarker(new MarkerOptions()
-                                                        .title(user.getName())
-                                                        //.snippet("Snippet")
-                                                        //.icon(customMarker)
-                                                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmap(resource)))
-                                                        .position(currLocation)
-                                                        .anchor(0.5f, 1));
-                                                userMap.put(user.getObjectId(), userMarker);
-                                                animateMarker(userMarker, currLocation, false);
-                                            }
-                                        });*/
                             } else {
                                 Marker userMarker = map.addMarker(new MarkerOptions()
                                         .title(user.getName())
-                                        //.snippet("Snippet")
-                                        //.icon(customMarker)
                                         .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmap(null)))
                                         .position(currLocation)
                                         .anchor(0.5f, 1));
@@ -261,20 +233,11 @@ public class LocationTrackerActivity extends AppCompatActivity {
                         LatLng currUserLoc = new LatLng(currUserGeo.getLatitude(), currUserGeo.getLongitude());
                         if (mfirstLoad) {
                             setLocation(currUserLoc);
-                            circularRevealActivity();
-                            mfirstLoad = false;
-                            /*ViewTreeObserver viewTreeObserver = mapsContainer.getViewTreeObserver();
-                            if (viewTreeObserver.isAlive()) {
-                                viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                                    @Override
-                                    public void onGlobalLayout() {
-                                        circularRevealActivity();
-                                        mapsContainer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                                    }
-                                });
-                            }*/
-                        }
+                            float finalRadius = Math.max(mapsContainer.getWidth(), mapsContainer.getHeight()) * 2.0f;
 
+                            circularRevealActivity(0, finalRadius, false);
+                            mfirstLoad = false;
+                        }
                     }
                 } else {
                     CommonUtil.createSnackbar(
@@ -288,25 +251,51 @@ public class LocationTrackerActivity extends AppCompatActivity {
 
     }
 
-    private void circularRevealActivity() {
+    private void circularRevealActivity(float initRadius, float finalRadius, final boolean doFinish) {
 
         int cx = mapsContainer.getLeft();
         int cy = mapsContainer.getTop();
 
-        float finalRadius = Math.max(mapsContainer.getWidth(), mapsContainer.getHeight()) * 2.0f;
 
         // create the animator for this view (the start radius is zero)
         Animator circularReveal = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            circularReveal = ViewAnimationUtils.createCircularReveal(mapsContainer, cx, cy, 0, finalRadius);
+            circularReveal = ViewAnimationUtils.createCircularReveal(mapsContainer, cx, cy, initRadius, finalRadius);
         }
 
         // make the view visible and start the animation
         mapsContainer.setVisibility(View.VISIBLE);
-        if (circularReveal != null) {
-            circularReveal.setDuration(2000);
-            circularReveal.start();
+        if (circularReveal == null) {
+            return;
         }
+
+        circularReveal.setDuration(2000);
+        circularReveal.start();
+
+
+        circularReveal.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (doFinish) {
+                    exitLocationTracker();
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
 
     }
 
@@ -318,25 +307,6 @@ public class LocationTrackerActivity extends AppCompatActivity {
             finish();
         }
     }
-
-    /*
-     * Called when the Activity becomes visible.
-    */
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    /*
-     * Called when the Activity is no longer visible.
-	 */
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-
-
 
     private void setLocation(LatLng latLng) {
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_FACTOR);
@@ -368,7 +338,7 @@ public class LocationTrackerActivity extends AppCompatActivity {
                 marker.setPosition(new LatLng(lat, lng));
 
                 if (t < 1.0) {
-                    // Post again 16ms later.
+                    // Post again 15ms later.
                     handler.postDelayed(this, 15);
                 } else {
                     if (hideMarker) {
@@ -381,25 +351,8 @@ public class LocationTrackerActivity extends AppCompatActivity {
         });
     }
 
-    private Bitmap getMarkerBitmapDrawable(GlideDrawable glideDrawable) {
-        final View customMarkerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.layout_custom_map_marker, null);
-        final ImageView markerImageView = (ImageView) customMarkerView.findViewById(R.id.iv_custom_marker);
-        final IconGenerator iconGenerator = new IconGenerator(LocationTrackerActivity.this);
-
-        if (glideDrawable == null) {
-            markerImageView.setImageResource(R.drawable.ic_profile_map);
-        } else {
-            markerImageView.setImageDrawable(glideDrawable);
-        }
-
-        iconGenerator.setContentView(customMarkerView);
-        iconGenerator.setColor(R.color.accent);
-        iconGenerator.setStyle(IconGenerator.STYLE_BLUE);
-        return iconGenerator.makeIcon();
-    }
-
     private Bitmap getMarkerBitmap(Bitmap bitmap) {
-        View customMarkerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.layout_custom_map_marker, null);
+        View customMarkerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.layout_custom_map_marker, binding.rlLocationTracker, false);
         ImageView markerImageView = (ImageView) customMarkerView.findViewById(R.id.iv_custom_marker);
         if (bitmap == null) {
             markerImageView.setImageResource(R.drawable.ic_profile);
@@ -423,6 +376,19 @@ public class LocationTrackerActivity extends AppCompatActivity {
     }
 
     public void onHomeClick(View view) {
+        float finalRadius = Math.max(mapsContainer.getWidth(), mapsContainer.getHeight()) * 2.0f;
+        circularRevealActivity(finalRadius, 0, true);
+    }
+
+    @Override
+    public void onBackPressed() {
+        float finalRadius = Math.max(mapsContainer.getWidth(), mapsContainer.getHeight()) * 2.0f;
+        circularRevealActivity(finalRadius, 0, true);
+    }
+
+    private void exitLocationTracker() {
+        mapsContainer.setVisibility(View.INVISIBLE);
         finish();
+        overridePendingTransition(R.anim.do_not_move, R.anim.do_not_move);
     }
 }
