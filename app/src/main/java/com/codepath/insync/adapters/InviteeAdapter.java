@@ -9,18 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.insync.R;
-import com.codepath.insync.databinding.UpcomingEventItemBinding;
-import com.codepath.insync.models.parse.User;
-
 import java.util.ArrayList;
 
-/**
- * Created by Gauri Gadkari on 4/10/17.
- */
 
 public class InviteeAdapter extends RecyclerView.Adapter<InviteeAdapter.InviteeViewHolder>  {
-    ArrayList<String> invitees;
-    Context context;
+    private ArrayList<String> invitees;
+    private Context context;
     @Override
     public InviteeAdapter.InviteeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.
@@ -54,10 +48,11 @@ public class InviteeAdapter extends RecyclerView.Adapter<InviteeAdapter.InviteeV
         this.context = context;
     }
 
-    public static class InviteeViewHolder extends RecyclerView.ViewHolder {
+    class InviteeViewHolder extends RecyclerView.ViewHolder {
         TextView guestName;
         ImageView btnClose;
-        public InviteeViewHolder(View itemView) {
+
+        InviteeViewHolder(View itemView) {
             super(itemView);
             //binding = UpcomingEventItemBinding.bind(itemView);
             guestName = (TextView) itemView.findViewById(R.id.guestName);

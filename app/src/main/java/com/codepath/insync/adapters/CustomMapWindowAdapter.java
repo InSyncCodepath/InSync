@@ -2,18 +2,15 @@ package com.codepath.insync.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.insync.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
-import static android.R.attr.description;
-
 
 public class CustomMapWindowAdapter implements GoogleMap.InfoWindowAdapter {
-    LayoutInflater mInflater;
+    private LayoutInflater mInflater;
 
     public CustomMapWindowAdapter(LayoutInflater inflater){
         mInflater = inflater;

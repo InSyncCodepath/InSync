@@ -40,7 +40,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MediaClient {
     private static String TAG = "MediaClient";
     private static int RENDER_SUCCESS = 7101;
-    public static int VIDEO_FETCH_DELAY = 5000;
+    public static int VIDEO_FETCH_DELAY = 10000;
     private static PicovicoService service;
     LoginCredential loginCredential;
     private List<Photo> photos;
@@ -83,8 +83,8 @@ public class MediaClient {
         if (loginCredential == null) {
             login();
         } else {
-            //uploadPhoto();
-            getVideo();
+            uploadPhoto();
+            //getVideo();
         }
         return "";
     }
@@ -106,8 +106,8 @@ public class MediaClient {
                 } else {
                     LoginCredential.setLoginCredential(response.body());
                     loginCredential = LoginCredential.getLoginCredential();
-                    //uploadPhoto();
-                    getVideo();
+                    uploadPhoto();
+                    //getVideo();
                 }
 
             }
@@ -249,7 +249,6 @@ public class MediaClient {
     }
 
     private void addVideoAssets() {
-        String [][]credits = {{"Thank you", "for coming and making it so special"}};
         JSONArray assets = new JSONArray();
 
         int endTime = Constants.CLIP_DURATION;
@@ -287,7 +286,6 @@ public class MediaClient {
                 loginCredential.getAccessToken(),
                 event.getName(),
                 "vanilla_frameless",
-                //credits,
                 assets
         );
 
@@ -334,7 +332,7 @@ public class MediaClient {
                     RenderResponse renderResponse = response.body();
                     if (renderResponse.getStatus() == RENDER_SUCCESS) {
                         try {
-                            Thread.sleep(6000);
+                            Thread.sleep(VIDEO_FETCH_DELAY);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -365,7 +363,7 @@ public class MediaClient {
 
     private void getVideo() {
         Call<VideoStatus> videoStatusCall = service.getVideo(
-                "nNFWA",
+                video.getId(),
                 loginCredential.getAccessKey(),
                 loginCredential.getAccessToken()
         );

@@ -1,14 +1,15 @@
 package com.codepath.insync.activities;
 
-import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.os.Handler;
-import android.support.design.widget.CollapsingToolbarLayout;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,8 +17,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,9 +35,12 @@ import com.codepath.insync.fragments.ConfirmationFragment;
 import com.codepath.insync.fragments.MessageSendFragment;
 import com.codepath.insync.fragments.UpcomingEventDetailFragment;
 import com.codepath.insync.listeners.OnImageClickListener;
+import com.codepath.insync.listeners.OnImageUploadClickListener;
 import com.codepath.insync.listeners.OnMessageChangeListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
+import com.codepath.insync.utils.BitmapScaler;
+import com.codepath.insync.utils.Constants;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 
@@ -47,6 +49,8 @@ import com.parse.SaveCallback;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
@@ -56,10 +60,12 @@ public class EventDetailChatActivity extends AppCompatActivity implements
         UpcomingEventDetailFragment.OnViewTouchListener,
         ConfirmationFragment.UpdateDraftDialogListener,
         OnImageClickListener,
-        OnMessageChangeListener{
+        OnMessageChangeListener,
+        OnImageUploadClickListener{
 
     private static final String TAG = "EventDetailChatActivity";
-
+    private static final int REQUEST_CAMERA_ACTIVITY = 1027;
+    private static final int SELECT_PICTURE = 1028;
 
     ActivityEventDetailBinding binding;
     Event event;
@@ -69,15 +75,7 @@ public class EventDetailChatActivity extends AppCompatActivity implements
     FragmentManager fragmentManager;
     RelativeLayout rlEventDetail;
     UpcomingEventDetailFragment upcomingEventDetailFragment;
-    Handler tbHintHandler = new Handler();
-
-    Runnable tbHintRunnable =new Runnable() {
-
-        @Override
-        public void run() {
-            binding.tvTapHint.setVisibility(View.INVISIBLE);
-        }
-    };
+    Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,9 +88,6 @@ public class EventDetailChatActivity extends AppCompatActivity implements
         postponeEnterTransition();
         processIntent();
         setupToolbar();
-
-        //tbHintHandler.removeCallbacks(tbHintRunnable);
-        //tbHintHandler.postDelayed(tbHintRunnable, 3000);
     }
 
     @Override
@@ -163,8 +158,6 @@ public class EventDetailChatActivity extends AppCompatActivity implements
     @Override
     public void onConfirmUpdateDialog(int position) {
         if (position == DialogInterface.BUTTON_POSITIVE) {
-
-
             event.setHasEnded(true);
             event.updateEvent(new SaveCallback() {
                 @Override
@@ -191,7 +184,6 @@ public class EventDetailChatActivity extends AppCompatActivity implements
     }
 
     public void setupUI(View view) {
-
         // Set up touch listener for non-text box views to hide keyboard.
         if (!(view instanceof EditText || view instanceof FloatingActionButton)) {
             view.setOnTouchListener(new View.OnTouchListener() {
@@ -220,15 +212,6 @@ public class EventDetailChatActivity extends AppCompatActivity implements
     private void loadViews() {
         ParseFile profileImage = event.getProfileImage();
         if (profileImage != null) {
-            /*Glide.with(this)
-                    .load(profileImage.getUrl())
-                    .crossFade()
-                    .into(new SimpleTarget<GlideDrawable>() {
-                        @Override
-                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                            scheduleStartPostponedTransition(binding.ivEDProfile);
-                        }
-                    });*/
             Picasso.with(this).load(profileImage.getUrl())
                     .placeholder(R.drawable.ic_camera_alt_white_48px)
                     .resize(binding.ivEDProfile.getWidth(), 0)
@@ -292,25 +275,7 @@ public class EventDetailChatActivity extends AppCompatActivity implements
 
             }
         });
-
-
-
-        /*Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.palette);
-        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-            @SuppressWarnings("ResourceType")
-            @Override
-            public void onGenerated(Palette palette) {
-                int vibrantColor = palette.getVibrantColor(R.color.primary_light);
-                collapsingToolbar.setContentScrimColor(vibrantColor);
-                collapsingToolbar.setStatusBarScrimColor(R.color.accent);
-            }
-        });*/
-
-
-
     }
-
 
     private void loadFragments() {
         FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -331,15 +296,6 @@ public class EventDetailChatActivity extends AppCompatActivity implements
 
     @Override
     public void onItemClick(ArrayList<String> images, int position) {
-        Transition changeTransform = TransitionInflater.from(this).
-                inflateTransition(R.transition.change_image_transform);
-        Transition explodeTransform = TransitionInflater.from(this).inflateTransition(android.R.transition.explode);
-        // Find the shared element (in Fragment A)
-        // Setup exit transition on first fragment
-
-        upcomingEventDetailFragment.setSharedElementReturnTransition(changeTransform);
-        upcomingEventDetailFragment.setExitTransition(explodeTransform);
-
         Bundle animationBundle =
                 ActivityOptions.makeCustomAnimation(this, R.anim.do_not_move, R.anim.do_not_move).toBundle();
 
@@ -360,5 +316,59 @@ public class EventDetailChatActivity extends AppCompatActivity implements
     @Override
     public void onFocused() {
         upcomingEventDetailFragment.updateScroll();
+    }
+
+    public byte[] resizeImageUri(Bitmap rawTakenImage) {
+        Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(rawTakenImage, Constants.RESIZE_WIDTH);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CAMERA_ACTIVITY && resultCode == RESULT_OK) {
+            String message = data.getStringExtra("message");
+            String filePath = data.getStringExtra("filePath");
+            ParseFile parseFile = null;
+            if (filePath != null) {
+                Uri resultUri = Uri.parse(filePath);
+                Bitmap rawTakenImage = BitmapFactory.decodeFile(resultUri.getPath());
+
+                parseFile = new ParseFile(""+System.currentTimeMillis()+".png", resizeImageUri(rawTakenImage));
+            } else {
+                try {
+                    Bitmap selectedImage = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                    parseFile = new ParseFile(""+System.currentTimeMillis()+".png", resizeImageUri(selectedImage));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                imageUri = null;
+            }
+
+            if (parseFile != null) {
+                messageSendFragment.setupImagePosting(message, parseFile);
+            }
+
+        } else if (requestCode == SELECT_PICTURE && resultCode == RESULT_OK) {
+            Intent intent = new Intent(EventDetailChatActivity.this, CameraActivity.class);
+            imageUri = data.getData();
+            intent.putExtra("image_uri", imageUri.toString());
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            startActivityForResult(intent, REQUEST_CAMERA_ACTIVITY);
+        }
+    }
+
+    @Override
+    public void onImageUploadClick(boolean isCamera) {
+        if (isCamera) {
+            Intent intent = new Intent(EventDetailChatActivity.this, CameraActivity.class);
+            startActivityForResult(intent, REQUEST_CAMERA_ACTIVITY);
+        } else {
+            Intent intent = new Intent(Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(Intent.createChooser(intent,
+                    "Select Picture"), SELECT_PICTURE);
+        }
     }
 }

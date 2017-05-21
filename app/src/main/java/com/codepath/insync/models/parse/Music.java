@@ -5,15 +5,14 @@ import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 
 @ParseClassName("Music")
 public class Music extends ParseObject {
-    public static final String NAME_KEY = "name";
-    public static final String THEME_KEY = "theme";
-    public static final String AUDIO_KEY = "audio";
-    public static final String DURATION_KEY = "duration";
+    private static final String NAME_KEY = "name";
+    private static final String THEME_KEY = "theme";
+    private static final String AUDIO_KEY = "audio";
+    private static final String DURATION_KEY = "duration";
 
     public String getName() {
         return getString(NAME_KEY);

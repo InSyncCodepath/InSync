@@ -1,5 +1,7 @@
 package com.codepath.insync.activities;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
@@ -53,7 +55,6 @@ public class EventDetailMoreActivity extends AppCompatActivity
 {
 
     private static final String TAG = "EventDetailMoreActivity";
-
 
     ActivityEventDetailMoreBinding binding;
     CollapsingToolbarLayout collapsingToolbar;
@@ -121,6 +122,10 @@ public class EventDetailMoreActivity extends AppCompatActivity
         Intent intent = getIntent();
         eventId = intent.getStringExtra("eventId");
         canTrack = intent.getBooleanExtra("canTrack", false);
+        // Cancel notification if any
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(intent.getIntExtra("noti_id", -1));
+
         binding.ivEDProfile.setTransitionName(intent.getStringExtra("transition_name"));
         Event.findEvent(eventId, new GetCallback<Event>() {
             @Override
@@ -232,15 +237,6 @@ public class EventDetailMoreActivity extends AppCompatActivity
     private void loadViews() {
         ParseFile profileImage = event.getProfileImage();
         if (profileImage != null) {
-            /*Glide.with(this)
-                    .load(profileImage.getUrl())
-                    .crossFade()
-                    .into(new SimpleTarget<GlideDrawable>() {
-                        @Override
-                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                            scheduleStartPostponedTransition(binding.ivEDProfile);
-                        }
-                    });*/
             Picasso.with(this).load(profileImage.getUrl())
                     .resize(binding.ivEDProfile.getWidth(), 0)
                     .transform(new RoundedCornersTransformation(10, 0)).into(binding.ivEDProfile,
@@ -332,10 +328,6 @@ public class EventDetailMoreActivity extends AppCompatActivity
                 }
             }
         });
-
-
-
-
     }
 
 
@@ -389,28 +381,6 @@ public class EventDetailMoreActivity extends AppCompatActivity
             }
         });
     }
-
-    /*private void loadFragments() {
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        if (isCurrent) {
-            // Load current and upcoming event detail
-            upcomingEventDetailFragment = UpcomingEventDetailFragment.newInstance(eventId);
-            ft.replace(R.id.flMessages, upcomingEventDetailFragment);
-            messageSendFragment = MessageSendFragment.newInstance(eventId);
-            ft.replace(R.id.flMessageSend, messageSendFragment);
-            setupUI(binding.clED);
-        } else {
-            pastEventDetailFragment =
-                    PastEventDetailFragment.newInstance(event.getObjectId(), event.getName(), event.getTheme());
-            ft.replace(R.id.flMessages, pastEventDetailFragment);
-        }
-
-        ft.commit();
-
-    }*/
-
-
-
 
     @Override
     public void onBackPressed() {

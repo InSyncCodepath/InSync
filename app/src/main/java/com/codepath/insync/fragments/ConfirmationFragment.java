@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.app.AlertDialog;
 
@@ -33,6 +34,7 @@ public class ConfirmationFragment extends DialogFragment {
     }
 
     @Override
+    @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialog);
         alertDialogBuilder.setMessage(getArguments().getString("message"));

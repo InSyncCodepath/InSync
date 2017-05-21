@@ -97,15 +97,6 @@
         <item name="background">@color/actionbar_bg</item>
     </style>
 
-    <style name="EventCreation">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_below">@id/profilePic</item>
-        <item name="android:layout_toLeftOf">@id/ivCamera</item>
-        <item name="android:visibility">visible</item>
-        <item name="android:layout_margin">24dp</item>
-    </style>
-
     <style name="alert_dialog_button">
         <item name="android:textColor">@color/accent</item>
         <item name="android:background">@android:color/transparent</item>

@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 
 import com.codepath.insync.R;
-import com.codepath.insync.listeners.OnEventClickListener;
 import com.codepath.insync.models.parse.Event;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
@@ -22,9 +21,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-
-import static com.codepath.insync.R.id.rlEventDetail;
-import static com.parse.ParseQuery.or;
 
 
 public class CommonUtil {
@@ -71,7 +67,7 @@ public class CommonUtil {
         ParseQuery<Event> queryEnded = ParseQuery.getQuery(Event.class);
         queryEnded.whereEqualTo("hasEnded", true);
 
-        List<ParseQuery<Event>> queryList = new ArrayList<ParseQuery<Event>>();
+        List<ParseQuery<Event>> queryList = new ArrayList<>();
         queryList.add(queryTime);
         queryList.add(queryEnded);
 
@@ -79,10 +75,6 @@ public class CommonUtil {
     }
 
     public static String getRelativeTimeAgo(Date inputDate) {
-
-
-        String relativeDate = "";
-
         long dateMillis = inputDate.getTime();
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, 0); //anything 0 - 23
@@ -92,10 +84,8 @@ public class CommonUtil {
         if (dateMillis > currentMidnightMillis) {
             return "Today";
         }
-        relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+        return DateUtils.getRelativeTimeSpanString(dateMillis,
                     System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
-
-        return relativeDate;
     }
 
     public static boolean compareDates(Date date1, Date date2) {

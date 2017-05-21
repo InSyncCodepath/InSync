@@ -19,8 +19,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 
 public class LTImageAdapter extends RecyclerView.Adapter<LTImageAdapter.ViewHolder> {
 
@@ -38,8 +36,8 @@ public class LTImageAdapter extends RecyclerView.Adapter<LTImageAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public @BindView(R.id.ivLTImage) ImageView ivLTImage;
-        public @BindView(R.id.tvLTName) TextView tvLTName;
+        @BindView(R.id.ivLTImage) ImageView ivLTImage;
+        @BindView(R.id.tvLTName) TextView tvLTName;
 
         public ViewHolder(final View itemView) {
                 // Stores the itemView in a public final member variable that can be used
@@ -76,12 +74,6 @@ public class LTImageAdapter extends RecyclerView.Adapter<LTImageAdapter.ViewHold
         ressource = layout_resource;
     }
 
-    // Easy access to the context object in the recyclerview
-    private Context getContext() {
-        return mContext;
-    }
-
-
     @Override
     public LTImageAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -90,8 +82,7 @@ public class LTImageAdapter extends RecyclerView.Adapter<LTImageAdapter.ViewHold
         View edImageView = inflater.inflate(ressource, parent, false);
 
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(edImageView);
-        return viewHolder;
+        return new ViewHolder(edImageView);
     }
 
     @Override
@@ -106,11 +97,7 @@ public class LTImageAdapter extends RecyclerView.Adapter<LTImageAdapter.ViewHold
         }
 
         holder.tvLTName.setText(user.getName().split(" ")[0]);
-        /*if (position == 0) {
-            holder.ivLTImage.setImageResource(R.drawable.ic_camera_alt_white_48px);
-        } else {*/
-            holder.ivLTImage.setImageResource(R.mipmap.ic_profile_placeholder);
-        //}
+        holder.ivLTImage.setImageResource(R.mipmap.ic_profile_placeholder);
 
         if (imageUrl != null) {
             Glide.with(mContext)
@@ -120,32 +107,11 @@ public class LTImageAdapter extends RecyclerView.Adapter<LTImageAdapter.ViewHold
                     .bitmapTransform(new RoundedCornersTransformation(mContext, 10, 0))
                     .into(holder.ivLTImage);
         }
-
-
     }
 
     @Override
     public int getItemCount() {
         return mEDImages.size();
-    }
-    
-    public ParseFile getItem(int position) {
-        return getItem(position);
-    }
-
-    public void clear() {
-        mEDImages.clear();
-        notifyDataSetChanged();
-
-    }
-
-    public void addAll(List<User> newEDImages) {
-        int position = mEDImages.size();
-        for (int i=0; i < newEDImages.size(); i++) {
-            mEDImages.add(newEDImages.get(i));
-            notifyItemInserted(position);
-            position++;
-        }
     }
 
 }

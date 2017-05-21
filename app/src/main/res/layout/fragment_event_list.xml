@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/pastList"
+            android:id="@+id/eventList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         </android.support.v4.widget.SwipeRefreshLayout>
@@ -41,26 +41,18 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/party"
                     android:id="@+id/partyImage"
+                    android:contentDescription="@string/event_image"
                     />
 
                 <TextView
+                    android:id="@+id/noEvent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="You dont have any Past Events"
-                    android:id="@+id/noPastEvent"
+                    tools:text="You dont have any Past Events"
                     android:layout_below="@id/partyImage"
                     android:layout_centerHorizontal="true"
-                    android:textSize="16sp"
+                    style="@style/MaterialLightBody1Secondary"
                     />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Create a new Event"
-                    android:id="@+id/createEvent"
-                    android:layout_below="@id/noPastEvent"
-                    android:layout_centerHorizontal="true"
-                    android:textSize="16sp"/>
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 

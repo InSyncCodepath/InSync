@@ -2,13 +2,8 @@ package com.codepath.insync.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -19,36 +14,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.codepath.insync.R;
 import com.codepath.insync.activities.CameraActivity;
 import com.codepath.insync.databinding.FragmentMessageSendBinding;
+import com.codepath.insync.listeners.OnImageUploadClickListener;
 import com.codepath.insync.listeners.OnMessageChangeListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.Message;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.utils.BitmapScaler;
-import com.codepath.insync.utils.Camera;
 import com.codepath.insync.utils.Constants;
-import com.codepath.insync.utils.SendImagesService;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import static android.app.Activity.RESULT_OK;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 public class MessageSendFragment extends Fragment {
@@ -56,13 +37,8 @@ public class MessageSendFragment extends Fragment {
     FragmentMessageSendBinding binding;
     Event event;
     Context context;
-    private Uri imageUri;
-    Event event1;
     OnMessageChangeListener messageChangeListener;
-    private static final int REQUEST_CAMERA_ACTIVITY = 1027;
-    private static final int SELECT_PICTURE = 1028;
-    private static final int REQUEST_WRITE_PERMISSION = 1029;
-    SendImagesService sendImagesService = new SendImagesService();
+    OnImageUploadClickListener imageUploadClickListener;
 
     public static MessageSendFragment newInstance(String eventId) {
 
@@ -80,22 +56,9 @@ public class MessageSendFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         messageChangeListener = (OnMessageChangeListener) getActivity();
+        imageUploadClickListener = (OnImageUploadClickListener) getActivity();
         event = new Event();
         event.setObjectId(getArguments().getString("eventId"));
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
-        query.whereEqualTo("objectId",getArguments().getString("eventId"));
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null) {
-                     event1 = (Event) objects.get(0);
-                } else {
-                    // error
-                }
-            }
-        });
-        requestPermission();
-
-        //getEventImages();
     }
 
     @Override
@@ -163,67 +126,18 @@ public class MessageSendFragment extends Fragment {
         binding.fabEDCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), CameraActivity.class);
-                startActivityForResult(intent, REQUEST_CAMERA_ACTIVITY);
+                imageUploadClickListener.onImageUploadClick(true);
             }
         });
 
         binding.fabEDGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Context context = getContext();
-                //sendImagesService.getEventImages(context, event1);
-                //getEventImages();
-                Intent intent = new Intent(Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(Intent.createChooser(intent,
-                        "Select Picture"), SELECT_PICTURE);
+                imageUploadClickListener.onImageUploadClick(false);
             }
         });
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CAMERA_ACTIVITY && resultCode == RESULT_OK) {
-            String message = data.getStringExtra("message");
-            String filePath = data.getStringExtra("filePath");
-            ParseFile parseFile = null;
-            if (filePath != null) {
-                Uri resultUri = Uri.parse(filePath);
-                Bitmap rawTakenImage = BitmapFactory.decodeFile(resultUri.getPath());
-
-                parseFile = new ParseFile(""+System.currentTimeMillis()+".png", resizeImageUri(rawTakenImage));
-            } else {
-                try {
-                    Bitmap selectedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
-                    parseFile = new ParseFile(""+System.currentTimeMillis()+".png", resizeImageUri(selectedImage));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-                imageUri = null;
-
-            }
-            if (parseFile != null) {
-                setupImagePosting(message, parseFile);
-            }
-
-        } else if (requestCode == SELECT_PICTURE && resultCode == RESULT_OK) {
-            Intent intent = new Intent(getActivity(), CameraActivity.class);
-            imageUri = data.getData();
-            intent.putExtra("image_uri", imageUri.toString());
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-            startActivityForResult(intent, REQUEST_CAMERA_ACTIVITY);
-        }
-    }
-
-    public byte[] resizeImageUri(Bitmap rawTakenImage) {
-        Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(rawTakenImage, Constants.RESIZE_WIDTH);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        return stream.toByteArray();
-    }
     public void setupImagePosting(String messageBody, ParseFile parseFile) {
         final Message message = new Message();
         message.setMedia(parseFile);
@@ -237,8 +151,6 @@ public class MessageSendFragment extends Fragment {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-//                    Toast.makeText(getActivity(), "Your Photo was successfully sent!",
-//                            Toast.LENGTH_SHORT).show();
                     event.getMessageRelation().add(message);
                     event.updateEvent(new SaveCallback() {
                         @Override
@@ -272,9 +184,6 @@ public class MessageSendFragment extends Fragment {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-//                    Toast.makeText(getActivity(), "Your message was successfully sent!",
-//                            Toast.LENGTH_SHORT).show();
-
                     event.getMessageRelation().add(message);
                     event.updateEvent(new SaveCallback() {
                         @Override
@@ -292,35 +201,10 @@ public class MessageSendFragment extends Fragment {
             }
         });
         binding.etEDMessage.setText(null);
-
     }
-
-
 
     public void clearViewFocus() {
         binding.etEDMessage.clearFocus();
     }
-
-
-    private void requestPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
-        } else {
-            openFilePicker();
-        }
-    }
-
-    private void openFilePicker() {
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == REQUEST_WRITE_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            openFilePicker();
-        }
-    }
-
-
 
 }

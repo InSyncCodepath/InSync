@@ -1,7 +1,6 @@
 package com.codepath.insync.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -20,14 +19,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.codepath.insync.R;
-import com.codepath.insync.activities.CameraActivity;
 import com.codepath.insync.databinding.FragmentPhoneLoginBinding;
 import com.codepath.insync.listeners.OnLoginListener;
+import com.codepath.insync.listeners.OnImageUploadClickListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
 import com.codepath.insync.utils.CommonUtil;
-import com.codepath.insync.utils.Constants;
 import com.codepath.insync.utils.FormatUtil;
 import com.parse.FunctionCallback;
 import com.parse.GetCallback;
@@ -41,16 +39,13 @@ import com.parse.SaveCallback;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.List;
-
-import static android.R.attr.phoneNumber;
-import static android.app.Activity.RESULT_OK;
 
 
 public class PhoneLoginFragment extends Fragment {
     private final static String TAG = "PhoneLoginFragment";
     FragmentPhoneLoginBinding binding;
     OnLoginListener loginListener;
+    OnImageUploadClickListener profilePicClickListener;
     String phoneNum;
     String eventId;
     ParseFile parseFile;
@@ -74,11 +69,12 @@ public class PhoneLoginFragment extends Fragment {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_phone_login, container, false);
         loginListener = (OnLoginListener) getActivity();
+        profilePicClickListener = (OnImageUploadClickListener) getActivity();
         phoneNum = getArguments().getString("phoneNum");
         eventId = getArguments().getString("eventId");
         parseFile = null;
         String formatStr = getResources().getString(R.string.don_t_have_the_code_sign_up);
-        binding.tvLoginResend.setText(FormatUtil.buildSpan(formatStr, 0, 20, 21, formatStr.length()));
+        binding.tvLoginNoCodeSignup.setText(FormatUtil.buildSpan(formatStr, 0, 20, 21, formatStr.length()));
         setupUI(binding.rlLogin);
         setupClickListeners();
         setupTextChangedListeners();
@@ -133,41 +129,18 @@ public class PhoneLoginFragment extends Fragment {
             }
         });
     }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1024) {
-            if (resultCode == RESULT_OK) {
-                String filePath = data.getStringExtra("filePath");
-                File file = new File(filePath);
-                parseFile = new ParseFile(file);
-
-                binding.civProfilePic.setImageBitmap(BitmapFactory.decodeFile(filePath));
-                parseFile.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e != null) {
-                            CommonUtil.createSnackbar(binding.rlLogin, getContext(), "Your profile picture could not be added! Please try again later.", R.color.primary);
-                        }
-                    }
-                });
-            }
-        }
-    }
 
     private void setupClickListeners() {
-        binding.tvLoginResend.setOnClickListener(new View.OnClickListener() {
+        binding.tvLoginNoCodeSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //sendVerificationCode(binding.etLoginPNum.getText().toString());
                 loginListener.onSignup();
             }
         });
         binding.fabSignUpAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), CameraActivity.class);
-                intent.putExtra("is_profile_pic", true);
-                startActivityForResult(intent, 1024);
+                profilePicClickListener.onImageUploadClick(true);
             }
         });
 
@@ -178,7 +151,7 @@ public class PhoneLoginFragment extends Fragment {
             public void onClick(View v) {
                 if (binding.tilLoginCode.getVisibility() == View.GONE) {
                     binding.tilLoginCode.setVisibility(View.VISIBLE);
-                    binding.tvLoginResend.setVisibility(View.VISIBLE);
+                    binding.tvLoginNoCodeSignup.setVisibility(View.VISIBLE);
                     binding.tvPhoneLoginBtn.setText(R.string.login);
                     binding.tvPhoneLoginBtn.setEnabled(false);
                     binding.tvPhoneLoginBtn.setTextColor(ContextCompat.getColor(getContext(), R.color.very_light_white));
@@ -256,7 +229,7 @@ public class PhoneLoginFragment extends Fragment {
     public void setupUI(View view) {
         binding.etLoginPNum.setText(phoneNum);
         binding.tilLoginCode.setVisibility(View.GONE);
-        binding.tvLoginResend.setVisibility(View.GONE);
+        binding.tvLoginNoCodeSignup.setVisibility(View.GONE);
         // Set up touch listener for non-text box views to hide keyboard.
         if (!(view instanceof EditText)) {
             view.setOnTouchListener(new View.OnTouchListener() {
@@ -272,4 +245,18 @@ public class PhoneLoginFragment extends Fragment {
         }
     }
 
+    public void updateProfilePic(String filePath) {
+        File file = new File(filePath);
+        parseFile = new ParseFile(file);
+
+        binding.civProfilePic.setImageBitmap(BitmapFactory.decodeFile(filePath));
+        parseFile.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    CommonUtil.createSnackbar(binding.rlLogin, getContext(), "Your profile picture could not be added! Please try again later.", R.color.primary);
+                }
+            }
+        });
+    }
 }

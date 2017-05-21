@@ -1,9 +1,5 @@
 package com.codepath.insync.adapters;
 
-/**
- * Created by Gauri Gadkari on 4/9/17.
- */
-
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;

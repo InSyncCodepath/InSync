@@ -1,18 +1,17 @@
 package com.codepath.insync.utils;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.codepath.insync.Manifest;
 import com.codepath.insync.models.parse.User;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -30,8 +29,8 @@ public class LocationService extends Service implements
         LocationListener {
 
     private static final String TAG = "LocationService";
-    private long UPDATE_INTERVAL = 60000;  /* 120 secs */
-    private long FASTEST_INTERVAL = 5000; /* 60 secs */
+    private long UPDATE_INTERVAL = 60000;  /* 60 secs */
+    private long FASTEST_INTERVAL = 5000; /* 5 secs */
 
     private boolean currentlyProcessingLocation = false;
     private LocationRequest locationRequest;
@@ -58,8 +57,7 @@ public class LocationService extends Service implements
     private void startTracking() {
         Log.d(TAG, "startTracking");
 
-        if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
-
+        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
             googleApiClient = new GoogleApiClient.Builder(this)
                     .addApi(LocationServices.API)
                     .addConnectionCallbacks(this)
@@ -138,7 +136,7 @@ public class LocationService extends Service implements
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull  ConnectionResult connectionResult) {
         Log.e(TAG, "onConnectionFailed");
 
         stopLocationUpdates();

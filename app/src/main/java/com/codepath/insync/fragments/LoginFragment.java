@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.FragmentLoginBinding;
@@ -39,7 +38,6 @@ import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -86,8 +84,6 @@ public class LoginFragment extends Fragment {
                 binding.tvLoginBtn.setEnabled(s.length() > 0 && binding.etLoginPassword.getText().length() > 0);
                 int color = binding.tvLoginBtn.isEnabled() ? R.color.primary : R.color.very_light_white;
                 binding.tvLoginBtn.setTextColor(ContextCompat.getColor(getContext(), color));
-
-
             }
 
             @Override
@@ -161,7 +157,6 @@ public class LoginFragment extends Fragment {
         binding.btnFblogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                binding.btnFblogin.setVisibility(View.GONE);
                 loginWithFB();
             }
         });
@@ -173,12 +168,12 @@ public class LoginFragment extends Fragment {
         ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
     }
 
-    class ProfilePhotoAsync extends AsyncTask<String, String, String> {
+    private class ProfilePhotoAsync extends AsyncTask<String, String, String> {
         public Bitmap bitmap;
         String url;
         User user;
 
-        public ProfilePhotoAsync(String url, User user) {
+        ProfilePhotoAsync(String url, User user) {
             this.url = url;
             this.user = user;
         }

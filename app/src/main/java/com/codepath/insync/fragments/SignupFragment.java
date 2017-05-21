@@ -1,7 +1,6 @@
 package com.codepath.insync.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -18,9 +17,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.codepath.insync.R;
-import com.codepath.insync.activities.CameraActivity;
 import com.codepath.insync.databinding.FragmentSignupBinding;
 import com.codepath.insync.listeners.OnLoginListener;
+import com.codepath.insync.listeners.OnImageUploadClickListener;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.utils.CommonUtil;
 import com.codepath.insync.utils.FormatUtil;
@@ -34,13 +33,12 @@ import com.parse.SignUpCallback;
 
 import java.io.File;
 
-import static android.app.Activity.RESULT_OK;
-
 
 public class SignupFragment extends Fragment {
     FragmentSignupBinding binding;
     OnLoginListener loginListener;
     ParseFile parseFile;
+    OnImageUploadClickListener profilePicClickListener;
     // Create the ParseUser
     final User user = new User();
 
@@ -51,6 +49,7 @@ public class SignupFragment extends Fragment {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_signup, container, false);
         loginListener = (OnLoginListener) getActivity();
+        profilePicClickListener = (OnImageUploadClickListener) getActivity();
         parseFile = null;
         String formatStr = getResources().getString(R.string.already_a_member_login);
         binding.tvSignupLogin.setText(FormatUtil.buildSpan(formatStr, 0, 17, 18, formatStr.length()));
@@ -66,26 +65,7 @@ public class SignupFragment extends Fragment {
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1024) {
-            if (resultCode == RESULT_OK) {
-                String filePath = data.getStringExtra("filePath");
-                File file = new File(filePath);
-                parseFile = new ParseFile(file);
 
-                binding.civProfilePic.setImageBitmap(BitmapFactory.decodeFile(filePath));
-                parseFile.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e != null) {
-                            CommonUtil.createSnackbar(binding.rlSignup, getContext(), "Your profile picture could not be added! Please try again later.", R.color.primary);
-                        }
-                    }
-                });
-            }
-        }
-    }
 
     private void setupTextChangedListeners() {
         binding.etSignupName.addTextChangedListener(new TextWatcher() {
@@ -174,9 +154,7 @@ public class SignupFragment extends Fragment {
         binding.fabSignUpAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), CameraActivity.class);
-                intent.putExtra("is_profile_pic", true);
-                startActivityForResult(intent, 1024);
+                profilePicClickListener.onImageUploadClick(true);
             }
         });
         binding.tvSignupBtn.setOnClickListener(new View.OnClickListener() {
@@ -249,5 +227,20 @@ public class SignupFragment extends Fragment {
                 }
             });
         }
+    }
+
+    public void updateProfilePic(String filePath) {
+        File file = new File(filePath);
+        parseFile = new ParseFile(file);
+
+        binding.civProfilePic.setImageBitmap(BitmapFactory.decodeFile(filePath));
+        parseFile.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    CommonUtil.createSnackbar(binding.rlSignup, getContext(), "Your profile picture could not be added! Please try again later.", R.color.primary);
+                }
+            }
+        });
     }
 }
