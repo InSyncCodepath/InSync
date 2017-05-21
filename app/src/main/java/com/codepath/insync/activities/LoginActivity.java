@@ -22,13 +22,13 @@ import com.codepath.insync.fragments.LoginFragment;
 import com.codepath.insync.fragments.PhoneLoginFragment;
 import com.codepath.insync.fragments.SignupFragment;
 import com.codepath.insync.listeners.OnLoginListener;
-import com.codepath.insync.listeners.OnProfilePicClickListener;
+import com.codepath.insync.listeners.OnImageUploadClickListener;
 import com.codepath.insync.utils.LocationService;
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
 
 
-public class LoginActivity extends AppCompatActivity implements OnLoginListener, OnProfilePicClickListener {
+public class LoginActivity extends AppCompatActivity implements OnLoginListener, OnImageUploadClickListener {
 
     private static final String TAG = "LoginActivity";
     ActivityLoginBinding binding;
@@ -168,7 +168,7 @@ public class LoginActivity extends AppCompatActivity implements OnLoginListener,
     }
 
     @Override
-    public void onProfileClick() {
+    public void onImageUploadClick(boolean isCamera) {
         Intent intent = new Intent(LoginActivity.this, CameraActivity.class);
         intent.putExtra("is_profile_pic", true);
         startActivityForResult(intent, CAMERA_REQUEST_CODE);

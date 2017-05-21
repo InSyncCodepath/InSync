@@ -19,7 +19,7 @@ import android.widget.EditText;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.FragmentSignupBinding;
 import com.codepath.insync.listeners.OnLoginListener;
-import com.codepath.insync.listeners.OnProfilePicClickListener;
+import com.codepath.insync.listeners.OnImageUploadClickListener;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.utils.CommonUtil;
 import com.codepath.insync.utils.FormatUtil;
@@ -38,7 +38,7 @@ public class SignupFragment extends Fragment {
     FragmentSignupBinding binding;
     OnLoginListener loginListener;
     ParseFile parseFile;
-    OnProfilePicClickListener profilePicClickListener;
+    OnImageUploadClickListener profilePicClickListener;
     // Create the ParseUser
     final User user = new User();
 
@@ -49,7 +49,7 @@ public class SignupFragment extends Fragment {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_signup, container, false);
         loginListener = (OnLoginListener) getActivity();
-        profilePicClickListener = (OnProfilePicClickListener) getActivity();
+        profilePicClickListener = (OnImageUploadClickListener) getActivity();
         parseFile = null;
         String formatStr = getResources().getString(R.string.already_a_member_login);
         binding.tvSignupLogin.setText(FormatUtil.buildSpan(formatStr, 0, 17, 18, formatStr.length()));
@@ -154,7 +154,7 @@ public class SignupFragment extends Fragment {
         binding.fabSignUpAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                profilePicClickListener.onProfileClick();
+                profilePicClickListener.onImageUploadClick(true);
             }
         });
         binding.tvSignupBtn.setOnClickListener(new View.OnClickListener() {

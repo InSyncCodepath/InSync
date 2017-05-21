@@ -32,8 +32,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.codepath.insync.utils.CommonUtil.compareDates;
-
 
 public class UpcomingEventDetailFragment extends Fragment {
     private static String TAG = "UpcomingEventDFragment";
@@ -41,7 +39,6 @@ public class UpcomingEventDetailFragment extends Fragment {
     List<Message> messages;
     MessageAdapter messageAdapter;
     LinearLayoutManager linearLayoutManager;
-    boolean mFirstLoad = true;
     BroadcastReceiver messageReceiver;
     OnViewTouchListener viewTouchListener;
     OnImageClickListener onImageClickListener;
@@ -145,10 +142,9 @@ public class UpcomingEventDetailFragment extends Fragment {
 
     private void findGalleryImages(int position) {
         ArrayList<String> chatImages = new ArrayList<>();
-        int reversePosition = messages.size() - position - 1;
-        int newPosition = reversePosition;
+        int newPosition = messages.size() - position - 1;
         for (int i=messages.size()-1; i >= 0; i--) {
-            String imageUrl = null;
+            String imageUrl;
             if (messages.get(i).getMedia() != null) {
                 imageUrl = messages.get(i).getMedia().getUrl();
                 chatImages.add(imageUrl);
@@ -159,8 +155,6 @@ public class UpcomingEventDetailFragment extends Fragment {
             }
         }
         onImageClickListener.onItemClick(chatImages, newPosition);
-
-
     }
 
     public void updateMessage(Message message) {
@@ -171,6 +165,7 @@ public class UpcomingEventDetailFragment extends Fragment {
     public void updateScroll() {
         //linearLayoutManager.scrollToPosition(0);
     }
+
     private void refreshMessages() {
         // Construct query to execute
         ParseQuery<Message> parseQuery = event.getMessageRelation().getQuery();
@@ -200,21 +195,11 @@ public class UpcomingEventDetailFragment extends Fragment {
                             Message newDateMsg = new Message();
                             newDateMsg.setBody(CommonUtil.getRelativeTimeAgo(currDate));
                             messages.add(0, newDateMsg);
-                            //messageAdapter.notifyItemInserted(0);
                         }
                         messages.add(0, newMessages.get(i));
-                        //messageAdapter.notifyItemInserted(0);
                     }
 
-                    //messages.addAll(newMessages);
                     messageAdapter.notifyDataSetChanged();
-        /*
-        TODO: ADD THIS INSTEAD
-        int curSize = tweetsArrayAdapter.getItemCount();
-        tweets.addAll(newTweets);
-        int newSize = newTweets.size();
-        tweetsArrayAdapter.notifyItemRangeInserted(curSize, newSize);
-         */
                     linearLayoutManager.scrollToPosition(0);
                 } else {
                     Log.e(TAG, "Error Loading Messages" + e);

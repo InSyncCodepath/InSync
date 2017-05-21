@@ -21,7 +21,7 @@ import android.widget.Toast;
 import com.codepath.insync.R;
 import com.codepath.insync.databinding.FragmentPhoneLoginBinding;
 import com.codepath.insync.listeners.OnLoginListener;
-import com.codepath.insync.listeners.OnProfilePicClickListener;
+import com.codepath.insync.listeners.OnImageUploadClickListener;
 import com.codepath.insync.models.parse.Event;
 import com.codepath.insync.models.parse.User;
 import com.codepath.insync.models.parse.UserEventRelation;
@@ -45,7 +45,7 @@ public class PhoneLoginFragment extends Fragment {
     private final static String TAG = "PhoneLoginFragment";
     FragmentPhoneLoginBinding binding;
     OnLoginListener loginListener;
-    OnProfilePicClickListener profilePicClickListener;
+    OnImageUploadClickListener profilePicClickListener;
     String phoneNum;
     String eventId;
     ParseFile parseFile;
@@ -69,7 +69,7 @@ public class PhoneLoginFragment extends Fragment {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_phone_login, container, false);
         loginListener = (OnLoginListener) getActivity();
-        profilePicClickListener = (OnProfilePicClickListener) getActivity();
+        profilePicClickListener = (OnImageUploadClickListener) getActivity();
         phoneNum = getArguments().getString("phoneNum");
         eventId = getArguments().getString("eventId");
         parseFile = null;
@@ -140,7 +140,7 @@ public class PhoneLoginFragment extends Fragment {
         binding.fabSignUpAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                profilePicClickListener.onProfileClick();
+                profilePicClickListener.onImageUploadClick(true);
             }
         });
 
