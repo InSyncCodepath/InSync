@@ -8,10 +8,8 @@ import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AlignmentSpan;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +32,6 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
-import static android.R.id.message;
-
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // view types
@@ -53,14 +49,15 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.listener = listener;
     }
 
-    public class ViewHolderLeft extends RecyclerView.ViewHolder {
-        public @BindView(R.id.ivProfileLeft) CircleImageView ivProfileLeft;
-        public @BindView(R.id.ivMessageRight) ImageView ivMessageRight;
-        public @BindView(R.id.cvMessageRight) CardView cvMessageRight;
-        public @BindView(R.id.tvBodyRight) TextView tvBodyRight;
-        public @BindView(R.id.tvCaptionRight) TextView tvCaptionRight;
-        public @BindView(R.id.tvFirstName) TextView tvFirstName;
-        public ViewHolderLeft(final View itemView) {
+    class ViewHolderLeft extends RecyclerView.ViewHolder {
+        @BindView(R.id.ivProfileLeft) CircleImageView ivProfileLeft;
+        @BindView(R.id.ivMessageRight) ImageView ivMessageRight;
+        @BindView(R.id.cvMessageRight) CardView cvMessageRight;
+        @BindView(R.id.tvBodyRight) TextView tvBodyRight;
+        @BindView(R.id.tvCaptionRight) TextView tvCaptionRight;
+        @BindView(R.id.tvFirstName) TextView tvFirstName;
+
+        ViewHolderLeft(final View itemView) {
                 // Stores the itemView in a public final member variable that can be used
                 // to access the context from any ViewHolder instance.
                 super(itemView);
@@ -82,13 +79,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    public class ViewHolderRight extends RecyclerView.ViewHolder {
-        public @BindView(R.id.ivProfileRight) CircleImageView ivProfileRight;
-        public @BindView(R.id.ivMessageLeft) ImageView ivMessageLeft;
-        public @BindView(R.id.cvMessageLeft) CardView cvMessageLeft;
-        public @BindView(R.id.tvBodyLeft) TextView tvBodyLeft;
-        public @BindView(R.id.tvCaptionLeft) TextView tvCaptionLeft;
-        public ViewHolderRight(final View itemView) {
+    class ViewHolderRight extends RecyclerView.ViewHolder {
+        @BindView(R.id.ivProfileRight) CircleImageView ivProfileRight;
+        @BindView(R.id.ivMessageLeft) ImageView ivMessageLeft;
+        @BindView(R.id.cvMessageLeft) CardView cvMessageLeft;
+        @BindView(R.id.tvBodyLeft) TextView tvBodyLeft;
+        @BindView(R.id.tvCaptionLeft) TextView tvCaptionLeft;
+
+        ViewHolderRight(final View itemView) {
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
@@ -110,9 +108,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    public class ViewHolderDate extends RecyclerView.ViewHolder {
-        public @BindView(R.id.tvChatDate) TextView tvChatDate;
-        public ViewHolderDate(final View itemView) {
+    class ViewHolderDate extends RecyclerView.ViewHolder {
+        @BindView(R.id.tvChatDate) TextView tvChatDate;
+
+        ViewHolderDate(final View itemView) {
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
@@ -144,12 +143,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mMessages = messages;
         mContext = context;
     }
-
-    // Easy access to the context object in the recyclerview
-    private Context getContext() {
-        return mContext;
-    }
-
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -289,25 +282,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemCount() {
         return mMessages.size();
-    }
-    
-    public Message getItem(int position) {
-        return getItem(getItemCount() - position - 1);
-    }
-
-    public void clear() {
-        mMessages.clear();
-        notifyDataSetChanged();
-
-    }
-
-    public void addAll(List<Message> newMessages) {
-        int position = mMessages.size();
-        for (int i=0; i < newMessages.size(); i++) {
-            mMessages.add(newMessages.get(i));
-            notifyItemInserted(position);
-            position++;
-        }
     }
 
     @Override
