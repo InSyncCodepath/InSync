@@ -9,11 +9,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.SnapHelper;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
+
 import android.widget.TextView;
 
 import com.codepath.insync.R;
@@ -23,7 +21,6 @@ import com.codepath.insync.databinding.ActivityFullScreenImageBinding;
 import java.util.ArrayList;
 
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
-import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 
 public class FullScreenImageActivity extends AppCompatActivity {
 
@@ -70,7 +67,6 @@ public class FullScreenImageActivity extends AppCompatActivity {
     private void setupRecyclerView(final ArrayList<String> images, int position) {
         EDImageAdapter galleryImageAdapter = new EDImageAdapter(this, images, R.layout.item_galleryimage, 0);
         AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(galleryImageAdapter);
-        ScaleInAnimationAdapter scaleInAdapter = new ScaleInAnimationAdapter(alphaAdapter);
         alphaAdapter.setDuration(500);
         binding.rvGallery.setAdapter(alphaAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
