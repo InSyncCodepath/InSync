@@ -14,17 +14,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
-            <!--<TextureView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="180dp"-->
-            <!--android:id="@+id/highlightsVideo"-->
-            <!--/>-->
             <ImageView
                 android:id="@+id/ivHighlights"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:scaleType="centerCrop"
+                android:contentDescription="@string/highlights"
                 />
             <ImageView
                 android:id="@+id/ivHighlightsPL"
@@ -32,6 +27,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:src="@drawable/ic_camera_alt_white_48px"
+                android:contentDescription="@string/highlights"
                 android:layout_centerInParent="true"/>
             <TextView
                 android:id="@+id/tvEventName"
@@ -40,7 +36,7 @@
                 android:textSize="16sp"
                 android:textColor="@color/subheader"
                 android:layout_marginTop="@dimen/margin4"
-                android:layout_marginLeft="@dimen/margin16"
+                android:layout_marginStart="@dimen/margin16"
                 style="@style/MaterialLightSubheadSecondary"
                 android:fontFamily="Roboto-Medium"
                 android:layout_below="@+id/ivHighlights"
@@ -55,7 +51,7 @@
                 style="@style/eventListTextView"
                 android:fontFamily="Roboto-Regular"
                 android:textSize="14sp"
-                android:layout_marginLeft="@dimen/margin8"
+                android:layout_marginStart="@dimen/margin8"
                 android:textColor="@color/body"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -66,7 +62,7 @@
                 style="@style/eventListTextView"
                 android:fontFamily="Roboto-Regular"
                 android:textSize="14sp"
-                android:layout_marginLeft="@dimen/margin8"
+                android:layout_marginStart="@dimen/margin8"
                 android:textColor="@color/body"/>
 
 

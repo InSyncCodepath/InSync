@@ -66,6 +66,10 @@ public class User extends ParseUser {
         return currentUser;
     }
 
+    public static void setCurrentUser(User user) {
+        currentUser = user;
+    }
+
     public String getName() {
         return getString(NAME_KEY);
     }
