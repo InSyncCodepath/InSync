@@ -1,15 +1,9 @@
 package com.codepath.insync.models.parse;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-import java.io.File;
 import java.util.Date;
 
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseClassName;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
@@ -17,22 +11,20 @@ import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.SaveCallback;
 
-import static android.R.attr.description;
-
 
 @ParseClassName("Event")
 public class Event extends ParseObject {
-    public static final String NAME_KEY = "name";
-    public static final String START_DATE_KEY = "startDate";
-    public static final String END_DATE_KEY = "endDate";
-    public static final String ADDRESS_KEY = "address";
-    public static final String LOCATION_KEY = "location";
-    public static final String DESCRIPTION_KEY = "description";
-    public static final String PROFILE_IMAGE_KEY = "profileImage";
-    public static final String MESSAGE_RELATION_KEY = "messageRelation";
-    public static final String HIGHLIGHTS_VIDEO_KEY = "highlightsVideo";
-    public static final String HAS_ENDED_KEY = "hasEnded";
-    public static final String THEME_KEY = "theme";
+    private static final String NAME_KEY = "name";
+    private static final String START_DATE_KEY = "startDate";
+    private static final String END_DATE_KEY = "endDate";
+    private static final String ADDRESS_KEY = "address";
+    private static final String LOCATION_KEY = "location";
+    private static final String DESCRIPTION_KEY = "description";
+    private static final String PROFILE_IMAGE_KEY = "profileImage";
+    private static final String MESSAGE_RELATION_KEY = "messageRelation";
+    private static final String HIGHLIGHTS_VIDEO_KEY = "highlightsVideo";
+    private static final String HAS_ENDED_KEY = "hasEnded";
+    private static final String THEME_KEY = "theme";
 
     public String getName() {
         return getString(NAME_KEY);
@@ -106,9 +98,6 @@ public class Event extends ParseObject {
         put(PROFILE_IMAGE_KEY, profileImage);
     }
 
-    public void setMessageRelation(ParseRelation<Message> messageRelation) {
-        put(MESSAGE_RELATION_KEY, messageRelation);
-    }
 
     public void setHighlightsVideo(String highlightsVideo) {
         put(HIGHLIGHTS_VIDEO_KEY, highlightsVideo);
@@ -123,19 +112,6 @@ public class Event extends ParseObject {
         put(THEME_KEY, theme);
     }
 
-    public Bitmap getProfileImageBitmap() {
-        ParseFile profileImg = getProfileImage();
-        Bitmap bitmap = null;
-        if (profileImg != null) {
-            try {
-                bitmap = BitmapFactory.decodeStream(profileImg.getDataStream());
-            } catch (ParseException | OutOfMemoryError e) {
-                e.printStackTrace();
-            }
-        }
-        return bitmap;
-    }
-
     public Event(){}
 
     public Event(ParseObject object) {
@@ -146,24 +122,12 @@ public class Event extends ParseObject {
         this.setEndDate(object.getDate(END_DATE_KEY));
         this.setDescription(object.getString(DESCRIPTION_KEY));
         this.setLocation(object.getParseGeoPoint(LOCATION_KEY));
-        //this.setProfileImage(object.getParseFile(PROFILE_IMAGE_KEY));
     }
 
     public void updateEvent(SaveCallback saveCallback) {
         saveInBackground(saveCallback);
     }
 
-    // TODO: Call get, saveInBackground and pinInBackground here
-    public static Event newEventInstance(String eventName, String address, Date startDate, Date endDate, String description, ParseGeoPoint location){
-        Event newEvent = new Event();
-        newEvent.setName(eventName);
-        newEvent.setAddress(address);
-        newEvent.setStartDate(startDate);
-        newEvent.setEndDate(endDate);
-        newEvent.setDescription(description);
-        newEvent.setLocation(location);
-        return newEvent;
-    }
     public Event(String eventName, String address, Date startDate, Date endDate, String description, ParseGeoPoint location){
         this.setName(eventName);
         this.setAddress(address);
@@ -171,7 +135,6 @@ public class Event extends ParseObject {
         this.setEndDate(endDate);
         this.setDescription(description);
         this.setLocation(location);
-        //this.setProfileImage();
 
     }
 
@@ -191,9 +154,6 @@ public class Event extends ParseObject {
 
     public static void findEvent(String eventId, GetCallback<Event> getCallback) {
         ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
-        // First try to find from the cache and only then go to network
-        /* Unsupported method when local data store is enabled */
-        //query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
         query.getInBackground(eventId, getCallback);
 
     }

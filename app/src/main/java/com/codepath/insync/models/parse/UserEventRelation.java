@@ -6,18 +6,16 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
-import static com.facebook.AccessToken.USER_ID_KEY;
-//import static com.codepath.insync.models.parse.Event.USER_RELATION_KEY;
 
 @ParseClassName("UserEventRelation")
 public class UserEventRelation extends ParseObject {
-    public static final String USER_ID_KEY = "userId";
-    public static final String EVENT_KEY = "event";
-    public static final String IS_ATTENDEES_VISIBLE_KEY = "isAttendeesVisible";
-    public static final String IS_HOSTING_KEY = "isHosting";
-    public static final String RSVP_STATUS_KEY = "rsvpStatus";
-    public static final String IS_LOCATION_VISIBLE_KEY = "isLocationVisible";
-    public static final String CAN_GET_UPDATES_KEY = "canGetUpdates";
+    private static final String USER_ID_KEY = "userId";
+    private static final String EVENT_KEY = "event";
+    private static final String IS_ATTENDEES_VISIBLE_KEY = "isAttendeesVisible";
+    private static final String IS_HOSTING_KEY = "isHosting";
+    private static final String RSVP_STATUS_KEY = "rsvpStatus";
+    private static final String IS_LOCATION_VISIBLE_KEY = "isLocationVisible";
+    private static final String CAN_GET_UPDATES_KEY = "canGetUpdates";
 
     public String getUserId() {
         return getString(USER_ID_KEY);
@@ -26,11 +24,6 @@ public class UserEventRelation extends ParseObject {
     public Event getEvent() {
         return new Event(getParseObject(EVENT_KEY));
     }
-
-//    public Event getUserEvent(String objectId) {
-//        ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
-//        query.whereEqualTo("event", );
-//    }
 
     public boolean isAttendeesVisbile() {
         return getBoolean(IS_ATTENDEES_VISIBLE_KEY);
@@ -124,8 +117,6 @@ public class UserEventRelation extends ParseObject {
         this.setIsLocationVisibleKey(isLocationVisible);
         this.setCanGetUpdatesKey(canGetUpdates);
         this.setRsvpStatusKey(rsvpStatus);
-        //this.setProfileImage();
-
     }
 
 }

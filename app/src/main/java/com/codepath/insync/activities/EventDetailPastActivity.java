@@ -153,9 +153,10 @@ public class EventDetailPastActivity extends AppCompatActivity implements OnImag
     private void loadFragments() {
         FragmentTransaction ft = fragmentManager.beginTransaction();
         // Load current and upcoming event detail
+        String theme = event.getTheme() == null ? "default": event.getTheme();
         pastEventDetailFragment = PastEventDetailFragment.newInstance(
-                eventId, event.getName(), event.getTheme(), event.getDescription(),
-                event.getStartDate().getTime(), event.getAddress());
+                eventId, event.getName(), theme, event.getDescription(),
+                event.getStartDate().getTime(), event.getAddress(), event.getHighlightsVideo());
         ft.replace(R.id.flPastDetails, pastEventDetailFragment);
 
         ft.commit();
