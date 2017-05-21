@@ -14,9 +14,6 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.widget.RemoteViews;
-
-import com.codepath.insync.BuildConfig;
 import com.codepath.insync.R;
 import com.codepath.insync.activities.EventDetailMoreActivity;
 import com.codepath.insync.activities.EventListActivity;
@@ -165,12 +162,6 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
             editor.apply();
         }
 
-        // Define custom views
-        RemoteViews contentView = new RemoteViews(BuildConfig.APPLICATION_ID, R.layout.notification_invite);
-        contentView.setImageViewResource(R.id.ivInviteNoti, R.mipmap.ic_insync_launch);
-        contentView.setTextViewText(R.id.tvInviteTitle, notiObj.optString("title"));
-        contentView.setTextViewText(R.id.tvInviteText, notiObj.optString("text"));
-
         // Define event list activity to trigger when group notification is selected
         Intent eventListIntent = new Intent(getApplicationContext(), EventListActivity.class);
         PendingIntent eventListPendingIntent = PendingIntent.getActivity(context, 0, eventListIntent, 0);
@@ -209,7 +200,6 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
         // Now we can attach the pendingIntent to a new notification using setContentIntent
         Notification groupNotification = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.mipmap.ic_lock_screen_noti)
-                //.setCustomContentView(contentView)
                 .setStyle(new NotificationCompat.InboxStyle())
                 .setColor(ContextCompat.getColor(context, R.color.tealish))
                 .setContentTitle(notiObj.optString("title"))
@@ -227,7 +217,6 @@ public  class ParseCBroadcastReceiver extends BroadcastReceiver {
 
         Notification notification = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.mipmap.ic_lock_screen_noti)
-                //.setCustomContentView(contentView)
                 .setStyle(new NotificationCompat.InboxStyle())
                 .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setContentTitle(notiObj.optString("title"))

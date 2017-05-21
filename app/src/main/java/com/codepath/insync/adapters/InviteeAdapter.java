@@ -9,9 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.insync.R;
-import com.codepath.insync.databinding.UpcomingEventItemBinding;
-import com.codepath.insync.models.parse.User;
-
 import java.util.ArrayList;
 
 /**
