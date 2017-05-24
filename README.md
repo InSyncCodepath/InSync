@@ -7,47 +7,44 @@
 The following **required** functionality will be completed:
 
 * [x] User can login and can create an account.
-* [x] User can search for other users by username
-* [x] User can create a group and add people to that group
 * [x] User can create an event with the following functionality:
   * [x] Event Name and Description
   * [x] Date, time, location
   * [x] RSVP
-  * [X] Attendees
-  * [] Invite message
+  * [X] Attendees (by searching for the user's name)
+* [x] Host can add an Event image
 * [x] Partipants in an event can communicate via instant messages.
 * [x] Users will get event reminders.
-* [] Users can share pictures/ video of the event in the chat.
+* [x] Users can share gallery/ camera images of the event in the chat.
 * [x] After the event, an album will be created which users can download. Optional: The album will expire after one week.
 * [x] Users can see the location of the partipants in real time some time before the event.
-* [x] Host can choose if the location tracker and invitee list is visible to the contacts or not.
 
 The following **optional** features can be implemented:
 
-* [] User can send an invite link to their contacts 
-* [x] User can search for other users by phone number
-* [x] User can upload a profile image.
-* [] User with admin permissions can invite others to the group.
-* [] Both host and invitee can choose the visibility level of their calendar for the particular event.
-* [x] Host can add an Event image
-* [] User can assign a co-host.
-* [] Host/ admin can edit/ cancel an event.
-* [] User with RSVP will get a choice if they want to continue receiving event updates.
+* [x] User can send an invite link to their contacts (partially done. With an invite link, the user can download and install the app and be part of an event).
+* [x] User can search for other users by phone number (partially done. Invite cannot be sent)
+* [x] User can upload a profile image during signup.
 * [x] In location tracker, user can see the location with a pin and profile image.
+* [] User can assign a co-host.
+* [] User with admin/ host permissions can invite more users to the event.
+* [] Event can be added to the user's calendar.
+* [] Both host and invitee can choose the visibility level of their calendar for the particular event.
+* [] Host/ admin can edit/ cancel an event.
+* [] User with RSVP as No will get a choice if they want to continue receiving event updates.
 * [] Host can create a poll to ask invitee preferences for example meal preferences.
-* [x] Send reminders/ nudges to people to RSVP.
-* [] Location based and time based camera images will be added to the group directly, user can disable this feature
+* [] Host can choose if the location tracker and invitee list is visible to the contacts or not.
 
 The following **bonus** features can be implemented:
 
 * [x] Create a highlights video at the end of the event.
-* [] App walkthrough screens
+* [x] App walkthrough screens
+* [] Location based and time based camera images will be added to the group directly, user can disable this feature
 
 ##Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 First sprint
-http://recordit.co/a9OScepSED 
+http://recordit.co/a9OScepSED
 
 Second sprint (Added location and camera)
 https://drive.google.com/open?id=0B7fB7lsZXRbQUFZHWjdJenJVRlU
