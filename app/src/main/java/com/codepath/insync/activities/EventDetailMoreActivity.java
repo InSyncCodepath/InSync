@@ -192,6 +192,9 @@ public class EventDetailMoreActivity extends AppCompatActivity
                                     if (!user.getObjectId().equals(User.getCurrentUser().getObjectId())) {
                                         guests.add(user);
                                         guestAdapter.notifyItemInserted(guests.size()-1);
+                                    } else {
+                                        guests.set(0, user);
+                                        guestAdapter.notifyItemChanged(0);
                                     }
                                 }
 
