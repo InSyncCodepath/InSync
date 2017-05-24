@@ -228,6 +228,9 @@ public class PastEventDetailFragment extends Fragment implements TextureView.Sur
                                 if (!user.getObjectId().equals(User.getCurrentUser().getObjectId())) {
                                     guests.add(user);
                                     guestAdapter.notifyItemInserted(guests.size() - 1);
+                                } else {
+                                    guests.set(0, user);
+                                    guestAdapter.notifyItemChanged(0);
                                 }
                             }
 
